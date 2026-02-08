@@ -20,7 +20,6 @@
             --light: #f8f9fa;
             --gray: #6c757d;
             --success: #28a745;
-            --danger: #dc3545;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             --transition: all 0.3s ease;
         }
@@ -221,27 +220,6 @@
             text-decoration: underline;
         }
 
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 30px;
-        }
-
-        .spinner {
-            border: 4px solid rgba(212, 175, 55, 0.3);
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         @media (max-width: 768px) {
             .logo-text {
                 font-size: 2.5rem;
@@ -280,13 +258,8 @@
             </p>
         </div>
 
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Loading system...</p>
-        </div>
-
         <div class="cards-grid">
-            <a href="admin.html" class="card" onclick="showLoading()">
+            <a href="admin.html" class="card">
                 <div class="card-icon">
                     <i class="fas fa-tools"></i>
                 </div>
@@ -296,7 +269,7 @@
                 </p>
             </a>
 
-            <a href="card.html?to=Demo&msg=Selamat%20datang%20di%20FIOR%20Florist&theme=birthday" class="card" target="_blank">
+            <a href="card.html?to=Demo&msg=Selamat%20datang%20di%20FIOR%20Florist&theme=birthday&preview=true" class="card" target="_blank">
                 <div class="card-icon">
                     <i class="fas fa-gift"></i>
                 </div>
@@ -306,13 +279,13 @@
                 </p>
             </a>
 
-            <a href="#" class="card" onclick="showDocs()">
+            <a href="https://github.com/fiorfloristjayapura-commits/cardgift-fior" class="card" target="_blank">
                 <div class="card-icon">
-                    <i class="fas fa-book"></i>
+                    <i class="fas fa-code"></i>
                 </div>
-                <h3 class="card-title">Documentation</h3>
+                <h3 class="card-title">GitHub Repository</h3>
                 <p class="card-desc">
-                    Panduan penggunaan sistem, troubleshooting, dan FAQ
+                    Akses kode sumber lengkap sistem ini di GitHub
                 </p>
             </a>
         </div>
@@ -368,14 +341,13 @@
             <p>Dikembangkan khusus untuk FIOR Florist Jayapura</p>
             
             <div class="quick-links">
-                <a href="admin.html" class="link" onclick="showLoading()">Admin Login</a>
-                <a href="card.html?to=Demo&msg=Test&theme=valentine" class="link" target="_blank">Demo Card</a>
+                <a href="admin.html" class="link">Admin Login</a>
+                <a href="card.html?to=Demo&msg=Test&theme=valentine&preview=true" class="link" target="_blank">Demo Card</a>
                 <a href="https://github.com/fiorfloristjayapura-commits/cardgift-fior" class="link" target="_blank">GitHub</a>
-                <a href="#" class="link" onclick="showSupport()">Support</a>
             </div>
             
             <p style="margin-top: 20px; font-size: 0.8rem; color: #555;">
-                System Status: <span id="systemStatus" style="color: var(--success);">🟢 Online</span>
+                <span style="color: #28a745;">●</span> System Status: Online
             </p>
         </div>
     </div>
@@ -383,48 +355,23 @@
     <script>
         // Configuration
         const CONFIG = {
-            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxIquhuDtAzIUHhpaVoYgLVtCvKEHNDVqwqrfZtfx3NrQ2CZrwivK3jAv9ioOU88ajPrw/exec"
+            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxIquhuDtAzIUHhpaVoYgLVtCvKEHNDVqwqrfZtfx3NrQ2CZrwivK3jAv9ioOU88ajPrw/exec",
+            CARD_BASE_URL: "card.html"
         };
 
-        // DOM Elements
-        const elements = {
-            loading: document.getElementById('loading'),
-            totalCards: document.getElementById('totalCards'),
-            totalCustomers: document.getElementById('totalCustomers'),
-            systemStatus: document.getElementById('systemStatus')
-        };
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            loadStats();
-            testConnection();
-        });
-
-        // Functions
-        function showLoading() {
-            elements.loading.style.display = 'block';
-        }
-
-        function showDocs() {
-            alert('Documentation coming soon!');
-        }
-
-        function showSupport() {
-            alert('Support: Email - admin@fiorflorist.com\nWhatsApp: +62 812-3456-7890');
-        }
-
+        // Load stats
         async function loadStats() {
             try {
                 const response = await fetch(`${CONFIG.SCRIPT_URL}?t=${Date.now()}`);
                 if (response.ok) {
                     const data = await response.json();
                     if (Array.isArray(data)) {
-                        elements.totalCustomers.textContent = data.length;
-                        // For cards count, we would need another endpoint
-                        // For now, estimate based on localStorage
+                        document.getElementById('totalCustomers').textContent = data.length;
+                        // Load cards count from localStorage
                         const recentCards = localStorage.getItem('fior_recent_cards');
                         if (recentCards) {
-                            elements.totalCards.textContent = JSON.parse(recentCards).length;
+                            const cards = JSON.parse(recentCards);
+                            document.getElementById('totalCards').textContent = cards.length;
                         }
                     }
                 }
@@ -433,37 +380,8 @@
             }
         }
 
-        function testConnection() {
-            fetch(CONFIG.SCRIPT_URL)
-                .then(response => {
-                    if (response.ok) {
-                        elements.systemStatus.innerHTML = '🟢 Online';
-                        elements.systemStatus.style.color = '#28a745';
-                    } else {
-                        elements.systemStatus.innerHTML = '🟡 Limited';
-                        elements.systemStatus.style.color = '#ffc107';
-                    }
-                })
-                .catch(() => {
-                    elements.systemStatus.innerHTML = '🔴 Offline';
-                    elements.systemStatus.style.color = '#dc3545';
-                });
-        }
-
-        // Auto-redirect to admin after 10 seconds idle
-        let idleTimer;
-        function resetIdleTimer() {
-            clearTimeout(idleTimer);
-            idleTimer = setTimeout(() => {
-                // Optional: Auto-redirect to admin
-                // window.location.href = "admin.html";
-            }, 10000);
-        }
-
-        // Reset timer on user activity
-        document.addEventListener('mousemove', resetIdleTimer);
-        document.addEventListener('keypress', resetIdleTimer);
-        resetIdleTimer();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadStats);
     </script>
 </body>
 </html>
