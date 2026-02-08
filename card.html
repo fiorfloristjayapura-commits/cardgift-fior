@@ -14,8 +14,6 @@
 
         :root {
             --primary: #d4af37;
-            --secondary: #1a1a1a;
-            --light: #ffffff;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             --transition: all 0.5s ease;
         }
@@ -23,38 +21,50 @@
         /* Theme Variables */
         .theme-valentine {
             --theme-color: #e91e63;
+            --theme-light: #fce4ec;
+            --theme-dark: #c2185b;
             --theme-bg: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
-            --theme-accent: #c2185b;
+            --theme-gradient: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
         }
 
         .theme-birthday {
             --theme-color: #2196f3;
+            --theme-light: #e3f2fd;
+            --theme-dark: #1565c0;
             --theme-bg: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            --theme-accent: #1565c0;
+            --theme-gradient: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
         }
 
         .theme-wedding {
             --theme-color: #ff9800;
+            --theme-light: #fff3e0;
+            --theme-dark: #ef6c00;
             --theme-bg: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-            --theme-accent: #ef6c00;
+            --theme-gradient: linear-gradient(135deg, #ff9800 0%, #ef6c00 100%);
         }
 
         .theme-anniversary {
             --theme-color: #9c27b0;
+            --theme-light: #f3e5f5;
+            --theme-dark: #7b1fa2;
             --theme-bg: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-            --theme-accent: #7b1fa2;
+            --theme-gradient: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
         }
 
         .theme-graduation {
             --theme-color: #4caf50;
+            --theme-light: #e8f5e9;
+            --theme-dark: #2e7d32;
             --theme-bg: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            --theme-accent: #2e7d32;
+            --theme-gradient: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
         }
 
         .theme-condolence {
             --theme-color: #607d8b;
+            --theme-light: #eceff1;
+            --theme-dark: #455a64;
             --theme-bg: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%);
-            --theme-accent: #455a64;
+            --theme-gradient: linear-gradient(135deg, #607d8b 0%, #455a64 100%);
         }
 
         body {
@@ -69,6 +79,28 @@
             transition: var(--transition);
         }
 
+        /* Preview Banner */
+        .preview-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--theme-gradient);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-weight: bold;
+            z-index: 10000;
+            animation: pulse 2s infinite;
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Card Container */
         .card-container {
             width: 100%;
             max-width: 500px;
@@ -83,16 +115,24 @@
             transform-style: preserve-3d;
             animation: cardAppear 1s ease-out;
             position: relative;
+            border: 10px solid white;
         }
 
         @keyframes cardAppear {
-            0% { transform: translateY(50px) rotateX(-10deg); opacity: 0; }
-            100% { transform: translateY(0) rotateX(0); opacity: 1; }
+            0% { 
+                transform: translateY(50px) rotateX(-10deg) scale(0.9); 
+                opacity: 0; 
+            }
+            100% { 
+                transform: translateY(0) rotateX(0) scale(1); 
+                opacity: 1; 
+            }
         }
 
+        /* Card Header */
         .card-header {
-            background: linear-gradient(135deg, var(--theme-color), var(--theme-accent));
-            padding: 30px 20px;
+            background: var(--theme-gradient);
+            padding: 40px 20px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -108,6 +148,7 @@
             background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
             background-size: 50px 50px;
             animation: float 20s linear infinite;
+            opacity: 0.3;
         }
 
         @keyframes float {
@@ -115,6 +156,7 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Logo */
         .logo {
             position: absolute;
             top: 15px;
@@ -125,29 +167,36 @@
             color: white;
             font-size: 0.9rem;
             z-index: 2;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
         }
 
         .logo i {
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
+        /* Theme Icon */
         .theme-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
+            font-size: 4rem;
+            margin-bottom: 20px;
             animation: bounce 2s infinite;
             filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+            display: inline-block;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
         }
 
+        /* Greeting Text */
         .greeting {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: bold;
             color: white;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             font-family: 'Brush Script MT', cursive;
         }
@@ -156,17 +205,20 @@
             color: rgba(255, 255, 255, 0.9);
             font-size: 1rem;
             margin-bottom: 5px;
+            letter-spacing: 1px;
         }
 
         .recipient-name {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
             color: white;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
             padding: 0 20px;
             word-break: break-word;
+            line-height: 1.2;
         }
 
+        /* Card Body */
         .card-body {
             padding: 40px 30px;
             position: relative;
@@ -176,8 +228,8 @@
         .message-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            padding: 30px;
-            border: 2px dashed var(--theme-color);
+            padding: 40px 30px;
+            border: 3px dashed var(--theme-color);
             position: relative;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
         }
@@ -185,125 +237,158 @@
         .message-container::before {
             content: "💌";
             position: absolute;
-            top: -20px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
             background: white;
-            padding: 10px;
+            padding: 10px 15px;
             border-radius: 50%;
-            border: 2px dashed var(--theme-color);
-            font-size: 1.5rem;
+            border: 3px dashed var(--theme-color);
+            font-size: 1.8rem;
+            z-index: 2;
         }
 
         .message {
-            font-size: 1.2rem;
-            line-height: 1.6;
+            font-size: 1.3rem;
+            line-height: 1.8;
             color: #444;
             text-align: center;
             font-style: italic;
             white-space: pre-wrap;
             word-wrap: break-word;
+            position: relative;
+            z-index: 1;
         }
 
         .message::before, .message::after {
             content: '"';
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: var(--theme-color);
             vertical-align: super;
             line-height: 0;
+            opacity: 0.5;
         }
 
+        /* Card Footer */
         .card-footer {
-            padding: 20px;
+            padding: 25px;
             text-align: center;
             background: rgba(0, 0, 0, 0.03);
             border-top: 1px solid rgba(0,0,0,0.1);
         }
 
         .company-info {
-            margin-top: 15px;
-            color: #666;
-            font-size: 0.9rem;
+            margin-bottom: 25px;
         }
 
         .company-name {
             color: var(--theme-color);
             font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .watermark {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 0.8rem;
-            color: rgba(0,0,0,0.2);
+        .company-tagline {
+            color: #666;
+            font-size: 0.9rem;
+            font-style: italic;
         }
 
+        /* Action Buttons */
         .action-buttons {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             justify-content: center;
             margin-top: 20px;
             flex-wrap: wrap;
         }
 
         .action-btn {
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
             border-radius: 50px;
-            background: var(--theme-color);
+            background: var(--theme-gradient);
             color: white;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 10px;
             transition: var(--transition);
             text-decoration: none;
+            min-width: 160px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .action-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            background: var(--theme-accent);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background: var(--theme-dark);
         }
 
         .action-btn.share {
-            background: #25D366;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
         }
 
         .action-btn.share:hover {
             background: #128C7E;
         }
 
+        .action-btn.print {
+            background: linear-gradient(135deg, #666 0%, #444 100%);
+        }
+
+        .action-btn.print:hover {
+            background: #444;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: rgba(0,0,0,0.2);
+            font-family: Arial, sans-serif;
+        }
+
+        /* Decorations */
         .decoration {
             position: absolute;
             z-index: 1;
+            pointer-events: none;
         }
 
         .decoration-1 {
-            top: 20px;
-            right: 20px;
-            font-size: 2rem;
+            top: 30px;
+            right: 30px;
+            font-size: 2.5rem;
             opacity: 0.3;
             animation: spin 20s linear infinite;
         }
 
         .decoration-2 {
-            bottom: 20px;
-            left: 20px;
-            font-size: 1.5rem;
+            bottom: 30px;
+            left: 30px;
+            font-size: 2rem;
             opacity: 0.2;
             animation: float 15s linear infinite reverse;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .decoration-3 {
+            top: 50%;
+            left: 20px;
+            font-size: 1.5rem;
+            opacity: 0.1;
+            animation: bounce 3s infinite alternate;
         }
 
+        /* Confetti */
         .confetti {
             position: fixed;
             width: 15px;
@@ -312,71 +397,76 @@
             opacity: 0.7;
             animation: confettiFall 5s linear forwards;
             z-index: 1000;
+            border-radius: 50%;
         }
 
         @keyframes confettiFall {
             0% {
-                transform: translateY(-100px) rotate(0deg);
+                transform: translateY(-100px) rotate(0deg) scale(1);
                 opacity: 1;
             }
             100% {
-                transform: translateY(100vh) rotate(720deg);
+                transform: translateY(100vh) rotate(720deg) scale(0);
                 opacity: 0;
             }
         }
 
-        /* Preview Mode */
-        .preview-banner {
+        /* Floating Hearts (Valentine Theme) */
+        .floating-heart {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #ff9800;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-weight: bold;
-            z-index: 10000;
-            animation: pulse 2s infinite;
+            font-size: 1.5rem;
+            animation: heartFloat 8s linear forwards;
+            z-index: 1;
+            opacity: 0.7;
+            pointer-events: none;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+        @keyframes heartFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         /* Responsive */
         @media (max-width: 600px) {
             .card {
                 border-radius: 15px;
+                border-width: 5px;
             }
             
             .card-header {
-                padding: 20px 15px;
+                padding: 30px 15px;
             }
             
             .greeting {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             
             .recipient-name {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
+            }
+            
+            .theme-icon {
+                font-size: 3rem;
             }
             
             .card-body {
                 padding: 25px 20px;
             }
             
-            .message {
-                font-size: 1rem;
+            .message-container {
+                padding: 30px 20px;
             }
             
-            .theme-icon {
-                font-size: 2.5rem;
+            .message {
+                font-size: 1.1rem;
             }
-        }
-
-        @media (max-width: 400px) {
+            
             .action-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -384,34 +474,60 @@
             
             .action-btn {
                 width: 100%;
-                justify-content: center;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .greeting {
+                font-size: 1.8rem;
+            }
+            
+            .recipient-name {
+                font-size: 1.5rem;
+            }
+            
+            .message {
+                font-size: 1rem;
             }
         }
 
         /* Print Styles */
         @media print {
-            .action-buttons, .watermark {
-                display: none;
+            body {
+                background: white !important;
             }
             
             .card {
-                box-shadow: none;
-                border: 1px solid #ddd;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+            
+            .action-buttons, .watermark, .preview-banner {
+                display: none !important;
+            }
+            
+            .decoration {
+                display: none !important;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Preview Banner (only shown in preview mode) -->
-    <div id="previewBanner" class="preview-banner" style="display: none;">
+    <!-- Preview Banner -->
+    <div id="previewBanner" class="preview-banner">
         ⚠️ PREVIEW MODE - This is a preview of your digital card
     </div>
 
+    <!-- Main Card Container -->
     <div class="card-container">
         <div class="card" id="greetingCard">
-            <!-- Decorative elements -->
+            <!-- Decorations -->
             <div class="decoration decoration-1" id="decoration1">✨</div>
             <div class="decoration decoration-2" id="decoration2">🌸</div>
+            <div class="decoration decoration-3" id="decoration3">🎀</div>
             
             <!-- Card Header -->
             <div class="card-header">
@@ -438,24 +554,27 @@
             <!-- Card Footer -->
             <div class="card-footer">
                 <div class="company-info">
-                    <div class="company-name">FIOR Florist</div>
-                    <div>Kartu Ucapan Digital</div>
-                    <div>Dibuat dengan 💖 di Jayapura</div>
+                    <div class="company-name">
+                        <i class="fas fa-crown"></i>
+                        FIOR Florist
+                    </div>
+                    <div class="company-tagline">Kartu Ucapan Digital • Jayapura</div>
                 </div>
                 
                 <div class="action-buttons">
-                    <button class="action-btn" onclick="shareCard()">
+                    <button class="action-btn share" onclick="shareCard()">
                         <i class="fas fa-share-alt"></i> Bagikan
                     </button>
-                    <a href="#" class="action-btn share" id="whatsappBtn" target="_blank">
+                    <a href="#" class="action-btn" id="whatsappBtn" target="_blank">
                         <i class="fab fa-whatsapp"></i> Kirim via WhatsApp
                     </a>
-                    <button class="action-btn" onclick="printCard()">
+                    <button class="action-btn print" onclick="printCard()">
                         <i class="fas fa-print"></i> Cetak
                     </button>
                 </div>
             </div>
             
+            <!-- Watermark -->
             <div class="watermark">
                 Digital Card by FIOR • <span id="currentDate"></span>
             </div>
@@ -463,61 +582,61 @@
     </div>
 
     <script>
-        // Theme configurations with emojis and greetings
+        // ========== CONFIGURATION ==========
         const THEMES = {
             valentine: {
                 emoji: "❤️",
                 greeting: "Happy Valentine's Day",
-                decorations: ["❤️", "💕", "💖", "💘", "💝"],
-                bgMusic: null
+                decorations: ["❤️", "💕", "💖", "💘", "💝", "🌹", "💐"],
+                colors: ["#e91e63", "#c2185b", "#f8bbd9"]
             },
             birthday: {
                 emoji: "🎂",
                 greeting: "Happy Birthday",
-                decorations: ["🎉", "🎈", "🎁", "✨", "🥳"],
-                bgMusic: null
+                decorations: ["🎉", "🎈", "🎁", "✨", "🥳", "🎊", "🎇"],
+                colors: ["#2196f3", "#1565c0", "#bbdefb"]
             },
             wedding: {
                 emoji: "💍",
                 greeting: "Congratulations",
-                decorations: ["💒", "👰", "🤵", "💑", "🌸"],
-                bgMusic: null
+                decorations: ["💒", "👰", "🤵", "💑", "🌸", "💐", "🥂"],
+                colors: ["#ff9800", "#ef6c00", "#ffe0b2"]
             },
             anniversary: {
                 emoji: "💑",
                 greeting: "Happy Anniversary",
-                decorations: ["💝", "🥂", "🎊", "💞", "🌹"],
-                bgMusic: null
+                decorations: ["💝", "🥂", "🎊", "💞", "🌹", "💖", "✨"],
+                colors: ["#9c27b0", "#7b1fa2", "#e1bee7"]
             },
             graduation: {
                 emoji: "🎓",
                 greeting: "Congratulations Graduate",
-                decorations: ["📚", "🏆", "🌟", "🎊", "👨‍🎓"],
-                bgMusic: null
+                decorations: ["📚", "🏆", "🌟", "🎊", "👨‍🎓", "👩‍🎓", "🎉"],
+                colors: ["#4caf50", "#2e7d32", "#c8e6c9"]
             },
             condolence: {
                 emoji: "🕊️",
                 greeting: "Deepest Condolences",
-                decorations: ["☁️", "🕯️", "🌼", "🙏", "✨"],
-                bgMusic: null
+                decorations: ["☁️", "🕯️", "🌼", "🙏", "✨", "🌸", "💫"],
+                colors: ["#607d8b", "#455a64", "#cfd8dc"]
             }
         };
 
-        // Get URL parameters
+        // ========== UTILITY FUNCTIONS ==========
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
             return {
                 to: params.get('to') || 'Dear Friend',
-                msg: params.get('msg') || 'Wishing you all the best. This digital card is sent with love from FIOR Florist.',
-                theme: params.get('theme') || 'valentine',
-                preview: params.get('preview') === 'true'
+                msg: decodeURIComponent(params.get('msg') || 'Wishing you all the best. This digital card is sent with love from FIOR Florist.'),
+                theme: params.get('theme') || 'birthday',
+                preview: params.get('preview') === 'true',
+                t: params.get('t') || Date.now()
             };
         }
 
-        // Initialize card
         function initCard() {
             const params = getUrlParams();
-            const theme = THEMES[params.theme] ? params.theme : 'valentine';
+            const theme = THEMES[params.theme] ? params.theme : 'birthday';
             const themeConfig = THEMES[theme];
             
             // Set theme class
@@ -532,6 +651,7 @@
             // Update decorations
             document.getElementById('decoration1').textContent = themeConfig.decorations[0];
             document.getElementById('decoration2').textContent = themeConfig.decorations[1];
+            document.getElementById('decoration3').textContent = themeConfig.decorations[2];
             
             // Update current date
             const now = new Date();
@@ -551,77 +671,112 @@
                 document.getElementById('previewBanner').style.display = 'block';
             }
             
-            // Create confetti if it's a celebratory theme
+            // Create special effects based on theme
+            createSpecialEffects(theme);
+            
+            // Add interactive effects
+            addInteractivity();
+        }
+
+        function createSpecialEffects(theme) {
+            // Confetti for celebratory themes
             if (['birthday', 'wedding', 'anniversary', 'graduation'].includes(theme)) {
                 createConfetti();
             }
+            
+            // Floating hearts for valentine theme
+            if (theme === 'valentine') {
+                createFloatingHearts();
+            }
+            
+            // Floating flowers for wedding theme
+            if (theme === 'wedding') {
+                createFloatingFlowers();
+            }
         }
 
-        // Create confetti effect
         function createConfetti() {
-            const colors = ['#e91e63', '#2196f3', '#ff9800', '#9c27b0', '#4caf50'];
-            const theme = getUrlParams().theme;
-            const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--theme-color');
+            const themeColors = THEMES[getUrlParams().theme]?.colors || ['#e91e63', '#2196f3', '#ff9800'];
             
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 150; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
                     confetti.className = 'confetti';
                     
-                    // Position randomly
+                    // Random position
                     confetti.style.left = Math.random() * 100 + 'vw';
                     
-                    // Use theme color or random color
-                    confetti.style.backgroundColor = 
-                        Math.random() > 0.5 ? themeColor : colors[Math.floor(Math.random() * colors.length)];
+                    // Random color from theme
+                    confetti.style.backgroundColor = themeColors[Math.floor(Math.random() * themeColors.length)];
                     
-                    // Random size
+                    // Random size and shape
                     const size = 5 + Math.random() * 15;
                     confetti.style.width = size + 'px';
                     confetti.style.height = size + 'px';
                     
-                    // Random animation duration
-                    confetti.style.animationDuration = (2 + Math.random() * 3) + 's';
+                    // Random shape (circle or square)
+                    if (Math.random() > 0.5) {
+                        confetti.style.borderRadius = '0';
+                    }
+                    
+                    // Random animation
+                    confetti.style.animationDuration = (2 + Math.random() * 4) + 's';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
                     
                     document.body.appendChild(confetti);
                     
                     // Remove after animation
                     setTimeout(() => {
                         confetti.remove();
-                    }, 5000);
-                }, i * 30);
+                    }, 7000);
+                }, i * 20);
             }
         }
 
-        // Share card function
-        function shareCard() {
-            const params = getUrlParams();
-            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${params.to}: ${window.location.href}`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Kartu Ucapan Digital - FIOR Florist',
-                    text: shareText,
-                    url: window.location.href
-                });
-            } else {
-                // Fallback: copy to clipboard
-                navigator.clipboard.writeText(shareText)
-                    .then(() => alert('Link kartu telah disalin! Tempelkan di mana saja untuk berbagi.'))
-                    .catch(err => console.error('Gagal menyalin:', err));
-            }
+        function createFloatingHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (15 + Math.random() * 25) + 'px';
+                heart.style.color = THEMES.valentine.colors[Math.floor(Math.random() * THEMES.valentine.colors.length)];
+                heart.style.opacity = 0.3 + Math.random() * 0.4;
+                
+                // Random animation
+                heart.style.animationDuration = (4 + Math.random() * 6) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.body.appendChild(heart);
+                
+                // Remove after animation
+                setTimeout(() => heart.remove(), 10000);
+            }, 500);
         }
 
-        // Print card function
-        function printCard() {
-            window.print();
+        function createFloatingFlowers() {
+            const flowers = ['🌸', '🌺', '🌷', '💐', '🌼', '🌻'];
+            setInterval(() => {
+                const flower = document.createElement('div');
+                flower.className = 'floating-heart';
+                flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                flower.style.left = Math.random() * 100 + 'vw';
+                flower.style.fontSize = (20 + Math.random() * 30) + 'px';
+                flower.style.opacity = 0.2 + Math.random() * 0.3;
+                
+                flower.style.animationDuration = (6 + Math.random() * 8) + 's';
+                flower.style.animationDelay = Math.random() * 3 + 's';
+                
+                document.body.appendChild(flower);
+                
+                setTimeout(() => flower.remove(), 15000);
+            }, 800);
         }
 
-        // Add some interactive effects
         function addInteractivity() {
             const card = document.getElementById('greetingCard');
             
-            // Tilt effect on mouse move
+            // 3D tilt effect
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
@@ -634,69 +789,78 @@
                 const rotateX = (centerY - y) / 25;
                 
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                card.style.transition = 'transform 0.1s ease';
             });
             
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
                 card.style.transition = 'transform 0.5s ease';
             });
+            
+            // Click effect
+            card.addEventListener('click', () => {
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                }, 150);
+            });
         }
 
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            initCard();
-            addInteractivity();
+        // ========== ACTION FUNCTIONS ==========
+        function shareCard() {
+            const params = getUrlParams();
+            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${params.to}:\n\n${window.location.href}\n\nDikirim dengan 💖`;
+            const shareTitle = 'Kartu Ucapan Digital - FIOR Florist';
             
-            // Add some random decorations
-            setTimeout(() => {
-                const decorations = ['🌟', '🎀', '💫', '🌺', '💎'];
-                const randomDeco = decorations[Math.floor(Math.random() * decorations.length)];
-                const floatingDeco = document.createElement('div');
-                floatingDeco.textContent = randomDeco;
-                floatingDeco.style.position = 'fixed';
-                floatingDeco.style.fontSize = '2rem';
-                floatingDeco.style.opacity = '0.1';
-                floatingDeco.style.zIndex = '1';
-                floatingDeco.style.left = Math.random() * 100 + 'vw';
-                floatingDeco.style.top = Math.random() * 100 + 'vh';
-                floatingDeco.style.animation = 'float 15s linear infinite';
-                document.body.appendChild(floatingDeco);
-            }, 1000);
-        });
-
-        // Add floating hearts for valentine theme
-        function addFloatingHearts() {
-            if (getUrlParams().theme === 'valentine') {
-                setInterval(() => {
-                    const heart = document.createElement('div');
-                    heart.textContent = '❤️';
-                    heart.style.position = 'fixed';
-                    heart.style.fontSize = (10 + Math.random() * 20) + 'px';
-                    heart.style.left = Math.random() * 100 + 'vw';
-                    heart.style.top = '100vh';
-                    heart.style.opacity = '0.7';
-                    heart.style.zIndex = '1';
-                    heart.style.animation = `heartFloat ${3 + Math.random() * 4}s linear forwards`;
-                    
-                    document.body.appendChild(heart);
-                    
-                    setTimeout(() => heart.remove(), 7000);
-                }, 300);
-                
-                // Add CSS for heart animation
-                const style = document.createElement('style');
-                style.textContent = `
-                    @keyframes heartFloat {
-                        0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
-                        100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-                    }
-                `;
-                document.head.appendChild(style);
+            if (navigator.share) {
+                navigator.share({
+                    title: shareTitle,
+                    text: shareText,
+                    url: window.location.href
+                }).then(() => {
+                    console.log('Card shared successfully');
+                }).catch(err => {
+                    console.log('Error sharing:', err);
+                    fallbackShare(shareText);
+                });
+            } else {
+                fallbackShare(shareText);
             }
         }
 
-        // Start floating hearts for valentine theme
-        addFloatingHearts();
+        function fallbackShare(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    alert('✨ Link kartu telah disalin ke clipboard!\nTempelkan di mana saja untuk berbagi.');
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    prompt('Salin link berikut untuk berbagi:', window.location.href);
+                });
+        }
+
+        function printCard() {
+            window.print();
+        }
+
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', initCard);
+        
+        // Add some random decorations on load
+        setTimeout(() => {
+            const decorations = ['🌟', '🎀', '💫', '🌺', '💎', '✨', '🎇'];
+            const randomDeco = decorations[Math.floor(Math.random() * decorations.length)];
+            const floatingDeco = document.createElement('div');
+            floatingDeco.textContent = randomDeco;
+            floatingDeco.style.position = 'fixed';
+            floatingDeco.style.fontSize = '2rem';
+            floatingDeco.style.opacity = '0.1';
+            floatingDeco.style.zIndex = '1';
+            floatingDeco.style.left = Math.random() * 100 + 'vw';
+            floatingDeco.style.top = Math.random() * 100 + 'vh';
+            floatingDeco.style.animation = 'float 20s linear infinite';
+            document.body.appendChild(floatingDeco);
+        }, 1000);
     </script>
 </body>
 </html>
