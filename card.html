@@ -375,6 +375,32 @@
             gap: 8px;
         }
 
+        /* Debug Info */
+        .debug-info {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            font-family: monospace;
+            display: none;
+        }
+
+        .debug-toggle {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 0.8rem;
+        }
+
         /* Card Footer */
         .card-footer {
             padding: 25px;
@@ -595,6 +621,9 @@
     </style>
 </head>
 <body>
+    <!-- Debug Toggle -->
+    <button class="debug-toggle" onclick="toggleDebug()">Debug</button>
+
     <!-- FIOR Logo Watermark -->
     <div class="fior-watermark"></div>
 
@@ -638,6 +667,9 @@
                     <div class="media-caption">
                         <i class="fas fa-camera"></i> Media spesial dari FIOR Florist
                     </div>
+                    
+                    <!-- Debug Info -->
+                    <div id="debugInfo" class="debug-info"></div>
                 </div>
             </div>
             
@@ -725,10 +757,33 @@
             }
         };
 
+        // ========== DEBUG FUNCTIONS ==========
+        function logDebug(message, type = 'info') {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+            
+            const debugDiv = document.getElementById('debugInfo');
+            if (debugDiv && debugDiv.style.display !== 'none') {
+                const timestamp = new Date().toLocaleTimeString();
+                const color = type === 'error' ? '#ff4444' : 
+                             type === 'warning' ? '#ffaa00' : '#44ff44';
+                
+                debugDiv.innerHTML += `<div style="color:${color}">[${timestamp}] ${message}</div>`;
+                debugDiv.scrollTop = debugDiv.scrollHeight;
+            }
+        }
+
+        function toggleDebug() {
+            const debugDiv = document.getElementById('debugInfo');
+            if (debugDiv) {
+                debugDiv.style.display = debugDiv.style.display === 'none' ? 'block' : 'none';
+                logDebug('Debug mode ' + (debugDiv.style.display === 'block' ? 'enabled' : 'disabled'));
+            }
+        }
+
         // ========== UTILITY FUNCTIONS ==========
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
-            return {
+            const result = {
                 to: params.get('to') || 'Dear Friend',
                 msg: decodeURIComponent(params.get('msg') || 'Wishing you all the best. This digital card is sent with love from FIOR Florist.'),
                 theme: params.get('theme') || 'birthday',
@@ -736,12 +791,20 @@
                 preview: params.get('preview') === 'true',
                 t: params.get('t') || Date.now()
             };
+            
+            logDebug(`URL Parameters: to="${result.to}", theme="${result.theme}", media="${result.media ? 'YES' : 'NO'}"`);
+            
+            return result;
         }
 
         function initCard() {
+            logDebug('Initializing card...');
+            
             const params = getUrlParams();
             const theme = THEMES[params.theme] ? params.theme : 'birthday';
             const themeConfig = THEMES[theme];
+            
+            logDebug(`Theme: ${theme} (${themeConfig.greeting})`);
             
             // Set theme class
             document.body.className = `theme-${theme}`;
@@ -759,12 +822,19 @@
             
             // Tampilkan media jika ada
             if (params.media) {
+                logDebug(`Found media parameter: ${params.media.substring(0, 100)}...`);
                 displayMedia(params.media, theme);
+            } else {
+                logDebug('No media parameter found in URL');
             }
+            
+            logDebug('Card initialization complete');
         }
 
         // ========== MEDIA DISPLAY FUNCTION ==========
         function displayMedia(mediaUrl, theme) {
+            logDebug(`Displaying media: ${mediaUrl.substring(0, 100)}...`);
+            
             const container = document.getElementById('mediaContainer');
             const lockScreen = document.getElementById('videoLockScreen');
             const lockIcon = document.getElementById('videoLockIcon');
@@ -773,22 +843,48 @@
             
             // Tampilkan container
             container.style.display = 'block';
+            logDebug('Media container displayed');
             
             // Set lock icon sesuai tema
             const themeConfig = THEMES[theme] || THEMES.birthday;
             lockIcon.textContent = themeConfig.lockIcon || '🔓';
+            logDebug(`Lock icon set to: ${themeConfig.lockIcon}`);
             
             // Cek jika media adalah video
-            const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('video') || 
-                           mediaUrl.includes('.mov') || mediaUrl.includes('.webm') ||
+            const isVideo = mediaUrl.includes('.mp4') || 
+                           mediaUrl.includes('video') || 
+                           mediaUrl.includes('.mov') || 
+                           mediaUrl.includes('.webm') ||
                            mediaUrl.includes('drive.google.com');
             
+            logDebug(`Media type detection: ${isVideo ? 'VIDEO' : 'IMAGE'}`);
+            logDebug(`Media URL contains: ${mediaUrl}`);
+            
             if (isVideo) {
+                logDebug('Creating video element...');
+                
+                // Clean URL (remove any extra parameters that might cause issues)
+                let cleanUrl = mediaUrl;
+                if (mediaUrl.includes('drive.google.com')) {
+                    // Extract file ID from Google Drive URL
+                    const fileIdMatch = mediaUrl.match(/[?&]id=([^&]+)/) || 
+                                       mediaUrl.match(/\/d\/([^\/]+)/) ||
+                                       mediaUrl.match(/uc\?id=([^&]+)/);
+                    
+                    if (fileIdMatch && fileIdMatch[1]) {
+                        cleanUrl = `https://drive.google.com/uc?id=${fileIdMatch[1]}&export=download`;
+                        logDebug(`Extracted Google Drive file ID: ${fileIdMatch[1]}`);
+                        logDebug(`Clean video URL: ${cleanUrl}`);
+                    }
+                }
+                
                 // Buat elemen video
                 mediaPlayer.innerHTML = `
                     <video id="greetingVideo" 
-                           style="width: 100%; height: auto; display: block;">
-                        <source src="${mediaUrl}" type="video/mp4">
+                           style="width: 100%; height: auto; display: block;"
+                           preload="metadata"
+                           playsinline>
+                        <source src="${cleanUrl}" type="video/mp4">
                         Browser Anda tidak mendukung video.
                     </video>
                 `;
@@ -798,71 +894,124 @@
                 
                 // Setup video metadata
                 videoElement.addEventListener('loadedmetadata', function() {
+                    logDebug(`Video metadata loaded: duration=${videoElement.duration}s, width=${videoElement.videoWidth}, height=${videoElement.videoHeight}`);
+                    
                     // Batasi durasi maksimal 30 detik
                     const maxDuration = 30;
                     const actualDuration = videoElement.duration;
                     
                     if (actualDuration > maxDuration) {
                         durationDisplay.textContent = `Durasi: ${maxDuration}s (dipotong)`;
+                        logDebug(`Video too long (${actualDuration}s), will be cut to ${maxDuration}s`);
+                        
                         // Potong video setelah 30 detik
                         setTimeout(() => {
                             if (!videoUnlocked) return;
                             videoElement.pause();
                             videoElement.currentTime = 0;
+                            logDebug('Video stopped after 30 seconds');
                         }, maxDuration * 1000);
                     } else {
                         durationDisplay.textContent = `Durasi: ${Math.round(actualDuration)}s`;
+                        logDebug(`Video duration: ${Math.round(actualDuration)} seconds`);
                     }
                 });
                 
                 // Event error handling
-                videoElement.addEventListener('error', function() {
+                videoElement.addEventListener('error', function(e) {
+                    logDebug(`Video error: ${e.target.error.code} - ${e.target.error.message}`, 'error');
                     lockIcon.textContent = '❌';
                     lockScreen.querySelector('.lock-instruction').textContent = 
                         'Video tidak dapat dimuat';
+                    lockScreen.style.cursor = 'default';
                 });
                 
                 // Event untuk membuka kunci
                 lockScreen.addEventListener('click', function unlockVideo() {
-                    if (videoElement.error) return;
+                    logDebug('Lock screen clicked, attempting to play video...');
+                    
+                    if (videoElement.error) {
+                        logDebug('Video has error, cannot play', 'error');
+                        return;
+                    }
                     
                     // Coba putar video
                     videoElement.muted = true;
+                    logDebug('Video muted for autoplay');
+                    
                     videoElement.play().then(() => {
+                        logDebug('Video playback started successfully');
                         videoUnlocked = true;
                         
                         // Animasi hilangkan lock screen
                         lockScreen.style.opacity = '0';
                         lockScreen.style.transform = 'scale(1.1)';
+                        logDebug('Lock screen fade animation started');
                         
                         setTimeout(() => {
                             lockScreen.style.display = 'none';
                             // Unmute setelah user interaksi
                             videoElement.muted = false;
+                            logDebug('Lock screen hidden, audio unmuted');
                         }, 500);
                         
                     }).catch(error => {
-                        console.error('Video play failed:', error);
+                        logDebug(`Video play failed: ${error.message}`, 'error');
                         lockIcon.textContent = '⚠️';
                         lockScreen.querySelector('.lock-instruction').textContent = 
                             'Klik lagi untuk mencoba memutar';
                     });
                 });
                 
+                // Test if video can load
+                setTimeout(() => {
+                    if (videoElement.readyState === 0) {
+                        logDebug('Video still loading after 3 seconds...', 'warning');
+                    }
+                }, 3000);
+                
             } else {
                 // Untuk gambar, langsung tampilkan tanpa lock screen
+                logDebug('Displaying as image');
                 lockScreen.style.display = 'none';
                 durationDisplay.style.display = 'none';
+                
+                // Clean URL for images
+                let cleanUrl = mediaUrl;
+                if (mediaUrl.includes('drive.google.com')) {
+                    const fileIdMatch = mediaUrl.match(/[?&]id=([^&]+)/) || 
+                                       mediaUrl.match(/\/d\/([^\/]+)/);
+                    
+                    if (fileIdMatch && fileIdMatch[1]) {
+                        cleanUrl = `https://drive.google.com/uc?id=${fileIdMatch[1]}&export=download`;
+                        logDebug(`Clean image URL: ${cleanUrl}`);
+                    }
+                }
+                
                 mediaPlayer.innerHTML = `
-                    <img src="${mediaUrl}" 
+                    <img src="${cleanUrl}" 
                          alt="Foto spesial" 
-                         class="image-preview">
+                         class="image-preview"
+                         onload="logDebug('Image loaded successfully')"
+                         onerror="logDebug('Image failed to load', 'error')">
                 `;
             }
+            
+            // Update debug info
+            document.getElementById('debugInfo').innerHTML = `
+                <div><strong>Media Info:</strong></div>
+                <div>Type: ${isVideo ? 'Video' : 'Image'}</div>
+                <div>URL: ${mediaUrl.substring(0, 80)}...</div>
+                <div>Theme: ${theme}</div>
+                <div>Loaded: ${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            logDebug('Media display setup complete');
         }
 
         // ========== ACTION FUNCTIONS ==========
         function shareCard() {
+            logDebug('Sharing card...');
             const params = getUrlParams();
             const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${params.to}:\n\n${window.location.href}`;
             
@@ -871,7 +1020,10 @@
                     title: 'Kartu Ucapan Digital - FIOR Florist',
                     text: shareText,
                     url: window.location.href
+                }).then(() => {
+                    logDebug('Card shared successfully via Web Share API');
                 }).catch(err => {
+                    logDebug(`Web Share failed: ${err.message}`, 'warning');
                     fallbackShare(shareText);
                 });
             } else {
@@ -882,19 +1034,30 @@
         function fallbackShare(text) {
             navigator.clipboard.writeText(text)
                 .then(() => {
+                    logDebug('Link copied to clipboard');
                     alert('✨ Link kartu telah disalin ke clipboard!');
                 })
                 .catch(err => {
+                    logDebug(`Clipboard failed: ${err.message}`, 'error');
                     prompt('Salin link berikut:', window.location.href);
                 });
         }
 
         function printCard() {
+            logDebug('Printing card...');
             window.print();
         }
 
         // ========== INITIALIZATION ==========
-        document.addEventListener('DOMContentLoaded', initCard);
+        document.addEventListener('DOMContentLoaded', function() {
+            logDebug('DOM Content Loaded');
+            initCard();
+        });
+
+        // Log page errors
+        window.addEventListener('error', function(e) {
+            logDebug(`Page error: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
+        });
     </script>
 </body>
 </html>
