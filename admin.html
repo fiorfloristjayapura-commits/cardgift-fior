@@ -1,734 +1,1107 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin FIOR Florist</title>
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin FIOR - Card Gift Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
-  color: #fff;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+        :root {
+            --primary: #d4af37;
+            --primary-dark: #b8941f;
+            --secondary: #1a1a1a;
+            --dark: #111;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --border: rgba(212, 175, 55, 0.3);
+            --shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
 
-.container {
-  width: 100%;
-  max-width: 480px;
-  background: rgba(30, 30, 30, 0.95);
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-.header {
-  text-align: center;
-  margin-bottom: 30px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-.logo {
-  font-size: 2.5rem;
-  color: #d4af37;
-  margin-bottom: 10px;
-  font-weight: 300;
-}
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            border-bottom: 2px solid var(--border);
+        }
 
-.subtitle {
-  color: #aaa;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-}
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
 
-.form-group {
-  margin-bottom: 20px;
-}
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
 
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: #d4af37;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
+        .logo h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: 300;
+        }
 
-select, input, textarea {
-  width: 100%;
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 10px;
-  color: #fff;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
+        .tagline {
+            color: var(--gray);
+            font-style: italic;
+            margin-bottom: 10px;
+        }
 
-select:focus, input:focus, textarea:focus {
-  outline: none;
-  border-color: #d4af37;
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
-}
+        .admin-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
 
-select option {
-  background: #1a1a1a;
-  color: #fff;
-}
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
 
-textarea {
-  min-height: 120px;
-  resize: vertical;
-}
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
 
-.buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 30px;
-}
+        .sidebar {
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            height: fit-content;
+        }
 
-.btn {
-  flex: 1;
-  padding: 16px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  text-decoration: none;
-}
+        .main-content {
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid var(--border);
+        }
 
-.btn-primary {
-  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
-  color: #000;
-}
+        .card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, #e6c158 0%, #d4af37 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-}
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
+        h2 i {
+            font-size: 1.2rem;
+        }
 
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
+        h3 {
+            color: var(--light);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
 
-.result-container {
-  margin-top: 30px;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  border-left: 4px solid #d4af37;
-  display: none;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-.result-container.active {
-  display: block;
-  animation: fadeIn 0.5s ease;
-}
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+        select, input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
 
-.result-label {
-  color: #d4af37;
-  font-weight: 600;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
 
-.result-label i {
-  font-size: 1.2rem;
-}
+        select option {
+            background: var(--secondary);
+            color: var(--light);
+        }
 
-.link-box {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 15px;
-  border-radius: 8px;
-  margin: 15px 0;
-  word-break: break-all;
-  font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
-  color: #4ecdc4;
-  border: 1px solid rgba(78, 205, 196, 0.2);
-}
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
 
-.action-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
-.action-btn {
-  flex: 1;
-  padding: 12px;
-  background: rgba(212, 175, 55, 0.1);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 8px;
-  color: #d4af37;
-  text-decoration: none;
-  text-align: center;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #000;
+        }
 
-.action-btn:hover {
-  background: rgba(212, 175, 55, 0.2);
-  transform: translateY(-2px);
-}
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
 
-.action-btn.copy {
-  background: rgba(78, 205, 196, 0.1);
-  border-color: rgba(78, 205, 196, 0.3);
-  color: #4ecdc4;
-}
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-.action-btn.copy:hover {
-  background: rgba(78, 205, 196, 0.2);
-}
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
 
-.loading {
-  display: none;
-  text-align: center;
-  padding: 20px;
-  color: #d4af37;
-}
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
 
-.loading.active {
-  display: block;
-}
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
 
-.spinner {
-  border: 3px solid rgba(212, 175, 55, 0.3);
-  border-top: 3px solid #d4af37;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 15px;
-}
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+        .stat-card {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
 
-.error-message {
-  background: rgba(255, 87, 87, 0.1);
-  border: 1px solid rgba(255, 87, 87, 0.3);
-  border-radius: 8px;
-  padding: 15px;
-  margin: 10px 0;
-  color: #ff5757;
-  display: none;
-}
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
 
-.error-message.active {
-  display: block;
-  animation: shake 0.5s ease;
-}
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
+        .customer-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
 
-.success-message {
-  background: rgba(76, 175, 80, 0.1);
-  border: 1px solid rgba(76, 175, 80, 0.3);
-  border-radius: 8px;
-  padding: 15px;
-  margin: 10px 0;
-  color: #4caf50;
-  display: none;
-}
+        .customer-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--primary);
+        }
 
-.success-message.active {
-  display: block;
-}
+        .customer-info h4 {
+            color: var(--light);
+            margin-bottom: 5px;
+        }
 
-.customer-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
+        .customer-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
 
-.customer-details {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
+        .customer-actions {
+            display: flex;
+            gap: 8px;
+        }
 
-.customer-name {
-  font-weight: 600;
-  color: #d4af37;
-}
+        .result-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            border-left: 4px solid var(--primary);
+            display: none;
+        }
 
-.customer-phone {
-  font-size: 0.9rem;
-  color: #aaa;
-}
+        .result-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
 
-.clear-btn {
-  background: none;
-  border: none;
-  color: #ff5757;
-  cursor: pointer;
-  font-size: 0.9rem;
-  padding: 5px 10px;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.clear-btn:hover {
-  background: rgba(255, 87, 87, 0.1);
-}
+        .link-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #4ecdc4;
+            border: 1px solid rgba(78, 205, 196, 0.2);
+        }
 
-@media (max-width: 600px) {
-  .container {
-    padding: 20px;
-    border-radius: 15px;
-  }
-  
-  .buttons, .action-buttons {
-    flex-direction: column;
-  }
-  
-  .btn, .action-btn {
-    width: 100%;
-  }
-}
-</style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-10px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: #28a745;
+        }
+
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: #dc3545;
+        }
+
+        .theme-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .theme-option {
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .theme-option:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .theme-option.active {
+            border-color: var(--primary);
+            background: rgba(212, 175, 55, 0.2);
+        }
+
+        .theme-emoji {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .theme-name {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Theme-specific colors */
+        .theme-valentine { color: #e91e63; }
+        .theme-birthday { color: #2196f3; }
+        .theme-wedding { color: #ff9800; }
+        .theme-anniversary { color: #9c27b0; }
+        .theme-graduation { color: #4caf50; }
+        .theme-condolence { color: #607d8b; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                <h1>FIOR FLORIST</h1>
+            </div>
+            <p class="tagline">Card Gift Generator - Admin Panel</p>
+            
+            <div class="admin-info">
+                <div>
+                    <span id="currentDate"></span> | 
+                    <span id="currentTime"></span>
+                </div>
+                <div>
+                    <span id="adminName">Admin: Fior Manager</span>
+                </div>
+            </div>
+        </header>
 
-<div class="container">
-  <div class="header">
-    <div class="logo">
-      <i class="fas fa-crown"></i> FIOR
+        <!-- Alerts -->
+        <div id="alertSuccess" class="alert alert-success"></div>
+        <div id="alertError" class="alert alert-error"></div>
+
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Statistics -->
+                <div class="card">
+                    <h2><i class="fas fa-chart-bar"></i> Dashboard</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalCustomers">0</div>
+                            <div class="stat-label">Total Customers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalCards">0</div>
+                            <div class="stat-label">Cards Created</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="todayCards">0</div>
+                            <div class="stat-label">Today</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Customers -->
+                <div class="card">
+                    <h2><i class="fas fa-users"></i> Recent Customers</h2>
+                    <div class="customer-list" id="recentCustomers">
+                        <!-- Will be populated by JavaScript -->
+                        <p class="text-center">Loading customers...</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="loadAllCustomers()" style="width: 100%; margin-top: 10px;">
+                        <i class="fas fa-sync-alt"></i> Refresh List
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+                    <div class="quick-actions">
+                        <button class="btn btn-secondary btn-sm" onclick="resetForm()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="testConnection()">
+                            <i class="fas fa-wifi"></i> Test Connection
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="exportData()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Create Card Form -->
+                <div class="card">
+                    <h2><i class="fas fa-gift"></i> Create New Card</h2>
+                    
+                    <div class="form-group">
+                        <label for="customerSelect"><i class="fas fa-user-circle"></i> Select Customer</label>
+                        <select id="customerSelect" onchange="onCustomerSelect()">
+                            <option value="">Loading customers...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipientName"><i class="fas fa-user"></i> Recipient Name *</label>
+                        <input type="text" id="recipientName" placeholder="Enter recipient full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsappNumber"><i class="fab fa-whatsapp"></i> WhatsApp Number *</label>
+                        <input type="tel" id="whatsappNumber" placeholder="Example: 081234567890" required>
+                        <small style="color: var(--gray); font-size: 0.8rem;">Format: 08xxx (will auto-convert to 62xxx)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message"><i class="fas fa-comment-dots"></i> Message *</label>
+                        <textarea id="message" placeholder="Write your personalized message here..." required></textarea>
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <small style="color: var(--gray); font-size: 0.8rem;">Min. 20 characters</small>
+                            <small style="color: var(--gray); font-size: 0.8rem;">
+                                <span id="charCount">0</span>/500 characters
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-palette"></i> Select Theme *</label>
+                        <select id="themeSelect" onchange="updateThemePreview()">
+                            <option value="valentine">❤️ Valentine's Day</option>
+                            <option value="birthday">🎂 Birthday</option>
+                            <option value="wedding">💍 Wedding</option>
+                            <option value="anniversary">💑 Anniversary</option>
+                            <option value="graduation">🎓 Graduation</option>
+                            <option value="condolence">🕊️ Condolence</option>
+                        </select>
+                        
+                        <div class="theme-preview" id="themePreview">
+                            <!-- Theme previews will be generated here -->
+                        </div>
+                    </div>
+
+                    <!-- Loading Indicator -->
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p>Processing your request...</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="generateCard()" style="flex: 2;">
+                            <i class="fas fa-magic"></i> Generate Card & Send
+                        </button>
+                        <button class="btn btn-secondary" onclick="previewCard()" style="flex: 1;">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result Container -->
+                <div class="result-container" id="resultContainer">
+                    <h2><i class="fas fa-check-circle"></i> Card Successfully Created!</h2>
+                    
+                    <div class="form-group">
+                        <label>Generated Card Link:</label>
+                        <div class="link-box" id="generatedLink">
+                            <!-- Link will appear here -->
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="#" target="_blank" class="action-btn" id="whatsappBtn">
+                            <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                        </a>
+                        <button class="action-btn" onclick="copyToClipboard()">
+                            <i class="fas fa-copy"></i> Copy Link
+                        </button>
+                        <a href="#" target="_blank" class="action-btn" id="previewBtn">
+                            <i class="fas fa-eye"></i> Open Card
+                        </a>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                        <h3><i class="fas fa-history"></i> Card Details</h3>
+                        <p><strong>Recipient:</strong> <span id="resultName">-</span></p>
+                        <p><strong>Theme:</strong> <span id="resultTheme">-</span></p>
+                        <p><strong>Created:</strong> <span id="resultTime">-</span></p>
+                        <p><strong>Status:</strong> <span style="color: var(--success);">✓ Ready to send</span></p>
+                    </div>
+                </div>
+
+                <!-- Recent Cards -->
+                <div class="card" style="margin-top: 30px;">
+                    <h2><i class="fas fa-history"></i> Recent Cards</h2>
+                    <div id="recentCardsList">
+                        <p>No cards generated yet. Create your first card!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>FIOR Florist Card Gift Generator v1.0 &copy; 2024 | Admin Panel</p>
+            <p>System Status: <span id="systemStatus" style="color: var(--success);">🟢 Online</span></p>
+            <p>Last Updated: <span id="lastUpdated">Loading...</span></p>
+        </footer>
     </div>
-    <div class="subtitle">Admin Panel - Pembuat Kartu Ucapan Digital</div>
-  </div>
 
-  <div id="errorMessage" class="error-message"></div>
-  <div id="successMessage" class="success-message"></div>
+    <script>
+        // Configuration
+        const CONFIG = {
+            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxIquhuDtAzIUHhpaVoYgLVtCvKEHNDVqwqrfZtfx3NrQ2CZrwivK3jAv9ioOU88ajPrw/exec",
+            CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
+            COMPANY_NAME: "FIOR Florist",
+            ADMIN_NAME: "Fior Manager"
+        };
 
-  <div class="form-group">
-    <label for="customer"><i class="fas fa-users"></i> Pilih Customer</label>
-    <select id="customer">
-      <option value="">Loading data customer...</option>
-    </select>
-  </div>
+        // DOM Elements
+        const elements = {
+            customerSelect: document.getElementById('customerSelect'),
+            recipientName: document.getElementById('recipientName'),
+            whatsappNumber: document.getElementById('whatsappNumber'),
+            message: document.getElementById('message'),
+            themeSelect: document.getElementById('themeSelect'),
+            charCount: document.getElementById('charCount'),
+            loading: document.getElementById('loading'),
+            resultContainer: document.getElementById('resultContainer'),
+            generatedLink: document.getElementById('generatedLink'),
+            whatsappBtn: document.getElementById('whatsappBtn'),
+            previewBtn: document.getElementById('previewBtn'),
+            resultName: document.getElementById('resultName'),
+            resultTheme: document.getElementById('resultTheme'),
+            resultTime: document.getElementById('resultTime'),
+            alertSuccess: document.getElementById('alertSuccess'),
+            alertError: document.getElementById('alertError'),
+            recentCustomers: document.getElementById('recentCustomers'),
+            recentCardsList: document.getElementById('recentCardsList'),
+            themePreview: document.getElementById('themePreview'),
+            totalCustomers: document.getElementById('totalCustomers'),
+            totalCards: document.getElementById('totalCards'),
+            todayCards: document.getElementById('todayCards'),
+            currentDate: document.getElementById('currentDate'),
+            currentTime: document.getElementById('currentTime'),
+            lastUpdated: document.getElementById('lastUpdated')
+        };
 
-  <div id="selectedCustomer" class="customer-info" style="display: none;">
-    <div class="customer-details">
-      <span class="customer-name" id="displayName">-</span>
-      <span class="customer-phone" id="displayPhone">-</span>
-    </div>
-    <button class="clear-btn" onclick="clearCustomer()">
-      <i class="fas fa-times"></i> Hapus
-    </button>
-  </div>
+        // Themes configuration
+        const THEMES = {
+            valentine: { emoji: "❤️", name: "Valentine", color: "#e91e63" },
+            birthday: { emoji: "🎂", name: "Birthday", color: "#2196f3" },
+            wedding: { emoji: "💍", name: "Wedding", color: "#ff9800" },
+            anniversary: { emoji: "💑", name: "Anniversary", color: "#9c27b0" },
+            graduation: { emoji: "🎓", name: "Graduation", color: "#4caf50" },
+            condolence: { emoji: "🕊️", name: "Condolence", color: "#607d8b" }
+        };
 
-  <div class="form-group">
-    <label for="nama"><i class="fas fa-user"></i> Nama Penerima</label>
-    <input type="text" id="nama" placeholder="Masukkan nama penerima">
-  </div>
+        // State
+        let customers = [];
+        let recentCards = [];
 
-  <div class="form-group">
-    <label for="hp"><i class="fas fa-phone"></i> Nomor WhatsApp</label>
-    <input type="text" id="hp" placeholder="Contoh: 081234567890">
-  </div>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            generateThemePreviews();
+            loadCustomers();
+            loadStats();
+            loadRecentCards();
+            
+            // Character count for message
+            elements.message.addEventListener('input', updateCharCount);
+            updateCharCount();
+        });
 
-  <div class="form-group">
-    <label for="pesan"><i class="fas fa-envelope"></i> Pesan Ucapan</label>
-    <textarea id="pesan" placeholder="Tulis pesan ucapan di sini..."></textarea>
-  </div>
+        // Functions
+        function updateDateTime() {
+            const now = new Date();
+            elements.currentDate.textContent = now.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            elements.currentTime.textContent = now.toLocaleTimeString('id-ID');
+        }
 
-  <div class="form-group">
-    <label for="tema"><i class="fas fa-palette"></i> Tema Kartu</label>
-    <select id="tema">
-      <option value="valentine">❤️ Valentine</option>
-      <option value="birthday">🎂 Ulang Tahun</option>
-      <option value="condolence">🕊️ Duka Cita</option>
-      <option value="anniversary">💑 Anniversary</option>
-      <option value="graduation">🎓 Wisuda</option>
-      <option value="wedding">💍 Pernikahan</option>
-    </select>
-  </div>
+        function generateThemePreviews() {
+            elements.themePreview.innerHTML = '';
+            for (const [key, theme] of Object.entries(THEMES)) {
+                const div = document.createElement('div');
+                div.className = 'theme-option';
+                if (key === 'valentine') div.classList.add('active');
+                div.setAttribute('data-theme', key);
+                div.innerHTML = `
+                    <div class="theme-emoji">${theme.emoji}</div>
+                    <div class="theme-name">${theme.name}</div>
+                `;
+                div.onclick = () => {
+                    elements.themeSelect.value = key;
+                    document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active');
+                };
+                elements.themePreview.appendChild(div);
+            }
+        }
 
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <div>Memproses...</div>
-  </div>
+        function updateThemePreview() {
+            const selectedTheme = elements.themeSelect.value;
+            document.querySelectorAll('.theme-option').forEach(el => {
+                el.classList.remove('active');
+                if (el.getAttribute('data-theme') === selectedTheme) {
+                    el.classList.add('active');
+                }
+            });
+        }
 
-  <div class="buttons">
-    <button class="btn btn-primary" onclick="generateCard()">
-      <i class="fas fa-magic"></i> Buat Kartu Ucapan
-    </button>
-    <button class="btn btn-secondary" onclick="resetForm()">
-      <i class="fas fa-redo"></i> Reset Form
-    </button>
-  </div>
+        function updateCharCount() {
+            const length = elements.message.value.length;
+            elements.charCount.textContent = length;
+            
+            if (length < 20) {
+                elements.charCount.style.color = 'var(--danger)';
+            } else if (length > 450) {
+                elements.charCount.style.color = 'var(--primary)';
+            } else {
+                elements.charCount.style.color = 'var(--gray)';
+            }
+        }
 
-  <div class="result-container" id="resultContainer">
-    <div class="result-label">
-      <i class="fas fa-link"></i> Link Kartu Berhasil Dibuat
-    </div>
-    <div class="link-box" id="generatedLink">-</div>
-    
-    <div class="action-buttons">
-      <a href="#" target="_blank" class="action-btn" id="whatsappBtn">
-        <i class="fab fa-whatsapp"></i> Kirim via WhatsApp
-      </a>
-      <button class="action-btn copy" onclick="copyLink()">
-        <i class="fas fa-copy"></i> Salin Link
-      </button>
-      <a href="#" target="_blank" class="action-btn" id="previewBtn">
-        <i class="fas fa-eye"></i> Preview
-      </a>
-    </div>
-  </div>
-</div>
+        async function loadCustomers() {
+            try {
+                showLoading(true);
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?t=${Date.now()}`);
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const data = await response.json();
+                
+                if (data.error) throw new Error(data.error);
+                
+                customers = Array.isArray(data) ? data : [];
+                updateCustomerSelect();
+                updateRecentCustomers();
+                updateStats();
+                
+            } catch (error) {
+                console.error('Error loading customers:', error);
+                showAlert(`Error loading customers: ${error.message}`, 'error');
+                elements.customerSelect.innerHTML = '<option value="">Error loading customers</option>';
+            } finally {
+                showLoading(false);
+            }
+        }
 
-<script>
-// Konfigurasi
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxIquhuDtAzIUHhpaVoYgLVtCvKEHNDVqwqrfZtfx3NrQ2CZrwivK3jAv9ioOU88ajPrw/exec";
-const CARD_BASE_URL = "https://fiorfloristjayapura-commits.github.io/Fior-PreOrder/kartu-fior-lite.html";
+        function updateCustomerSelect() {
+            elements.customerSelect.innerHTML = '<option value="">Select a customer or add new...</option>';
+            
+            customers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = JSON.stringify(customer);
+                option.textContent = `${customer.nama} - ${customer.no_hp || 'No phone'}`;
+                elements.customerSelect.appendChild(option);
+            });
+            
+            // Add "Add New Customer" option
+            const addNewOption = document.createElement('option');
+            addNewOption.value = "add_new";
+            addNewOption.textContent = "➕ Add New Customer";
+            elements.customerSelect.appendChild(addNewOption);
+        }
 
-// Elemen DOM
-const customerSelect = document.getElementById('customer');
-const namaInput = document.getElementById('nama');
-const hpInput = document.getElementById('hp');
-const pesanInput = document.getElementById('pesan');
-const temaSelect = document.getElementById('tema');
-const resultContainer = document.getElementById('resultContainer');
-const generatedLink = document.getElementById('generatedLink');
-const whatsappBtn = document.getElementById('whatsappBtn');
-const previewBtn = document.getElementById('previewBtn');
-const loading = document.getElementById('loading');
-const errorMessage = document.getElementById('errorMessage');
-const successMessage = document.getElementById('successMessage');
-const selectedCustomer = document.getElementById('selectedCustomer');
-const displayName = document.getElementById('displayName');
-const displayPhone = document.getElementById('displayPhone');
+        function updateRecentCustomers() {
+            if (customers.length === 0) {
+                elements.recentCustomers.innerHTML = '<p class="text-center">No customers found</p>';
+                return;
+            }
+            
+            const recent = customers.slice(-5).reverse();
+            elements.recentCustomers.innerHTML = '';
+            
+            recent.forEach(customer => {
+                const div = document.createElement('div');
+                div.className = 'customer-item';
+                div.innerHTML = `
+                    <div class="customer-info">
+                        <h4>${customer.nama}</h4>
+                        <p>${customer.no_hp || 'No phone provided'}</p>
+                    </div>
+                    <div class="customer-actions">
+                        <button class="btn btn-secondary btn-sm" onclick="selectCustomer('${customer.nama}', '${customer.no_hp}')">
+                            <i class="fas fa-check"></i> Use
+                        </button>
+                    </div>
+                `;
+                elements.recentCustomers.appendChild(div);
+            });
+        }
 
-// Load data customer saat halaman dimuat
-window.addEventListener('DOMContentLoaded', loadCustomers);
+        function onCustomerSelect() {
+            if (elements.customerSelect.value === "add_new") {
+                elements.recipientName.value = '';
+                elements.whatsappNumber.value = '';
+                elements.customerSelect.value = '';
+                return;
+            }
+            
+            if (!elements.customerSelect.value) return;
+            
+            try {
+                const customer = JSON.parse(elements.customerSelect.value);
+                elements.recipientName.value = customer.nama || '';
+                elements.whatsappNumber.value = customer.no_hp || '';
+            } catch (error) {
+                console.error('Error parsing customer:', error);
+            }
+        }
 
-async function loadCustomers() {
-  try {
-    showLoading(true);
-    
-    // Tambahkan timestamp untuk menghindari cache
-    const response = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    // Handle jika ada error dari server
-    if (data.error) {
-      throw new Error(data.error);
-    }
-    
-    customerSelect.innerHTML = '<option value="">Pilih customer...</option>';
-    
-    if (data.length === 0) {
-      customerSelect.innerHTML = '<option value="">Tidak ada data customer</option>';
-      return;
-    }
-    
-    data.forEach(customer => {
-      if (customer.nama) {
-        const option = document.createElement('option');
-        option.value = JSON.stringify(customer);
-        option.textContent = `${customer.nama} (${customer.no_hp || '-'})`;
-        customerSelect.appendChild(option);
-      }
-    });
-    
-  } catch (error) {
-    console.error('Error loading customers:', error);
-    customerSelect.innerHTML = '<option value="">Gagal memuat data</option>';
-    showError('Gagal memuat data customer. Silakan refresh halaman.');
-  } finally {
-    showLoading(false);
-  }
-}
+        function selectCustomer(name, phone) {
+            elements.recipientName.value = name;
+            elements.whatsappNumber.value = phone;
+            showAlert(`Customer "${name}" selected`, 'success');
+        }
 
-// Event listener untuk select customer
-customerSelect.addEventListener('change', function() {
-  if (!this.value) {
-    selectedCustomer.style.display = 'none';
-    return;
-  }
-  
-  try {
-    const customer = JSON.parse(this.value);
-    namaInput.value = customer.nama || '';
-    hpInput.value = customer.no_hp || '';
-    
-    // Tampilkan info customer
-    displayName.textContent = customer.nama || '-';
-    displayPhone.textContent = customer.no_hp || '-';
-    selectedCustomer.style.display = 'flex';
-    
-  } catch (error) {
-    console.error('Error parsing customer data:', error);
-  }
-});
+        async function generateCard() {
+            // Validate form
+            const name = elements.recipientName.value.trim();
+            const phone = elements.whatsappNumber.value.trim().replace(/[^\d]/g, '');
+            const message = elements.message.value.trim();
+            const theme = elements.themeSelect.value;
+            
+            if (!name) {
+                showAlert('Please enter recipient name', 'error');
+                elements.recipientName.focus();
+                return;
+            }
+            
+            if (!phone || phone.length < 10) {
+                showAlert('Please enter valid WhatsApp number (min. 10 digits)', 'error');
+                elements.whatsappNumber.focus();
+                return;
+            }
+            
+            if (!message || message.length < 20) {
+                showAlert('Please enter message (min. 20 characters)', 'error');
+                elements.message.focus();
+                return;
+            }
+            
+            if (!theme) {
+                showAlert('Please select a theme', 'error');
+                return;
+            }
+            
+            try {
+                showLoading(true);
+                
+                // Generate card URL
+                const cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
+                
+                // Save to Google Sheets
+                await saveCardToSheets({
+                    type: "card",
+                    nama: name,
+                    tema: theme,
+                    pesan: message,
+                    link: cardUrl
+                });
+                
+                // Update UI
+                elements.generatedLink.textContent = cardUrl;
+                elements.resultName.textContent = name;
+                elements.resultTheme.textContent = THEMES[theme].name;
+                elements.resultTime.textContent = new Date().toLocaleString('id-ID');
+                
+                // Update buttons
+                const whatsappNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
+                const whatsappMessage = `Halo ${name}, ini kartu ucapan digital dari ${CONFIG.COMPANY_NAME}:\n\n${cardUrl}\n\nSemoga berkenan! 🎉`;
+                elements.whatsappBtn.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(whatsappMessage)}`;
+                elements.previewBtn.href = cardUrl;
+                
+                // Show result
+                elements.resultContainer.classList.add('active');
+                showAlert('Card successfully created!', 'success');
+                
+                // Scroll to result
+                elements.resultContainer.scrollIntoView({ behavior: 'smooth' });
+                
+                // Add to recent cards
+                addToRecentCards({
+                    name: name,
+                    theme: theme,
+                    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+                    link: cardUrl
+                });
+                
+                // Update stats
+                loadStats();
+                
+            } catch (error) {
+                console.error('Error generating card:', error);
+                showAlert(`Error: ${error.message}`, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
 
-function clearCustomer() {
-  customerSelect.value = '';
-  selectedCustomer.style.display = 'none';
-  namaInput.value = '';
-  hpInput.value = '';
-}
+        async function saveCardToSheets(data) {
+            return new Promise((resolve, reject) => {
+                fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(() => resolve())
+                .catch(error => reject(error));
+            });
+        }
 
-function resetForm() {
-  customerSelect.value = '';
-  namaInput.value = '';
-  hpInput.value = '';
-  pesanInput.value = '';
-  temaSelect.value = 'valentine';
-  selectedCustomer.style.display = 'none';
-  resultContainer.classList.remove('active');
-  hideMessages();
-}
+        function addToRecentCards(card) {
+            recentCards.unshift(card);
+            if (recentCards.length > 5) recentCards = recentCards.slice(0, 5);
+            
+            updateRecentCardsList();
+        }
 
-function showLoading(show) {
-  loading.classList.toggle('active', show);
-}
+        function updateRecentCardsList() {
+            if (recentCards.length === 0) {
+                elements.recentCardsList.innerHTML = '<p>No cards generated yet. Create your first card!</p>';
+                return;
+            }
+            
+            elements.recentCardsList.innerHTML = '';
+            
+            recentCards.forEach(card => {
+                const div = document.createElement('div');
+                div.className = 'customer-item';
+                div.innerHTML = `
+                    <div class="customer-info">
+                        <h4>${card.name}</h4>
+                        <p>${THEMES[card.theme].emoji} ${THEMES[card.theme].name} • ${card.time}</p>
+                    </div>
+                    <div class="customer-actions">
+                        <a href="${card.link}" target="_blank" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                    </div>
+                `;
+                elements.recentCardsList.appendChild(div);
+            });
+        }
 
-function showError(message) {
-  errorMessage.textContent = message;
-  errorMessage.classList.add('active');
-  setTimeout(() => errorMessage.classList.remove('active'), 5000);
-}
+        function previewCard() {
+            const name = elements.recipientName.value.trim() || "Preview";
+            const message = elements.message.value.trim() || "This is a preview message";
+            const theme = elements.themeSelect.value;
+            
+            const previewUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&preview=true`;
+            window.open(previewUrl, '_blank');
+        }
 
-function showSuccess(message) {
-  successMessage.textContent = message;
-  successMessage.classList.add('active');
-  setTimeout(() => successMessage.classList.remove('active'), 3000);
-}
+        function copyToClipboard() {
+            const link = elements.generatedLink.textContent;
+            
+            if (!link || link === '') {
+                showAlert('No link to copy', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(link)
+                .then(() => showAlert('Link copied to clipboard!', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    showAlert('Failed to copy link', 'error');
+                });
+        }
 
-function hideMessages() {
-  errorMessage.classList.remove('active');
-  successMessage.classList.remove('active');
-}
+        function resetForm() {
+            elements.recipientName.value = '';
+            elements.whatsappNumber.value = '';
+            elements.message.value = '';
+            elements.themeSelect.value = 'valentine';
+            elements.customerSelect.value = '';
+            elements.resultContainer.classList.remove('active');
+            updateThemePreview();
+            updateCharCount();
+            showAlert('Form reset successfully', 'success');
+        }
 
-async function generateCard() {
-  // Validasi input
-  const nama = namaInput.value.trim();
-  const hp = hpInput.value.trim().replace(/[^\d]/g, '');
-  const pesan = pesanInput.value.trim();
-  const tema = temaSelect.value;
-  
-  if (!nama) {
-    showError('Nama penerima harus diisi');
-    namaInput.focus();
-    return;
-  }
-  
-  if (!hp || hp.length < 10) {
-    showError('Nomor WhatsApp harus diisi dengan benar (min. 10 digit)');
-    hpInput.focus();
-    return;
-  }
-  
-  if (!pesan) {
-    showError('Pesan ucapan harus diisi');
-    pesanInput.focus();
-    return;
-  }
-  
-  try {
-    showLoading(true);
-    hideMessages();
-    
-    // Generate link kartu
-    const link = `${CARD_BASE_URL}?to=${encodeURIComponent(nama)}&msg=${encodeURIComponent(pesan)}&theme=${tema}&t=${Date.now()}`;
-    
-    // Simpan ke Google Sheets
-    await saveToGoogleSheets({
-      type: "card",
-      nama: nama,
-      tema: tema,
-      pesan: pesan,
-      link: link
-    });
-    
-    // Tampilkan hasil
-    generatedLink.textContent = link;
-    
-    // Update tombol WhatsApp
-    const whatsappNumber = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
-    const whatsappMessage = `Halo ${nama}, ini kartu ucapan digital dari Fior Florist:\n\n${link}\n\nSemoga berkenan! 🎉`;
-    whatsappBtn.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-    
-    // Update tombol preview
-    previewBtn.href = link;
-    
-    // Tampilkan result container
-    resultContainer.classList.add('active');
-    
-    // Scroll ke hasil
-    resultContainer.scrollIntoView({ behavior: 'smooth' });
-    
-    showSuccess('Kartu berhasil dibuat dan disimpan!');
-    
-  } catch (error) {
-    console.error('Error generating card:', error);
-    showError('Gagal membuat kartu. Silakan coba lagi.');
-  } finally {
-    showLoading(false);
-  }
-}
+        function testConnection() {
+            showLoading(true);
+            fetch(CONFIG.SCRIPT_URL)
+                .then(response => {
+                    if (response.ok) {
+                        showAlert('✅ Connection to Google Sheets is working!', 'success');
+                    } else {
+                        showAlert('⚠️ Connection issue detected', 'error');
+                    }
+                })
+                .catch(error => {
+                    showAlert(`❌ Connection failed: ${error.message}`, 'error');
+                })
+                .finally(() => showLoading(false));
+        }
 
-async function saveToGoogleSheets(data) {
-  return new Promise((resolve, reject) => {
-    // Buat form data
-    const formData = new FormData();
-    formData.append('data', JSON.stringify(data));
-    
-    // Gunakan fetch dengan timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-    
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors', // Mode no-cors untuk menghindari CORS issues
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      clearTimeout(timeoutId);
-      // Karena no-cors, kita tidak bisa membaca response
-      // Tapi request sudah terkirim
-      resolve();
-    })
-    .catch(error => {
-      clearTimeout(timeoutId);
-      if (error.name === 'AbortError') {
-        reject(new Error('Request timeout'));
-      } else {
-        reject(error);
-      }
-    });
-  });
-}
+        async function loadStats() {
+            // Simulate stats - in real app, you would fetch from Google Sheets
+            elements.totalCustomers.textContent = customers.length;
+            elements.totalCards.textContent = recentCards.length;
+            elements.todayCards.textContent = recentCards.filter(card => {
+                // Simple check if card was created today
+                return true; // In real app, check date
+            }).length;
+        }
 
-function copyLink() {
-  const link = generatedLink.textContent;
-  
-  if (!link || link === '-') {
-    showError('Tidak ada link untuk disalin');
-    return;
-  }
-  
-  navigator.clipboard.writeText(link)
-    .then(() => {
-      showSuccess('Link berhasil disalin ke clipboard!');
-      
-      // Ganti teks tombol sementara
-      const copyBtn = document.querySelector('.copy');
-      const originalHTML = copyBtn.innerHTML;
-      copyBtn.innerHTML = '<i class="fas fa-check"></i> Tersalin!';
-      copyBtn.style.background = 'rgba(76, 175, 80, 0.2)';
-      copyBtn.style.borderColor = 'rgba(76, 175, 80, 0.5)';
-      copyBtn.style.color = '#4caf50';
-      
-      setTimeout(() => {
-        copyBtn.innerHTML = originalHTML;
-        copyBtn.style.background = '';
-        copyBtn.style.borderColor = '';
-        copyBtn.style.color = '';
-      }, 2000);
-    })
-    .catch(err => {
-      console.error('Failed to copy:', err);
-      showError('Gagal menyalin link. Silakan salin manual.');
-    });
-}
+        function loadRecentCards() {
+            // Load from localStorage or Google Sheets
+            const saved = localStorage.getItem('fior_recent_cards');
+            if (saved) {
+                recentCards = JSON.parse(saved);
+                updateRecentCardsList();
+            }
+        }
 
-// Tambahkan form validation real-time
-[namaInput, hpInput, pesanInput].forEach(input => {
-  input.addEventListener('input', function() {
-    this.classList.remove('error');
-  });
-});
+        function exportData() {
+            const data = {
+                customers: customers,
+                recentCards: recentCards,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `fior-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            showAlert('Data exported successfully', 'success');
+        }
 
-// Auto-format nomor HP
-hpInput.addEventListener('input', function(e) {
-  let value = e.target.value.replace(/[^\d]/g, '');
-  
-  // Format: 0812 3456 7890
-  if (value.length > 4) {
-    value = value.substring(0, 4) + ' ' + value.substring(4);
-  }
-  if (value.length > 9) {
-    value = value.substring(0, 9) + ' ' + value.substring(9);
-  }
-  if (value.length > 14) {
-    value = value.substring(0, 14);
-  }
-  
-  e.target.value = value;
-});
+        function showLoading(show) {
+            elements.loading.classList.toggle('active', show);
+        }
 
-// Tambahkan hotkey
-document.addEventListener('keydown', function(e) {
-  // Ctrl+Enter untuk generate card
-  if (e.ctrlKey && e.key === 'Enter') {
-    generateCard();
-  }
-  
-  // Esc untuk reset
-  if (e.key === 'Escape') {
-    resetForm();
-  }
-});
+        function showAlert(message, type = 'success') {
+            const alert = type === 'success' ? elements.alertSuccess : elements.alertError;
+            alert.textContent = message;
+            alert.classList.add('active');
+            
+            setTimeout(() => {
+                alert.classList.remove('active');
+            }, 5000);
+        }
 
-// Tambahkan notifikasi jika ada data belum tersimpan
-window.addEventListener('beforeunload', function(e) {
-  if (namaInput.value || hpInput.value || pesanInput.value) {
-    e.preventDefault();
-    e.returnValue = '';
-  }
-});
+        // Auto-save recent cards
+        setInterval(() => {
+            localStorage.setItem('fior_recent_cards', JSON.stringify(recentCards));
+            elements.lastUpdated.textContent = new Date().toLocaleTimeString('id-ID');
+        }, 30000);
 
-// Inisialisasi
-console.log('FIOR Admin Panel loaded successfully');
-</script>
-
+        // Initialize
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        generateThemePreviews();
+        loadCustomers();
+        loadRecentCards();
+    </script>
 </body>
 </html>
