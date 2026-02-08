@@ -3,132 +3,731 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Kartu FIOR</title>
-
+<title>Admin FIOR Florist</title>
 <style>
-body{
-  font-family:Arial, sans-serif;
-  background:#111;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.box{
-  background:#1a1a1a;
-  padding:25px;
-  border-radius:15px;
-  width:90%;
-  max-width:420px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
-h2{
-  text-align:center;
-  color:#d4af37;
+.container {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(30, 30, 30, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
-input, textarea, select{
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border:none;
-  border-radius:6px;
-  font-size:14px;
+.header {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-button{
-  width:100%;
-  padding:12px;
-  background:#d4af37;
-  border:none;
-  font-weight:bold;
-  cursor:pointer;
-  border-radius:6px;
+.logo {
+  font-size: 2.5rem;
+  color: #d4af37;
+  margin-bottom: 10px;
+  font-weight: 300;
 }
 
-button:hover{
-  background:#e6c24a;
+.subtitle {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
 }
 
-.result{
-  margin-top:15px;
-  font-size:13px;
-  word-break:break-all;
-  background:#000;
-  padding:10px;
-  border-radius:6px;
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #d4af37;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+select, input, textarea {
+  width: 100%;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+select:focus, input:focus, textarea:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+select option {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.btn {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+  color: #000;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #e6c158 0%, #d4af37 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.result-container {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border-left: 4px solid #d4af37;
+  display: none;
+}
+
+.result-container.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-label {
+  color: #d4af37;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.result-label i {
+  font-size: 1.2rem;
+}
+
+.link-box {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  word-break: break-all;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #4ecdc4;
+  border: 1px solid rgba(78, 205, 196, 0.2);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 12px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  color: #d4af37;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: translateY(-2px);
+}
+
+.action-btn.copy {
+  background: rgba(78, 205, 196, 0.1);
+  border-color: rgba(78, 205, 196, 0.3);
+  color: #4ecdc4;
+}
+
+.action-btn.copy:hover {
+  background: rgba(78, 205, 196, 0.2);
+}
+
+.loading {
+  display: none;
+  text-align: center;
+  padding: 20px;
+  color: #d4af37;
+}
+
+.loading.active {
+  display: block;
+}
+
+.spinner {
+  border: 3px solid rgba(212, 175, 55, 0.3);
+  border-top: 3px solid #d4af37;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  background: rgba(255, 87, 87, 0.1);
+  border: 1px solid rgba(255, 87, 87, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px 0;
+  color: #ff5757;
+  display: none;
+}
+
+.error-message.active {
+  display: block;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.success-message {
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px 0;
+  color: #4caf50;
+  display: none;
+}
+
+.success-message.active {
+  display: block;
+}
+
+.customer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.customer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.customer-name {
+  font-weight: 600;
+  color: #d4af37;
+}
+
+.customer-phone {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: #ff5757;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.clear-btn:hover {
+  background: rgba(255, 87, 87, 0.1);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+    border-radius: 15px;
+  }
+  
+  .buttons, .action-buttons {
+    flex-direction: column;
+  }
+  
+  .btn, .action-btn {
+    width: 100%;
+  }
 }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
 
-<div class="box">
-  <h2>Admin FIOR</h2>
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <i class="fas fa-crown"></i> FIOR
+    </div>
+    <div class="subtitle">Admin Panel - Pembuat Kartu Ucapan Digital</div>
+  </div>
 
-  <input type="text" id="nama" placeholder="Nama penerima">
-  <input type="text" id="hp" placeholder="No HP customer">
-  <textarea id="pesan" placeholder="Pesan"></textarea>
+  <div id="errorMessage" class="error-message"></div>
+  <div id="successMessage" class="success-message"></div>
 
-  <select id="tema">
-    <option value="valentine">Valentine</option>
-    <option value="birthday">Ulang Tahun</option>
-    <option value="condolence">Duka Cita</option>
-  </select>
+  <div class="form-group">
+    <label for="customer"><i class="fas fa-users"></i> Pilih Customer</label>
+    <select id="customer">
+      <option value="">Loading data customer...</option>
+    </select>
+  </div>
 
-  <button onclick="generate()">Buat Kartu</button>
+  <div id="selectedCustomer" class="customer-info" style="display: none;">
+    <div class="customer-details">
+      <span class="customer-name" id="displayName">-</span>
+      <span class="customer-phone" id="displayPhone">-</span>
+    </div>
+    <button class="clear-btn" onclick="clearCustomer()">
+      <i class="fas fa-times"></i> Hapus
+    </button>
+  </div>
 
-  <div id="result" class="result">Link kartu akan muncul di sini</div>
+  <div class="form-group">
+    <label for="nama"><i class="fas fa-user"></i> Nama Penerima</label>
+    <input type="text" id="nama" placeholder="Masukkan nama penerima">
+  </div>
+
+  <div class="form-group">
+    <label for="hp"><i class="fas fa-phone"></i> Nomor WhatsApp</label>
+    <input type="text" id="hp" placeholder="Contoh: 081234567890">
+  </div>
+
+  <div class="form-group">
+    <label for="pesan"><i class="fas fa-envelope"></i> Pesan Ucapan</label>
+    <textarea id="pesan" placeholder="Tulis pesan ucapan di sini..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="tema"><i class="fas fa-palette"></i> Tema Kartu</label>
+    <select id="tema">
+      <option value="valentine">❤️ Valentine</option>
+      <option value="birthday">🎂 Ulang Tahun</option>
+      <option value="condolence">🕊️ Duka Cita</option>
+      <option value="anniversary">💑 Anniversary</option>
+      <option value="graduation">🎓 Wisuda</option>
+      <option value="wedding">💍 Pernikahan</option>
+    </select>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div>Memproses...</div>
+  </div>
+
+  <div class="buttons">
+    <button class="btn btn-primary" onclick="generateCard()">
+      <i class="fas fa-magic"></i> Buat Kartu Ucapan
+    </button>
+    <button class="btn btn-secondary" onclick="resetForm()">
+      <i class="fas fa-redo"></i> Reset Form
+    </button>
+  </div>
+
+  <div class="result-container" id="resultContainer">
+    <div class="result-label">
+      <i class="fas fa-link"></i> Link Kartu Berhasil Dibuat
+    </div>
+    <div class="link-box" id="generatedLink">-</div>
+    
+    <div class="action-buttons">
+      <a href="#" target="_blank" class="action-btn" id="whatsappBtn">
+        <i class="fab fa-whatsapp"></i> Kirim via WhatsApp
+      </a>
+      <button class="action-btn copy" onclick="copyLink()">
+        <i class="fas fa-copy"></i> Salin Link
+      </button>
+      <a href="#" target="_blank" class="action-btn" id="previewBtn">
+        <i class="fas fa-eye"></i> Preview
+      </a>
+    </div>
+  </div>
 </div>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbwx39TjwPn2VNw9z3zfoo-DllmdsWtWop6HXU910eymKTuuuNXcBDlzqiNRTPi5IQunOA/exec";
+// Konfigurasi
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxIquhuDtAzIUHhpaVoYgLVtCvKEHNDVqwqrfZtfx3NrQ2CZrwivK3jAv9ioOU88ajPrw/exec";
+const CARD_BASE_URL = "https://fiorfloristjayapura-commits.github.io/Fior-PreOrder/kartu-fior-lite.html";
 
-function generate(){
-  const nama = document.getElementById("nama").value;
-  const hp = document.getElementById("hp").value;
-  const pesan = document.getElementById("pesan").value;
-  const tema = document.getElementById("tema").value;
+// Elemen DOM
+const customerSelect = document.getElementById('customer');
+const namaInput = document.getElementById('nama');
+const hpInput = document.getElementById('hp');
+const pesanInput = document.getElementById('pesan');
+const temaSelect = document.getElementById('tema');
+const resultContainer = document.getElementById('resultContainer');
+const generatedLink = document.getElementById('generatedLink');
+const whatsappBtn = document.getElementById('whatsappBtn');
+const previewBtn = document.getElementById('previewBtn');
+const loading = document.getElementById('loading');
+const errorMessage = document.getElementById('errorMessage');
+const successMessage = document.getElementById('successMessage');
+const selectedCustomer = document.getElementById('selectedCustomer');
+const displayName = document.getElementById('displayName');
+const displayPhone = document.getElementById('displayPhone');
 
-  if(!nama){
-    alert("Isi nama penerima dulu");
+// Load data customer saat halaman dimuat
+window.addEventListener('DOMContentLoaded', loadCustomers);
+
+async function loadCustomers() {
+  try {
+    showLoading(true);
+    
+    // Tambahkan timestamp untuk menghindari cache
+    const response = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Handle jika ada error dari server
+    if (data.error) {
+      throw new Error(data.error);
+    }
+    
+    customerSelect.innerHTML = '<option value="">Pilih customer...</option>';
+    
+    if (data.length === 0) {
+      customerSelect.innerHTML = '<option value="">Tidak ada data customer</option>';
+      return;
+    }
+    
+    data.forEach(customer => {
+      if (customer.nama) {
+        const option = document.createElement('option');
+        option.value = JSON.stringify(customer);
+        option.textContent = `${customer.nama} (${customer.no_hp || '-'})`;
+        customerSelect.appendChild(option);
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error loading customers:', error);
+    customerSelect.innerHTML = '<option value="">Gagal memuat data</option>';
+    showError('Gagal memuat data customer. Silakan refresh halaman.');
+  } finally {
+    showLoading(false);
+  }
+}
+
+// Event listener untuk select customer
+customerSelect.addEventListener('change', function() {
+  if (!this.value) {
+    selectedCustomer.style.display = 'none';
     return;
   }
+  
+  try {
+    const customer = JSON.parse(this.value);
+    namaInput.value = customer.nama || '';
+    hpInput.value = customer.no_hp || '';
+    
+    // Tampilkan info customer
+    displayName.textContent = customer.nama || '-';
+    displayPhone.textContent = customer.no_hp || '-';
+    selectedCustomer.style.display = 'flex';
+    
+  } catch (error) {
+    console.error('Error parsing customer data:', error);
+  }
+});
 
-  const link =
-    "https://fiorfloristjayapura-commits.github.io/Fior-PreOrder/kartu-fior-lite.html" +
-    "?to=" + encodeURIComponent(nama) +
-    "&msg=" + encodeURIComponent(pesan) +
-    "&theme=" + tema;
-
-  // Simpan customer
-  fetch(scriptURL, {
-    method:"POST",
-    body:JSON.stringify({
-      type:"customer",
-      nama:nama,
-      no_hp:hp,
-      catatan:""
-    })
-  });
-
-  // Simpan kartu
-  fetch(scriptURL, {
-    method:"POST",
-    body:JSON.stringify({
-      type:"card",
-      nama:nama,
-      tema:tema,
-      pesan:pesan,
-      link:link
-    })
-  });
-
-  document.getElementById("result").textContent = link;
+function clearCustomer() {
+  customerSelect.value = '';
+  selectedCustomer.style.display = 'none';
+  namaInput.value = '';
+  hpInput.value = '';
 }
+
+function resetForm() {
+  customerSelect.value = '';
+  namaInput.value = '';
+  hpInput.value = '';
+  pesanInput.value = '';
+  temaSelect.value = 'valentine';
+  selectedCustomer.style.display = 'none';
+  resultContainer.classList.remove('active');
+  hideMessages();
+}
+
+function showLoading(show) {
+  loading.classList.toggle('active', show);
+}
+
+function showError(message) {
+  errorMessage.textContent = message;
+  errorMessage.classList.add('active');
+  setTimeout(() => errorMessage.classList.remove('active'), 5000);
+}
+
+function showSuccess(message) {
+  successMessage.textContent = message;
+  successMessage.classList.add('active');
+  setTimeout(() => successMessage.classList.remove('active'), 3000);
+}
+
+function hideMessages() {
+  errorMessage.classList.remove('active');
+  successMessage.classList.remove('active');
+}
+
+async function generateCard() {
+  // Validasi input
+  const nama = namaInput.value.trim();
+  const hp = hpInput.value.trim().replace(/[^\d]/g, '');
+  const pesan = pesanInput.value.trim();
+  const tema = temaSelect.value;
+  
+  if (!nama) {
+    showError('Nama penerima harus diisi');
+    namaInput.focus();
+    return;
+  }
+  
+  if (!hp || hp.length < 10) {
+    showError('Nomor WhatsApp harus diisi dengan benar (min. 10 digit)');
+    hpInput.focus();
+    return;
+  }
+  
+  if (!pesan) {
+    showError('Pesan ucapan harus diisi');
+    pesanInput.focus();
+    return;
+  }
+  
+  try {
+    showLoading(true);
+    hideMessages();
+    
+    // Generate link kartu
+    const link = `${CARD_BASE_URL}?to=${encodeURIComponent(nama)}&msg=${encodeURIComponent(pesan)}&theme=${tema}&t=${Date.now()}`;
+    
+    // Simpan ke Google Sheets
+    await saveToGoogleSheets({
+      type: "card",
+      nama: nama,
+      tema: tema,
+      pesan: pesan,
+      link: link
+    });
+    
+    // Tampilkan hasil
+    generatedLink.textContent = link;
+    
+    // Update tombol WhatsApp
+    const whatsappNumber = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
+    const whatsappMessage = `Halo ${nama}, ini kartu ucapan digital dari Fior Florist:\n\n${link}\n\nSemoga berkenan! 🎉`;
+    whatsappBtn.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+    
+    // Update tombol preview
+    previewBtn.href = link;
+    
+    // Tampilkan result container
+    resultContainer.classList.add('active');
+    
+    // Scroll ke hasil
+    resultContainer.scrollIntoView({ behavior: 'smooth' });
+    
+    showSuccess('Kartu berhasil dibuat dan disimpan!');
+    
+  } catch (error) {
+    console.error('Error generating card:', error);
+    showError('Gagal membuat kartu. Silakan coba lagi.');
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function saveToGoogleSheets(data) {
+  return new Promise((resolve, reject) => {
+    // Buat form data
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(data));
+    
+    // Gunakan fetch dengan timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Mode no-cors untuk menghindari CORS issues
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      clearTimeout(timeoutId);
+      // Karena no-cors, kita tidak bisa membaca response
+      // Tapi request sudah terkirim
+      resolve();
+    })
+    .catch(error => {
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        reject(new Error('Request timeout'));
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+
+function copyLink() {
+  const link = generatedLink.textContent;
+  
+  if (!link || link === '-') {
+    showError('Tidak ada link untuk disalin');
+    return;
+  }
+  
+  navigator.clipboard.writeText(link)
+    .then(() => {
+      showSuccess('Link berhasil disalin ke clipboard!');
+      
+      // Ganti teks tombol sementara
+      const copyBtn = document.querySelector('.copy');
+      const originalHTML = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i class="fas fa-check"></i> Tersalin!';
+      copyBtn.style.background = 'rgba(76, 175, 80, 0.2)';
+      copyBtn.style.borderColor = 'rgba(76, 175, 80, 0.5)';
+      copyBtn.style.color = '#4caf50';
+      
+      setTimeout(() => {
+        copyBtn.innerHTML = originalHTML;
+        copyBtn.style.background = '';
+        copyBtn.style.borderColor = '';
+        copyBtn.style.color = '';
+      }, 2000);
+    })
+    .catch(err => {
+      console.error('Failed to copy:', err);
+      showError('Gagal menyalin link. Silakan salin manual.');
+    });
+}
+
+// Tambahkan form validation real-time
+[namaInput, hpInput, pesanInput].forEach(input => {
+  input.addEventListener('input', function() {
+    this.classList.remove('error');
+  });
+});
+
+// Auto-format nomor HP
+hpInput.addEventListener('input', function(e) {
+  let value = e.target.value.replace(/[^\d]/g, '');
+  
+  // Format: 0812 3456 7890
+  if (value.length > 4) {
+    value = value.substring(0, 4) + ' ' + value.substring(4);
+  }
+  if (value.length > 9) {
+    value = value.substring(0, 9) + ' ' + value.substring(9);
+  }
+  if (value.length > 14) {
+    value = value.substring(0, 14);
+  }
+  
+  e.target.value = value;
+});
+
+// Tambahkan hotkey
+document.addEventListener('keydown', function(e) {
+  // Ctrl+Enter untuk generate card
+  if (e.ctrlKey && e.key === 'Enter') {
+    generateCard();
+  }
+  
+  // Esc untuk reset
+  if (e.key === 'Escape') {
+    resetForm();
+  }
+});
+
+// Tambahkan notifikasi jika ada data belum tersimpan
+window.addEventListener('beforeunload', function(e) {
+  if (namaInput.value || hpInput.value || pesanInput.value) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
+// Inisialisasi
+console.log('FIOR Admin Panel loaded successfully');
 </script>
 
 </body>
