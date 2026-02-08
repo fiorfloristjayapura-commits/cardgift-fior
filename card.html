@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         :root {
@@ -59,46 +60,6 @@
             --theme-gradient: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
         }
 
-        .theme-school {
-            --theme-color: #ff5722;
-            --theme-light: #fbe9e7;
-            --theme-dark: #d84315;
-            --theme-bg: linear-gradient(135deg, #fbe9e7 0%, #ffccbc 100%);
-            --theme-gradient: linear-gradient(135deg, #ff5722 0%, #d84315 100%);
-        }
-
-        .theme-bachelor {
-            --theme-color: #673ab7;
-            --theme-light: #ede7f6;
-            --theme-dark: #512da8;
-            --theme-bg: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%);
-            --theme-gradient: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
-        }
-
-        .theme-police {
-            --theme-color: #3f51b5;
-            --theme-light: #e8eaf6;
-            --theme-dark: #303f9f;
-            --theme-bg: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
-            --theme-gradient: linear-gradient(135deg, #3f51b5 0%, #303f9f 100%);
-        }
-
-        .theme-army {
-            --theme-color: #388e3c;
-            --theme-light: #e8f5e9;
-            --theme-dark: #2e7d32;
-            --theme-bg: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            --theme-gradient: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
-        }
-
-        .theme-opening {
-            --theme-color: #ff9800;
-            --theme-light: #fff3e0;
-            --theme-dark: #f57c00;
-            --theme-bg: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-            --theme-gradient: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-        }
-
         .theme-condolence {
             --theme-color: #607d8b;
             --theme-light: #eceff1;
@@ -108,7 +69,6 @@
         }
 
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
             background: var(--theme-bg);
             color: #333;
             min-height: 100vh;
@@ -122,38 +82,28 @@
         /* FIOR Logo Watermark */
         .fior-watermark {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 80px;
-            height: 80px;
+            bottom: 40px;
+            right: 40px;
+            width: 180px;
+            height: 180px;
             background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.1;
+            opacity: 0.15;
             z-index: 1;
             pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
         }
 
-        /* Preview Banner */
-        .preview-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--theme-gradient);
-            color: white;
-            text-align: center;
-            padding: 12px;
-            font-weight: bold;
-            z-index: 10000;
-            animation: pulse 2s infinite;
-            display: none;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+        @media (max-width: 600px) {
+            .fior-watermark {
+                width: 120px;
+                height: 120px;
+                bottom: 20px;
+                right: 20px;
+                opacity: 0.1;
+            }
         }
 
         /* Card Container */
@@ -205,16 +155,9 @@
             height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
             background-size: 50px 50px;
-            animation: float 20s linear infinite;
             opacity: 0.3;
         }
 
-        @keyframes float {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Logo in Header */
         .logo {
             position: absolute;
             top: 15px;
@@ -241,7 +184,6 @@
             filter: brightness(0) invert(1);
         }
 
-        /* Theme Icon */
         .theme-icon {
             font-size: 4rem;
             margin-bottom: 20px;
@@ -255,7 +197,6 @@
             50% { transform: translateY(-15px); }
         }
 
-        /* Greeting Text */
         .greeting {
             font-size: 2.5rem;
             font-weight: bold;
@@ -333,6 +274,107 @@
             opacity: 0.5;
         }
 
+        /* Media Container */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto 10px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 3px solid var(--theme-color);
+            background: #000;
+        }
+
+        .lock-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            border-radius: 15px;
+        }
+
+        .lock-screen:hover {
+            background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 100%);
+            transform: scale(1.01);
+        }
+
+        .lock-icon {
+            font-size: 4.5rem;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.5));
+            animation: gentlePulse 2.5s infinite ease-in-out;
+            margin-bottom: 15px;
+        }
+
+        @keyframes gentlePulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .lock-instruction {
+            color: white;
+            text-align: center;
+            font-size: 1rem;
+            padding: 0 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            max-width: 80%;
+        }
+
+        .video-duration {
+            color: #aaa;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            background: rgba(255,255,255,0.1);
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-player video {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            border-radius: 12px;
+            display: block;
+            background: #000;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            border: 2px solid var(--theme-color);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .media-caption {
+            font-size: 0.9rem;
+            color: var(--theme-color);
+            text-align: center;
+            margin-top: 8px;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
         /* Card Footer */
         .card-footer {
             padding: 25px;
@@ -370,6 +412,38 @@
             color: #666;
             font-size: 0.9rem;
             font-style: italic;
+        }
+
+        /* Kontak Baru */
+        .company-contact {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .contact-link {
+            color: var(--theme-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            padding: 8px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .contact-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-link i {
+            font-size: 1.2rem;
         }
 
         /* Action Buttons */
@@ -421,81 +495,6 @@
             background: #444;
         }
 
-        /* Decorations */
-        .decoration {
-            position: absolute;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .decoration-1 {
-            top: 30px;
-            right: 30px;
-            font-size: 2.5rem;
-            opacity: 0.3;
-            animation: spin 20s linear infinite;
-        }
-
-        .decoration-2 {
-            bottom: 30px;
-            left: 30px;
-            font-size: 2rem;
-            opacity: 0.2;
-            animation: float 15s linear infinite reverse;
-        }
-
-        .decoration-3 {
-            top: 50%;
-            left: 20px;
-            font-size: 1.5rem;
-            opacity: 0.1;
-            animation: bounce 3s infinite alternate;
-        }
-
-        /* Confetti */
-        .confetti {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            background: var(--theme-color);
-            opacity: 0.7;
-            animation: confettiFall 5s linear forwards;
-            z-index: 1000;
-            border-radius: 50%;
-        }
-
-        @keyframes confettiFall {
-            0% {
-                transform: translateY(-100px) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg) scale(0);
-                opacity: 0;
-            }
-        }
-
-        /* Floating Elements */
-        .floating-element {
-            position: fixed;
-            font-size: 1.5rem;
-            animation: floatElement 8s linear forwards;
-            z-index: 1;
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        @keyframes floatElement {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
         /* Responsive */
         @media (max-width: 600px) {
             .card {
@@ -531,6 +530,27 @@
                 font-size: 1.1rem;
             }
             
+            .video-wrapper {
+                max-width: 100%;
+                margin: 15px auto 5px;
+            }
+            
+            .video-player video {
+                max-height: 300px;
+            }
+            
+            .image-preview {
+                max-height: 300px;
+            }
+            
+            .lock-icon {
+                font-size: 3.5rem;
+            }
+            
+            .lock-instruction {
+                font-size: 0.9rem;
+            }
+            
             .action-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -541,11 +561,9 @@
                 max-width: 250px;
             }
             
-            .fior-watermark {
-                width: 60px;
-                height: 60px;
-                bottom: 10px;
-                right: 10px;
+            .contact-link {
+                font-size: 0.85rem;
+                padding: 6px 15px;
             }
         }
 
@@ -561,27 +579,17 @@
             .message {
                 font-size: 1rem;
             }
-        }
-
-        /* Print Styles */
-        @media print {
-            body {
-                background: white !important;
+            
+            .video-player video {
+                max-height: 250px;
             }
             
-            .card {
-                box-shadow: none !important;
-                border: 1px solid #ddd !important;
-                margin: 0 !important;
-                max-width: 100% !important;
+            .image-preview {
+                max-height: 250px;
             }
             
-            .action-buttons, .preview-banner, .fior-watermark {
-                display: none !important;
-            }
-            
-            .decoration {
-                display: none !important;
+            .lock-icon {
+                font-size: 3rem;
             }
         }
     </style>
@@ -590,18 +598,9 @@
     <!-- FIOR Logo Watermark -->
     <div class="fior-watermark"></div>
 
-    <!-- Preview Banner -->
-    <div id="previewBanner" class="preview-banner">
-        ⚠️ PREVIEW MODE - This is a preview of your digital card
-    </div>
-
     <!-- Main Card Container -->
     <div class="card-container">
         <div class="card" id="greetingCard">
-            <!-- Decorations -->
-            <div class="decoration decoration-1" id="decoration1">✨</div>
-            <div class="decoration decoration-2" id="decoration2">🌸</div>
-            <div class="decoration decoration-3" id="decoration3">🎀</div>
             
             <!-- Card Header -->
             <div class="card-header">
@@ -623,6 +622,23 @@
                         [Pesan ucapan akan muncul di sini. Kartu ini dikirim dengan penuh kasih dari FIOR Florist.]
                     </div>
                 </div>
+                
+                <!-- Media Container -->
+                <div id="mediaContainer" style="display: none;">
+                    <div class="video-wrapper">
+                        <!-- Lock Screen -->
+                        <div id="videoLockScreen" class="lock-screen">
+                            <div class="lock-icon" id="videoLockIcon">🔒</div>
+                            <p class="lock-instruction">Ketuk logo untuk memutar video spesial</p>
+                            <div class="video-duration" id="durationDisplay"></div>
+                        </div>
+                        <!-- Video/Image Player -->
+                        <div id="cardMedia" class="video-player"></div>
+                    </div>
+                    <div class="media-caption">
+                        <i class="fas fa-camera"></i> Media spesial dari FIOR Florist
+                    </div>
+                </div>
             </div>
             
             <!-- Card Footer -->
@@ -633,6 +649,18 @@
                         FIOR Florist
                     </div>
                     <div class="company-tagline">Kartu Ucapan Digital • Jayapura</div>
+                    
+                    <!-- Kontak Baru -->
+                    <div class="company-contact">
+                        <a href="https://www.instagram.com/tokobungafior.jayapura?igsh=MWZqZHUyZjY1MnkyNw==" 
+                           target="_blank" class="contact-link">
+                            <i class="fab fa-instagram"></i> @tokobungafior.jayapura
+                        </a>
+                        <a href="https://wa.me/6285337777585" 
+                           target="_blank" class="contact-link">
+                            <i class="fab fa-whatsapp"></i> +62 853-3777-7585 (Admin)
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="action-buttons">
@@ -658,77 +686,42 @@
                 greeting: "Happy Valentine's Day",
                 decorations: ["❤️", "💕", "💖", "💘", "💝", "🌹", "💐"],
                 colors: ["#e91e63", "#c2185b", "#f8bbd9"],
-                floatingElements: ["❤️", "💖", "💘"]
+                lockIcon: "❤️"
             },
             birthday: {
                 emoji: "🎂",
                 greeting: "Happy Birthday",
                 decorations: ["🎉", "🎈", "🎁", "✨", "🥳", "🎊", "🎇"],
                 colors: ["#2196f3", "#1565c0", "#bbdefb"],
-                floatingElements: ["🎈", "🎉", "✨"]
+                lockIcon: "🎂"
             },
             wedding: {
                 emoji: "💍",
                 greeting: "Congratulations",
                 decorations: ["💒", "👰", "🤵", "💑", "🌸", "💐", "🥂"],
                 colors: ["#ff9800", "#ef6c00", "#ffe0b2"],
-                floatingElements: ["💐", "🌸", "✨"]
+                lockIcon: "💍"
             },
             anniversary: {
                 emoji: "💑",
                 greeting: "Happy Anniversary",
                 decorations: ["💝", "🥂", "🎊", "💞", "🌹", "💖", "✨"],
                 colors: ["#9c27b0", "#7b1fa2", "#e1bee7"],
-                floatingElements: ["💝", "💞", "✨"]
+                lockIcon: "💑"
             },
             graduation: {
                 emoji: "🎓",
                 greeting: "Congratulations Graduate!",
                 decorations: ["📚", "🏆", "🌟", "🎊", "👨‍🎓", "👩‍🎓", "🎉"],
                 colors: ["#4caf50", "#2e7d32", "#c8e6c9"],
-                floatingElements: ["🎓", "📚", "🏆"]
-            },
-            school: {
-                emoji: "🏫",
-                greeting: "Congratulations on Your School Achievement!",
-                decorations: ["📚", "✏️", "📝", "🎒", "🌟", "🏅", "📖"],
-                colors: ["#ff5722", "#d84315", "#ffccbc"],
-                floatingElements: ["📚", "✏️", "🌟"]
-            },
-            bachelor: {
-                emoji: "🎓",
-                greeting: "Congratulations Sarjana!",
-                decorations: ["📜", "🎓", "🌟", "🏛️", "📚", "🎉", "✨"],
-                colors: ["#673ab7", "#512da8", "#d1c4e9"],
-                floatingElements: ["📜", "🎓", "✨"]
-            },
-            police: {
-                emoji: "👮",
-                greeting: "Congratulations Polisi!",
-                decorations: ["🚓", "👮", "⭐", "🎖️", "🏅", "🎉", "✨"],
-                colors: ["#3f51b5", "#303f9f", "#c5cae9"],
-                floatingElements: ["⭐", "🎖️", "🚓"]
-            },
-            army: {
-                emoji: "💂",
-                greeting: "Congratulations Tentara!",
-                decorations: ["🎖️", "⭐", "🏅", "🛡️", "⚔️", "🎉", "✨"],
-                colors: ["#388e3c", "#2e7d32", "#c8e6c9"],
-                floatingElements: ["🎖️", "⭐", "🛡️"]
-            },
-            opening: {
-                emoji: "🎊",
-                greeting: "Congratulations on Your Grand Opening!",
-                decorations: ["🏢", "💼", "💰", "📈", "🎉", "✨", "🏆"],
-                colors: ["#ff9800", "#f57c00", "#ffe0b2"],
-                floatingElements: ["💰", "📈", "✨"]
+                lockIcon: "🎓"
             },
             condolence: {
                 emoji: "🕊️",
                 greeting: "Deepest Condolences",
                 decorations: ["☁️", "🕯️", "🌼", "🙏", "✨", "🌸", "💫"],
                 colors: ["#607d8b", "#455a64", "#cfd8dc"],
-                floatingElements: []
+                lockIcon: "🕊️"
             }
         };
 
@@ -739,6 +732,7 @@
                 to: params.get('to') || 'Dear Friend',
                 msg: decodeURIComponent(params.get('msg') || 'Wishing you all the best. This digital card is sent with love from FIOR Florist.'),
                 theme: params.get('theme') || 'birthday',
+                media: params.get('media') || null,
                 preview: params.get('preview') === 'true',
                 t: params.get('t') || Date.now()
             };
@@ -758,176 +752,126 @@
             document.getElementById('themeIcon').textContent = themeConfig.emoji;
             document.getElementById('greetingText').textContent = themeConfig.greeting;
             
-            // Update decorations
-            document.getElementById('decoration1').textContent = themeConfig.decorations[0];
-            document.getElementById('decoration2').textContent = themeConfig.decorations[1];
-            document.getElementById('decoration3').textContent = themeConfig.decorations[2];
-            
             // Update WhatsApp button
             const whatsappMessage = `Halo ${params.to}, saya mengirimkan kartu ucapan digital untukmu dari FIOR Florist:\n\n${window.location.href}\n\nSemoga berkenan!`;
             document.getElementById('whatsappBtn').href = 
                 `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
             
-            // Show preview banner if in preview mode
-            if (params.preview) {
-                document.getElementById('previewBanner').style.display = 'block';
-            }
-            
-            // Create special effects based on theme
-            createSpecialEffects(theme);
-            
-            // Add interactive effects
-            addInteractivity();
-        }
-
-        function createSpecialEffects(theme) {
-            // Confetti for celebratory themes
-            const celebratoryThemes = ['birthday', 'wedding', 'anniversary', 'graduation', 'school', 'bachelor', 'police', 'army', 'opening'];
-            if (celebratoryThemes.includes(theme)) {
-                createConfetti(theme);
-                createFloatingElements(theme);
-            }
-            
-            // Floating hearts for valentine theme
-            if (theme === 'valentine') {
-                createFloatingHearts();
+            // Tampilkan media jika ada
+            if (params.media) {
+                displayMedia(params.media, theme);
             }
         }
 
-        function createConfetti(theme) {
-            const themeColors = THEMES[theme]?.colors || ['#e91e63', '#2196f3', '#ff9800'];
+        // ========== MEDIA DISPLAY FUNCTION ==========
+        function displayMedia(mediaUrl, theme) {
+            const container = document.getElementById('mediaContainer');
+            const lockScreen = document.getElementById('videoLockScreen');
+            const lockIcon = document.getElementById('videoLockIcon');
+            const durationDisplay = document.getElementById('durationDisplay');
+            const mediaPlayer = document.getElementById('cardMedia');
             
-            for (let i = 0; i < 150; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
+            // Tampilkan container
+            container.style.display = 'block';
+            
+            // Set lock icon sesuai tema
+            const themeConfig = THEMES[theme] || THEMES.birthday;
+            lockIcon.textContent = themeConfig.lockIcon || '🔓';
+            
+            // Cek jika media adalah video
+            const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('video') || 
+                           mediaUrl.includes('.mov') || mediaUrl.includes('.webm') ||
+                           mediaUrl.includes('drive.google.com');
+            
+            if (isVideo) {
+                // Buat elemen video
+                mediaPlayer.innerHTML = `
+                    <video id="greetingVideo" 
+                           style="width: 100%; height: auto; display: block;">
+                        <source src="${mediaUrl}" type="video/mp4">
+                        Browser Anda tidak mendukung video.
+                    </video>
+                `;
+                
+                const videoElement = document.getElementById('greetingVideo');
+                let videoUnlocked = false;
+                
+                // Setup video metadata
+                videoElement.addEventListener('loadedmetadata', function() {
+                    // Batasi durasi maksimal 30 detik
+                    const maxDuration = 30;
+                    const actualDuration = videoElement.duration;
                     
-                    // Random position
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    
-                    // Random color from theme
-                    confetti.style.backgroundColor = themeColors[Math.floor(Math.random() * themeColors.length)];
-                    
-                    // Random size and shape
-                    const size = 5 + Math.random() * 15;
-                    confetti.style.width = size + 'px';
-                    confetti.style.height = size + 'px';
-                    
-                    // Random shape (circle or square)
-                    if (Math.random() > 0.5) {
-                        confetti.style.borderRadius = '0';
+                    if (actualDuration > maxDuration) {
+                        durationDisplay.textContent = `Durasi: ${maxDuration}s (dipotong)`;
+                        // Potong video setelah 30 detik
+                        setTimeout(() => {
+                            if (!videoUnlocked) return;
+                            videoElement.pause();
+                            videoElement.currentTime = 0;
+                        }, maxDuration * 1000);
+                    } else {
+                        durationDisplay.textContent = `Durasi: ${Math.round(actualDuration)}s`;
                     }
+                });
+                
+                // Event error handling
+                videoElement.addEventListener('error', function() {
+                    lockIcon.textContent = '❌';
+                    lockScreen.querySelector('.lock-instruction').textContent = 
+                        'Video tidak dapat dimuat';
+                });
+                
+                // Event untuk membuka kunci
+                lockScreen.addEventListener('click', function unlockVideo() {
+                    if (videoElement.error) return;
                     
-                    // Random animation
-                    confetti.style.animationDuration = (2 + Math.random() * 4) + 's';
-                    confetti.style.animationDelay = Math.random() * 2 + 's';
-                    
-                    document.body.appendChild(confetti);
-                    
-                    // Remove after animation
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 7000);
-                }, i * 20);
+                    // Coba putar video
+                    videoElement.muted = true;
+                    videoElement.play().then(() => {
+                        videoUnlocked = true;
+                        
+                        // Animasi hilangkan lock screen
+                        lockScreen.style.opacity = '0';
+                        lockScreen.style.transform = 'scale(1.1)';
+                        
+                        setTimeout(() => {
+                            lockScreen.style.display = 'none';
+                            // Unmute setelah user interaksi
+                            videoElement.muted = false;
+                        }, 500);
+                        
+                    }).catch(error => {
+                        console.error('Video play failed:', error);
+                        lockIcon.textContent = '⚠️';
+                        lockScreen.querySelector('.lock-instruction').textContent = 
+                            'Klik lagi untuk mencoba memutar';
+                    });
+                });
+                
+            } else {
+                // Untuk gambar, langsung tampilkan tanpa lock screen
+                lockScreen.style.display = 'none';
+                durationDisplay.style.display = 'none';
+                mediaPlayer.innerHTML = `
+                    <img src="${mediaUrl}" 
+                         alt="Foto spesial" 
+                         class="image-preview">
+                `;
             }
-        }
-
-        function createFloatingElements(theme) {
-            const elements = THEMES[theme]?.floatingElements || ['✨', '🌟', '🎉'];
-            
-            setInterval(() => {
-                const element = document.createElement('div');
-                element.className = 'floating-element';
-                element.textContent = elements[Math.floor(Math.random() * elements.length)];
-                element.style.left = Math.random() * 100 + 'vw';
-                element.style.fontSize = (15 + Math.random() * 25) + 'px';
-                
-                // Use theme colors
-                const themeColors = THEMES[theme]?.colors || ['#2196f3', '#e91e63', '#4caf50'];
-                element.style.color = themeColors[Math.floor(Math.random() * themeColors.length)];
-                
-                element.style.opacity = 0.3 + Math.random() * 0.4;
-                
-                // Random animation
-                element.style.animationDuration = (4 + Math.random() * 6) + 's';
-                element.style.animationDelay = Math.random() * 2 + 's';
-                
-                document.body.appendChild(element);
-                
-                // Remove after animation
-                setTimeout(() => element.remove(), 10000);
-            }, 800);
-        }
-
-        function createFloatingHearts() {
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.className = 'floating-element';
-                heart.textContent = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = (15 + Math.random() * 25) + 'px';
-                heart.style.color = THEMES.valentine.colors[Math.floor(Math.random() * THEMES.valentine.colors.length)];
-                heart.style.opacity = 0.3 + Math.random() * 0.4;
-                
-                // Random animation
-                heart.style.animationDuration = (4 + Math.random() * 6) + 's';
-                heart.style.animationDelay = Math.random() * 2 + 's';
-                
-                document.body.appendChild(heart);
-                
-                // Remove after animation
-                setTimeout(() => heart.remove(), 10000);
-            }, 500);
-        }
-
-        function addInteractivity() {
-            const card = document.getElementById('greetingCard');
-            
-            // 3D tilt effect
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateY = (x - centerX) / 25;
-                const rotateX = (centerY - y) / 25;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                card.style.transition = 'transform 0.1s ease';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-                card.style.transition = 'transform 0.5s ease';
-            });
-            
-            // Click effect
-            card.addEventListener('click', () => {
-                card.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    card.style.transform = 'scale(1)';
-                }, 150);
-            });
         }
 
         // ========== ACTION FUNCTIONS ==========
         function shareCard() {
             const params = getUrlParams();
-            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${params.to}:\n\n${window.location.href}\n\nDikirim dengan 💖`;
-            const shareTitle = 'Kartu Ucapan Digital - FIOR Florist';
+            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${params.to}:\n\n${window.location.href}`;
             
             if (navigator.share) {
                 navigator.share({
-                    title: shareTitle,
+                    title: 'Kartu Ucapan Digital - FIOR Florist',
                     text: shareText,
                     url: window.location.href
-                }).then(() => {
-                    console.log('Card shared successfully');
                 }).catch(err => {
-                    console.log('Error sharing:', err);
                     fallbackShare(shareText);
                 });
             } else {
@@ -938,11 +882,10 @@
         function fallbackShare(text) {
             navigator.clipboard.writeText(text)
                 .then(() => {
-                    alert('✨ Link kartu telah disalin ke clipboard!\nTempelkan di mana saja untuk berbagi.');
+                    alert('✨ Link kartu telah disalin ke clipboard!');
                 })
                 .catch(err => {
-                    console.error('Failed to copy:', err);
-                    prompt('Salin link berikut untuk berbagi:', window.location.href);
+                    prompt('Salin link berikut:', window.location.href);
                 });
         }
 
@@ -952,22 +895,6 @@
 
         // ========== INITIALIZATION ==========
         document.addEventListener('DOMContentLoaded', initCard);
-        
-        // Add some random decorations on load
-        setTimeout(() => {
-            const decorations = ['🌟', '🎀', '💫', '🌺', '💎', '✨', '🎇'];
-            const randomDeco = decorations[Math.floor(Math.random() * decorations.length)];
-            const floatingDeco = document.createElement('div');
-            floatingDeco.textContent = randomDeco;
-            floatingDeco.style.position = 'fixed';
-            floatingDeco.style.fontSize = '2rem';
-            floatingDeco.style.opacity = '0.1';
-            floatingDeco.style.zIndex = '1';
-            floatingDeco.style.left = Math.random() * 100 + 'vw';
-            floatingDeco.style.top = Math.random() * 100 + 'vh';
-            floatingDeco.style.animation = 'float 20s linear infinite';
-            document.body.appendChild(floatingDeco);
-        }, 1000);
     </script>
 </body>
 </html>
