@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIOR Card Gift - Loading...</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 500px;
+            padding: 30px;
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .logo {
+            color: #d4af37;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(212, 175, 55, 0.3);
+            border-top: 4px solid #d4af37;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .links {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .link-btn {
+            padding: 12px 20px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            color: #d4af37;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .link-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-crown"></i> FIOR FLORIST
+        </div>
+        <h2>Card Gift Generator</h2>
+        <p>Loading Admin Panel...</p>
+        
+        <div class="spinner"></div>
+        
+        <div class="links">
+            <a href="admin.html" class="link-btn">🎴 Go to Admin Panel</a>
+            <a href="card.html?to=Test&msg=Welcome%20to%20FIOR&theme=valentine" class="link-btn">👁️ Preview Card Template</a>
+            <a href="README.md" class="link-btn">📖 View Documentation</a>
+        </div>
+        
+        <p style="margin-top: 20px; color: #aaa; font-size: 0.9rem;">
+            Redirecting in <span id="countdown">3</span> seconds...
+        </p>
+    </div>
+
+    <script>
+        // Countdown redirect
+        let seconds = 3;
+        const countdownEl = document.getElementById('countdown');
+        const countdown = setInterval(() => {
+            seconds--;
+            countdownEl.textContent = seconds;
+            if (seconds <= 0) {
+                clearInterval(countdown);
+                window.location.href = "admin.html";
+            }
+        }, 1000);
+        
+        // Redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = "admin.html";
+        }, 3000);
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+</html>
