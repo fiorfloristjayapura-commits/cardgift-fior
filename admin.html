@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Kartu FIOR</title>
+
+<style>
+body{
+  font-family:Arial, sans-serif;
+  background:#111;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+
+.box{
+  background:#1a1a1a;
+  padding:25px;
+  border-radius:15px;
+  width:90%;
+  max-width:420px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+h2{
+  text-align:center;
+  color:#d4af37;
+}
+
+input, textarea, select{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border:none;
+  border-radius:6px;
+  font-size:14px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  background:#d4af37;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+  border-radius:6px;
+}
+
+button:hover{
+  background:#e6c24a;
+}
+
+.result{
+  margin-top:15px;
+  font-size:13px;
+  word-break:break-all;
+  background:#000;
+  padding:10px;
+  border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Admin FIOR</h2>
+
+  <input type="text" id="nama" placeholder="Nama penerima">
+  <input type="text" id="hp" placeholder="No HP customer">
+  <textarea id="pesan" placeholder="Pesan"></textarea>
+
+  <select id="tema">
+    <option value="valentine">Valentine</option>
+    <option value="birthday">Ulang Tahun</option>
+    <option value="condolence">Duka Cita</option>
+  </select>
+
+  <button onclick="generate()">Buat Kartu</button>
+
+  <div id="result" class="result">Link kartu akan muncul di sini</div>
+</div>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbwx39TjwPn2VNw9z3zfoo-DllmdsWtWop6HXU910eymKTuuuNXcBDlzqiNRTPi5IQunOA/exec";
+
+function generate(){
+  const nama = document.getElementById("nama").value;
+  const hp = document.getElementById("hp").value;
+  const pesan = document.getElementById("pesan").value;
+  const tema = document.getElementById("tema").value;
+
+  if(!nama){
+    alert("Isi nama penerima dulu");
+    return;
+  }
+
+  const link =
+    "https://fiorfloristjayapura-commits.github.io/Fior-PreOrder/kartu-fior-lite.html" +
+    "?to=" + encodeURIComponent(nama) +
+    "&msg=" + encodeURIComponent(pesan) +
+    "&theme=" + tema;
+
+  // Simpan customer
+  fetch(scriptURL, {
+    method:"POST",
+    body:JSON.stringify({
+      type:"customer",
+      nama:nama,
+      no_hp:hp,
+      catatan:""
+    })
+  });
+
+  // Simpan kartu
+  fetch(scriptURL, {
+    method:"POST",
+    body:JSON.stringify({
+      type:"card",
+      nama:nama,
+      tema:tema,
+      pesan:pesan,
+      link:link
+    })
+  });
+
+  document.getElementById("result").textContent = link;
+}
+</script>
+
+</body>
+</html>
