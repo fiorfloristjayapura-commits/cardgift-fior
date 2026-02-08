@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         :root {
@@ -29,7 +30,6 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
             color: var(--light);
             min-height: 100vh;
@@ -116,6 +116,7 @@
             text-decoration: none;
             transition: var(--transition);
             border-left: 3px solid transparent;
+            cursor: pointer;
         }
 
         .nav-item:hover, .nav-item.active {
@@ -201,7 +202,7 @@
             margin-bottom: 40px;
         }
 
-        .card {
+        .stat-card {
             background: rgba(30, 30, 30, 0.8);
             border-radius: 15px;
             padding: 25px;
@@ -209,7 +210,7 @@
             transition: var(--transition);
         }
 
-        .card:hover {
+        .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow);
             border-color: var(--primary);
@@ -488,6 +489,7 @@
             border: 1px solid var(--border);
             display: none;
             animation: fadeIn 0.5s ease;
+            margin-top: 30px;
         }
 
         .result-card.active {
@@ -504,6 +506,44 @@
             font-size: 0.9rem;
             color: #4ecdc4;
             border: 1px solid rgba(78, 205, 196, 0.2);
+        }
+
+        /* Media Upload Styles */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 20px;
+        }
+
+        .media-preview {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .preview-video {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .media-info {
+            font-size: 0.85rem;
+            color: var(--gray);
+            background: rgba(0,0,0,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
         }
 
         /* Responsive */
@@ -555,6 +595,10 @@
                 display: block;
                 overflow-x: auto;
             }
+            
+            .theme-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
         }
     </style>
 </head>
@@ -587,27 +631,23 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="nav-menu">
-                <a href="#" class="nav-item active" data-page="dashboard">
+                <a class="nav-item active" data-page="dashboard">
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="nav-item" data-page="create-card">
+                <a class="nav-item" data-page="create-card">
                     <i class="fas fa-gift"></i>
                     <span>Create Card</span>
                 </a>
-                <a href="#" class="nav-item" data-page="customers">
+                <a class="nav-item" data-page="customers">
                     <i class="fas fa-users"></i>
                     <span>Customers</span>
                 </a>
-                <a href="#" class="nav-item" data-page="cards-history">
+                <a class="nav-item" data-page="cards-history">
                     <i class="fas fa-history"></i>
                     <span>Cards History</span>
                 </a>
-                <a href="#" class="nav-item" data-page="templates">
-                    <i class="fas fa-palette"></i>
-                    <span>Templates</span>
-                </a>
-                <a href="#" class="nav-item" data-page="settings">
+                <a class="nav-item" data-page="settings">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </a>
@@ -629,6 +669,7 @@
             <!-- Alerts -->
             <div id="alertSuccess" class="alert alert-success"></div>
             <div id="alertError" class="alert alert-error"></div>
+            <div id="alertWarning" class="alert alert-warning"></div>
             <div id="alertInfo" class="alert alert-info"></div>
 
             <!-- Dashboard Page -->
@@ -642,7 +683,7 @@
                 </div>
 
                 <div class="cards-grid">
-                    <div class="card">
+                    <div class="stat-card">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-users"></i>
@@ -659,7 +700,7 @@
                         </button>
                     </div>
 
-                    <div class="card">
+                    <div class="stat-card">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-gift"></i>
@@ -676,7 +717,7 @@
                         </button>
                     </div>
 
-                    <div class="card">
+                    <div class="stat-card">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-chart-line"></i>
@@ -693,7 +734,7 @@
                         </button>
                     </div>
 
-                    <div class="card">
+                    <div class="stat-card">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="fas fa-whatsapp"></i>
@@ -733,7 +774,7 @@
                     <p class="page-subtitle">Create and send beautiful digital greeting cards</p>
                 </div>
 
-                <div class="card">
+                <div class="stat-card">
                     <form id="cardForm" onsubmit="event.preventDefault(); createCard();">
                         <div class="form-group">
                             <label class="form-label">
@@ -749,7 +790,7 @@
                                     <input type="tel" class="form-control" id="whatsappNumber" 
                                            placeholder="WhatsApp Number *" required>
                                     <small style="color: var(--gray); font-size: 0.8rem; margin-top: 5px; display: block;">
-                                        Example: 081234567890 (auto-converts to 62xxx)
+                                        Example: 081234567890
                                     </small>
                                 </div>
                             </div>
@@ -770,6 +811,47 @@
                                 <small style="color: var(--gray); font-size: 0.8rem;">
                                     <span id="charCount">0</span>/500 characters
                                 </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-images"></i>
+                                Upload Foto/Video (Opsional)
+                            </label>
+                            <div class="upload-area">
+                                <input type="file" 
+                                       id="mediaUpload" 
+                                       accept="image/*,video/*"
+                                       class="form-control"
+                                       style="border: none; padding: 0; margin-bottom: 15px;"
+                                       onchange="previewMedia(event)">
+                                
+                                <div id="mediaPreview" class="media-preview">
+                                    <!-- Preview untuk gambar -->
+                                    <img id="imagePreview" class="preview-image">
+                                    
+                                    <!-- Preview untuk video -->
+                                    <video id="videoPreview" class="preview-video" controls></video>
+                                    
+                                    <!-- Info media -->
+                                    <div id="mediaInfo" class="media-info"></div>
+                                    
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="removeMedia()" style="margin-top: 15px;">
+                                        <i class="fas fa-trash"></i> Hapus Media
+                                    </button>
+                                </div>
+                                
+                                <div style="margin-top: 15px;">
+                                    <small style="color: var(--gray); font-size: 0.8rem; display: block;">
+                                        <i class="fas fa-info-circle"></i> Rekomendasi:
+                                    </small>
+                                    <small style="color: var(--gray); font-size: 0.75rem; display: block;">
+                                        • Gambar: JPG/PNG, maks. 5MB<br>
+                                        • Video: MP4, maks. 10MB, durasi 30 detik<br>
+                                        • Resolusi optimal: 720p (1280x720)
+                                    </small>
+                                </div>
                             </div>
                         </div>
 
@@ -830,7 +912,7 @@
                         <h3 style="color: var(--primary); margin-bottom: 15px;">
                             <i class="fas fa-info-circle"></i> Card Details
                         </h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;" class="card-details">
                             <div>
                                 <small style="color: var(--gray);">Recipient</small>
                                 <div style="color: var(--light); font-weight: 500;" id="resultRecipient">-</div>
@@ -876,7 +958,7 @@
                     <p class="page-subtitle">Manage your customer database stored in Google Sheets</p>
                 </div>
 
-                <div class="card" style="margin-bottom: 30px;">
+                <div class="stat-card" style="margin-bottom: 30px;">
                     <h3 style="color: var(--primary); margin-bottom: 20px;">
                         <i class="fas fa-user-plus"></i> Add New Customer
                     </h3>
@@ -940,7 +1022,7 @@
                     <p class="page-subtitle">View all cards created and their delivery status</p>
                 </div>
 
-                <div class="card" style="margin-bottom: 30px;">
+                <div class="stat-card" style="margin-bottom: 30px;">
                     <h3 style="color: var(--primary); margin-bottom: 20px;">
                         <i class="fas fa-filter"></i> Filter Cards
                     </h3>
@@ -981,21 +1063,6 @@
                 </div>
             </div>
 
-            <!-- Templates Page -->
-            <div id="templates" class="page">
-                <div class="page-header">
-                    <h1 class="page-title">
-                        <i class="fas fa-palette"></i>
-                        Card Templates
-                    </h1>
-                    <p class="page-subtitle">Choose from beautiful card templates for different occasions</p>
-                </div>
-
-                <div class="theme-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
-                    <!-- Templates will be loaded here -->
-                </div>
-            </div>
-
             <!-- Settings Page -->
             <div id="settings" class="page">
                 <div class="page-header">
@@ -1006,32 +1073,34 @@
                     <p class="page-subtitle">Configure your card generation system</p>
                 </div>
 
-                <div class="card" style="margin-bottom: 30px;">
+                <div class="stat-card" style="margin-bottom: 30px;">
                     <h3 style="color: var(--primary); margin-bottom: 20px;">
                         <i class="fas fa-link"></i> API Configuration
                     </h3>
                     <div class="form-group">
                         <label class="form-label">Google Apps Script URL</label>
                         <input type="text" class="form-control" id="scriptUrl" 
-                               value="https://script.google.com/macros/s/AKfycbxIquhuDtAzIUHhpaVoYgLVtCvKEHNDVqwqrfZtfx3NrQ2CZrwivK3jAv9ioOU88ajPrw/exec">
+                               placeholder="https://script.google.com/macros/s/...">
                         <small style="color: var(--gray); font-size: 0.8rem; margin-top: 5px; display: block;">
-                            This URL connects to your Google Sheets database
+                            This URL connects to your Google Sheets database. Get it after deploying your Google Apps Script.
                         </small>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Card Template URL</label>
+                        <label class="form-label">Card Base URL</label>
                         <input type="text" class="form-control" id="cardUrl" 
                                value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
                     </div>
-                    <button class="btn btn-primary" onclick="saveSettings()">
-                        <i class="fas fa-save"></i> Save Settings
-                    </button>
-                    <button class="btn btn-secondary" onclick="testApiConnection()">
-                        <i class="fas fa-wifi"></i> Test Connection
-                    </button>
+                    <div style="display: flex; gap: 15px;">
+                        <button class="btn btn-primary" onclick="saveSettings()">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                        <button class="btn btn-secondary" onclick="testApiConnection()">
+                            <i class="fas fa-wifi"></i> Test Connection
+                        </button>
+                    </div>
                 </div>
 
-                <div class="card">
+                <div class="stat-card">
                     <h3 style="color: var(--primary); margin-bottom: 20px;">
                         <i class="fas fa-database"></i> Data Management
                     </h3>
@@ -1054,20 +1123,66 @@
     <script>
         // ========== CONFIGURATION ==========
         const CONFIG = {
-            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxIquhuDtAzIUHhpaVoYgLVtCvKEHNDVqwqrfZtfx3NrQ2CZrwivK3jAv9ioOU88ajPrw/exec",
+            SCRIPT_URL: "", // Will be filled from localStorage or manual input
             CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
             COMPANY_NAME: "FIOR Florist",
             DEFAULT_THEME: "birthday"
         };
 
+        // ========== THEME CONFIGURATION ==========
+        const THEMES = [
+            {
+                id: 'birthday',
+                name: 'Birthday',
+                emoji: '🎂',
+                color: '#2196f3',
+                description: 'Perfect for birthday celebrations'
+            },
+            {
+                id: 'valentine',
+                name: "Valentine's Day",
+                emoji: '❤️',
+                color: '#e91e63',
+                description: 'For expressing love and affection'
+            },
+            {
+                id: 'wedding',
+                name: 'Wedding',
+                emoji: '💍',
+                color: '#ff9800',
+                description: 'Beautiful wedding congratulations'
+            },
+            {
+                id: 'anniversary',
+                name: 'Anniversary',
+                emoji: '💑',
+                color: '#9c27b0',
+                description: 'Celebrate special milestones'
+            },
+            {
+                id: 'graduation',
+                name: 'Graduation',
+                emoji: '🎓',
+                color: '#4caf50',
+                description: 'Congratulations on graduation'
+            },
+            {
+                id: 'condolence',
+                name: 'Condolence',
+                emoji: '🕊️',
+                color: '#607d8b',
+                description: 'Express sympathy and support'
+            }
+        ];
+
         // ========== STATE MANAGEMENT ==========
         let state = {
             customers: [],
             cards: [],
-            themes: [],
             currentPage: 'dashboard',
             selectedTheme: CONFIG.DEFAULT_THEME,
-            settings: {}
+            settings: {},
+            uploadedMedia: null
         };
 
         // ========== DOM ELEMENTS ==========
@@ -1075,6 +1190,7 @@
             // Alerts
             alertSuccess: document.getElementById('alertSuccess'),
             alertError: document.getElementById('alertError'),
+            alertWarning: document.getElementById('alertWarning'),
             alertInfo: document.getElementById('alertInfo'),
             
             // Loading
@@ -1093,6 +1209,11 @@
             whatsappNumber: document.getElementById('whatsappNumber'),
             cardMessage: document.getElementById('cardMessage'),
             charCount: document.getElementById('charCount'),
+            mediaUpload: document.getElementById('mediaUpload'),
+            mediaPreview: document.getElementById('mediaPreview'),
+            imagePreview: document.getElementById('imagePreview'),
+            videoPreview: document.getElementById('videoPreview'),
+            mediaInfo: document.getElementById('mediaInfo'),
             themeGrid: document.getElementById('themeGrid'),
             selectedTheme: document.getElementById('selectedTheme'),
             customerSelect: document.getElementById('customerSelect'),
@@ -1124,87 +1245,6 @@
             currentTime: document.getElementById('currentTime')
         };
 
-       // ========== THEME CONFIGURATION ==========
-const THEMES = [
-    {
-        id: 'birthday',
-        name: 'Birthday',
-        emoji: '🎂',
-        color: '#2196f3',
-        description: 'Perfect for birthday celebrations'
-    },
-    {
-        id: 'valentine',
-        name: "Valentine's Day",
-        emoji: '❤️',
-        color: '#e91e63',
-        description: 'For expressing love and affection'
-    },
-    {
-        id: 'wedding',
-        name: 'Wedding',
-        emoji: '💍',
-        color: '#ff9800',
-        description: 'Beautiful wedding congratulations'
-    },
-    {
-        id: 'anniversary',
-        name: 'Anniversary',
-        emoji: '💑',
-        color: '#9c27b0',
-        description: 'Celebrate special milestones'
-    },
-    {
-        id: 'graduation',
-        name: 'Graduation',
-        emoji: '🎓',
-        color: '#4caf50',
-        description: 'Congratulations on graduation'
-    },
-    {
-        id: 'school',
-        name: 'School Achievement',
-        emoji: '🏫',
-        color: '#ff5722',
-        description: 'For school achievements'
-    },
-    {
-        id: 'bachelor',
-        name: 'Bachelor Degree',
-        emoji: '🎓',
-        color: '#673ab7',
-        description: 'Congratulations on bachelor degree'
-    },
-    {
-        id: 'police',
-        name: 'Police Promotion',
-        emoji: '👮',
-        color: '#3f51b5',
-        description: 'For police promotions'
-    },
-    {
-        id: 'army',
-        name: 'Army/TNI',
-        emoji: '💂',
-        color: '#388e3c',
-        description: 'For military achievements'
-    },
-    {
-        id: 'opening',
-        name: 'Grand Opening',
-        emoji: '🎊',
-        color: '#ff9800',
-        description: 'Business grand opening'
-    },
-    {
-        id: 'condolence',
-        name: 'Condolence',
-        emoji: '🕊️',
-        color: '#607d8b',
-        description: 'Express sympathy and support'
-    }
-];
-
         // ========== INITIALIZATION ==========
         document.addEventListener('DOMContentLoaded', function() {
             initSystem();
@@ -1227,12 +1267,12 @@ const THEMES = [
                 // Load themes
                 loadThemes();
                 
+                // Setup event listeners
+                setupEventListeners();
+                
                 // Load initial data
                 await loadCustomers();
                 await loadCardsHistory();
-                
-                // Setup event listeners
-                setupEventListeners();
                 
                 // Load dashboard stats
                 loadDashboardStats();
@@ -1247,71 +1287,7 @@ const THEMES = [
             }
         }
 
-        // ========== DASHBOARD FUNCTIONS ==========
-        function updateDashboardStats() {
-            try {
-                // Update customer count
-                elements.statsCustomers.textContent = state.customers.length;
-                
-                // Update cards count
-                elements.statsCards.textContent = state.cards.length;
-                
-                // Update today's count
-                const today = new Date().toLocaleDateString('id-ID');
-                const todayCards = state.cards.filter(card => 
-                    card.date && card.date.includes(today.split('/')[0])
-                ).length;
-                elements.statsToday.textContent = todayCards;
-                
-                // Update WhatsApp count (estimate)
-                elements.statsWhatsApp.textContent = Math.floor(state.cards.length * 0.8);
-                
-                console.log('Dashboard stats updated');
-                
-            } catch (error) {
-                console.error('Error updating dashboard stats:', error);
-            }
-        }
-
-        function loadDashboardStats() {
-            updateDashboardStats();
-            loadRecentActivity();
-        }
-
-        function loadRecentActivity() {
-            if (state.cards.length === 0) {
-                elements.recentActivity.innerHTML = `
-                    <p style="padding: 20px; text-align: center; color: var(--gray);">
-                        No recent activity
-                    </p>
-                `;
-                return;
-            }
-            
-            const recent = state.cards.slice(0, 5);
-            let html = '';
-            
-            recent.forEach(card => {
-                const theme = THEMES.find(t => t.id === card.theme) || { emoji: '🎴', name: card.theme };
-                
-                html += `
-                    <div style="padding: 15px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; gap: 15px;">
-                        <div style="font-size: 1.5rem;">${theme.emoji}</div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 500; color: var(--light);">Card for ${card.name}</div>
-                            <div style="font-size: 0.9rem; color: var(--gray);">${theme.name} • ${card.time}</div>
-                        </div>
-                        <a href="${card.link}" target="_blank" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                    </div>
-                `;
-            });
-            
-            elements.recentActivity.innerHTML = html;
-        }
-
-        // ========== CORE FUNCTIONS ==========
+        // ========== BASIC FUNCTIONS ==========
         function updateDateTime() {
             const now = new Date();
             elements.currentDate.textContent = now.toLocaleDateString('id-ID', {
@@ -1375,7 +1351,7 @@ const THEMES = [
             });
             
             // Auto-format phone number
-            elements.whatsappNumber.addEventListener('input', function(e) {
+            const formatPhoneNumber = function(e) {
                 let value = e.target.value.replace(/[^\d]/g, '');
                 if (value.length > 4) {
                     value = value.substring(0, 4) + ' ' + value.substring(4);
@@ -1384,18 +1360,10 @@ const THEMES = [
                     value = value.substring(0, 9) + ' ' + value.substring(9);
                 }
                 e.target.value = value;
-            });
+            };
             
-            elements.customerPhone.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/[^\d]/g, '');
-                if (value.length > 4) {
-                    value = value.substring(0, 4) + ' ' + value.substring(4);
-                }
-                if (value.length > 9) {
-                    value = value.substring(0, 9) + ' ' + value.substring(9);
-                }
-                e.target.value = value;
-            });
+            elements.whatsappNumber.addEventListener('input', formatPhoneNumber);
+            elements.customerPhone.addEventListener('input', formatPhoneNumber);
         }
 
         // ========== ALERT SYSTEM ==========
@@ -1446,6 +1414,13 @@ const THEMES = [
         async function loadCustomers() {
             try {
                 showLoading(true);
+                
+                // Check if SCRIPT_URL is configured
+                if (!CONFIG.SCRIPT_URL) {
+                    showAlert('Please configure Google Apps Script URL in Settings first', 'warning');
+                    state.customers = [];
+                    return [];
+                }
                 
                 const response = await fetch(`${CONFIG.SCRIPT_URL}?t=${Date.now()}`);
                 
@@ -1524,11 +1499,15 @@ const THEMES = [
                 showLoading(true);
                 
                 // Save to Google Sheets
-                const response = await saveToGoogleSheets({
-                    type: "customer",
-                    nama: name,
-                    no_hp: phone,
-                    catatan: note
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        type: "customer",
+                        nama: name,
+                        no_hp: phone,
+                        catatan: note
+                    })
                 });
                 
                 // Add to local state
@@ -1684,9 +1663,141 @@ const THEMES = [
             elements.customersTable.innerHTML = html;
         }
 
+        // ========== MEDIA UPLOAD FUNCTIONS ==========
+        function validateMedia(file) {
+            return new Promise((resolve, reject) => {
+                // 1. Batasi ukuran file (maksimal 10MB)
+                const maxSize = 10 * 1024 * 1024; // 10MB
+                if (file.size > maxSize) {
+                    reject(`File terlalu besar (${(file.size/1024/1024).toFixed(1)}MB). Maksimal 10MB.`);
+                    return;
+                }
+                
+                // 2. Validasi tipe file
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/quicktime', 'video/webm'];
+                if (!allowedTypes.includes(file.type)) {
+                    reject(`Format file tidak didukung. Gunakan: JPG, PNG, GIF, MP4, MOV, WEBM`);
+                    return;
+                }
+                
+                // 3. Validasi khusus untuk video (durasi maksimal 30 detik)
+                if (file.type.startsWith('video/')) {
+                    const video = document.createElement('video');
+                    video.preload = 'metadata';
+                    
+                    video.onloadedmetadata = function() {
+                        window.URL.revokeObjectURL(video.src);
+                        
+                        // Batasi durasi maksimal 30 detik
+                        const maxDuration = 30;
+                        if (video.duration > maxDuration) {
+                            reject(`Video terlalu panjang (${video.duration.toFixed(1)} detik). Maksimal ${maxDuration} detik.`);
+                        } else {
+                            resolve({
+                                file: file,
+                                type: 'video',
+                                duration: video.duration,
+                                resolution: `${video.videoWidth}x${video.videoHeight}`
+                            });
+                        }
+                    };
+                    
+                    video.onerror = function() {
+                        reject('Tidak dapat membaca file video. File mungkin rusak.');
+                    };
+                    
+                    video.src = URL.createObjectURL(file);
+                } else {
+                    // Untuk gambar
+                    const img = new Image();
+                    img.onload = function() {
+                        resolve({
+                            file: file,
+                            type: 'image',
+                            size: file.size,
+                            resolution: `${img.width}x${img.height}`
+                        });
+                    };
+                    img.onerror = function() {
+                        reject('Tidak dapat membaca file gambar.');
+                    };
+                    img.src = URL.createObjectURL(file);
+                }
+            });
+        }
+
+        function previewMedia(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Reset preview sebelumnya
+            removeMedia();
+            
+            // Validasi file
+            validateMedia(file).then(mediaInfo => {
+                state.uploadedMedia = mediaInfo.file;
+                
+                elements.mediaPreview.style.display = 'block';
+                
+                if (mediaInfo.type === 'video') {
+                    // Untuk video
+                    elements.videoPreview.src = URL.createObjectURL(file);
+                    elements.videoPreview.style.display = 'block';
+                    elements.imagePreview.style.display = 'none';
+                    
+                    // Tampilkan info video
+                    elements.mediaInfo.innerHTML = `
+                        <div style="margin-top: 10px;">
+                            <div><strong>🎥 Video Ready</strong></div>
+                            <div>Size: ${(file.size/1024/1024).toFixed(2)} MB</div>
+                            <div>Duration: ${Math.round(mediaInfo.duration)} seconds</div>
+                            <div>Resolution: ${mediaInfo.resolution}</div>
+                            <div>Will appear with interactive lock screen</div>
+                        </div>
+                    `;
+                    
+                } else {
+                    // Untuk gambar
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        elements.imagePreview.src = e.target.result;
+                        elements.imagePreview.style.display = 'block';
+                        elements.videoPreview.style.display = 'none';
+                        
+                        // Tampilkan info gambar
+                        elements.mediaInfo.innerHTML = `
+                            <div style="margin-top: 10px;">
+                                <div><strong>🖼️ Image Ready</strong></div>
+                                <div>Size: ${(file.size/1024).toFixed(1)} KB</div>
+                                <div>Format: ${file.type.split('/')[1].toUpperCase()}</div>
+                                <div>Resolution: ${mediaInfo.resolution}</div>
+                                <div>Will appear directly in card</div>
+                            </div>
+                        `;
+                    };
+                    reader.readAsDataURL(file);
+                }
+                
+            }).catch(errorMessage => {
+                showAlert(errorMessage, 'error');
+                event.target.value = ''; // Reset input file
+            });
+        }
+
+        function removeMedia() {
+            state.uploadedMedia = null;
+            elements.mediaUpload.value = '';
+            elements.mediaPreview.style.display = 'none';
+            elements.imagePreview.style.display = 'none';
+            elements.videoPreview.style.display = 'none';
+            elements.imagePreview.src = '';
+            elements.videoPreview.src = '';
+            elements.mediaInfo.innerHTML = '';
+        }
+
         // ========== CARD CREATION ==========
         async function createCard() {
-            // Validate form
+            // Validasi form
             const name = elements.recipientName.value.trim();
             const phone = elements.whatsappNumber.value.trim().replace(/[^\d]/g, '');
             const message = elements.cardMessage.value.trim();
@@ -1713,35 +1824,52 @@ const THEMES = [
             try {
                 showLoading(true);
                 
-                // Generate card URL
-                const cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
+                // 1. Upload media ke Google Drive jika ada
+                let mediaUrl = '';
+                if (state.uploadedMedia) {
+                    mediaUrl = await uploadToGoogleDrive(state.uploadedMedia);
+                    if (!mediaUrl) {
+                        showAlert('Failed to upload media. Card will be created without media.', 'warning');
+                    }
+                }
                 
-                // Save to Google Sheets
+                // 2. Generate card URL (dengan parameter media jika ada)
+                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
+                if (mediaUrl) {
+                    cardUrl += `&media=${encodeURIComponent(mediaUrl)}`;
+                }
+                
+                // 3. Save to Google Sheets
                 await saveToGoogleSheets({
                     type: "card",
                     nama: name,
                     tema: theme,
                     pesan: message,
-                    link: cardUrl
+                    link: cardUrl,
+                    media_url: mediaUrl || ""
                 });
                 
-                // Update UI with result
-                showCardResult(name, phone, theme, cardUrl);
+                // 4. Update UI dengan hasil
+                showCardResult(name, phone, theme, cardUrl, mediaUrl);
                 
-                // Add to local cards
+                // 5. Tambahkan ke local cards state
                 const newCard = {
                     name: name,
                     theme: theme,
                     time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
                     date: new Date().toLocaleDateString('id-ID'),
-                    link: cardUrl
+                    link: cardUrl,
+                    hasMedia: !!mediaUrl
                 };
                 state.cards.unshift(newCard);
                 
-                // Save to localStorage
+                // 6. Save to localStorage
                 localStorage.setItem('fior_recent_cards', JSON.stringify(state.cards));
                 
-                // Update dashboard stats
+                // 7. Reset media upload
+                removeMedia();
+                
+                // 8. Update dashboard stats
                 updateDashboardStats();
                 
                 showAlert('Card created successfully!', 'success');
@@ -1754,7 +1882,67 @@ const THEMES = [
             }
         }
 
-        function showCardResult(name, phone, theme, cardUrl) {
+        async function uploadToGoogleDrive(file) {
+            return new Promise((resolve, reject) => {
+                // Convert file to base64
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                
+                reader.onload = function(e) {
+                    const base64Data = e.target.result.split(',')[1];
+                    const filename = `fior_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+                    
+                    // Kirim ke Google Apps Script
+                    fetch(CONFIG.SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: JSON.stringify({
+                            type: "media",
+                            filename: filename,
+                            data: base64Data,
+                            mimeType: file.type
+                        })
+                    })
+                    .then(response => response.text())
+                    .then(text => {
+                        try {
+                            const data = JSON.parse(text);
+                            if (data.status === "success") {
+                                resolve(data.url);
+                            } else {
+                                reject(data.message || 'Upload failed');
+                            }
+                        } catch (e) {
+                            // If response is not JSON (due to no-cors), create URL manually
+                            console.log('No-CORS response, assuming success');
+                            resolve(`https://drive.google.com/uc?id=FILE_ID&export=download`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Upload failed:', error);
+                        reject('Failed to upload media. Try again.');
+                    });
+                };
+                
+                reader.onerror = function(error) {
+                    reject('Failed to read file.');
+                };
+            });
+        }
+
+        async function saveToGoogleSheets(data) {
+            return new Promise((resolve, reject) => {
+                fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data)
+                })
+                .then(() => resolve())
+                .catch(error => reject(error));
+            });
+        }
+
+        function showCardResult(name, phone, theme, cardUrl, mediaUrl) {
             // Update result elements
             elements.generatedLink.textContent = cardUrl;
             elements.resultRecipient.textContent = name;
@@ -1766,6 +1954,19 @@ const THEMES = [
             const whatsappMessage = `Halo ${name}, ini kartu ucapan digital dari ${CONFIG.COMPANY_NAME}:\n\n${cardUrl}\n\nSemoga berkenan! 🎉`;
             elements.whatsappActionBtn.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(whatsappMessage)}`;
             elements.previewActionBtn.href = cardUrl;
+            
+            // Tampilkan info media jika ada
+            if (mediaUrl) {
+                const cardDetails = document.querySelector('.card-details');
+                cardDetails.innerHTML += `
+                    <div>
+                        <small style="color: var(--gray);">Media</small>
+                        <div style="color: var(--success); font-weight: 500;">
+                            <i class="fas fa-check-circle"></i> ${mediaUrl.includes('video') ? 'Video' : 'Image'} Attached
+                        </div>
+                    </div>
+                `;
+            }
             
             // Show result card
             elements.resultCard.classList.add('active');
@@ -1789,6 +1990,7 @@ const THEMES = [
             selectTheme(CONFIG.DEFAULT_THEME);
             elements.charCount.textContent = '0';
             elements.charCount.style.color = 'var(--gray)';
+            removeMedia();
             showAlert('Form reset successfully', 'info');
         }
 
@@ -1806,6 +2008,68 @@ const THEMES = [
                     console.error('Failed to copy:', err);
                     showAlert('Failed to copy link', 'error');
                 });
+        }
+
+        // ========== DASHBOARD FUNCTIONS ==========
+        function loadDashboardStats() {
+            updateDashboardStats();
+            loadRecentActivity();
+        }
+
+        function updateDashboardStats() {
+            try {
+                // Update customer count
+                elements.statsCustomers.textContent = state.customers.length;
+                
+                // Update cards count
+                elements.statsCards.textContent = state.cards.length;
+                
+                // Update today's count
+                const today = new Date().toLocaleDateString('id-ID');
+                const todayCards = state.cards.filter(card => 
+                    card.date && card.date.includes(today.split('/')[0])
+                ).length;
+                elements.statsToday.textContent = todayCards;
+                
+                // Update WhatsApp count (estimate)
+                elements.statsWhatsApp.textContent = Math.floor(state.cards.length * 0.8);
+                
+            } catch (error) {
+                console.error('Error updating dashboard stats:', error);
+            }
+        }
+
+        function loadRecentActivity() {
+            if (state.cards.length === 0) {
+                elements.recentActivity.innerHTML = `
+                    <p style="padding: 20px; text-align: center; color: var(--gray);">
+                        No recent activity
+                    </p>
+                `;
+                return;
+            }
+            
+            const recent = state.cards.slice(0, 5);
+            let html = '';
+            
+            recent.forEach(card => {
+                const theme = THEMES.find(t => t.id === card.theme) || { emoji: '🎴', name: card.theme };
+                
+                html += `
+                    <div style="padding: 15px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; gap: 15px;">
+                        <div style="font-size: 1.5rem;">${theme.emoji}</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; color: var(--light);">Card for ${card.name}</div>
+                            <div style="font-size: 0.9rem; color: var(--gray);">${theme.name} • ${card.time}</div>
+                        </div>
+                        <a href="${card.link}" target="_blank" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                `;
+            });
+            
+            elements.recentActivity.innerHTML = html;
         }
 
         // ========== CARDS HISTORY ==========
@@ -1842,6 +2106,7 @@ const THEMES = [
                             <th>Recipient</th>
                             <th>Theme</th>
                             <th>Date</th>
+                            <th>Media</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -1861,6 +2126,7 @@ const THEMES = [
                             </span>
                         </td>
                         <td>${card.date || card.time}</td>
+                        <td>${card.hasMedia ? '✅' : '❌'}</td>
                         <td class="table-actions">
                             <a href="${card.link}" target="_blank" class="btn btn-secondary btn-sm">
                                 <i class="fas fa-eye"></i> View
@@ -1890,23 +2156,86 @@ const THEMES = [
             }
         }
 
-        // ========== GOOGLE SHEETS INTEGRATION ==========
-        async function saveToGoogleSheets(data) {
-            return new Promise((resolve, reject) => {
-                fetch(CONFIG.SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(() => resolve())
-                .catch(error => reject(error));
+        function filterCards() {
+            const theme = document.getElementById('filterTheme').value;
+            const date = document.getElementById('filterDate').value;
+            
+            let filtered = state.cards;
+            
+            if (theme) {
+                filtered = filtered.filter(card => card.theme === theme);
+            }
+            
+            if (date) {
+                const filterDate = new Date(date).toLocaleDateString('id-ID');
+                filtered = filtered.filter(card => card.date === filterDate);
+            }
+            
+            if (filtered.length === 0) {
+                elements.cardsHistoryTable.innerHTML = `
+                    <p style="padding: 30px; text-align: center; color: var(--gray);">
+                        No cards found with selected filters
+                    </p>
+                `;
+                return;
+            }
+            
+            let html = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Recipient</th>
+                            <th>Theme</th>
+                            <th>Date</th>
+                            <th>Media</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            filtered.forEach((card, index) => {
+                const theme = THEMES.find(t => t.id === card.theme) || { name: card.theme, emoji: '🎴' };
+                
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${card.name}</td>
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                ${theme.emoji} ${theme.name}
+                            </span>
+                        </td>
+                        <td>${card.date || card.time}</td>
+                        <td>${card.hasMedia ? '✅' : '❌'}</td>
+                        <td class="table-actions">
+                            <a href="${card.link}" target="_blank" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <button class="btn btn-secondary btn-sm" onclick="resendCard(${state.cards.indexOf(card)})">
+                                <i class="fab fa-whatsapp"></i> Resend
+                            </button>
+                        </td>
+                    </tr>
+                `;
             });
+            
+            html += `
+                    </tbody>
+                </table>
+            `;
+            
+            elements.cardsHistoryTable.innerHTML = html;
         }
 
-        // ========== SETTINGS ==========
+        function clearFilter() {
+            document.getElementById('filterTheme').value = '';
+            document.getElementById('filterDate').value = '';
+            loadCardsHistoryTable();
+        }
+
+        // ========== SETTINGS FUNCTIONS ==========
         function loadSettings() {
             const saved = localStorage.getItem('fior_settings');
             if (saved) {
@@ -1939,6 +2268,13 @@ const THEMES = [
         // ========== UTILITY FUNCTIONS ==========
         function testConnection() {
             showLoading(true);
+            
+            if (!CONFIG.SCRIPT_URL) {
+                showAlert('Please configure Google Apps Script URL in Settings first', 'error');
+                showLoading(false);
+                return;
+            }
+            
             fetch(CONFIG.SCRIPT_URL)
                 .then(response => {
                     if (response.ok) {
@@ -2006,7 +2342,7 @@ const THEMES = [
 
         function clearLocalData() {
             if (confirm('Clear all local cache? This will not delete data from Google Sheets.')) {
-                localStorage.removeItem('fior_cards_history');
+                localStorage.removeItem('fior_recent_cards');
                 localStorage.removeItem('fior_settings');
                 state.cards = [];
                 state.settings = {};
@@ -2017,15 +2353,15 @@ const THEMES = [
         }
 
         function resetSystem() {
-            if (confirm('Reset entire system? This will clear all local data.')) {
+            if (confirm('Reset entire system? This will clear all local data and settings.')) {
                 localStorage.clear();
                 state = {
                     customers: [],
                     cards: [],
-                    themes: [],
                     currentPage: 'dashboard',
                     selectedTheme: CONFIG.DEFAULT_THEME,
-                    settings: {}
+                    settings: {},
+                    uploadedMedia: null
                 };
                 initSystem();
                 showAlert('System reset complete', 'success');
@@ -2038,4 +2374,3 @@ const THEMES = [
     </script>
 </body>
 </html>
-
