@@ -1,145 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIOR Admin Panel</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    padding: 30px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+}
+
+input, textarea, select, button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+}
+
+button {
+    background: gold;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#result {
+    margin-top: 20px;
+    background: #222;
+    padding: 15px;
+    border-radius: 8px;
+    word-break: break-all;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h2>FIOR Card Generator</h2>
+
+    <input id="nama" placeholder="Nama penerima">
+    <textarea id="pesan" placeholder="Pesan ucapan"></textarea>
+
+    <select id="tema">
+        <option value="birthday">Birthday</option>
+        <option value="valentine">Valentine</option>
+        <option value="wedding">Wedding</option>
+        <option value="anniversary">Anniversary</option>
+        <option value="graduation">Graduation</option>
+        <option value="condolence">Condolence</option>
+    </select>
+
+    <input type="file" id="media">
+
+    <button onclick="generateCard()">Generate Card</button>
+
+    <div id="result"></div>
+</div>
+
 <script>
-/* ================= CONFIG FINAL ================= */
 const CONFIG = {
-    SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxIquhuDtAzIUHhpaVoYgLVtCvKEHNDVqwqrfZtfx3NrQ2CZrwivK3jAv9ioOU88ajPrw/exec",
-    CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
-    COMPANY_NAME: "FIOR Florist",
-    DEFAULT_THEME: "birthday",
-    MAX_FILE_SIZE: 10 * 1024 * 1024,
-    MAX_VIDEO_DURATION: 30
+    SCRIPT_URL: "PASTE_URL_APPS_SCRIPT_DI_SINI"
 };
 
-/* ================= STATE ================= */
-let state = {
-    uploadedMedia: null,
-    settings: {}
-};
+async function generateCard() {
+    const nama = document.getElementById("nama").value;
+    const pesan = document.getElementById("pesan").value;
+    const tema = document.getElementById("tema").value;
+    const file = document.getElementById("media").files[0];
 
-/* ================= SETTINGS ================= */
-function loadSettings() {
-    const saved = localStorage.getItem('fior_settings');
+    let mediaUrl = "";
 
-    if (saved) {
-        state.settings = JSON.parse(saved);
-
-        if (state.settings.scriptUrl && state.settings.scriptUrl.trim() !== "") {
-            CONFIG.SCRIPT_URL = state.settings.scriptUrl;
-        }
-
-        if (state.settings.cardUrl && state.settings.cardUrl.trim() !== "") {
-            CONFIG.CARD_BASE_URL = state.settings.cardUrl;
-        }
+    if (file) {
+        mediaUrl = await uploadMedia(file);
     }
 
-    const scriptInput = document.getElementById('scriptUrl');
-    const cardInput = document.getElementById('cardUrl');
+    const link =
+        `card.html?to=${encodeURIComponent(nama)}` +
+        `&msg=${encodeURIComponent(pesan)}` +
+        `&theme=${tema}` +
+        (mediaUrl ? `&media=${encodeURIComponent(mediaUrl)}` : "");
 
-    if (scriptInput) scriptInput.value = CONFIG.SCRIPT_URL;
-    if (cardInput) cardInput.value = CONFIG.CARD_BASE_URL;
-}
+    document.getElementById("result").innerHTML =
+        `<a href="${link}" target="_blank">${link}</a>`;
 
-function saveSettings() {
-    const scriptUrlValue = document.getElementById('scriptUrl').value.trim();
-    const cardUrlValue = document.getElementById('cardUrl').value.trim();
-
-    if (!scriptUrlValue) {
-        alert('Google Apps Script URL tidak boleh kosong');
-        return;
-    }
-
-    state.settings = {
-        scriptUrl: scriptUrlValue,
-        cardUrl: cardUrlValue
-    };
-
-    localStorage.setItem('fior_settings', JSON.stringify(state.settings));
-
-    CONFIG.SCRIPT_URL = scriptUrlValue;
-    CONFIG.CARD_BASE_URL = cardUrlValue;
-
-    alert('Settings saved!');
-}
-
-/* ================= FILE TO BASE64 ================= */
-async function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-        reader.readAsDataURL(file);
+    // simpan ke server
+    await fetch(CONFIG.SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            type: "card",
+            nama: nama,
+            tema: tema,
+            pesan: pesan,
+            link: link,
+            media_url: mediaUrl
+        })
     });
 }
 
-/* ================= UPLOAD FUNCTION (FIXED) ================= */
-async function uploadToGoogleDrive(file) {
-    if (!CONFIG.SCRIPT_URL || CONFIG.SCRIPT_URL.trim() === "") {
-        throw new Error("Google Apps Script URL belum diset.");
-    }
-
-    const base64Data = await fileToBase64(file);
-    const base64Content = base64Data.split(',')[1];
-
-    const uploadData = {
-        type: "media",
-        filename: file.name,
-        data: base64Content,
-        mimeType: file.type,
-        cardId: "upload_" + Date.now()
-    };
+async function uploadMedia(file) {
+    const base64 = await toBase64(file);
 
     const response = await fetch(CONFIG.SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(uploadData)
+        method: "POST",
+        body: JSON.stringify({
+            type: "media",
+            filename: file.name,
+            mimeType: file.type,
+            data: base64.split(',')[1]
+        })
     });
 
     const result = await response.json();
 
-    if (result.status !== "success") {
-        throw new Error(result.message || "Upload gagal");
+    if (result.status === "success") {
+        return result.url;
+    } else {
+        alert("Upload gagal: " + result.message);
+        return "";
     }
-
-    let mediaUrl = result.url;
-
-    if (!mediaUrl && result.fileId) {
-        mediaUrl = `https://drive.google.com/uc?id=${result.fileId}&export=download`;
-    }
-
-    return mediaUrl;
 }
 
-/* ================= CREATE CARD ================= */
-async function createCard() {
-    const name = document.getElementById('recipientName').value;
-    const phone = document.getElementById('whatsappNumber').value;
-    const message = document.getElementById('cardMessage').value;
-    const theme = document.getElementById('selectedTheme').value;
-
-    let mediaUrl = "";
-
-    if (state.uploadedMedia) {
-        mediaUrl = await uploadToGoogleDrive(state.uploadedMedia.file);
-    }
-
-    let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}`;
-
-    if (mediaUrl) {
-        cardUrl += `&media=${encodeURIComponent(mediaUrl)}`;
-    }
-
-    alert("Card created:\n" + cardUrl);
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+    });
 }
-
-/* ================= FILE SELECT ================= */
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    state.uploadedMedia = { file: file };
-}
-
-/* ================= INIT ================= */
-document.addEventListener('DOMContentLoaded', () => {
-    loadSettings();
-});
 </script>
+</body>
+</html>
