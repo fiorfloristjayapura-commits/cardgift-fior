@@ -876,6 +876,36 @@
         .uploading {
             animation: pulseUpload 1.5s infinite;
         }
+
+        /* Badge styles */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .badge-success {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+
+        .badge-info {
+            background: rgba(23, 162, 184, 0.2);
+            color: var(--info);
+        }
+
+        /* Modal styles */
+        #customModal {
+            animation: fadeIn 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -1264,15 +1294,15 @@
 
             <!-- Customers Page -->
             <div id="customers" class="page">
-                <!-- Same as before -->
+                <!-- Content will be loaded dynamically -->
             </div>
 
             <!-- Cards History Page -->
             <div id="cards-history" class="page">
-                <!-- Same as before -->
+                <!-- Content will be loaded dynamically -->
             </div>
 
-            <!-- Media Library Page (NEW) -->
+            <!-- Media Library Page -->
             <div id="media-library" class="page">
                 <div class="page-header">
                     <h1 class="page-title">
@@ -1658,12 +1688,14 @@
 
         function setupEventListeners() {
             // Character count for message
-            elements.cardMessage.addEventListener('input', function() {
-                const length = this.value.length;
-                elements.charCount.textContent = length;
-                elements.charCount.style.color = length < 20 ? 'var(--danger)' : 
-                                               length > 450 ? 'var(--warning)' : 'var(--gray)';
-            });
+            if (elements.cardMessage) {
+                elements.cardMessage.addEventListener('input', function() {
+                    const length = this.value.length;
+                    elements.charCount.textContent = length;
+                    elements.charCount.style.color = length < 20 ? 'var(--danger)' : 
+                                                   length > 450 ? 'var(--warning)' : 'var(--gray)';
+                });
+            }
             
             // Auto-format phone number
             const formatPhoneNumber = function(e) {
@@ -1677,7 +1709,9 @@
                 e.target.value = value;
             };
             
-            elements.whatsappNumber.addEventListener('input', formatPhoneNumber);
+            if (elements.whatsappNumber) {
+                elements.whatsappNumber.addEventListener('input', formatPhoneNumber);
+            }
         }
 
         // ========== DRAG AND DROP SETUP ==========
@@ -1709,7 +1743,7 @@
                     if (e.target === area || e.target.classList.contains('upload-icon') || 
                         e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) {
                         const fileInput = area.id === 'quickUploadArea' ? elements.quickUpload : elements.mediaUpload;
-                        fileInput.click();
+                        if (fileInput) fileInput.click();
                     }
                 });
             });
@@ -1758,14 +1792,17 @@
         }
 
         function showLoading(show, text = "Loading...") {
-            elements.loadingOverlay.classList.toggle('active', show);
-            if (text) {
-                elements.loadingText.textContent = text;
+            if (elements.loadingOverlay) {
+                elements.loadingOverlay.classList.toggle('active', show);
+                if (text && elements.loadingText) {
+                    elements.loadingText.textContent = text;
+                }
             }
         }
 
         // ========== THEME MANAGEMENT ==========
         function loadThemes() {
+            if (!elements.themeGrid) return;
             elements.themeGrid.innerHTML = '';
             THEMES.forEach(theme => {
                 const div = document.createElement('div');
@@ -1782,7 +1819,9 @@
 
         function selectTheme(themeId) {
             state.selectedTheme = themeId;
-            elements.selectedTheme.value = themeId;
+            if (elements.selectedTheme) {
+                elements.selectedTheme.value = themeId;
+            }
             
             // Update UI
             document.querySelectorAll('.theme-card').forEach(card => {
@@ -1793,7 +1832,7 @@
             });
         }
 
-        // ========== MEDIA UPLOAD FUNCTIONS (PERFECT VERSION) ==========
+        // ========== MEDIA UPLOAD FUNCTIONS ==========
         async function validateMedia(file) {
             return new Promise((resolve, reject) => {
                 console.log('Validating media file:', file.name, file.type, file.size);
@@ -1894,25 +1933,37 @@
                 state.uploadedMedia = mediaInfo;
                 
                 // Update upload area style
-                elements.uploadArea.classList.add('has-file');
+                if (elements.uploadArea) {
+                    elements.uploadArea.classList.add('has-file');
+                }
                 
                 // Show preview
-                elements.mediaPreview.style.display = 'block';
+                if (elements.mediaPreview) {
+                    elements.mediaPreview.style.display = 'block';
+                }
                 
                 if (mediaInfo.type === 'video') {
                     // Show video preview
                     const videoURL = URL.createObjectURL(file);
-                    elements.videoPreview.src = videoURL;
-                    elements.videoPreview.style.display = 'block';
-                    elements.imagePreview.style.display = 'none';
+                    if (elements.videoPreview) {
+                        elements.videoPreview.src = videoURL;
+                        elements.videoPreview.style.display = 'block';
+                    }
+                    if (elements.imagePreview) {
+                        elements.imagePreview.style.display = 'none';
+                    }
                     
                 } else {
                     // Show image preview
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        elements.imagePreview.src = e.target.result;
-                        elements.imagePreview.style.display = 'block';
-                        elements.videoPreview.style.display = 'none';
+                        if (elements.imagePreview) {
+                            elements.imagePreview.src = e.target.result;
+                            elements.imagePreview.style.display = 'block';
+                        }
+                        if (elements.videoPreview) {
+                            elements.videoPreview.style.display = 'none';
+                        }
                     };
                     reader.readAsDataURL(file);
                 }
@@ -1926,11 +1977,15 @@
                 console.error('Validation error:', errorMessage);
                 showAlert(errorMessage, 'error');
                 event.target.value = '';
-                elements.uploadArea.classList.remove('has-file');
+                if (elements.uploadArea) {
+                    elements.uploadArea.classList.remove('has-file');
+                }
             }
         }
 
         function updateFileInfo(mediaInfo) {
+            if (!elements.fileInfoGrid) return;
+            
             const file = mediaInfo.file;
             const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
             
@@ -1997,43 +2052,71 @@
         function removeMedia() {
             if (state.uploadedMedia) {
                 // Clean up object URLs
-                if (state.uploadedMedia.type === 'video') {
+                if (state.uploadedMedia.type === 'video' && elements.videoPreview) {
                     URL.revokeObjectURL(elements.videoPreview.src);
                 }
             }
             
             state.uploadedMedia = null;
-            elements.mediaUpload.value = '';
-            elements.uploadArea.classList.remove('has-file');
-            elements.mediaPreview.style.display = 'none';
-            elements.imagePreview.style.display = 'none';
-            elements.videoPreview.style.display = 'none';
-            elements.imagePreview.src = '';
-            elements.videoPreview.src = '';
-            elements.fileInfoGrid.innerHTML = '';
-            elements.uploadStatus.style.display = 'none';
-            elements.uploadProgress.style.display = 'none';
+            if (elements.mediaUpload) {
+                elements.mediaUpload.value = '';
+            }
+            if (elements.uploadArea) {
+                elements.uploadArea.classList.remove('has-file');
+            }
+            if (elements.mediaPreview) {
+                elements.mediaPreview.style.display = 'none';
+            }
+            if (elements.imagePreview) {
+                elements.imagePreview.style.display = 'none';
+                elements.imagePreview.src = '';
+            }
+            if (elements.videoPreview) {
+                elements.videoPreview.style.display = 'none';
+                elements.videoPreview.src = '';
+            }
+            if (elements.fileInfoGrid) {
+                elements.fileInfoGrid.innerHTML = '';
+            }
+            if (elements.uploadStatus) {
+                elements.uploadStatus.style.display = 'none';
+            }
+            if (elements.uploadProgress) {
+                elements.uploadProgress.style.display = 'none';
+            }
             
             showAlert('Media dihapus', 'info');
         }
 
         function zoomMedia() {
             if (state.uploadedMedia?.type === 'image') {
-                elements.modalImage.src = elements.imagePreview.src;
-                elements.modalImage.style.display = 'block';
-                elements.modalVideo.style.display = 'none';
+                if (elements.modalImage && elements.imagePreview) {
+                    elements.modalImage.src = elements.imagePreview.src;
+                    elements.modalImage.style.display = 'block';
+                }
+                if (elements.modalVideo) {
+                    elements.modalVideo.style.display = 'none';
+                }
             } else if (state.uploadedMedia?.type === 'video') {
-                elements.modalVideo.src = elements.videoPreview.src;
-                elements.modalVideo.style.display = 'block';
-                elements.modalImage.style.display = 'none';
+                if (elements.modalVideo && elements.videoPreview) {
+                    elements.modalVideo.src = elements.videoPreview.src;
+                    elements.modalVideo.style.display = 'block';
+                }
+                if (elements.modalImage) {
+                    elements.modalImage.style.display = 'none';
+                }
             }
             
-            elements.mediaModal.style.display = 'flex';
+            if (elements.mediaModal) {
+                elements.mediaModal.style.display = 'flex';
+            }
         }
 
         function closeMediaModal() {
-            elements.mediaModal.style.display = 'none';
-            if (elements.modalVideo.src) {
+            if (elements.mediaModal) {
+                elements.mediaModal.style.display = 'none';
+            }
+            if (elements.modalVideo && elements.modalVideo.src) {
                 elements.modalVideo.pause();
             }
         }
@@ -2134,54 +2217,66 @@
         }
 
         function updateProgress(progress, status) {
-            elements.progressFill.style.width = `${progress}%`;
-            elements.progressPercentage.textContent = `${progress}%`;
-            elements.progressStatus.textContent = status;
+            if (elements.progressFill) {
+                elements.progressFill.style.width = `${progress}%`;
+            }
+            if (elements.progressPercentage) {
+                elements.progressPercentage.textContent = `${progress}%`;
+            }
+            if (elements.progressStatus) {
+                elements.progressStatus.textContent = status;
+            }
         }
 
         // ========== CARD CREATION WITH MEDIA UPLOAD ==========
         async function createCard() {
             // Get form values
-            const name = elements.recipientName.value.trim();
-            const phone = elements.whatsappNumber.value.trim().replace(/[^\d]/g, '');
-            const message = elements.cardMessage.value.trim();
+            const name = elements.recipientName ? elements.recipientName.value.trim() : '';
+            const phone = elements.whatsappNumber ? elements.whatsappNumber.value.trim().replace(/[^\d]/g, '') : '';
+            const message = elements.cardMessage ? elements.cardMessage.value.trim() : '';
             const theme = state.selectedTheme;
             
             // Validation
             if (!name) {
                 showAlert('Please enter recipient name', 'error');
-                elements.recipientName.focus();
+                if (elements.recipientName) elements.recipientName.focus();
                 return;
             }
             
             if (!phone || phone.length < 10) {
                 showAlert('Please enter valid WhatsApp number (min. 10 digits)', 'error');
-                elements.whatsappNumber.focus();
+                if (elements.whatsappNumber) elements.whatsappNumber.focus();
                 return;
             }
             
             if (!message || message.length < 20) {
                 showAlert('Please enter message (min. 20 characters)', 'error');
-                elements.cardMessage.focus();
+                if (elements.cardMessage) elements.cardMessage.focus();
                 return;
             }
             
             try {
                 showLoading(true, "Creating card...");
-                elements.createCardBtn.disabled = true;
+                if (elements.createCardBtn) {
+                    elements.createCardBtn.disabled = true;
+                }
                 
                 let mediaUrl = '';
                 
                 // Upload media if exists
                 if (state.uploadedMedia) {
                     showLoading(true, "Uploading media...");
-                    elements.uploadProgress.style.display = 'block';
+                    if (elements.uploadProgress) {
+                        elements.uploadProgress.style.display = 'block';
+                    }
                     
                     try {
                         mediaUrl = await uploadToGoogleDrive(state.uploadedMedia.file, updateProgress);
-                        elements.uploadStatus.style.display = 'block';
-                        elements.uploadStatusText.textContent = '✅ Media uploaded successfully!';
-                        elements.uploadStatusText.className = 'file-info-value success';
+                        if (elements.uploadStatus) {
+                            elements.uploadStatus.style.display = 'block';
+                            elements.uploadStatusText.textContent = '✅ Media uploaded successfully!';
+                            elements.uploadStatusText.className = 'file-info-value success';
+                        }
                         
                     } catch (uploadError) {
                         showAlert(`Media upload failed: ${uploadError.message}. Card will be created without media.`, 'warning');
@@ -2232,8 +2327,12 @@
                 showAlert(`Error: ${error.message}`, 'error');
             } finally {
                 showLoading(false);
-                elements.createCardBtn.disabled = false;
-                elements.uploadProgress.style.display = 'none';
+                if (elements.createCardBtn) {
+                    elements.createCardBtn.disabled = false;
+                }
+                if (elements.uploadProgress) {
+                    elements.uploadProgress.style.display = 'none';
+                }
             }
         }
 
@@ -2260,16 +2359,28 @@
 
         function showCardResult(name, phone, theme, cardUrl, mediaUrl) {
             // Update result elements
-            elements.generatedLink.textContent = cardUrl;
-            elements.resultRecipient.textContent = name;
-            elements.resultTheme.textContent = THEMES.find(t => t.id === theme)?.name || theme;
-            elements.resultTime.textContent = new Date().toLocaleString('id-ID');
+            if (elements.generatedLink) {
+                elements.generatedLink.textContent = cardUrl;
+            }
+            if (elements.resultRecipient) {
+                elements.resultRecipient.textContent = name;
+            }
+            if (elements.resultTheme) {
+                elements.resultTheme.textContent = THEMES.find(t => t.id === theme)?.name || theme;
+            }
+            if (elements.resultTime) {
+                elements.resultTime.textContent = new Date().toLocaleString('id-ID');
+            }
             
             // Update action buttons
             const whatsappNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
             const whatsappMessage = `Halo ${name}, ini kartu ucapan digital dari ${CONFIG.COMPANY_NAME}:\n\n${cardUrl}\n\nSemoga berkenan! 🎉`;
-            elements.whatsappActionBtn.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(whatsappMessage)}`;
-            elements.previewActionBtn.href = cardUrl;
+            if (elements.whatsappActionBtn) {
+                elements.whatsappActionBtn.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(whatsappMessage)}`;
+            }
+            if (elements.previewActionBtn) {
+                elements.previewActionBtn.href = cardUrl;
+            }
             
             // Add media info if exists
             if (mediaUrl) {
@@ -2287,15 +2398,16 @@
             }
             
             // Show result card
-            elements.resultCard.classList.add('active');
-            
-            // Scroll to result
-            elements.resultCard.scrollIntoView({ behavior: 'smooth' });
+            if (elements.resultCard) {
+                elements.resultCard.classList.add('active');
+                // Scroll to result
+                elements.resultCard.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         function previewCard() {
-            const name = elements.recipientName.value.trim() || "Preview";
-            const message = elements.cardMessage.value.trim() || "This is a preview of your digital card";
+            const name = elements.recipientName ? elements.recipientName.value.trim() : "Preview";
+            const message = elements.cardMessage ? elements.cardMessage.value.trim() : "This is a preview of your digital card";
             const theme = state.selectedTheme;
             
             const previewUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&preview=true`;
@@ -2303,17 +2415,23 @@
         }
 
         function resetCardForm() {
-            elements.cardForm.reset();
-            elements.resultCard.classList.remove('active');
+            if (elements.cardForm) {
+                elements.cardForm.reset();
+            }
+            if (elements.resultCard) {
+                elements.resultCard.classList.remove('active');
+            }
             selectTheme(CONFIG.DEFAULT_THEME);
-            elements.charCount.textContent = '0';
-            elements.charCount.style.color = 'var(--gray)';
+            if (elements.charCount) {
+                elements.charCount.textContent = '0';
+                elements.charCount.style.color = 'var(--gray)';
+            }
             removeMedia();
             showAlert('Form reset successfully', 'info');
         }
 
         function copyCardLink() {
-            const link = elements.generatedLink.textContent;
+            const link = elements.generatedLink ? elements.generatedLink.textContent : '';
             
             if (!link || link === '') {
                 showAlert('No link to copy', 'error');
@@ -2326,6 +2444,561 @@
                     console.error('Failed to copy:', err);
                     showAlert('Failed to copy link', 'error');
                 });
+        }
+
+        // ========== CUSTOMER TABLE FUNCTIONS ==========
+        async function loadCustomersTable() {
+            try {
+                showLoading(true, "Loading customers...");
+                
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=customers&t=${Date.now()}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    state.customers = Array.isArray(data) ? data : [];
+                    
+                    // Render table
+                    renderCustomersTable();
+                } else {
+                    throw new Error('Failed to fetch customers');
+                }
+            } catch (error) {
+                console.error('Error loading customers:', error);
+                showAlert(`Failed to load customers: ${error.message}`, 'error');
+                renderCustomersTable(); // Render empty table
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function renderCustomersTable() {
+            const customersDiv = document.getElementById('customers');
+            if (!customersDiv) return;
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-users"></i>
+                        Customers
+                    </h1>
+                    <p class="page-subtitle">Manage your customer database</p>
+                </div>
+                
+                <div class="stat-card" style="margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="color: var(--primary);">
+                            <i class="fas fa-database"></i> Customer Database
+                        </h3>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" class="form-control" id="searchCustomer" 
+                                   placeholder="Search customers..." style="width: 250px;">
+                            <button class="btn btn-secondary" onclick="searchCustomer()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button class="btn btn-primary" onclick="addNewCustomer()">
+                                <i class="fas fa-plus"></i> Add Customer
+                            </button>
+                        </div>
+                    </div>
+            `;
+            
+            if (state.customers.length === 0) {
+                html += `
+                    <div style="padding: 40px; text-align: center;">
+                        <div style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 style="color: var(--light); margin-bottom: 10px;">No Customers Yet</h3>
+                        <p style="color: var(--gray);">Start by adding your first customer!</p>
+                        <button class="btn btn-primary" onclick="addNewCustomer()" style="margin-top: 20px;">
+                            <i class="fas fa-plus"></i> Add First Customer
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Last Card</th>
+                                    <th>Total Cards</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                state.customers.forEach((customer, index) => {
+                    html += `
+                        <tr>
+                            <td>
+                                <div style="font-weight: 500;">${customer.nama || 'N/A'}</div>
+                                <small style="color: var(--gray);">${customer.catatan || 'No notes'}</small>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                                    ${customer.no_hp || 'N/A'}
+                                </div>
+                            </td>
+                            <td>
+                                ${customer.last_card_date || 'Never'}
+                            </td>
+                            <td>
+                                <span class="badge" style="background: rgba(212, 175, 55, 0.2); color: var(--primary); padding: 5px 10px; border-radius: 20px;">
+                                    ${customer.total_cards || 0}
+                                </span>
+                            </td>
+                            <td class="table-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="useCustomer(${index})">
+                                    <i class="fas fa-gift"></i> Send Card
+                                </button>
+                                <button class="btn btn-info btn-sm" onclick="viewCustomerDetails(${index})">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCustomer(${index})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 20px; color: var(--gray); font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> Showing ${state.customers.length} customer(s)
+                    </div>
+                `;
+            }
+            
+            html += `
+                </div>
+            `;
+            
+            customersDiv.innerHTML = html;
+        }
+
+        function searchCustomer() {
+            const searchInput = document.getElementById('searchCustomer');
+            if (!searchInput) return;
+            
+            const query = searchInput.value.toLowerCase();
+            if (!query) {
+                renderCustomersTable();
+                return;
+            }
+            
+            const filtered = state.customers.filter(customer => 
+                (customer.nama && customer.nama.toLowerCase().includes(query)) ||
+                (customer.no_hp && customer.no_hp.includes(query)) ||
+                (customer.catatan && customer.catatan.toLowerCase().includes(query))
+            );
+            
+            // Create a temporary display
+            const originalCustomers = state.customers;
+            state.customers = filtered;
+            renderCustomersTable();
+            state.customers = originalCustomers;
+        }
+
+        function addNewCustomer() {
+            const name = prompt('Enter customer name:');
+            if (!name) return;
+            
+            const phone = prompt('Enter WhatsApp number:');
+            if (!phone) return;
+            
+            const notes = prompt('Enter notes (optional):', '');
+            
+            const newCustomer = {
+                nama: name,
+                no_hp: phone,
+                catatan: notes || '',
+                last_card_date: 'Never',
+                total_cards: 0
+            };
+            
+            state.customers.push(newCustomer);
+            saveCustomerToGoogleSheets(newCustomer);
+            renderCustomersTable();
+            showAlert('Customer added successfully!', 'success');
+        }
+
+        async function saveCustomerToGoogleSheets(customer) {
+            try {
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: "customer",
+                        nama: customer.nama,
+                        no_hp: customer.no_hp,
+                        catatan: customer.catatan
+                    })
+                });
+                
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (error) {
+                console.error('Error saving customer:', error);
+            }
+        }
+
+        function useCustomer(index) {
+            const customer = state.customers[index];
+            if (!customer) return;
+            
+            // Navigate to create card page
+            navigateTo('create-card');
+            
+            // Auto-fill form
+            setTimeout(() => {
+                if (elements.recipientName) {
+                    elements.recipientName.value = customer.nama;
+                }
+                if (elements.whatsappNumber) {
+                    elements.whatsappNumber.value = customer.no_hp;
+                }
+                
+                showAlert(`Customer "${customer.nama}" loaded. Now create a card for them!`, 'success');
+            }, 500);
+        }
+
+        function viewCustomerDetails(index) {
+            const customer = state.customers[index];
+            if (!customer) return;
+            
+            const modalHtml = `
+                <div style="padding: 20px; max-width: 500px;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-user"></i> Customer Details
+                    </h3>
+                    
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="color: var(--gray); font-size: 0.9rem;">Name</label>
+                                <div style="color: var(--light); font-weight: 500;">${customer.nama || 'N/A'}</div>
+                            </div>
+                            <div>
+                                <label style="color: var(--gray); font-size: 0.9rem;">Phone</label>
+                                <div style="color: var(--light); font-weight: 500; display: flex; align-items: center; gap: 8px;">
+                                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                                    ${customer.no_hp || 'N/A'}
+                                </div>
+                            </div>
+                            <div style="grid-column: span 2;">
+                                <label style="color: var(--gray); font-size: 0.9rem;">Notes</label>
+                                <div style="color: var(--light); padding: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; min-height: 60px;">
+                                    ${customer.catatan || 'No notes'}
+                                </div>
+                            </div>
+                            <div>
+                                <label style="color: var(--gray); font-size: 0.9rem;">Total Cards</label>
+                                <div style="color: var(--primary); font-weight: bold; font-size: 1.2rem;">
+                                    ${customer.total_cards || 0}
+                                </div>
+                            </div>
+                            <div>
+                                <label style="color: var(--gray); font-size: 0.9rem;">Last Card</label>
+                                <div style="color: var(--light); font-weight: 500;">
+                                    ${customer.last_card_date || 'Never'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button onclick="useCustomer(${index})" class="btn btn-primary">
+                            <i class="fas fa-gift"></i> Send Card
+                        </button>
+                        <button onclick="closeModal()" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            showModal(modalHtml);
+        }
+
+        function deleteCustomer(index) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                state.customers.splice(index, 1);
+                renderCustomersTable();
+                showAlert('Customer deleted', 'success');
+            }
+        }
+
+        // ========== CARDS HISTORY FUNCTIONS ==========
+        async function loadCardsHistoryTable() {
+            try {
+                showLoading(true, "Loading cards history...");
+                
+                // Try to load from Google Sheets
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    state.cards = Array.isArray(data) ? data : [];
+                }
+                
+                // Also load from localStorage
+                const savedCards = localStorage.getItem('fior_recent_cards');
+                if (savedCards) {
+                    const localCards = JSON.parse(savedCards);
+                    // Merge with server cards (avoid duplicates)
+                    state.cards = [...state.cards, ...localCards];
+                    // Remove duplicates by link
+                    state.cards = state.cards.filter((card, index, self) =>
+                        index === self.findIndex(c => c.link === card.link)
+                    );
+                }
+                
+                // Render table
+                renderCardsHistoryTable();
+                
+            } catch (error) {
+                console.error('Error loading cards history:', error);
+                // Load from localStorage if server fails
+                const savedCards = localStorage.getItem('fior_recent_cards');
+                state.cards = savedCards ? JSON.parse(savedCards) : [];
+                renderCardsHistoryTable();
+                showAlert('Loaded from local cache only', 'warning');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function renderCardsHistoryTable() {
+            const cardsDiv = document.getElementById('cards-history');
+            if (!cardsDiv) return;
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-history"></i>
+                        Cards History
+                    </h1>
+                    <p class="page-subtitle">View all generated cards and their status</p>
+                </div>
+                
+                <div class="stat-card" style="margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="color: var(--primary);">
+                            <i class="fas fa-history"></i> Generated Cards
+                        </h3>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" class="form-control" id="searchCards" 
+                                   placeholder="Search cards..." style="width: 250px;">
+                            <button class="btn btn-secondary" onclick="searchCards()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button class="btn btn-warning" onclick="clearHistory()">
+                                <i class="fas fa-broom"></i> Clear Local
+                            </button>
+                        </div>
+                    </div>
+            `;
+            
+            if (state.cards.length === 0) {
+                html += `
+                    <div style="padding: 40px; text-align: center;">
+                        <div style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <h3 style="color: var(--light); margin-bottom: 10px;">No Cards Yet</h3>
+                        <p style="color: var(--gray);">Create your first card to see history here!</p>
+                        <button class="btn btn-primary" onclick="navigateTo('create-card')" style="margin-top: 20px;">
+                            <i class="fas fa-plus"></i> Create First Card
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Recipient</th>
+                                    <th>Theme</th>
+                                    <th>Date & Time</th>
+                                    <th>Media</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // Sort by date (newest first)
+                const sortedCards = [...state.cards].sort((a, b) => {
+                    const dateA = new Date(a.date + ' ' + a.time);
+                    const dateB = new Date(b.date + ' ' + b.time);
+                    return dateB - dateA;
+                });
+                
+                sortedCards.forEach((card, index) => {
+                    const theme = THEMES.find(t => t.id === card.theme) || { name: card.theme, emoji: '🎴' };
+                    
+                    html += `
+                        <tr>
+                            <td>
+                                <div style="font-weight: 500;">${card.name || 'Unknown'}</div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.2rem;">${theme.emoji}</span>
+                                    ${theme.name}
+                                </div>
+                            </td>
+                            <td>
+                                <div>${card.date || 'Unknown'}</div>
+                                <small style="color: var(--gray);">${card.time || ''}</small>
+                            </td>
+                            <td>
+                                ${card.hasMedia ? 
+                                    '<span style="color: var(--success);"><i class="fas fa-check-circle"></i> Yes</span>' : 
+                                    '<span style="color: var(--gray);"><i class="fas fa-times-circle"></i> No</span>'
+                                }
+                            </td>
+                            <td>
+                                <span class="badge" style="background: rgba(40, 167, 69, 0.2); color: var(--success); padding: 5px 10px; border-radius: 20px;">
+                                    <i class="fas fa-check"></i> Sent
+                                </span>
+                            </td>
+                            <td class="table-actions">
+                                <a href="${card.link}" target="_blank" class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <button class="btn btn-info btn-sm" onclick="resendCard(${index})">
+                                    <i class="fas fa-redo"></i> Resend
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCard(${index})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 20px; color: var(--gray); font-size: 0.9rem; display: flex; justify-content: space-between;">
+                        <div>
+                            <i class="fas fa-info-circle"></i> Showing ${state.cards.length} card(s)
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="exportCards()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                `;
+            }
+            
+            html += `
+                </div>
+            `;
+            
+            cardsDiv.innerHTML = html;
+        }
+
+        function searchCards() {
+            const searchInput = document.getElementById('searchCards');
+            if (!searchInput) return;
+            
+            const query = searchInput.value.toLowerCase();
+            if (!query) {
+                renderCardsHistoryTable();
+                return;
+            }
+            
+            const filtered = state.cards.filter(card => 
+                (card.name && card.name.toLowerCase().includes(query)) ||
+                (card.theme && card.theme.toLowerCase().includes(query)) ||
+                (card.date && card.date.includes(query))
+            );
+            
+            // Update UI with filtered results
+            const originalCards = state.cards;
+            state.cards = filtered;
+            renderCardsHistoryTable();
+            state.cards = originalCards;
+        }
+
+        function resendCard(index) {
+            const card = state.cards[index];
+            if (!card) return;
+            
+            // Ask for phone number
+            const phone = prompt('Enter WhatsApp number to resend:', '');
+            if (!phone) return;
+            
+            // Create WhatsApp message
+            const whatsappNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
+            const whatsappMessage = `Halo, ini kartu ucapan digital dari ${CONFIG.COMPANY_NAME}:\n\n${card.link}\n\nKartu ini dikirim ulang karena permintaan. 🎉`;
+            
+            const whatsappUrl = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            showAlert('Card resent via WhatsApp!', 'success');
+        }
+
+        function deleteCard(index) {
+            if (confirm('Are you sure you want to delete this card from history?')) {
+                state.cards.splice(index, 1);
+                
+                // Update localStorage
+                localStorage.setItem('fior_recent_cards', JSON.stringify(state.cards));
+                
+                renderCardsHistoryTable();
+                showAlert('Card deleted from history', 'success');
+            }
+        }
+
+        function clearHistory() {
+            if (confirm('Clear all local card history? This will not delete cards from Google Sheets.')) {
+                localStorage.removeItem('fior_recent_cards');
+                state.cards = state.cards.filter(card => card.fromServer); // Keep only server cards
+                renderCardsHistoryTable();
+                showAlert('Local history cleared', 'success');
+            }
+        }
+
+        function exportCards() {
+            if (state.cards.length === 0) {
+                showAlert('No cards to export', 'warning');
+                return;
+            }
+            
+            // Convert to CSV
+            let csv = 'Recipient,Theme,Date,Time,Link,Media\n';
+            
+            state.cards.forEach(card => {
+                csv += `"${card.name || ''}","${card.theme || ''}","${card.date || ''}","${card.time || ''}","${card.link || ''}","${card.hasMedia ? 'Yes' : 'No'}"\n`;
+            });
+            
+            // Download CSV
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `fior-cards-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            
+            showAlert('Cards exported to CSV', 'success');
         }
 
         // ========== MEDIA LIBRARY FUNCTIONS ==========
@@ -2341,8 +3014,12 @@
             }
             
             // Show progress
-            elements.quickUploadProgress.style.display = 'block';
-            elements.quickUploadArea.classList.add('uploading');
+            if (elements.quickUploadProgress) {
+                elements.quickUploadProgress.style.display = 'block';
+            }
+            if (elements.quickUploadArea) {
+                elements.quickUploadArea.classList.add('uploading');
+            }
             
             let uploadedCount = 0;
             let errorCount = 0;
@@ -2351,9 +3028,15 @@
                 const file = filesToUpload[i];
                 const progress = Math.round((i / filesToUpload.length) * 100);
                 
-                elements.quickProgressFill.style.width = `${progress}%`;
-                elements.quickProgressPercentage.textContent = `${progress}%`;
-                elements.quickProgressStatus.textContent = `Uploading ${i + 1} of ${filesToUpload.length}: ${file.name}`;
+                if (elements.quickProgressFill) {
+                    elements.quickProgressFill.style.width = `${progress}%`;
+                }
+                if (elements.quickProgressPercentage) {
+                    elements.quickProgressPercentage.textContent = `${progress}%`;
+                }
+                if (elements.quickProgressStatus) {
+                    elements.quickProgressStatus.textContent = `Uploading ${i + 1} of ${filesToUpload.length}: ${file.name}`;
+                }
                 
                 try {
                     // Validate file
@@ -2381,15 +3064,27 @@
             }
             
             // Complete progress
-            elements.quickProgressFill.style.width = '100%';
-            elements.quickProgressPercentage.textContent = '100%';
-            elements.quickProgressStatus.textContent = 'Upload complete!';
+            if (elements.quickProgressFill) {
+                elements.quickProgressFill.style.width = '100%';
+            }
+            if (elements.quickProgressPercentage) {
+                elements.quickProgressPercentage.textContent = '100%';
+            }
+            if (elements.quickProgressStatus) {
+                elements.quickProgressStatus.textContent = 'Upload complete!';
+            }
             
             // Update UI
             setTimeout(() => {
-                elements.quickUploadProgress.style.display = 'none';
-                elements.quickUploadArea.classList.remove('uploading');
-                elements.quickUpload.value = '';
+                if (elements.quickUploadProgress) {
+                    elements.quickUploadProgress.style.display = 'none';
+                }
+                if (elements.quickUploadArea) {
+                    elements.quickUploadArea.classList.remove('uploading');
+                }
+                if (elements.quickUpload) {
+                    elements.quickUpload.value = '';
+                }
                 
                 if (uploadedCount > 0) {
                     showAlert(`Successfully uploaded ${uploadedCount} file(s)`, 'success');
@@ -2419,6 +3114,8 @@
         }
 
         function loadMediaLibraryTable() {
+            if (!elements.mediaLibraryTable) return;
+            
             if (state.mediaFiles.length === 0) {
                 elements.mediaLibraryTable.innerHTML = `
                     <div style="padding: 40px; text-align: center;">
@@ -2527,7 +3224,10 @@
         }
 
         function searchMedia() {
-            const query = elements.searchMedia.value.toLowerCase();
+            const searchInput = document.getElementById('searchMedia');
+            if (!searchInput) return;
+            
+            const query = searchInput.value.toLowerCase();
             if (!query) {
                 loadMediaLibraryTable();
                 return;
@@ -2539,31 +3239,43 @@
             );
             
             if (filtered.length === 0) {
-                elements.mediaLibraryTable.innerHTML = `
-                    <p style="padding: 30px; text-align: center; color: var(--gray);">
-                        No media files found for "${query}"
-                    </p>
-                `;
+                if (elements.mediaLibraryTable) {
+                    elements.mediaLibraryTable.innerHTML = `
+                        <p style="padding: 30px; text-align: center; color: var(--gray);">
+                            No media files found for "${query}"
+                        </p>
+                    `;
+                }
                 return;
             }
             
-            // Render filtered results (similar to loadMediaLibraryTable)
-            loadMediaLibraryTable(); // Simplified for now
+            // Render filtered results (simplified for now)
+            loadMediaLibraryTable();
         }
 
         // ========== DASHBOARD FUNCTIONS ==========
         function loadDashboardStats() {
             // Update stats
-            elements.statsCustomers.textContent = state.customers.length;
-            elements.statsCards.textContent = state.cards.length;
-            elements.statsMedia.textContent = state.mediaFiles.length;
-            elements.statsWhatsApp.textContent = Math.floor(state.cards.length * 0.8);
+            if (elements.statsCustomers) {
+                elements.statsCustomers.textContent = state.customers.length;
+            }
+            if (elements.statsCards) {
+                elements.statsCards.textContent = state.cards.length;
+            }
+            if (elements.statsMedia) {
+                elements.statsMedia.textContent = state.mediaFiles.length;
+            }
+            if (elements.statsWhatsApp) {
+                elements.statsWhatsApp.textContent = Math.floor(state.cards.length * 0.8);
+            }
             
             // Load recent activity
             loadRecentActivity();
         }
 
         function loadRecentActivity() {
+            if (!elements.recentActivity) return;
+            
             const recentCards = state.cards.slice(0, 5);
             
             if (recentCards.length === 0) {
@@ -2635,11 +3347,11 @@
             const saved = localStorage.getItem('fior_settings');
             if (saved) {
                 state.settings = JSON.parse(saved);
-                if (state.settings.scriptUrl) {
+                if (state.settings.scriptUrl && elements.scriptUrl) {
                     elements.scriptUrl.value = state.settings.scriptUrl;
                     CONFIG.SCRIPT_URL = state.settings.scriptUrl;
                 }
-                if (state.settings.cardUrl) {
+                if (state.settings.cardUrl && elements.cardUrl) {
                     elements.cardUrl.value = state.settings.cardUrl;
                     CONFIG.CARD_BASE_URL = state.settings.cardUrl;
                 }
@@ -2648,8 +3360,8 @@
 
         function saveSettings() {
             state.settings = {
-                scriptUrl: elements.scriptUrl.value,
-                cardUrl: elements.cardUrl.value
+                scriptUrl: elements.scriptUrl ? elements.scriptUrl.value : '',
+                cardUrl: elements.cardUrl ? elements.cardUrl.value : ''
             };
             
             localStorage.setItem('fior_settings', JSON.stringify(state.settings));
@@ -2708,7 +3420,7 @@
             }
         }
 
-        // ========== CUSTOMER FUNCTIONS (Simplified for brevity) ==========
+        // ========== CUSTOMER FUNCTIONS ==========
         async function loadCustomers() {
             try {
                 const response = await fetch(`${CONFIG.SCRIPT_URL}?t=${Date.now()}`);
@@ -2719,6 +3431,93 @@
             } catch (error) {
                 console.error('Error loading customers:', error);
                 state.customers = [];
+            }
+        }
+
+        async function loadCardsHistory() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    state.cards = Array.isArray(data) ? data : [];
+                }
+            } catch (error) {
+                console.error('Error loading cards history:', error);
+                // Load from localStorage as fallback
+                const saved = localStorage.getItem('fior_recent_cards');
+                state.cards = saved ? JSON.parse(saved) : [];
+            }
+        }
+
+        function fillCustomerInfo() {
+            const select = document.getElementById('customerSelect');
+            if (!select) return;
+            
+            const selectedIndex = select.selectedIndex;
+            if (selectedIndex > 0 && state.customers[selectedIndex - 1]) {
+                const customer = state.customers[selectedIndex - 1];
+                if (elements.recipientName) {
+                    elements.recipientName.value = customer.nama || '';
+                }
+                if (elements.whatsappNumber) {
+                    elements.whatsappNumber.value = customer.no_hp || '';
+                }
+                showAlert(`Customer "${customer.nama}" loaded`, 'success');
+            }
+        }
+
+        // ========== MODAL FUNCTIONS ==========
+        function showModal(content) {
+            // Remove existing modal if any
+            const existingModal = document.getElementById('customModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            const modal = document.createElement('div');
+            modal.id = 'customModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 3000;
+                padding: 20px;
+            `;
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: rgba(30,30,30,0.95);
+                border-radius: 15px;
+                border: 1px solid var(--border);
+                max-width: 600px;
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+                backdrop-filter: blur(10px);
+            `;
+            
+            modalContent.innerHTML = content;
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            
+            // Close on background click
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            };
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('customModal');
+            if (modal) {
+                modal.remove();
             }
         }
 
@@ -2733,9 +3532,10 @@
             showAlert(`An error occurred: ${e.reason.message || e.reason}`, 'error');
         });
 
-        // Initialize
-        initSystem();
+        // Debug: Check if functions exist
+        console.log("loadCustomersTable exists:", typeof loadCustomersTable);
+        console.log("loadCardsHistoryTable exists:", typeof loadCardsHistoryTable);
+
     </script>
 </body>
 </html>
-
