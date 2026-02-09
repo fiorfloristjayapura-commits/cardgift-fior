@@ -131,6 +131,7 @@
             color: var(--gray);
             font-size: 0.95rem;
             line-height: 1.5;
+            margin-bottom: 20px;
         }
 
         .features {
@@ -220,6 +221,33 @@
             text-decoration: underline;
         }
 
+        .upload-info {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .upload-info h4 {
+            color: var(--success);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-info ul {
+            padding-left: 20px;
+            color: var(--gray);
+        }
+
+        .upload-info li {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             .logo-text {
                 font-size: 2.5rem;
@@ -256,6 +284,16 @@
                 Sistem profesional untuk membuat dan mengirim kartu ucapan digital<br>
                 sebagai pelengkap layanan florist FIOR
             </p>
+        </div>
+
+        <div class="upload-info">
+            <h4><i class="fas fa-upload"></i> Upload Media Support</h4>
+            <ul>
+                <li><strong>Gambar:</strong> JPG, PNG, GIF, WEBP (maks. 10MB)</li>
+                <li><strong>Video:</strong> MP4, MOV, WEBM (maks. 10MB, 30 detik)</li>
+                <li><strong>Resolusi optimal:</strong> 720p (1280x720)</li>
+                <li><strong>Auto-optimization:</strong> File dioptimalkan otomatis</li>
+            </ul>
         </div>
 
         <div class="cards-grid">
@@ -306,17 +344,17 @@
                 </div>
             </div>
             <div class="feature">
+                <i class="fas fa-upload"></i>
+                <div class="feature-text">
+                    <h3>Upload Media Sempurna</h3>
+                    <p>Upload gambar/video dengan validasi & optimasi otomatis</p>
+                </div>
+            </div>
+            <div class="feature">
                 <i class="fas fa-database"></i>
                 <div class="feature-text">
                     <h3>Google Sheets Database</h3>
                     <p>Semua data tersimpan aman di Google Sheets</p>
-                </div>
-            </div>
-            <div class="feature">
-                <i class="fas fa-mobile-alt"></i>
-                <div class="feature-text">
-                    <h3>Responsive Design</h3>
-                    <p>Akses dari desktop, tablet, atau smartphone</p>
                 </div>
             </div>
         </div>
@@ -334,10 +372,14 @@
                 <div class="stat-number">6+</div>
                 <div class="stat-label">Tema Kartu</div>
             </div>
+            <div class="stat-item">
+                <div class="stat-number">10MB</div>
+                <div class="stat-label">Max Upload</div>
+            </div>
         </div>
 
         <div class="footer">
-            <p>FIOR Florist Card Gift System v2.0 &copy; 2024</p>
+            <p>FIOR Florist Card Gift System v3.0 &copy; 2024</p>
             <p>Dikembangkan khusus untuk FIOR Florist Jayapura</p>
             
             <div class="quick-links">
@@ -347,7 +389,7 @@
             </div>
             
             <p style="margin-top: 20px; font-size: 0.8rem; color: #555;">
-                <span style="color: #28a745;">●</span> System Status: Online
+                <span style="color: #28a745;">●</span> System Status: <span id="systemStatus">Online</span>
             </p>
         </div>
     </div>
@@ -367,21 +409,35 @@
                     const data = await response.json();
                     if (Array.isArray(data)) {
                         document.getElementById('totalCustomers').textContent = data.length;
-                        // Load cards count from localStorage
-                        const recentCards = localStorage.getItem('fior_recent_cards');
-                        if (recentCards) {
-                            const cards = JSON.parse(recentCards);
-                            document.getElementById('totalCards').textContent = cards.length;
-                        }
                     }
                 }
+                
+                // Load cards count from localStorage
+                const recentCards = localStorage.getItem('fior_recent_cards');
+                if (recentCards) {
+                    const cards = JSON.parse(recentCards);
+                    document.getElementById('totalCards').textContent = cards.length;
+                }
+                
+                // Check system status
+                const statusResponse = await fetch(CONFIG.SCRIPT_URL);
+                document.getElementById('systemStatus').textContent = 
+                    statusResponse.ok ? 'Online' : 'Maintenance';
+                document.getElementById('systemStatus').style.color = 
+                    statusResponse.ok ? '#28a745' : '#ffc107';
+                
             } catch (error) {
                 console.log('Stats load error:', error);
+                document.getElementById('systemStatus').textContent = 'Offline';
+                document.getElementById('systemStatus').style.color = '#dc3545';
             }
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', loadStats);
+        
+        // Auto-refresh stats every 30 seconds
+        setInterval(loadStats, 30000);
     </script>
 </body>
 </html>
