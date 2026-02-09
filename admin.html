@@ -20,101 +20,137 @@ body{
     color:var(--text);
 }
 
-.container{
-    max-width:500px;
-    margin:60px auto;
-    padding:30px;
-    background:var(--card);
-    border-radius:15px;
-    box-shadow:0 20px 60px rgba(0,0,0,0.6);
-    border:1px solid rgba(212,175,55,0.3);
+/* Layout */
+.wrapper{
+    display:flex;
+    min-height:100vh;
 }
 
-h1{
-    text-align:center;
+.sidebar{
+    width:220px;
+    background:#000;
+    padding:20px;
+    border-right:1px solid rgba(212,175,55,0.2);
+}
+
+.sidebar h2{
     color:var(--gold);
     font-weight:300;
+    text-align:center;
     margin-bottom:30px;
 }
 
+.nav a{
+    display:block;
+    padding:12px;
+    color:#ccc;
+    text-decoration:none;
+    border-radius:8px;
+    margin-bottom:8px;
+}
+
+.nav a:hover,
+.nav a.active{
+    background:rgba(212,175,55,0.2);
+    color:var(--gold);
+}
+
+.content{
+    flex:1;
+    padding:40px;
+}
+
+.card{
+    background:var(--card);
+    padding:25px;
+    border-radius:15px;
+    border:1px solid rgba(212,175,55,0.3);
+    max-width:500px;
+}
+
+/* Form */
 input, textarea, select{
     width:100%;
-    padding:14px;
+    padding:12px;
     margin:10px 0;
-    border-radius:10px;
+    border-radius:8px;
     border:1px solid rgba(212,175,55,0.3);
     background:#111;
     color:white;
-    font-size:15px;
-}
-
-textarea{
-    min-height:120px;
 }
 
 button{
     width:100%;
     padding:14px;
+    background:linear-gradient(135deg,#d4af37,#b8941f);
     border:none;
     border-radius:10px;
-    background:linear-gradient(135deg,#d4af37,#b8941f);
-    color:black;
-    font-size:16px;
     font-weight:bold;
     cursor:pointer;
-    margin-top:15px;
-}
-
-button:hover{
-    opacity:0.9;
 }
 
 #result{
-    margin-top:25px;
-    padding:15px;
+    margin-top:20px;
     background:#000;
+    padding:15px;
     border-radius:10px;
-    font-size:14px;
     word-break:break-all;
 }
 
-.upload-box{
-    border:2px dashed rgba(212,175,55,0.4);
-    padding:20px;
-    text-align:center;
-    border-radius:12px;
-    margin-top:15px;
+.hidden{
+    display:none;
 }
 </style>
 </head>
 
 <body>
-<div class="container">
-    <h1>FIOR Card Generator</h1>
+<div class="wrapper">
 
-    <input id="recipientName" placeholder="Nama penerima">
-
-    <input id="whatsappNumber" placeholder="Nomor WhatsApp">
-
-    <textarea id="cardMessage" placeholder="Pesan ucapan"></textarea>
-
-    <select id="selectedTheme">
-        <option value="birthday">Birthday</option>
-        <option value="valentine">Valentine</option>
-        <option value="wedding">Wedding</option>
-        <option value="anniversary">Anniversary</option>
-        <option value="graduation">Graduation</option>
-        <option value="condolence">Condolence</option>
-    </select>
-
-    <div class="upload-box">
-        <input type="file" id="mediaUpload">
-        <small>Upload foto atau video (opsional, max 10MB)</small>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>FIOR</h2>
+        <div class="nav">
+            <a href="#" class="active" onclick="showPage('dashboard')">Dashboard</a>
+            <a href="#" onclick="showPage('create')">Create Card</a>
+        </div>
     </div>
 
-    <button onclick="createCard()">Generate Card</button>
+    <!-- Content -->
+    <div class="content">
 
-    <div id="result"></div>
+        <!-- Dashboard -->
+        <div id="dashboardPage">
+            <h1>Dashboard</h1>
+            <p>Selamat datang di sistem kartu digital FIOR.</p>
+        </div>
+
+        <!-- Create Card -->
+        <div id="createPage" class="hidden">
+            <h1>Create Card</h1>
+
+            <div class="card">
+                <input id="recipientName" placeholder="Nama penerima">
+                <input id="whatsappNumber" placeholder="Nomor WhatsApp">
+                <textarea id="cardMessage" placeholder="Pesan ucapan"></textarea>
+
+                <select id="selectedTheme">
+                    <option value="birthday">Birthday</option>
+                    <option value="valentine">Valentine</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="anniversary">Anniversary</option>
+                    <option value="graduation">Graduation</option>
+                    <option value="condolence">Condolence</option>
+                </select>
+
+                <input type="file" id="mediaUpload">
+
+                <button onclick="createCard()">Generate Card</button>
+
+                <div id="result"></div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <script>
@@ -128,6 +164,17 @@ let uploadedMedia = null;
 document.getElementById("mediaUpload").addEventListener("change", e=>{
     uploadedMedia = e.target.files[0] || null;
 });
+
+function showPage(page){
+    document.getElementById("dashboardPage").classList.add("hidden");
+    document.getElementById("createPage").classList.add("hidden");
+
+    if(page==="dashboard"){
+        document.getElementById("dashboardPage").classList.remove("hidden");
+    }else{
+        document.getElementById("createPage").classList.remove("hidden");
+    }
+}
 
 async function createCard(){
     const name = document.getElementById("recipientName").value;
@@ -162,7 +209,6 @@ async function createCard(){
     document.getElementById("result").innerHTML =
         `<a href="${cardUrl}" target="_blank">${cardUrl}</a>`;
 
-    // simpan ke Google Sheet
     await fetch(CONFIG.SCRIPT_URL,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
