@@ -3,46 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel - FIOR Card Generator</title>
+<title>FIOR Admin Panel</title>
 
 <style>
+:root{
+    --gold:#d4af37;
+    --dark:#111;
+    --card:#1b1b1b;
+    --text:#f1f1f1;
+}
+
 body{
+    margin:0;
+    font-family:Segoe UI, sans-serif;
+    background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
+    color:var(--text);
+}
+
+.container{
+    max-width:500px;
+    margin:60px auto;
+    padding:30px;
+    background:var(--card);
+    border-radius:15px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+    border:1px solid rgba(212,175,55,0.3);
+}
+
+h1{
+    text-align:center;
+    color:var(--gold);
+    font-weight:300;
+    margin-bottom:30px;
+}
+
+input, textarea, select{
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid rgba(212,175,55,0.3);
     background:#111;
     color:white;
-    font-family:Arial, sans-serif;
-    padding:30px;
+    font-size:15px;
 }
-.container{
-    max-width:600px;
-    margin:auto;
+
+textarea{
+    min-height:120px;
 }
-input, textarea, select, button{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border-radius:8px;
-    border:none;
-    font-size:16px;
-}
+
 button{
-    background:gold;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(135deg,#d4af37,#b8941f);
     color:black;
+    font-size:16px;
     font-weight:bold;
     cursor:pointer;
+    margin-top:15px;
 }
+
+button:hover{
+    opacity:0.9;
+}
+
 #result{
-    margin-top:20px;
-    background:#222;
+    margin-top:25px;
     padding:15px;
-    border-radius:8px;
+    background:#000;
+    border-radius:10px;
+    font-size:14px;
     word-break:break-all;
+}
+
+.upload-box{
+    border:2px dashed rgba(212,175,55,0.4);
+    padding:20px;
+    text-align:center;
+    border-radius:12px;
+    margin-top:15px;
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-    <h2>FIOR Card Generator</h2>
+    <h1>FIOR Card Generator</h1>
 
     <input id="recipientName" placeholder="Nama penerima">
 
@@ -59,7 +107,10 @@ button{
         <option value="condolence">Condolence</option>
     </select>
 
-    <input type="file" id="mediaUpload">
+    <div class="upload-box">
+        <input type="file" id="mediaUpload">
+        <small>Upload foto atau video (opsional, max 10MB)</small>
+    </div>
 
     <button onclick="createCard()">Generate Card</button>
 
@@ -111,7 +162,7 @@ async function createCard(){
     document.getElementById("result").innerHTML =
         `<a href="${cardUrl}" target="_blank">${cardUrl}</a>`;
 
-    // save to sheet
+    // simpan ke Google Sheet
     await fetch(CONFIG.SCRIPT_URL,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
@@ -126,40 +177,30 @@ async function createCard(){
     });
 }
 
-async function uploadToGoogleDrive(file, progressCallback = null) {
-    try {
-        const base64Data = await fileToBase64(file);
+async function uploadToGoogleDrive(file) {
+    const base64Data = await fileToBase64(file);
 
-        const payload = {
-            type: "media",
-            filename: file.name,
-            mimeType: file.type,
-            data: base64Data.split(',')[1]
-        };
+    const payload = {
+        type: "media",
+        filename: file.name,
+        mimeType: file.type,
+        data: base64Data.split(',')[1]
+    };
 
-        const response = await fetch(CONFIG.SCRIPT_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
+    const response = await fetch(CONFIG.SCRIPT_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
 
-        if (!response.ok) {
-            throw new Error("Server tidak merespon");
-        }
+    const result = await response.json();
 
-        const result = await response.json();
-
-        if (result.status === "success" && result.url) {
-            return result.url;
-        } else {
-            throw new Error(result.message || "Upload gagal");
-        }
-
-    } catch (error) {
-        console.error("Upload error:", error);
-        throw new Error("Upload gagal: " + error.message);
+    if (result.status === "success" && result.url) {
+        return result.url;
+    } else {
+        throw new Error(result.message || "Upload gagal");
     }
 }
 
