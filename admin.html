@@ -1,263 +1,3542 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FIOR Admin Panel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - FIOR Card Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<style>
-:root{
-    --gold:#d4af37;
-    --dark:#111;
-    --card:#1b1b1b;
-    --text:#f1f1f1;
-}
+        :root {
+            --primary: #d4af37;
+            --primary-dark: #b8941f;
+            --secondary: #1a1a1a;
+            --dark: #111;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --border: rgba(212, 175, 55, 0.3);
+            --shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
 
-body{
-    margin:0;
-    font-family:Segoe UI, sans-serif;
-    background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
-    color:var(--text);
-}
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: var(--light);
+            min-height: 100vh;
+        }
 
-/* Layout */
-.wrapper{
-    display:flex;
-    min-height:100vh;
-}
+        /* Header */
+        .header {
+            background: rgba(30, 30, 30, 0.95);
+            padding: 15px 30px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
 
-.sidebar{
-    width:220px;
-    background:#000;
-    padding:20px;
-    border-right:1px solid rgba(212,175,55,0.2);
-}
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-.sidebar h2{
-    color:var(--gold);
-    font-weight:300;
-    text-align:center;
-    margin-bottom:30px;
-}
+        .logo-image {
+            width: 40px;
+            height: 40px;
+            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5));
+        }
 
-.nav a{
-    display:block;
-    padding:12px;
-    color:#ccc;
-    text-decoration:none;
-    border-radius:8px;
-    margin-bottom:8px;
-}
+        .logo-text {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 300;
+        }
 
-.nav a:hover,
-.nav a.active{
-    background:rgba(212,175,55,0.2);
-    color:var(--gold);
-}
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-.content{
-    flex:1;
-    padding:40px;
-}
+        .datetime {
+            text-align: right;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
 
-.card{
-    background:var(--card);
-    padding:25px;
-    border-radius:15px;
-    border:1px solid rgba(212,175,55,0.3);
-    max-width:500px;
-}
+        .datetime div:first-child {
+            font-weight: 500;
+            color: var(--light);
+        }
 
-/* Form */
-input, textarea, select{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border-radius:8px;
-    border:1px solid rgba(212,175,55,0.3);
-    background:#111;
-    color:white;
-}
+        /* Main Container */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
 
-button{
-    width:100%;
-    padding:14px;
-    background:linear-gradient(135deg,#d4af37,#b8941f);
-    border:none;
-    border-radius:10px;
-    font-weight:bold;
-    cursor:pointer;
-}
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: rgba(40, 40, 40, 0.95);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
 
-#result{
-    margin-top:20px;
-    background:#000;
-    padding:15px;
-    border-radius:10px;
-    word-break:break-all;
-}
+        .nav-menu {
+            flex: 1;
+        }
 
-.hidden{
-    display:none;
-}
-</style>
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 25px;
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(212, 175, 55, 0.1);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 20px 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            max-width: calc(100vw - 250px);
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            background: rgba(212, 175, 55, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--light);
+            margin-bottom: 10px;
+        }
+
+        .card-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #000;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        /* Tables */
+        .table-container {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: none;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .alert-warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .alert-info {
+            background: rgba(23, 162, 184, 0.1);
+            border-color: var(--info);
+            color: var(--info);
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            border: 5px solid rgba(212, 175, 55, 0.3);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Theme Preview */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .theme-card {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .theme-card:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-card.active {
+            border-color: var(--primary);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .theme-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .theme-name {
+            font-size: 0.9rem;
+            color: var(--light);
+        }
+
+        /* Result Card */
+        .result-card {
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            display: none;
+            animation: fadeIn 0.5s ease;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .result-card.active {
+            display: block;
+        }
+
+        .link-box {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #4ecdc4;
+            border: 1px solid rgba(78, 205, 196, 0.2);
+        }
+
+        /* ========== UPLOAD AREA STYLES ========== */
+        .upload-area {
+            border: 3px dashed var(--border);
+            border-radius: 15px;
+            padding: 40px 25px;
+            text-align: center;
+            background: rgba(255,255,255,0.03);
+            margin-bottom: 20px;
+            transition: var(--transition);
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-area.drag-over {
+            border-color: var(--primary);
+            background: rgba(212, 175, 55, 0.05);
+            transform: scale(1.02);
+        }
+
+        .upload-area.has-file {
+            border-color: var(--success);
+            background: rgba(40, 167, 69, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .upload-text {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .upload-text strong {
+            color: var(--light);
+        }
+
+        .upload-hint {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-top: 15px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid var(--primary);
+        }
+
+        .file-input-label:hover {
+            background: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .file-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+
+        /* Media Preview */
+        .media-preview {
+            margin-top: 30px;
+            display: none;
+            width: 100%;
+        }
+
+        .preview-container {
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+        }
+
+        .preview-video {
+            max-width: 100%;
+            max-height: 300px;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .preview-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .preview-controls button {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .preview-controls button:hover {
+            background: rgba(212,175,55,0.9);
+            transform: scale(1.1);
+        }
+
+        /* File Info */
+        .file-info-box {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .file-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .file-info-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .file-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-info-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-info-value {
+            color: var(--light);
+            font-weight: 500;
+            font-size: 1rem;
+            word-break: break-all;
+        }
+
+        .file-info-value.success {
+            color: var(--success);
+        }
+
+        .file-info-value.warning {
+            color: var(--warning);
+        }
+
+        .file-info-value.error {
+            color: var(--danger);
+        }
+
+        /* Progress Bar */
+        .upload-progress {
+            width: 100%;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--success) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .progress-percentage {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Upload Actions */
+        .upload-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 10px;
+                min-height: auto;
+            }
+            
+            .nav-menu {
+                display: flex;
+                flex: 1;
+                overflow-x: auto;
+            }
+            
+            .nav-item {
+                white-space: nowrap;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                padding: 10px 15px;
+            }
+            
+            .nav-item.active {
+                border-left: none;
+                border-bottom-color: var(--primary);
+            }
+            
+            .sidebar-footer {
+                display: none;
+            }
+            
+            .main-content {
+                max-width: 100vw;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .theme-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .upload-area {
+                padding: 25px 15px;
+            }
+            
+            .file-info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-actions {
+                flex-direction: column;
+            }
+            
+            .upload-actions .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .card-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .upload-text {
+                font-size: 1rem;
+            }
+        }
+
+        /* Animation for file upload */
+        @keyframes pulseUpload {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .uploading {
+            animation: pulseUpload 1.5s infinite;
+        }
+
+        /* Badge styles */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .badge-success {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+
+        .badge-info {
+            background: rgba(23, 162, 184, 0.2);
+            color: var(--info);
+        }
+
+        /* Modal styles */
+        #customModal {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
 </head>
-
 <body>
-<div class="wrapper">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div id="loadingText" style="color: white; margin-left: 20px; font-size: 1.1rem;"></div>
+    </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>FIOR</h2>
-        <div class="nav">
-            <a href="#" class="active" onclick="showPage('dashboard')">Dashboard</a>
-            <a href="#" onclick="showPage('create')">Create Card</a>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <div class="logo-image"></div>
+            <div class="logo-text">FIOR CARD GENERATOR</div>
+        </div>
+        
+        <div class="user-info">
+            <div class="datetime">
+                <div id="currentDate">Loading...</div>
+                <div id="currentTime">00:00:00</div>
+            </div>
+            <div class="user-avatar">
+                <i class="fas fa-user-circle" style="font-size: 2rem; color: var(--primary);"></i>
+            </div>
         </div>
     </div>
 
-    <!-- Content -->
-    <div class="content">
-
-        <!-- Dashboard -->
-        <div id="dashboardPage">
-            <h1>Dashboard</h1>
-            <p>Selamat datang di sistem kartu digital FIOR.</p>
-        </div>
-
-        <!-- Create Card -->
-        <div id="createPage" class="hidden">
-            <h1>Create Card</h1>
-
-            <div class="card">
-                <input id="recipientName" placeholder="Nama penerima">
-                <input id="whatsappNumber" placeholder="Nomor WhatsApp">
-                <textarea id="cardMessage" placeholder="Pesan ucapan"></textarea>
-
-                <select id="selectedTheme">
-                    <option value="birthday">Birthday</option>
-                    <option value="valentine">Valentine</option>
-                    <option value="wedding">Wedding</option>
-                    <option value="anniversary">Anniversary</option>
-                    <option value="graduation">Graduation</option>
-                    <option value="condolence">Condolence</option>
-                </select>
-
-                <input type="file" id="mediaUpload">
-
-                <button onclick="createCard()">Generate Card</button>
-
-                <div id="result"></div>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-menu">
+                <a class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" data-page="create-card">
+                    <i class="fas fa-gift"></i>
+                    <span>Create Card</span>
+                </a>
+                <a class="nav-item" data-page="customers">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </a>
+                <a class="nav-item" data-page="cards-history">
+                    <i class="fas fa-history"></i>
+                    <span>Cards History</span>
+                </a>
+                <a class="nav-item" data-page="media-library">
+                    <i class="fas fa-photo-video"></i>
+                    <span>Media Library</span>
+                </a>
+                <a class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <div class="status-dot"></div>
+                    <span>System Online</span>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="testConnection()" style="width: 100%;">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </button>
             </div>
         </div>
 
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Alerts -->
+            <div id="alertSuccess" class="alert alert-success"></div>
+            <div id="alertError" class="alert alert-error"></div>
+            <div id="alertWarning" class="alert alert-warning"></div>
+            <div id="alertInfo" class="alert alert-info"></div>
+
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page active">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </h1>
+                    <p class="page-subtitle">Overview of your card generation system</p>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="stat-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-stats">
+                                <div class="stat-number" id="statsCustomers">0</div>
+                                <div class="stat-label">Total Customers</div>
+                            </div>
+                        </div>
+                        <h3 class="card-title">Customer Database</h3>
+                        <p class="card-desc">Manage and view all your customer data stored in Google Sheets</p>
+                        <button class="btn btn-secondary" onclick="navigateTo('customers')">
+                            <i class="fas fa-eye"></i> View All
+                        </button>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <div class="card-stats">
+                                <div class="stat-number" id="statsCards">0</div>
+                                <div class="stat-label">Cards Created</div>
+                            </div>
+                        </div>
+                        <h3 class="card-title">Card Generation</h3>
+                        <p class="card-desc">Create new digital cards with various themes and send via WhatsApp</p>
+                        <button class="btn btn-primary" onclick="navigateTo('create-card')">
+                            <i class="fas fa-plus"></i> Create New
+                        </button>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                            <div class="card-stats">
+                                <div class="stat-number" id="statsMedia">0</div>
+                                <div class="stat-label">Media Files</div>
+                            </div>
+                        </div>
+                        <h3 class="card-title">Media Upload</h3>
+                        <p class="card-desc">Upload and manage images/videos for your greeting cards</p>
+                        <button class="btn btn-success" onclick="navigateTo('media-library')">
+                            <i class="fas fa-photo-video"></i> Media Library
+                        </button>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-whatsapp"></i>
+                            </div>
+                            <div class="card-stats">
+                                <div class="stat-number" id="statsWhatsApp">0</div>
+                                <div class="stat-label">WhatsApp Sent</div>
+                            </div>
+                        </div>
+                        <h3 class="card-title">WhatsApp Integration</h3>
+                        <p class="card-desc">Monitor WhatsApp delivery and success rate of your card messages</p>
+                        <button class="btn btn-info" onclick="testWhatsApp()">
+                            <i class="fab fa-whatsapp"></i> Test Integration
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container" style="margin-top: 40px;">
+                    <h3 style="padding: 20px; border-bottom: 1px solid var(--border); color: var(--primary);">
+                        <i class="fas fa-clock"></i> Recent Activity
+                    </h3>
+                    <div id="recentActivity">
+                        <p style="padding: 20px; text-align: center; color: var(--gray);">
+                            Loading recent activity...
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Card Page -->
+            <div id="create-card" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-gift"></i>
+                        Create New Card
+                    </h1>
+                    <p class="page-subtitle">Create and send beautiful digital greeting cards with media</p>
+                </div>
+
+                <div class="stat-card">
+                    <form id="cardForm" onsubmit="event.preventDefault(); createCard();">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i>
+                                Recipient Information
+                            </label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div>
+                                    <input type="text" class="form-control" id="recipientName" 
+                                           placeholder="Full Name *" required>
+                                </div>
+                                <div>
+                                    <input type="tel" class="form-control" id="whatsappNumber" 
+                                           placeholder="WhatsApp Number *" required>
+                                    <small style="color: var(--gray); font-size: 0.8rem; margin-top: 5px; display: block;">
+                                        Example: 081234567890
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-comment-dots"></i>
+                                Message Content
+                            </label>
+                            <textarea class="form-control" id="cardMessage" 
+                                      placeholder="Write your personalized message here... *" 
+                                      required rows="6"></textarea>
+                            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                                <small style="color: var(--gray); font-size: 0.8rem;">
+                                    Minimum 20 characters
+                                </small>
+                                <small style="color: var(--gray); font-size: 0.8rem;">
+                                    <span id="charCount">0</span>/500 characters
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- ========== UPLOAD MEDIA SECTION ========== -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-photo-video"></i>
+                                Upload Foto/Video (Opsional)
+                            </label>
+                            
+                            <div class="upload-area" id="uploadArea">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <div class="upload-text">
+                                    <strong>Drag & drop</strong> files here or <strong>click to browse</strong>
+                                </div>
+                                <div class="upload-hint">
+                                    Supports: JPG, PNG, GIF, MP4, MOV, WEBM • Max 10MB
+                                </div>
+                                
+                                <div class="file-input-wrapper">
+                                    <input type="file" 
+                                           id="mediaUpload" 
+                                           class="file-input"
+                                           accept="image/*,video/*"
+                                           onchange="handleFileSelect(event)">
+                                    <label for="mediaUpload" class="file-input-label">
+                                        <i class="fas fa-folder-open"></i> Browse Files
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Progress Bar -->
+                            <div class="upload-progress" id="uploadProgress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                                <div class="progress-text">
+                                    <span id="progressStatus">Uploading...</span>
+                                    <span class="progress-percentage" id="progressPercentage">0%</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Media Preview -->
+                            <div class="media-preview" id="mediaPreview">
+                                <div class="preview-container">
+                                    <div class="preview-controls">
+                                        <button onclick="zoomMedia()" title="Zoom">
+                                            <i class="fas fa-search-plus"></i>
+                                        </button>
+                                        <button onclick="removeMedia()" title="Remove">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    <img id="imagePreview" class="preview-image" style="display: none;">
+                                    <video id="videoPreview" class="preview-video" controls style="display: none;"></video>
+                                </div>
+                                
+                                <div class="file-info-box">
+                                    <div class="file-info-grid" id="fileInfoGrid">
+                                        <!-- File info will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Upload Status -->
+                            <div id="uploadStatus" style="display: none; margin-top: 15px;">
+                                <div class="file-info-item">
+                                    <div class="file-info-label">
+                                        <i class="fas fa-link"></i> Upload Status
+                                    </div>
+                                    <div class="file-info-value" id="uploadStatusText"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-palette"></i>
+                                Select Theme
+                            </label>
+                            <div class="theme-grid" id="themeGrid">
+                                <!-- Themes will be loaded here -->
+                            </div>
+                            <input type="hidden" id="selectedTheme" value="birthday" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user-friends"></i>
+                                Quick Customer Select (Optional)
+                            </label>
+                            <select class="form-control" id="customerSelect" onchange="fillCustomerInfo()">
+                                <option value="">Select existing customer...</option>
+                                <!-- Customers will be loaded here -->
+                            </select>
+                        </div>
+
+                        <div style="display: flex; gap: 15px; margin-top: 30px;">
+                            <button type="submit" class="btn btn-primary" style="flex: 2;" id="createCardBtn">
+                                <i class="fas fa-magic"></i> Generate & Send Card
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="previewCard()" style="flex: 1;">
+                                <i class="fas fa-eye"></i> Preview
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetCardForm()" style="flex: 1;">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Result Card -->
+                <div class="result-card" id="resultCard">
+                    <h2 class="page-title" style="font-size: 1.5rem; margin-bottom: 20px;">
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                        Card Successfully Created!
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i>
+                            Generated Card Link
+                        </label>
+                        <div class="link-box" id="generatedLink">
+                            <!-- Link will appear here -->
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <h3 style="color: var(--primary); margin-bottom: 15px;">
+                            <i class="fas fa-info-circle"></i> Card Details
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;" class="card-details">
+                            <div>
+                                <small style="color: var(--gray);">Recipient</small>
+                                <div style="color: var(--light); font-weight: 500;" id="resultRecipient">-</div>
+                            </div>
+                            <div>
+                                <small style="color: var(--gray);">Theme</small>
+                                <div style="color: var(--light); font-weight: 500;" id="resultTheme">-</div>
+                            </div>
+                            <div>
+                                <small style="color: var(--gray);">Created</small>
+                                <div style="color: var(--light); font-weight: 500;" id="resultTime">-</div>
+                            </div>
+                            <div>
+                                <small style="color: var(--gray);">Status</small>
+                                <div style="color: var(--success); font-weight: 500;">
+                                    <i class="fas fa-check-circle"></i> Ready to Send
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 25px;">
+                        <a href="#" target="_blank" class="btn btn-success" id="whatsappActionBtn" style="flex: 1;">
+                            <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                        </a>
+                        <button onclick="copyCardLink()" class="btn btn-secondary" style="flex: 1;">
+                            <i class="fas fa-copy"></i> Copy Link
+                        </button>
+                        <a href="#" target="_blank" class="btn btn-secondary" id="previewActionBtn" style="flex: 1;">
+                            <i class="fas fa-eye"></i> Open Card
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customers Page -->
+            <div id="customers" class="page">
+                <!-- Content will be loaded dynamically -->
+            </div>
+
+            <!-- Cards History Page -->
+            <div id="cards-history" class="page">
+                <!-- Content will be loaded dynamically -->
+            </div>
+
+            <!-- Media Library Page -->
+            <div id="media-library" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-photo-video"></i>
+                        Media Library
+                    </h1>
+                    <p class="page-subtitle">Manage your uploaded images and videos</p>
+                </div>
+
+                <div class="stat-card" style="margin-bottom: 30px;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-upload"></i> Quick Upload
+                    </h3>
+                    <div class="upload-area" id="quickUploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="upload-text">
+                            <strong>Drag & drop</strong> files here for quick upload
+                        </div>
+                        <div class="upload-hint">
+                            Max 10MB per file • Multiple files supported
+                        </div>
+                        
+                        <div class="file-input-wrapper">
+                            <input type="file" 
+                                   id="quickUpload" 
+                                   class="file-input"
+                                   accept="image/*,video/*"
+                                   multiple
+                                   onchange="handleQuickUpload(event)">
+                            <label for="quickUpload" class="file-input-label">
+                                <i class="fas fa-upload"></i> Select Files
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Upload Progress -->
+                    <div class="upload-progress" id="quickUploadProgress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="quickProgressFill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="quickProgressStatus">Uploading...</span>
+                            <span class="progress-percentage" id="quickProgressPercentage">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div style="padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="color: var(--primary);">
+                            <i class="fas fa-images"></i> Media Files
+                        </h3>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" class="form-control" id="searchMedia" 
+                                   placeholder="Search media..." style="width: 250px;">
+                            <button class="btn btn-secondary btn-sm" onclick="searchMedia()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                    <div id="mediaLibraryTable">
+                        <p style="padding: 30px; text-align: center; color: var(--gray);">
+                            Loading media library...
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-cog"></i>
+                        System Settings
+                    </h1>
+                    <p class="page-subtitle">Configure your card generation system</p>
+                </div>
+
+                <div class="stat-card" style="margin-bottom: 30px;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-link"></i> API Configuration
+                    </h3>
+                    <div class="form-group">
+                        <label class="form-label">Google Apps Script URL</label>
+                        <input type="text" class="form-control" id="scriptUrl" 
+                               placeholder="https://script.google.com/macros/s/...">
+                        <small style="color: var(--gray); font-size: 0.8rem; margin-top: 5px; display: block;">
+                            This URL connects to your Google Sheets database. Get it after deploying your Google Apps Script.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Card Base URL</label>
+                        <input type="text" class="form-control" id="cardUrl" 
+                               value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <button class="btn btn-primary" onclick="saveSettings()">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                        <button class="btn btn-secondary" onclick="testApiConnection()">
+                            <i class="fas fa-wifi"></i> Test Connection
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-database"></i> Data Management
+                    </h3>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button class="btn btn-secondary" onclick="backupData()">
+                            <i class="fas fa-download"></i> Backup Data
+                        </button>
+                        <button class="btn btn-warning" onclick="clearUploadCache()">
+                            <i class="fas fa-broom"></i> Clear Upload Cache
+                        </button>
+                        <button class="btn btn-danger" onclick="resetSystem()">
+                            <i class="fas fa-redo"></i> Reset System
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-const CONFIG = {
-    SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
-    CARD_BASE_URL: "card.html"
-};
+    <!-- Modal for Zoomed Media -->
+    <div id="mediaModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: center;">
+        <div style="position: relative; max-width: 90%; max-height: 90%;">
+            <button onclick="closeMediaModal()" style="position: absolute; top: -40px; right: 0; background: var(--danger); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </button>
+            <img id="modalImage" style="max-width: 100%; max-height: 80vh; border-radius: 10px;">
+            <video id="modalVideo" controls style="max-width: 100%; max-height: 80vh; border-radius: 10px; display: none;"></video>
+        </div>
+    </div>
 
-let uploadedMedia = null;
+    <script>
+        // ========== CONFIGURATION ==========
+        const CONFIG = {
+            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
+            CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
+            COMPANY_NAME: "FIOR Florist",
+            DEFAULT_THEME: "birthday",
+            MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+            MAX_VIDEO_DURATION: 30 // seconds
+        };
 
-document.getElementById("mediaUpload").addEventListener("change", e=>{
-    uploadedMedia = e.target.files[0] || null;
-});
+        // ========== THEME CONFIGURATION ==========
+        const THEMES = [
+            {
+                id: 'birthday',
+                name: 'Birthday',
+                emoji: '🎂',
+                color: '#2196f3',
+                description: 'Perfect for birthday celebrations'
+            },
+            {
+                id: 'valentine',
+                name: "Valentine's Day",
+                emoji: '❤️',
+                color: '#e91e63',
+                description: 'For expressing love and affection'
+            },
+            {
+                id: 'wedding',
+                name: 'Wedding',
+                emoji: '💍',
+                color: '#ff9800',
+                description: 'Beautiful wedding congratulations'
+            },
+            {
+                id: 'anniversary',
+                name: 'Anniversary',
+                emoji: '💑',
+                color: '#9c27b0',
+                description: 'Celebrate special milestones'
+            },
+            {
+                id: 'graduation',
+                name: 'Graduation',
+                emoji: '🎓',
+                color: '#4caf50',
+                description: 'Congratulations on graduation'
+            },
+            {
+                id: 'condolence',
+                name: 'Condolence',
+                emoji: '🕊️',
+                color: '#607d8b',
+                description: 'Express sympathy and support'
+            }
+        ];
 
-function showPage(page){
-    document.getElementById("dashboardPage").classList.add("hidden");
-    document.getElementById("createPage").classList.add("hidden");
+        // ========== STATE MANAGEMENT ==========
+        let state = {
+            customers: [],
+            cards: [],
+            mediaFiles: [],
+            currentPage: 'dashboard',
+            selectedTheme: CONFIG.DEFAULT_THEME,
+            settings: {},
+            uploadedMedia: null,
+            uploadQueue: [],
+            isUploading: false
+        };
 
-    if(page==="dashboard"){
-        document.getElementById("dashboardPage").classList.remove("hidden");
-    }else{
-        document.getElementById("createPage").classList.remove("hidden");
-    }
-}
+        // ========== DOM ELEMENTS ==========
+        const elements = {
+            // Alerts
+            alertSuccess: document.getElementById('alertSuccess'),
+            alertError: document.getElementById('alertError'),
+            alertWarning: document.getElementById('alertWarning'),
+            alertInfo: document.getElementById('alertInfo'),
+            
+            // Loading
+            loadingOverlay: document.getElementById('loadingOverlay'),
+            loadingText: document.getElementById('loadingText'),
+            
+            // Dashboard
+            statsCustomers: document.getElementById('statsCustomers'),
+            statsCards: document.getElementById('statsCards'),
+            statsMedia: document.getElementById('statsMedia'),
+            statsWhatsApp: document.getElementById('statsWhatsApp'),
+            recentActivity: document.getElementById('recentActivity'),
+            
+            // Create Card
+            cardForm: document.getElementById('cardForm'),
+            recipientName: document.getElementById('recipientName'),
+            whatsappNumber: document.getElementById('whatsappNumber'),
+            cardMessage: document.getElementById('cardMessage'),
+            charCount: document.getElementById('charCount'),
+            uploadArea: document.getElementById('uploadArea'),
+            mediaUpload: document.getElementById('mediaUpload'),
+            uploadProgress: document.getElementById('uploadProgress'),
+            progressFill: document.getElementById('progressFill'),
+            progressStatus: document.getElementById('progressStatus'),
+            progressPercentage: document.getElementById('progressPercentage'),
+            mediaPreview: document.getElementById('mediaPreview'),
+            imagePreview: document.getElementById('imagePreview'),
+            videoPreview: document.getElementById('videoPreview'),
+            fileInfoGrid: document.getElementById('fileInfoGrid'),
+            uploadStatus: document.getElementById('uploadStatus'),
+            uploadStatusText: document.getElementById('uploadStatusText'),
+            themeGrid: document.getElementById('themeGrid'),
+            selectedTheme: document.getElementById('selectedTheme'),
+            customerSelect: document.getElementById('customerSelect'),
+            createCardBtn: document.getElementById('createCardBtn'),
+            resultCard: document.getElementById('resultCard'),
+            generatedLink: document.getElementById('generatedLink'),
+            resultRecipient: document.getElementById('resultRecipient'),
+            resultTheme: document.getElementById('resultTheme'),
+            resultTime: document.getElementById('resultTime'),
+            whatsappActionBtn: document.getElementById('whatsappActionBtn'),
+            previewActionBtn: document.getElementById('previewActionBtn'),
+            
+            // Media Library
+            quickUploadArea: document.getElementById('quickUploadArea'),
+            quickUpload: document.getElementById('quickUpload'),
+            quickUploadProgress: document.getElementById('quickUploadProgress'),
+            quickProgressFill: document.getElementById('quickProgressFill'),
+            quickProgressStatus: document.getElementById('quickProgressStatus'),
+            quickProgressPercentage: document.getElementById('quickProgressPercentage'),
+            mediaLibraryTable: document.getElementById('mediaLibraryTable'),
+            
+            // Modal
+            mediaModal: document.getElementById('mediaModal'),
+            modalImage: document.getElementById('modalImage'),
+            modalVideo: document.getElementById('modalVideo'),
+            
+            // Date & Time
+            currentDate: document.getElementById('currentDate'),
+            currentTime: document.getElementById('currentTime'),
+            
+            // Settings
+            scriptUrl: document.getElementById('scriptUrl'),
+            cardUrl: document.getElementById('cardUrl')
+        };
 
-async function createCard(){
-    const name = document.getElementById("recipientName").value;
-    const phone = document.getElementById("whatsappNumber").value;
-    const message = document.getElementById("cardMessage").value;
-    const theme = document.getElementById("selectedTheme").value;
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            initSystem();
+        });
 
-    if(!name || !phone || !message){
-        alert("Lengkapi data dulu");
-        return;
-    }
-
-    let mediaUrl = "";
-
-    if(uploadedMedia){
-        try{
-            mediaUrl = await uploadToGoogleDrive(uploadedMedia);
-        }catch(e){
-            alert("Upload media gagal");
+        async function initSystem() {
+            showLoading(true, "Initializing system...");
+            
+            try {
+                // Initialize date/time
+                updateDateTime();
+                setInterval(updateDateTime, 1000);
+                
+                // Load settings
+                loadSettings();
+                
+                // Setup navigation
+                setupNavigation();
+                
+                // Setup drag and drop
+                setupDragAndDrop();
+                
+                // Load themes
+                loadThemes();
+                
+                // Setup event listeners
+                setupEventListeners();
+                
+                // Load initial data
+                await loadCustomers();
+                await loadCardsHistory();
+                await loadMediaLibrary();
+                
+                // Load dashboard stats
+                loadDashboardStats();
+                
+                showAlert('System initialized successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showAlert('System initialization failed: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
         }
-    }
 
-    let cardUrl =
-        `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}`
-        + `&msg=${encodeURIComponent(message)}`
-        + `&theme=${theme}`;
+        // ========== BASIC FUNCTIONS ==========
+        function updateDateTime() {
+            const now = new Date();
+            elements.currentDate.textContent = now.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            elements.currentTime.textContent = now.toLocaleTimeString('id-ID');
+        }
 
-    if(mediaUrl){
-        cardUrl += `&media=${encodeURIComponent(mediaUrl)}`;
-    }
+        function setupNavigation() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    navigateTo(page);
+                });
+            });
+        }
 
-    document.getElementById("result").innerHTML =
-        `<a href="${cardUrl}" target="_blank">${cardUrl}</a>`;
+        function navigateTo(page) {
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-page') === page) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Show selected page
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            document.getElementById(page).classList.add('active');
+            
+            // Update state
+            state.currentPage = page;
+            
+            // Load page-specific data
+            switch(page) {
+                case 'dashboard':
+                    loadDashboardStats();
+                    break;
+                case 'customers':
+                    loadCustomersTable();
+                    break;
+                case 'cards-history':
+                    loadCardsHistoryTable();
+                    break;
+                case 'media-library':
+                    loadMediaLibraryTable();
+                    break;
+            }
+        }
 
-    await fetch(CONFIG.SCRIPT_URL,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-            type:"card",
-            nama:name,
-            tema:theme,
-            pesan:message,
-            link:cardUrl,
-            media_url:mediaUrl
-        })
-    });
-}
+        function setupEventListeners() {
+            // Character count for message
+            if (elements.cardMessage) {
+                elements.cardMessage.addEventListener('input', function() {
+                    const length = this.value.length;
+                    elements.charCount.textContent = length;
+                    elements.charCount.style.color = length < 20 ? 'var(--danger)' : 
+                                                   length > 450 ? 'var(--warning)' : 'var(--gray)';
+                });
+            }
+            
+            // Auto-format phone number
+            const formatPhoneNumber = function(e) {
+                let value = e.target.value.replace(/[^\d]/g, '');
+                if (value.length > 4) {
+                    value = value.substring(0, 4) + ' ' + value.substring(4);
+                }
+                if (value.length > 9) {
+                    value = value.substring(0, 9) + ' ' + value.substring(9);
+                }
+                e.target.value = value;
+            };
+            
+            if (elements.whatsappNumber) {
+                elements.whatsappNumber.addEventListener('input', formatPhoneNumber);
+            }
+        }
 
-async function uploadToGoogleDrive(file) {
-    const base64Data = await fileToBase64(file);
+        // ========== DRAG AND DROP SETUP ==========
+        function setupDragAndDrop() {
+            const uploadAreas = [elements.uploadArea, elements.quickUploadArea];
+            
+            uploadAreas.forEach(area => {
+                if (!area) return;
+                
+                // Prevent default drag behaviors
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    area.addEventListener(eventName, preventDefaults, false);
+                });
+                
+                // Highlight drop area when dragging over
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    area.addEventListener(eventName, highlight, false);
+                });
+                
+                ['dragleave', 'drop'].forEach(eventName => {
+                    area.addEventListener(eventName, unhighlight, false);
+                });
+                
+                // Handle dropped files
+                area.addEventListener('drop', handleDrop, false);
+                
+                // Click to select files
+                area.addEventListener('click', function(e) {
+                    if (e.target === area || e.target.classList.contains('upload-icon') || 
+                        e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) {
+                        const fileInput = area.id === 'quickUploadArea' ? elements.quickUpload : elements.mediaUpload;
+                        if (fileInput) fileInput.click();
+                    }
+                });
+            });
+        }
 
-    const payload = {
-        type: "media",
-        filename: file.name,
-        mimeType: file.type,
-        data: base64Data.split(',')[1]
-    };
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
 
-    const response = await fetch(CONFIG.SCRIPT_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
+        function highlight(e) {
+            const area = e.currentTarget;
+            area.classList.add('drag-over');
+        }
 
-    const result = await response.json();
+        function unhighlight(e) {
+            const area = e.currentTarget;
+            area.classList.remove('drag-over');
+        }
 
-    if (result.status === "success" && result.url) {
-        return result.url;
-    } else {
-        throw new Error(result.message || "Upload gagal");
-    }
-}
+        function handleDrop(e) {
+            const area = e.currentTarget;
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                if (area.id === 'quickUploadArea') {
+                    handleQuickUpload({ target: { files: files } });
+                } else {
+                    handleFileSelect({ target: { files: [files[0]] } });
+                }
+            }
+        }
 
-function fileToBase64(file){
-    return new Promise((resolve,reject)=>{
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = ()=>resolve(reader.result);
-        reader.onerror = reject;
-    });
-}
-</script>
+        // ========== ALERT SYSTEM ==========
+        function showAlert(message, type = 'info', duration = 5000) {
+            const alert = elements[`alert${type.charAt(0).toUpperCase() + type.slice(1)}`];
+            if (!alert) return;
+            
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, duration);
+        }
+
+        function showLoading(show, text = "Loading...") {
+            if (elements.loadingOverlay) {
+                elements.loadingOverlay.classList.toggle('active', show);
+                if (text && elements.loadingText) {
+                    elements.loadingText.textContent = text;
+                }
+            }
+        }
+
+        // ========== THEME MANAGEMENT ==========
+        function loadThemes() {
+            if (!elements.themeGrid) return;
+            elements.themeGrid.innerHTML = '';
+            THEMES.forEach(theme => {
+                const div = document.createElement('div');
+                div.className = `theme-card ${theme.id === state.selectedTheme ? 'active' : ''}`;
+                div.setAttribute('data-theme', theme.id);
+                div.innerHTML = `
+                    <div class="theme-emoji">${theme.emoji}</div>
+                    <div class="theme-name">${theme.name}</div>
+                `;
+                div.onclick = () => selectTheme(theme.id);
+                elements.themeGrid.appendChild(div);
+            });
+        }
+
+        function selectTheme(themeId) {
+            state.selectedTheme = themeId;
+            if (elements.selectedTheme) {
+                elements.selectedTheme.value = themeId;
+            }
+            
+            // Update UI
+            document.querySelectorAll('.theme-card').forEach(card => {
+                card.classList.remove('active');
+                if (card.getAttribute('data-theme') === themeId) {
+                    card.classList.add('active');
+                }
+            });
+        }
+
+        // ========== MEDIA UPLOAD FUNCTIONS ==========
+        async function validateMedia(file) {
+            return new Promise((resolve, reject) => {
+                console.log('Validating media file:', file.name, file.type, file.size);
+                
+                // 1. Check file size
+                if (file.size > CONFIG.MAX_FILE_SIZE) {
+                    reject(`File terlalu besar (${(file.size/1024/1024).toFixed(1)}MB). Maksimal 10MB.`);
+                    return;
+                }
+                
+                // 2. Check file type
+                const allowedTypes = [
+                    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+                    'video/mp4', 'video/quicktime', 'video/webm', 'video/x-matroska'
+                ];
+                
+                const isValidType = allowedTypes.includes(file.type.toLowerCase());
+                const isGenericImage = file.type.startsWith('image/');
+                const isGenericVideo = file.type.startsWith('video/');
+                
+                if (!isValidType && !isGenericImage && !isGenericVideo) {
+                    reject(`Format file tidak didukung: ${file.type}. Gunakan: JPG, PNG, GIF, WEBP, MP4, MOV, WEBM`);
+                    return;
+                }
+                
+                // 3. Special validation for videos
+                if (isGenericVideo || file.type.includes('video')) {
+                    const video = document.createElement('video');
+                    video.preload = 'metadata';
+                    
+                    video.onloadedmetadata = function() {
+                        window.URL.revokeObjectURL(video.src);
+                        
+                        // Check video duration
+                        if (video.duration > CONFIG.MAX_VIDEO_DURATION) {
+                            reject(`Video terlalu panjang (${video.duration.toFixed(1)} detik). Maksimal ${CONFIG.MAX_VIDEO_DURATION} detik.`);
+                        } else {
+                            resolve({
+                                file: file,
+                                type: 'video',
+                                duration: video.duration,
+                                resolution: `${video.videoWidth}x${video.videoHeight}`,
+                                valid: true
+                            });
+                        }
+                    };
+                    
+                    video.onerror = function() {
+                        reject('Tidak dapat membaca file video. File mungkin rusak.');
+                    };
+                    
+                    video.src = URL.createObjectURL(file);
+                    
+                } else {
+                    // For images
+                    const img = new Image();
+                    img.onload = function() {
+                        window.URL.revokeObjectURL(img.src);
+                        
+                        // Check image dimensions
+                        const minWidth = 100;
+                        const minHeight = 100;
+                        
+                        if (img.width < minWidth || img.height < minHeight) {
+                            reject(`Gambar terlalu kecil (${img.width}x${img.height}). Minimum ${minWidth}x${minHeight} pixel.`);
+                        } else {
+                            resolve({
+                                file: file,
+                                type: 'image',
+                                size: file.size,
+                                resolution: `${img.width}x${img.height}`,
+                                valid: true
+                            });
+                        }
+                    };
+                    
+                    img.onerror = function() {
+                        reject('Tidak dapat membaca file gambar. File mungkin rusak.');
+                    };
+                    
+                    img.src = URL.createObjectURL(file);
+                }
+            });
+        }
+
+        async function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            console.log('File selected:', file.name, file.type, file.size);
+            
+            // Reset previous media
+            removeMedia();
+            
+            try {
+                // Validate file
+                const mediaInfo = await validateMedia(file);
+                state.uploadedMedia = mediaInfo;
+                
+                // Update upload area style
+                if (elements.uploadArea) {
+                    elements.uploadArea.classList.add('has-file');
+                }
+                
+                // Show preview
+                if (elements.mediaPreview) {
+                    elements.mediaPreview.style.display = 'block';
+                }
+                
+                if (mediaInfo.type === 'video') {
+                    // Show video preview
+                    const videoURL = URL.createObjectURL(file);
+                    if (elements.videoPreview) {
+                        elements.videoPreview.src = videoURL;
+                        elements.videoPreview.style.display = 'block';
+                    }
+                    if (elements.imagePreview) {
+                        elements.imagePreview.style.display = 'none';
+                    }
+                    
+                } else {
+                    // Show image preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        if (elements.imagePreview) {
+                            elements.imagePreview.src = e.target.result;
+                            elements.imagePreview.style.display = 'block';
+                        }
+                        if (elements.videoPreview) {
+                            elements.videoPreview.style.display = 'none';
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+                
+                // Show file info
+                updateFileInfo(mediaInfo);
+                
+                showAlert(`"${file.name}" valid dan siap diupload!`, 'success');
+                
+            } catch (errorMessage) {
+                console.error('Validation error:', errorMessage);
+                showAlert(errorMessage, 'error');
+                event.target.value = '';
+                if (elements.uploadArea) {
+                    elements.uploadArea.classList.remove('has-file');
+                }
+            }
+        }
+
+        function updateFileInfo(mediaInfo) {
+            if (!elements.fileInfoGrid) return;
+            
+            const file = mediaInfo.file;
+            const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+            
+            let infoHTML = `
+                <div class="file-info-item">
+                    <div class="file-info-label">
+                        <i class="fas fa-file"></i> File Name
+                    </div>
+                    <div class="file-info-value">${file.name}</div>
+                </div>
+                
+                <div class="file-info-item">
+                    <div class="file-info-label">
+                        <i class="fas fa-expand-arrows-alt"></i> Type
+                    </div>
+                    <div class="file-info-value">${mediaInfo.type.toUpperCase()} • ${file.type.split('/')[1]?.toUpperCase() || 'Unknown'}</div>
+                </div>
+                
+                <div class="file-info-item">
+                    <div class="file-info-label">
+                        <i class="fas fa-weight-hanging"></i> Size
+                    </div>
+                    <div class="file-info-value">${fileSizeMB} MB</div>
+                </div>
+            `;
+            
+            if (mediaInfo.type === 'video') {
+                infoHTML += `
+                    <div class="file-info-item">
+                        <div class="file-info-label">
+                            <i class="fas fa-clock"></i> Duration
+                        </div>
+                        <div class="file-info-value">${Math.round(mediaInfo.duration)} detik</div>
+                    </div>
+                    
+                    <div class="file-info-item">
+                        <div class="file-info-label">
+                            <i class="fas fa-ruler-combined"></i> Resolution
+                        </div>
+                        <div class="file-info-value">${mediaInfo.resolution}</div>
+                    </div>
+                `;
+            } else {
+                infoHTML += `
+                    <div class="file-info-item">
+                        <div class="file-info-label">
+                            <i class="fas fa-ruler-combined"></i> Resolution
+                        </div>
+                        <div class="file-info-value">${mediaInfo.resolution}</div>
+                    </div>
+                    
+                    <div class="file-info-item">
+                        <div class="file-info-label">
+                            <i class="fas fa-check-circle"></i> Status
+                        </div>
+                        <div class="file-info-value success">Valid dan siap diupload</div>
+                    </div>
+                `;
+            }
+            
+            elements.fileInfoGrid.innerHTML = infoHTML;
+        }
+
+        function removeMedia() {
+            if (state.uploadedMedia) {
+                // Clean up object URLs
+                if (state.uploadedMedia.type === 'video' && elements.videoPreview) {
+                    URL.revokeObjectURL(elements.videoPreview.src);
+                }
+            }
+            
+            state.uploadedMedia = null;
+            if (elements.mediaUpload) {
+                elements.mediaUpload.value = '';
+            }
+            if (elements.uploadArea) {
+                elements.uploadArea.classList.remove('has-file');
+            }
+            if (elements.mediaPreview) {
+                elements.mediaPreview.style.display = 'none';
+            }
+            if (elements.imagePreview) {
+                elements.imagePreview.style.display = 'none';
+                elements.imagePreview.src = '';
+            }
+            if (elements.videoPreview) {
+                elements.videoPreview.style.display = 'none';
+                elements.videoPreview.src = '';
+            }
+            if (elements.fileInfoGrid) {
+                elements.fileInfoGrid.innerHTML = '';
+            }
+            if (elements.uploadStatus) {
+                elements.uploadStatus.style.display = 'none';
+            }
+            if (elements.uploadProgress) {
+                elements.uploadProgress.style.display = 'none';
+            }
+            
+            showAlert('Media dihapus', 'info');
+        }
+
+        function zoomMedia() {
+            if (state.uploadedMedia?.type === 'image') {
+                if (elements.modalImage && elements.imagePreview) {
+                    elements.modalImage.src = elements.imagePreview.src;
+                    elements.modalImage.style.display = 'block';
+                }
+                if (elements.modalVideo) {
+                    elements.modalVideo.style.display = 'none';
+                }
+            } else if (state.uploadedMedia?.type === 'video') {
+                if (elements.modalVideo && elements.videoPreview) {
+                    elements.modalVideo.src = elements.videoPreview.src;
+                    elements.modalVideo.style.display = 'block';
+                }
+                if (elements.modalImage) {
+                    elements.modalImage.style.display = 'none';
+                }
+            }
+            
+            if (elements.mediaModal) {
+                elements.mediaModal.style.display = 'flex';
+            }
+        }
+
+        function closeMediaModal() {
+            if (elements.mediaModal) {
+                elements.mediaModal.style.display = 'none';
+            }
+            if (elements.modalVideo && elements.modalVideo.src) {
+                elements.modalVideo.pause();
+            }
+        }
+
+        // ========== UPLOAD TO GOOGLE DRIVE ==========
+        async function uploadToGoogleDrive(file, progressCallback = null) {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    // Show progress
+                    if (progressCallback) {
+                        progressCallback(0, 'Preparing upload...');
+                    }
+                    
+                    // Convert file to base64
+                    const base64Data = await fileToBase64(file);
+                    
+                    // Prepare upload data
+                    const uploadData = {
+                        type: "media",
+                        filename: file.name,
+                        data: base64Data.split(',')[1],
+                        mimeType: file.type
+                    };
+                    
+                    console.log('Uploading to:', CONFIG.SCRIPT_URL);
+                    console.log('File:', file.name, file.type, file.size);
+                    
+                    // Simulate progress for better UX
+                    let progress = 0;
+                    const progressInterval = setInterval(() => {
+                        if (progress < 90) {
+                            progress += 10;
+                            if (progressCallback) {
+                                progressCallback(progress, 'Uploading...');
+                            }
+                        }
+                    }, 200);
+                    
+                    // Upload with timeout
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+                    
+                    const response = await fetch(CONFIG.SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(uploadData),
+                        signal: controller.signal
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    clearInterval(progressInterval);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    console.log('Upload response:', result);
+                    
+                    if (result.status === "success") {
+                        if (progressCallback) {
+                            progressCallback(100, 'Upload complete!');
+                        }
+                        resolve(result.url);
+                    } else {
+                        throw new Error(result.message || 'Upload failed');
+                    }
+                    
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    
+                    // Handle specific errors
+                    let errorMessage = error.message;
+                    if (error.name === 'AbortError') {
+                        errorMessage = 'Upload timeout (60 detik). Coba file yang lebih kecil.';
+                    } else if (error.message.includes('Failed to fetch')) {
+                        errorMessage = 'Koneksi internet bermasalah. Periksa koneksi Anda.';
+                    } else if (error.message.includes('FILE_TOO_LARGE')) {
+                        errorMessage = 'File terlalu besar. Maksimal 10MB.';
+                    } else if (error.message.includes('INVALID_TYPE')) {
+                        errorMessage = 'Format file tidak didukung.';
+                    }
+                    
+                    reject(new Error(errorMessage));
+                }
+            });
+        }
+
+        async function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        function updateProgress(progress, status) {
+            if (elements.progressFill) {
+                elements.progressFill.style.width = `${progress}%`;
+            }
+            if (elements.progressPercentage) {
+                elements.progressPercentage.textContent = `${progress}%`;
+            }
+            if (elements.progressStatus) {
+                elements.progressStatus.textContent = status;
+            }
+        }
+
+        // ========== CARD CREATION WITH MEDIA UPLOAD ==========
+        async function createCard() {
+            // Get form values
+            const name = elements.recipientName ? elements.recipientName.value.trim() : '';
+            const phone = elements.whatsappNumber ? elements.whatsappNumber.value.trim().replace(/[^\d]/g, '') : '';
+            const message = elements.cardMessage ? elements.cardMessage.value.trim() : '';
+            const theme = state.selectedTheme;
+            
+            // Validation
+            if (!name) {
+                showAlert('Please enter recipient name', 'error');
+                if (elements.recipientName) elements.recipientName.focus();
+                return;
+            }
+            
+            if (!phone || phone.length < 10) {
+                showAlert('Please enter valid WhatsApp number (min. 10 digits)', 'error');
+                if (elements.whatsappNumber) elements.whatsappNumber.focus();
+                return;
+            }
+            
+            if (!message || message.length < 20) {
+                showAlert('Please enter message (min. 20 characters)', 'error');
+                if (elements.cardMessage) elements.cardMessage.focus();
+                return;
+            }
+            
+            try {
+                showLoading(true, "Creating card...");
+                if (elements.createCardBtn) {
+                    elements.createCardBtn.disabled = true;
+                }
+                
+                let mediaUrl = '';
+                
+                // Upload media if exists
+                if (state.uploadedMedia) {
+                    showLoading(true, "Uploading media...");
+                    if (elements.uploadProgress) {
+                        elements.uploadProgress.style.display = 'block';
+                    }
+                    
+                    try {
+                        mediaUrl = await uploadToGoogleDrive(state.uploadedMedia.file, updateProgress);
+                        if (elements.uploadStatus) {
+                            elements.uploadStatus.style.display = 'block';
+                            elements.uploadStatusText.textContent = '✅ Media uploaded successfully!';
+                            elements.uploadStatusText.className = 'file-info-value success';
+                        }
+                        
+                    } catch (uploadError) {
+                        showAlert(`Media upload failed: ${uploadError.message}. Card will be created without media.`, 'warning');
+                        mediaUrl = '';
+                    }
+                }
+                
+                // Generate card URL
+                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
+                if (mediaUrl) {
+                    cardUrl += `&media=${encodeURIComponent(mediaUrl)}`;
+                }
+                
+                // Save to Google Sheets
+                await saveToGoogleSheets({
+                    type: "card",
+                    nama: name,
+                    tema: theme,
+                    pesan: message,
+                    link: cardUrl,
+                    media_url: mediaUrl || ""
+                });
+                
+                // Update UI with result
+                showCardResult(name, phone, theme, cardUrl, mediaUrl);
+                
+                // Add to local state
+                const newCard = {
+                    name: name,
+                    theme: theme,
+                    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+                    date: new Date().toLocaleDateString('id-ID'),
+                    link: cardUrl,
+                    hasMedia: !!mediaUrl
+                };
+                state.cards.unshift(newCard);
+                
+                // Save to localStorage
+                localStorage.setItem('fior_recent_cards', JSON.stringify(state.cards));
+                
+                // Update dashboard stats
+                updateDashboardStats();
+                
+                showAlert('🎉 Card created successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error creating card:', error);
+                showAlert(`Error: ${error.message}`, 'error');
+            } finally {
+                showLoading(false);
+                if (elements.createCardBtn) {
+                    elements.createCardBtn.disabled = false;
+                }
+                if (elements.uploadProgress) {
+                    elements.uploadProgress.style.display = 'none';
+                }
+            }
+        }
+
+        async function saveToGoogleSheets(data) {
+            return new Promise((resolve, reject) => {
+                fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === "success") {
+                        resolve(result);
+                    } else {
+                        reject(new Error(result.message || 'Save failed'));
+                    }
+                })
+                .catch(error => reject(error));
+            });
+        }
+
+        function showCardResult(name, phone, theme, cardUrl, mediaUrl) {
+            // Update result elements
+            if (elements.generatedLink) {
+                elements.generatedLink.textContent = cardUrl;
+            }
+            if (elements.resultRecipient) {
+                elements.resultRecipient.textContent = name;
+            }
+            if (elements.resultTheme) {
+                elements.resultTheme.textContent = THEMES.find(t => t.id === theme)?.name || theme;
+            }
+            if (elements.resultTime) {
+                elements.resultTime.textContent = new Date().toLocaleString('id-ID');
+            }
+            
+            // Update action buttons
+            const whatsappNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
+            const whatsappMessage = `Halo ${name}, ini kartu ucapan digital dari ${CONFIG.COMPANY_NAME}:\n\n${cardUrl}\n\nSemoga berkenan! 🎉`;
+            if (elements.whatsappActionBtn) {
+                elements.whatsappActionBtn.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(whatsappMessage)}`;
+            }
+            if (elements.previewActionBtn) {
+                elements.previewActionBtn.href = cardUrl;
+            }
+            
+            // Add media info if exists
+            if (mediaUrl) {
+                const cardDetails = document.querySelector('.card-details');
+                if (cardDetails) {
+                    cardDetails.innerHTML += `
+                        <div>
+                            <small style="color: var(--gray);">Media</small>
+                            <div style="color: var(--success); font-weight: 500;">
+                                <i class="fas fa-check-circle"></i> ${state.uploadedMedia?.type === 'video' ? 'Video' : 'Image'} Attached
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Show result card
+            if (elements.resultCard) {
+                elements.resultCard.classList.add('active');
+                // Scroll to result
+                elements.resultCard.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function previewCard() {
+            const name = elements.recipientName ? elements.recipientName.value.trim() : "Preview";
+            const message = elements.cardMessage ? elements.cardMessage.value.trim() : "This is a preview of your digital card";
+            const theme = state.selectedTheme;
+            
+            const previewUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&preview=true`;
+            window.open(previewUrl, '_blank');
+        }
+
+        function resetCardForm() {
+            if (elements.cardForm) {
+                elements.cardForm.reset();
+            }
+            if (elements.resultCard) {
+                elements.resultCard.classList.remove('active');
+            }
+            selectTheme(CONFIG.DEFAULT_THEME);
+            if (elements.charCount) {
+                elements.charCount.textContent = '0';
+                elements.charCount.style.color = 'var(--gray)';
+            }
+            removeMedia();
+            showAlert('Form reset successfully', 'info');
+        }
+
+        function copyCardLink() {
+            const link = elements.generatedLink ? elements.generatedLink.textContent : '';
+            
+            if (!link || link === '') {
+                showAlert('No link to copy', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(link)
+                .then(() => showAlert('Link copied to clipboard!', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    showAlert('Failed to copy link', 'error');
+                });
+        }
+
+        // ========== CUSTOMER TABLE FUNCTIONS ==========
+        async function loadCustomersTable() {
+            try {
+                showLoading(true, "Loading customers...");
+                
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=customers&t=${Date.now()}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    state.customers = Array.isArray(data) ? data : [];
+                    
+                    // Render table
+                    renderCustomersTable();
+                } else {
+                    throw new Error('Failed to fetch customers');
+                }
+            } catch (error) {
+                console.error('Error loading customers:', error);
+                showAlert(`Failed to load customers: ${error.message}`, 'error');
+                renderCustomersTable(); // Render empty table
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function renderCustomersTable() {
+            const customersDiv = document.getElementById('customers');
+            if (!customersDiv) return;
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-users"></i>
+                        Customers
+                    </h1>
+                    <p class="page-subtitle">Manage your customer database</p>
+                </div>
+                
+                <div class="stat-card" style="margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="color: var(--primary);">
+                            <i class="fas fa-database"></i> Customer Database
+                        </h3>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" class="form-control" id="searchCustomer" 
+                                   placeholder="Search customers..." style="width: 250px;">
+                            <button class="btn btn-secondary" onclick="searchCustomer()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button class="btn btn-primary" onclick="addNewCustomer()">
+                                <i class="fas fa-plus"></i> Add Customer
+                            </button>
+                        </div>
+                    </div>
+            `;
+            
+            if (state.customers.length === 0) {
+                html += `
+                    <div style="padding: 40px; text-align: center;">
+                        <div style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 style="color: var(--light); margin-bottom: 10px;">No Customers Yet</h3>
+                        <p style="color: var(--gray);">Start by adding your first customer!</p>
+                        <button class="btn btn-primary" onclick="addNewCustomer()" style="margin-top: 20px;">
+                            <i class="fas fa-plus"></i> Add First Customer
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Last Card</th>
+                                    <th>Total Cards</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                state.customers.forEach((customer, index) => {
+                    html += `
+                        <tr>
+                            <td>
+                                <div style="font-weight: 500;">${customer.nama || 'N/A'}</div>
+                                <small style="color: var(--gray);">${customer.catatan || 'No notes'}</small>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                                    ${customer.no_hp || 'N/A'}
+                                </div>
+                            </td>
+                            <td>
+                                ${customer.last_card_date || 'Never'}
+                            </td>
+                            <td>
+                                <span class="badge" style="background: rgba(212, 175, 55, 0.2); color: var(--primary); padding: 5px 10px; border-radius: 20px;">
+                                    ${customer.total_cards || 0}
+                                </span>
+                            </td>
+                            <td class="table-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="useCustomer(${index})">
+                                    <i class="fas fa-gift"></i> Send Card
+                                </button>
+                                <button class="btn btn-info btn-sm" onclick="viewCustomerDetails(${index})">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCustomer(${index})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 20px; color: var(--gray); font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> Showing ${state.customers.length} customer(s)
+                    </div>
+                `;
+            }
+            
+            html += `
+                </div>
+            `;
+            
+            customersDiv.innerHTML = html;
+        }
+
+        function searchCustomer() {
+            const searchInput = document.getElementById('searchCustomer');
+            if (!searchInput) return;
+            
+            const query = searchInput.value.toLowerCase();
+            if (!query) {
+                renderCustomersTable();
+                return;
+            }
+            
+            const filtered = state.customers.filter(customer => 
+                (customer.nama && customer.nama.toLowerCase().includes(query)) ||
+                (customer.no_hp && customer.no_hp.includes(query)) ||
+                (customer.catatan && customer.catatan.toLowerCase().includes(query))
+            );
+            
+            // Create a temporary display
+            const originalCustomers = state.customers;
+            state.customers = filtered;
+            renderCustomersTable();
+            state.customers = originalCustomers;
+        }
+
+        function addNewCustomer() {
+            const name = prompt('Enter customer name:');
+            if (!name) return;
+            
+            const phone = prompt('Enter WhatsApp number:');
+            if (!phone) return;
+            
+            const notes = prompt('Enter notes (optional):', '');
+            
+            const newCustomer = {
+                nama: name,
+                no_hp: phone,
+                catatan: notes || '',
+                last_card_date: 'Never',
+                total_cards: 0
+            };
+            
+            state.customers.push(newCustomer);
+            saveCustomerToGoogleSheets(newCustomer);
+            renderCustomersTable();
+            showAlert('Customer added successfully!', 'success');
+        }
+
+        async function saveCustomerToGoogleSheets(customer) {
+            try {
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: "customer",
+                        nama: customer.nama,
+                        no_hp: customer.no_hp,
+                        catatan: customer.catatan
+                    })
+                });
+                
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (error) {
+                console.error('Error saving customer:', error);
+            }
+        }
+
+        function useCustomer(index) {
+            const customer = state.customers[index];
+            if (!customer) return;
+            
+            // Navigate to create card page
+            navigateTo('create-card');
+            
+            // Auto-fill form
+            setTimeout(() => {
+                if (elements.recipientName) {
+                    elements.recipientName.value = customer.nama;
+                }
+                if (elements.whatsappNumber) {
+                    elements.whatsappNumber.value = customer.no_hp;
+                }
+                
+                showAlert(`Customer "${customer.nama}" loaded. Now create a card for them!`, 'success');
+            }, 500);
+        }
+
+        function viewCustomerDetails(index) {
+            const customer = state.customers[index];
+            if (!customer) return;
+            
+            const modalHtml = `
+                <div style="padding: 20px; max-width: 500px;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-user"></i> Customer Details
+                    </h3>
+                    
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="color: var(--gray); font-size: 0.9rem;">Name</label>
+                                <div style="color: var(--light); font-weight: 500;">${customer.nama || 'N/A'}</div>
+                            </div>
+                            <div>
+                                <label style="color: var(--gray); font-size: 0.9rem;">Phone</label>
+                                <div style="color: var(--light); font-weight: 500; display: flex; align-items: center; gap: 8px;">
+                                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                                    ${customer.no_hp || 'N/A'}
+                                </div>
+                            </div>
+                            <div style="grid-column: span 2;">
+                                <label style="color: var(--gray); font-size: 0.9rem;">Notes</label>
+                                <div style="color: var(--light); padding: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; min-height: 60px;">
+                                    ${customer.catatan || 'No notes'}
+                                </div>
+                            </div>
+                            <div>
+                                <label style="color: var(--gray); font-size: 0.9rem;">Total Cards</label>
+                                <div style="color: var(--primary); font-weight: bold; font-size: 1.2rem;">
+                                    ${customer.total_cards || 0}
+                                </div>
+                            </div>
+                            <div>
+                                <label style="color: var(--gray); font-size: 0.9rem;">Last Card</label>
+                                <div style="color: var(--light); font-weight: 500;">
+                                    ${customer.last_card_date || 'Never'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button onclick="useCustomer(${index})" class="btn btn-primary">
+                            <i class="fas fa-gift"></i> Send Card
+                        </button>
+                        <button onclick="closeModal()" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            showModal(modalHtml);
+        }
+
+        function deleteCustomer(index) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                state.customers.splice(index, 1);
+                renderCustomersTable();
+                showAlert('Customer deleted', 'success');
+            }
+        }
+
+        // ========== CARDS HISTORY FUNCTIONS ==========
+        async function loadCardsHistoryTable() {
+            try {
+                showLoading(true, "Loading cards history...");
+                
+                // Try to load from Google Sheets
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    state.cards = Array.isArray(data) ? data : [];
+                }
+                
+                // Also load from localStorage
+                const savedCards = localStorage.getItem('fior_recent_cards');
+                if (savedCards) {
+                    const localCards = JSON.parse(savedCards);
+                    // Merge with server cards (avoid duplicates)
+                    state.cards = [...state.cards, ...localCards];
+                    // Remove duplicates by link
+                    state.cards = state.cards.filter((card, index, self) =>
+                        index === self.findIndex(c => c.link === card.link)
+                    );
+                }
+                
+                // Render table
+                renderCardsHistoryTable();
+                
+            } catch (error) {
+                console.error('Error loading cards history:', error);
+                // Load from localStorage if server fails
+                const savedCards = localStorage.getItem('fior_recent_cards');
+                state.cards = savedCards ? JSON.parse(savedCards) : [];
+                renderCardsHistoryTable();
+                showAlert('Loaded from local cache only', 'warning');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function renderCardsHistoryTable() {
+            const cardsDiv = document.getElementById('cards-history');
+            if (!cardsDiv) return;
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-history"></i>
+                        Cards History
+                    </h1>
+                    <p class="page-subtitle">View all generated cards and their status</p>
+                </div>
+                
+                <div class="stat-card" style="margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="color: var(--primary);">
+                            <i class="fas fa-history"></i> Generated Cards
+                        </h3>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" class="form-control" id="searchCards" 
+                                   placeholder="Search cards..." style="width: 250px;">
+                            <button class="btn btn-secondary" onclick="searchCards()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button class="btn btn-warning" onclick="clearHistory()">
+                                <i class="fas fa-broom"></i> Clear Local
+                            </button>
+                        </div>
+                    </div>
+            `;
+            
+            if (state.cards.length === 0) {
+                html += `
+                    <div style="padding: 40px; text-align: center;">
+                        <div style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <h3 style="color: var(--light); margin-bottom: 10px;">No Cards Yet</h3>
+                        <p style="color: var(--gray);">Create your first card to see history here!</p>
+                        <button class="btn btn-primary" onclick="navigateTo('create-card')" style="margin-top: 20px;">
+                            <i class="fas fa-plus"></i> Create First Card
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Recipient</th>
+                                    <th>Theme</th>
+                                    <th>Date & Time</th>
+                                    <th>Media</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // Sort by date (newest first)
+                const sortedCards = [...state.cards].sort((a, b) => {
+                    const dateA = new Date(a.date + ' ' + a.time);
+                    const dateB = new Date(b.date + ' ' + b.time);
+                    return dateB - dateA;
+                });
+                
+                sortedCards.forEach((card, index) => {
+                    const theme = THEMES.find(t => t.id === card.theme) || { name: card.theme, emoji: '🎴' };
+                    
+                    html += `
+                        <tr>
+                            <td>
+                                <div style="font-weight: 500;">${card.name || 'Unknown'}</div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.2rem;">${theme.emoji}</span>
+                                    ${theme.name}
+                                </div>
+                            </td>
+                            <td>
+                                <div>${card.date || 'Unknown'}</div>
+                                <small style="color: var(--gray);">${card.time || ''}</small>
+                            </td>
+                            <td>
+                                ${card.hasMedia ? 
+                                    '<span style="color: var(--success);"><i class="fas fa-check-circle"></i> Yes</span>' : 
+                                    '<span style="color: var(--gray);"><i class="fas fa-times-circle"></i> No</span>'
+                                }
+                            </td>
+                            <td>
+                                <span class="badge" style="background: rgba(40, 167, 69, 0.2); color: var(--success); padding: 5px 10px; border-radius: 20px;">
+                                    <i class="fas fa-check"></i> Sent
+                                </span>
+                            </td>
+                            <td class="table-actions">
+                                <a href="${card.link}" target="_blank" class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <button class="btn btn-info btn-sm" onclick="resendCard(${index})">
+                                    <i class="fas fa-redo"></i> Resend
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCard(${index})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 20px; color: var(--gray); font-size: 0.9rem; display: flex; justify-content: space-between;">
+                        <div>
+                            <i class="fas fa-info-circle"></i> Showing ${state.cards.length} card(s)
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="exportCards()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                `;
+            }
+            
+            html += `
+                </div>
+            `;
+            
+            cardsDiv.innerHTML = html;
+        }
+
+        function searchCards() {
+            const searchInput = document.getElementById('searchCards');
+            if (!searchInput) return;
+            
+            const query = searchInput.value.toLowerCase();
+            if (!query) {
+                renderCardsHistoryTable();
+                return;
+            }
+            
+            const filtered = state.cards.filter(card => 
+                (card.name && card.name.toLowerCase().includes(query)) ||
+                (card.theme && card.theme.toLowerCase().includes(query)) ||
+                (card.date && card.date.includes(query))
+            );
+            
+            // Update UI with filtered results
+            const originalCards = state.cards;
+            state.cards = filtered;
+            renderCardsHistoryTable();
+            state.cards = originalCards;
+        }
+
+        function resendCard(index) {
+            const card = state.cards[index];
+            if (!card) return;
+            
+            // Ask for phone number
+            const phone = prompt('Enter WhatsApp number to resend:', '');
+            if (!phone) return;
+            
+            // Create WhatsApp message
+            const whatsappNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
+            const whatsappMessage = `Halo, ini kartu ucapan digital dari ${CONFIG.COMPANY_NAME}:\n\n${card.link}\n\nKartu ini dikirim ulang karena permintaan. 🎉`;
+            
+            const whatsappUrl = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            showAlert('Card resent via WhatsApp!', 'success');
+        }
+
+        function deleteCard(index) {
+            if (confirm('Are you sure you want to delete this card from history?')) {
+                state.cards.splice(index, 1);
+                
+                // Update localStorage
+                localStorage.setItem('fior_recent_cards', JSON.stringify(state.cards));
+                
+                renderCardsHistoryTable();
+                showAlert('Card deleted from history', 'success');
+            }
+        }
+
+        function clearHistory() {
+            if (confirm('Clear all local card history? This will not delete cards from Google Sheets.')) {
+                localStorage.removeItem('fior_recent_cards');
+                state.cards = state.cards.filter(card => card.fromServer); // Keep only server cards
+                renderCardsHistoryTable();
+                showAlert('Local history cleared', 'success');
+            }
+        }
+
+        function exportCards() {
+            if (state.cards.length === 0) {
+                showAlert('No cards to export', 'warning');
+                return;
+            }
+            
+            // Convert to CSV
+            let csv = 'Recipient,Theme,Date,Time,Link,Media\n';
+            
+            state.cards.forEach(card => {
+                csv += `"${card.name || ''}","${card.theme || ''}","${card.date || ''}","${card.time || ''}","${card.link || ''}","${card.hasMedia ? 'Yes' : 'No'}"\n`;
+            });
+            
+            // Download CSV
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `fior-cards-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            
+            showAlert('Cards exported to CSV', 'success');
+        }
+
+        // ========== MEDIA LIBRARY FUNCTIONS ==========
+        async function handleQuickUpload(event) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+            
+            // Limit to 5 files at once
+            const filesToUpload = files.slice(0, 5);
+            
+            if (files.length > 5) {
+                showAlert(`Max 5 files. Uploading first ${filesToUpload.length} files.`, 'warning');
+            }
+            
+            // Show progress
+            if (elements.quickUploadProgress) {
+                elements.quickUploadProgress.style.display = 'block';
+            }
+            if (elements.quickUploadArea) {
+                elements.quickUploadArea.classList.add('uploading');
+            }
+            
+            let uploadedCount = 0;
+            let errorCount = 0;
+            
+            for (let i = 0; i < filesToUpload.length; i++) {
+                const file = filesToUpload[i];
+                const progress = Math.round((i / filesToUpload.length) * 100);
+                
+                if (elements.quickProgressFill) {
+                    elements.quickProgressFill.style.width = `${progress}%`;
+                }
+                if (elements.quickProgressPercentage) {
+                    elements.quickProgressPercentage.textContent = `${progress}%`;
+                }
+                if (elements.quickProgressStatus) {
+                    elements.quickProgressStatus.textContent = `Uploading ${i + 1} of ${filesToUpload.length}: ${file.name}`;
+                }
+                
+                try {
+                    // Validate file
+                    await validateMedia(file);
+                    
+                    // Upload file
+                    const mediaUrl = await uploadToGoogleDrive(file);
+                    
+                    // Store in local state
+                    state.mediaFiles.push({
+                        name: file.name,
+                        type: file.type.startsWith('image/') ? 'image' : 'video',
+                        size: file.size,
+                        url: mediaUrl,
+                        uploadedAt: new Date().toISOString()
+                    });
+                    
+                    uploadedCount++;
+                    
+                } catch (error) {
+                    console.error(`Failed to upload ${file.name}:`, error);
+                    errorCount++;
+                    showAlert(`Failed to upload ${file.name}: ${error.message}`, 'error');
+                }
+            }
+            
+            // Complete progress
+            if (elements.quickProgressFill) {
+                elements.quickProgressFill.style.width = '100%';
+            }
+            if (elements.quickProgressPercentage) {
+                elements.quickProgressPercentage.textContent = '100%';
+            }
+            if (elements.quickProgressStatus) {
+                elements.quickProgressStatus.textContent = 'Upload complete!';
+            }
+            
+            // Update UI
+            setTimeout(() => {
+                if (elements.quickUploadProgress) {
+                    elements.quickUploadProgress.style.display = 'none';
+                }
+                if (elements.quickUploadArea) {
+                    elements.quickUploadArea.classList.remove('uploading');
+                }
+                if (elements.quickUpload) {
+                    elements.quickUpload.value = '';
+                }
+                
+                if (uploadedCount > 0) {
+                    showAlert(`Successfully uploaded ${uploadedCount} file(s)`, 'success');
+                    updateDashboardStats();
+                    loadMediaLibraryTable();
+                }
+                
+                if (errorCount > 0) {
+                    showAlert(`${errorCount} file(s) failed to upload`, 'error');
+                }
+            }, 1000);
+        }
+
+        async function loadMediaLibrary() {
+            try {
+                // In a real app, you would fetch from Google Sheets
+                // For now, load from localStorage
+                const saved = localStorage.getItem('fior_media_library');
+                state.mediaFiles = saved ? JSON.parse(saved) : [];
+                
+                updateDashboardStats();
+                
+            } catch (error) {
+                console.error('Error loading media library:', error);
+                state.mediaFiles = [];
+            }
+        }
+
+        function loadMediaLibraryTable() {
+            if (!elements.mediaLibraryTable) return;
+            
+            if (state.mediaFiles.length === 0) {
+                elements.mediaLibraryTable.innerHTML = `
+                    <div style="padding: 40px; text-align: center;">
+                        <div style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h3 style="color: var(--light); margin-bottom: 10px;">No Media Files</h3>
+                        <p style="color: var(--gray);">Upload your first image or video to get started!</p>
+                        <button class="btn btn-primary" onclick="navigateTo('create-card')" style="margin-top: 20px;">
+                            <i class="fas fa-upload"></i> Upload Media
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Preview</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Size</th>
+                            <th>Uploaded</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            state.mediaFiles.forEach((file, index) => {
+                const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+                const uploadedDate = new Date(file.uploadedAt).toLocaleDateString('id-ID');
+                
+                html += `
+                    <tr>
+                        <td style="width: 100px;">
+                            ${file.type === 'image' ? 
+                                `<img src="${file.url}" style="width: 80px; height: 60px; object-fit: cover; border-radius: 5px;" onerror="this.src='https://via.placeholder.com/80x60/333/fff?text=Image'">` :
+                                `<div style="width: 80px; height: 60px; background: #333; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-video" style="color: var(--primary); font-size: 1.5rem;"></i>
+                                </div>`
+                            }
+                        </td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            ${file.name}
+                        </td>
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                ${file.type === 'image' ? '<i class="fas fa-image"></i>' : '<i class="fas fa-video"></i>'}
+                                ${file.type.toUpperCase()}
+                            </span>
+                        </td>
+                        <td>${fileSizeMB} MB</td>
+                        <td>${uploadedDate}</td>
+                        <td class="table-actions">
+                            <button class="btn btn-secondary btn-sm" onclick="useMedia('${file.url}', '${file.type}')">
+                                <i class="fas fa-check"></i> Use
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="copyMediaUrl('${file.url}')">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteMedia(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                    </tbody>
+                </table>
+            `;
+            
+            elements.mediaLibraryTable.innerHTML = html;
+        }
+
+        function useMedia(url, type) {
+            // Navigate to create card page and auto-fill media
+            navigateTo('create-card');
+            
+            // Simulate file selection (for demo)
+            // In real app, you would create a File object from the URL
+            showAlert(`Media selected (${type}). Use the upload section for actual files.`, 'info');
+        }
+
+        function copyMediaUrl(url) {
+            navigator.clipboard.writeText(url)
+                .then(() => showAlert('Media URL copied to clipboard!', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    showAlert('Failed to copy URL', 'error');
+                });
+        }
+
+        function deleteMedia(index) {
+            if (confirm('Are you sure you want to delete this media file?')) {
+                state.mediaFiles.splice(index, 1);
+                localStorage.setItem('fior_media_library', JSON.stringify(state.mediaFiles));
+                loadMediaLibraryTable();
+                updateDashboardStats();
+                showAlert('Media file deleted', 'success');
+            }
+        }
+
+        function searchMedia() {
+            const searchInput = document.getElementById('searchMedia');
+            if (!searchInput) return;
+            
+            const query = searchInput.value.toLowerCase();
+            if (!query) {
+                loadMediaLibraryTable();
+                return;
+            }
+            
+            const filtered = state.mediaFiles.filter(file => 
+                file.name.toLowerCase().includes(query) ||
+                file.type.toLowerCase().includes(query)
+            );
+            
+            if (filtered.length === 0) {
+                if (elements.mediaLibraryTable) {
+                    elements.mediaLibraryTable.innerHTML = `
+                        <p style="padding: 30px; text-align: center; color: var(--gray);">
+                            No media files found for "${query}"
+                        </p>
+                    `;
+                }
+                return;
+            }
+            
+            // Render filtered results (simplified for now)
+            loadMediaLibraryTable();
+        }
+
+        // ========== DASHBOARD FUNCTIONS ==========
+        function loadDashboardStats() {
+            // Update stats
+            if (elements.statsCustomers) {
+                elements.statsCustomers.textContent = state.customers.length;
+            }
+            if (elements.statsCards) {
+                elements.statsCards.textContent = state.cards.length;
+            }
+            if (elements.statsMedia) {
+                elements.statsMedia.textContent = state.mediaFiles.length;
+            }
+            if (elements.statsWhatsApp) {
+                elements.statsWhatsApp.textContent = Math.floor(state.cards.length * 0.8);
+            }
+            
+            // Load recent activity
+            loadRecentActivity();
+        }
+
+        function loadRecentActivity() {
+            if (!elements.recentActivity) return;
+            
+            const recentCards = state.cards.slice(0, 5);
+            
+            if (recentCards.length === 0) {
+                elements.recentActivity.innerHTML = `
+                    <p style="padding: 20px; text-align: center; color: var(--gray);">
+                        No recent activity
+                    </p>
+                `;
+                return;
+            }
+            
+            let html = '';
+            
+            recentCards.forEach(card => {
+                const theme = THEMES.find(t => t.id === card.theme) || { emoji: '🎴', name: card.theme };
+                
+                html += `
+                    <div style="padding: 15px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; gap: 15px;">
+                        <div style="font-size: 1.5rem;">${theme.emoji}</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; color: var(--light);">Card for ${card.name}</div>
+                            <div style="font-size: 0.9rem; color: var(--gray);">${theme.name} • ${card.time}</div>
+                        </div>
+                        <a href="${card.link}" target="_blank" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                `;
+            });
+            
+            elements.recentActivity.innerHTML = html;
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+        function testConnection() {
+            showLoading(true, "Testing connection...");
+            
+            if (!CONFIG.SCRIPT_URL) {
+                showAlert('Please configure Google Apps Script URL in Settings first', 'error');
+                showLoading(false);
+                return;
+            }
+            
+            fetch(CONFIG.SCRIPT_URL)
+                .then(response => {
+                    if (response.ok) {
+                        showAlert('✅ Connection to Google Sheets is working!', 'success');
+                    } else {
+                        showAlert('⚠️ Connection issue detected', 'warning');
+                    }
+                })
+                .catch(error => {
+                    showAlert(`❌ Connection failed: ${error.message}`, 'error');
+                })
+                .finally(() => showLoading(false));
+        }
+
+        function testApiConnection() {
+            testConnection();
+        }
+
+        function testWhatsApp() {
+            const testUrl = `https://wa.me/6281234567890?text=${encodeURIComponent('Test message from FIOR Card Generator')}`;
+            window.open(testUrl, '_blank');
+            showAlert('WhatsApp test initiated', 'info');
+        }
+
+        function loadSettings() {
+            const saved = localStorage.getItem('fior_settings');
+            if (saved) {
+                state.settings = JSON.parse(saved);
+                if (state.settings.scriptUrl && elements.scriptUrl) {
+                    elements.scriptUrl.value = state.settings.scriptUrl;
+                    CONFIG.SCRIPT_URL = state.settings.scriptUrl;
+                }
+                if (state.settings.cardUrl && elements.cardUrl) {
+                    elements.cardUrl.value = state.settings.cardUrl;
+                    CONFIG.CARD_BASE_URL = state.settings.cardUrl;
+                }
+            }
+        }
+
+        function saveSettings() {
+            state.settings = {
+                scriptUrl: elements.scriptUrl ? elements.scriptUrl.value : '',
+                cardUrl: elements.cardUrl ? elements.cardUrl.value : ''
+            };
+            
+            localStorage.setItem('fior_settings', JSON.stringify(state.settings));
+            
+            CONFIG.SCRIPT_URL = state.settings.scriptUrl;
+            CONFIG.CARD_BASE_URL = state.settings.cardUrl;
+            
+            showAlert('Settings saved successfully!', 'success');
+        }
+
+        function backupData() {
+            const backup = {
+                customers: state.customers,
+                cards: state.cards,
+                mediaFiles: state.mediaFiles,
+                settings: state.settings,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `fior-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            showAlert('System data backed up successfully', 'success');
+        }
+
+        function clearUploadCache() {
+            if (confirm('Clear all uploaded media cache? This will not delete files from Google Drive.')) {
+                localStorage.removeItem('fior_media_library');
+                state.mediaFiles = [];
+                showAlert('Upload cache cleared', 'success');
+                updateDashboardStats();
+                loadMediaLibraryTable();
+            }
+        }
+
+        function resetSystem() {
+            if (confirm('Reset entire system? This will clear all local data and settings.')) {
+                localStorage.clear();
+                state = {
+                    customers: [],
+                    cards: [],
+                    mediaFiles: [],
+                    currentPage: 'dashboard',
+                    selectedTheme: CONFIG.DEFAULT_THEME,
+                    settings: {},
+                    uploadedMedia: null,
+                    uploadQueue: [],
+                    isUploading: false
+                };
+                initSystem();
+                showAlert('System reset complete', 'success');
+            }
+        }
+
+        // ========== CUSTOMER FUNCTIONS ==========
+        async function loadCustomers() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?t=${Date.now()}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    state.customers = Array.isArray(data) ? data : [];
+                }
+            } catch (error) {
+                console.error('Error loading customers:', error);
+                state.customers = [];
+            }
+        }
+
+        async function loadCardsHistory() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    state.cards = Array.isArray(data) ? data : [];
+                }
+            } catch (error) {
+                console.error('Error loading cards history:', error);
+                // Load from localStorage as fallback
+                const saved = localStorage.getItem('fior_recent_cards');
+                state.cards = saved ? JSON.parse(saved) : [];
+            }
+        }
+
+        function fillCustomerInfo() {
+            const select = document.getElementById('customerSelect');
+            if (!select) return;
+            
+            const selectedIndex = select.selectedIndex;
+            if (selectedIndex > 0 && state.customers[selectedIndex - 1]) {
+                const customer = state.customers[selectedIndex - 1];
+                if (elements.recipientName) {
+                    elements.recipientName.value = customer.nama || '';
+                }
+                if (elements.whatsappNumber) {
+                    elements.whatsappNumber.value = customer.no_hp || '';
+                }
+                showAlert(`Customer "${customer.nama}" loaded`, 'success');
+            }
+        }
+
+        // ========== MODAL FUNCTIONS ==========
+        function showModal(content) {
+            // Remove existing modal if any
+            const existingModal = document.getElementById('customModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            const modal = document.createElement('div');
+            modal.id = 'customModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 3000;
+                padding: 20px;
+            `;
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: rgba(30,30,30,0.95);
+                border-radius: 15px;
+                border: 1px solid var(--border);
+                max-width: 600px;
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+                backdrop-filter: blur(10px);
+            `;
+            
+            modalContent.innerHTML = content;
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            
+            // Close on background click
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            };
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('customModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // ========== ERROR HANDLING ==========
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+            showAlert(`An error occurred: ${e.message}`, 'error');
+        });
+
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+            showAlert(`An error occurred: ${e.reason.message || e.reason}`, 'error');
+        });
+
+        // Debug: Check if functions exist
+        console.log("loadCustomersTable exists:", typeof loadCustomersTable);
+        console.log("loadCardsHistoryTable exists:", typeof loadCardsHistoryTable);
+
+    </script>
 </body>
 </html>
+
