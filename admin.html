@@ -901,11 +901,6 @@
             background: rgba(23, 162, 184, 0.2);
             color: var(--info);
         }
-
-        /* Modal styles */
-        #customModal {
-            animation: fadeIn 0.3s ease;
-        }
     </style>
 </head>
 <body>
@@ -1444,7 +1439,7 @@
     <script>
         // ========== CONFIGURATION ==========
         const CONFIG = {
-            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
+            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxIquhuDtAzIUHhpaVoYgLVtCvKEHNDVqwqrfZtfx3NrQ2CZrwivK3jAv9ioOU88ajPrw/exec",
             CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
             COMPANY_NAME: "FIOR Florist",
             DEFAULT_THEME: "birthday",
@@ -2121,85 +2116,150 @@
             }
         }
 
-        // ========== UPLOAD TO GOOGLE DRIVE ==========
+        // ========== UPLOAD TO GOOGLE DRIVE (FIXED) ==========
         async function uploadToGoogleDrive(file, progressCallback = null) {
             return new Promise(async (resolve, reject) => {
                 try {
+                    console.log('Starting upload process...');
+                    
                     // Show progress
                     if (progressCallback) {
-                        progressCallback(0, 'Preparing upload...');
+                        progressCallback(10, 'Preparing file...');
                     }
                     
                     // Convert file to base64
                     const base64Data = await fileToBase64(file);
                     
+                    // Remove data URL prefix
+                    const base64Content = base64Data.split(',')[1];
+                    
+                    if (!base64Content) {
+                        throw new Error('Failed to convert file to base64');
+                    }
+                    
+                    console.log('File converted to base64, size:', base64Content.length);
+                    
                     // Prepare upload data
                     const uploadData = {
                         type: "media",
                         filename: file.name,
-                        data: base64Data.split(',')[1],
-                        mimeType: file.type
+                        data: base64Content,
+                        mimeType: file.type,
+                        cardId: "upload_" + Date.now()
                     };
                     
                     console.log('Uploading to:', CONFIG.SCRIPT_URL);
-                    console.log('File:', file.name, file.type, file.size);
                     
                     // Simulate progress for better UX
-                    let progress = 0;
+                    let progress = 20;
                     const progressInterval = setInterval(() => {
-                        if (progress < 90) {
-                            progress += 10;
+                        if (progress < 80) {
+                            progress += 5;
                             if (progressCallback) {
-                                progressCallback(progress, 'Uploading...');
+                                progressCallback(progress, 'Uploading to server...');
                             }
                         }
-                    }, 200);
+                    }, 300);
                     
                     // Upload with timeout
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+                    const timeoutId = setTimeout(() => controller.abort(), 120000); // 120 second timeout
                     
-                    const response = await fetch(CONFIG.SCRIPT_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(uploadData),
-                        signal: controller.signal
-                    });
-                    
-                    clearTimeout(timeoutId);
-                    clearInterval(progressInterval);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    
-                    const result = await response.json();
-                    console.log('Upload response:', result);
-                    
-                    if (result.status === "success") {
-                        if (progressCallback) {
-                            progressCallback(100, 'Upload complete!');
+                    try {
+                        const response = await fetch(CONFIG.SCRIPT_URL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(uploadData),
+                            signal: controller.signal
+                        });
+                        
+                        clearTimeout(timeoutId);
+                        clearInterval(progressInterval);
+                        
+                        console.log('Server response status:', response.status);
+                        
+                        // Get response text first
+                        const responseText = await response.text();
+                        console.log('Response text (first 500 chars):', responseText.substring(0, 500));
+                        
+                        let result;
+                        try {
+                            result = JSON.parse(responseText);
+                        } catch (parseError) {
+                            console.error('JSON parse error:', parseError);
+                            // Try to extract JSON from response
+                            const jsonMatch = responseText.match(/\{.*\}/s);
+                            if (jsonMatch) {
+                                result = JSON.parse(jsonMatch[0]);
+                            } else {
+                                throw new Error('Invalid server response format');
+                            }
                         }
-                        resolve(result.url);
-                    } else {
-                        throw new Error(result.message || 'Upload failed');
+                        
+                        console.log('Parsed result:', result);
+                        
+                        if (result.status === "success") {
+                            if (progressCallback) {
+                                progressCallback(100, 'Upload complete!');
+                            }
+                            
+                            // Get the URL and ensure it's a proper Google Drive URL
+                            let mediaUrl = result.url || result.directUrl || '';
+                            
+                            // Fix Google Drive URL if needed
+                            if (mediaUrl.includes('drive.google.com')) {
+                                // Extract file ID
+                                const fileIdMatch = mediaUrl.match(/\/d\/([^\/]+)/) || 
+                                                   mediaUrl.match(/id=([^&]+)/) ||
+                                                   mediaUrl.match(/file\/d\/([^\/]+)/);
+                                
+                                if (fileIdMatch && fileIdMatch[1]) {
+                                    const fileId = fileIdMatch[1];
+                                    // Create direct download URL
+                                    mediaUrl = `https://drive.google.com/uc?id=${fileId}&export=download`;
+                                    console.log('Fixed Google Drive URL:', mediaUrl);
+                                }
+                            }
+                            
+                            // If no URL in response, create one from fileId
+                            if (!mediaUrl && result.fileId) {
+                                mediaUrl = `https://drive.google.com/uc?id=${result.fileId}&export=download`;
+                            }
+                            
+                            if (!mediaUrl) {
+                                throw new Error('No media URL returned from server');
+                            }
+                            
+                            console.log('Upload successful, media URL:', mediaUrl);
+                            resolve(mediaUrl);
+                            
+                        } else {
+                            throw new Error(result.message || 'Upload failed on server');
+                        }
+                        
+                    } catch (fetchError) {
+                        clearTimeout(timeoutId);
+                        clearInterval(progressInterval);
+                        throw fetchError;
                     }
                     
                 } catch (error) {
-                    console.error('Upload error:', error);
+                    console.error('Upload error details:', error);
                     
-                    // Handle specific errors
                     let errorMessage = error.message;
+                    
                     if (error.name === 'AbortError') {
-                        errorMessage = 'Upload timeout (60 detik). Coba file yang lebih kecil.';
-                    } else if (error.message.includes('Failed to fetch')) {
+                        errorMessage = 'Upload timeout (120 detik). Coba file yang lebih kecil.';
+                    } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
                         errorMessage = 'Koneksi internet bermasalah. Periksa koneksi Anda.';
                     } else if (error.message.includes('FILE_TOO_LARGE')) {
                         errorMessage = 'File terlalu besar. Maksimal 10MB.';
                     } else if (error.message.includes('INVALID_TYPE')) {
                         errorMessage = 'Format file tidak didukung.';
+                    } else if (error.message.includes('No media URL')) {
+                        errorMessage = 'Server tidak mengembalikan URL media.';
                     }
                     
                     reject(new Error(errorMessage));
@@ -2210,13 +2270,15 @@
         async function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.readAsDataURL(file);
                 reader.onload = () => resolve(reader.result);
                 reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
             });
         }
 
         function updateProgress(progress, status) {
+            console.log(`Progress: ${progress}% - ${status}`);
+            
             if (elements.progressFill) {
                 elements.progressFill.style.width = `${progress}%`;
             }
@@ -2226,9 +2288,23 @@
             if (elements.progressStatus) {
                 elements.progressStatus.textContent = status;
             }
+            
+            // Show/hide progress bar
+            if (elements.uploadProgress) {
+                if (progress > 0 && progress < 100) {
+                    elements.uploadProgress.style.display = 'block';
+                } else if (progress >= 100) {
+                    // Hide after completion
+                    setTimeout(() => {
+                        if (elements.uploadProgress) {
+                            elements.uploadProgress.style.display = 'none';
+                        }
+                    }, 1000);
+                }
+            }
         }
 
-        // ========== CARD CREATION WITH MEDIA UPLOAD ==========
+        // ========== CARD CREATION WITH MEDIA UPLOAD (FIXED) ==========
         async function createCard() {
             // Get form values
             const name = elements.recipientName ? elements.recipientName.value.trim() : '';
@@ -2262,43 +2338,85 @@
                 }
                 
                 let mediaUrl = '';
+                let mediaType = '';
                 
                 // Upload media if exists
                 if (state.uploadedMedia) {
                     showLoading(true, "Uploading media...");
-                    if (elements.uploadProgress) {
-                        elements.uploadProgress.style.display = 'block';
-                    }
                     
                     try {
+                        console.log('Starting media upload...');
                         mediaUrl = await uploadToGoogleDrive(state.uploadedMedia.file, updateProgress);
+                        mediaType = state.uploadedMedia.type;
+                        
+                        console.log('Media uploaded successfully:', mediaUrl);
+                        
                         if (elements.uploadStatus) {
                             elements.uploadStatus.style.display = 'block';
                             elements.uploadStatusText.textContent = '✅ Media uploaded successfully!';
                             elements.uploadStatusText.className = 'file-info-value success';
                         }
                         
+                        showAlert('✅ Media uploaded successfully!', 'success');
+                        
                     } catch (uploadError) {
+                        console.error('Media upload failed:', uploadError);
                         showAlert(`Media upload failed: ${uploadError.message}. Card will be created without media.`, 'warning');
                         mediaUrl = '';
                     }
                 }
                 
                 // Generate card URL
-                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
+                const timestamp = Date.now();
+                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${timestamp}`;
+                
+                // Add media parameter if exists
                 if (mediaUrl) {
                     cardUrl += `&media=${encodeURIComponent(mediaUrl)}`;
+                    // Add media type hint for better loading
+                    cardUrl += `&mediatype=${mediaType}`;
                 }
                 
+                console.log('Generated card URL:', cardUrl);
+                
                 // Save to Google Sheets
-                await saveToGoogleSheets({
-                    type: "card",
-                    nama: name,
-                    tema: theme,
-                    pesan: message,
-                    link: cardUrl,
-                    media_url: mediaUrl || ""
-                });
+                try {
+                    const cardData = {
+                        type: "card",
+                        nama: name,
+                        tema: theme,
+                        pesan: message,
+                        link: cardUrl,
+                        media_url: mediaUrl || ""
+                    };
+                    
+                    console.log('Saving card data to Google Sheets:', cardData);
+                    
+                    const response = await fetch(CONFIG.SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(cardData)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const saveResult = await response.json();
+                    console.log('Card save result:', saveResult);
+                    
+                    // Use server-generated URL if available
+                    if (saveResult.status === "success" && saveResult.data && saveResult.data.link) {
+                        cardUrl = saveResult.data.link;
+                    }
+                    
+                } catch (saveError) {
+                    console.error('Error saving to Google Sheets:', saveError);
+                    // Continue with local URL
+                    showAlert('Card saved locally, but Google Sheets sync failed.', 'warning');
+                }
                 
                 // Update UI with result
                 showCardResult(name, phone, theme, cardUrl, mediaUrl);
@@ -2310,7 +2428,9 @@
                     time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
                     date: new Date().toLocaleDateString('id-ID'),
                     link: cardUrl,
-                    hasMedia: !!mediaUrl
+                    hasMedia: !!mediaUrl,
+                    mediaUrl: mediaUrl,
+                    mediaType: mediaType
                 };
                 state.cards.unshift(newCard);
                 
@@ -2322,6 +2442,11 @@
                 
                 showAlert('🎉 Card created successfully!', 'success');
                 
+                // Auto-copy link to clipboard
+                setTimeout(() => {
+                    copyCardLink();
+                }, 1000);
+                
             } catch (error) {
                 console.error('Error creating card:', error);
                 showAlert(`Error: ${error.message}`, 'error');
@@ -2331,30 +2456,11 @@
                     elements.createCardBtn.disabled = false;
                 }
                 if (elements.uploadProgress) {
-                    elements.uploadProgress.style.display = 'none';
+                    setTimeout(() => {
+                        elements.uploadProgress.style.display = 'none';
+                    }, 2000);
                 }
             }
-        }
-
-        async function saveToGoogleSheets(data) {
-            return new Promise((resolve, reject) => {
-                fetch(CONFIG.SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.status === "success") {
-                        resolve(result);
-                    } else {
-                        reject(new Error(result.message || 'Save failed'));
-                    }
-                })
-                .catch(error => reject(error));
-            });
         }
 
         function showCardResult(name, phone, theme, cardUrl, mediaUrl) {
@@ -2377,21 +2483,30 @@
             const whatsappMessage = `Halo ${name}, ini kartu ucapan digital dari ${CONFIG.COMPANY_NAME}:\n\n${cardUrl}\n\nSemoga berkenan! 🎉`;
             if (elements.whatsappActionBtn) {
                 elements.whatsappActionBtn.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(whatsappMessage)}`;
+                elements.whatsappActionBtn.target = '_blank';
             }
             if (elements.previewActionBtn) {
                 elements.previewActionBtn.href = cardUrl;
+                elements.previewActionBtn.target = '_blank';
             }
             
             // Add media info if exists
-            if (mediaUrl) {
+            if (mediaUrl && state.uploadedMedia) {
                 const cardDetails = document.querySelector('.card-details');
                 if (cardDetails) {
+                    const mediaType = state.uploadedMedia.type === 'video' ? 'Video' : 'Gambar';
+                    const mediaSize = (state.uploadedMedia.file.size / 1024 / 1024).toFixed(2);
+                    
                     cardDetails.innerHTML += `
                         <div>
                             <small style="color: var(--gray);">Media</small>
                             <div style="color: var(--success); font-weight: 500;">
-                                <i class="fas fa-check-circle"></i> ${state.uploadedMedia?.type === 'video' ? 'Video' : 'Image'} Attached
+                                <i class="fas fa-check-circle"></i> ${mediaType} Terlampir
                             </div>
+                            <small style="color: var(--gray); font-size: 0.8rem;">
+                                ${mediaSize} MB • 
+                                <a href="${mediaUrl}" target="_blank" style="color: var(--primary); text-decoration: underline;">Lihat Media</a>
+                            </small>
                         </div>
                     `;
                 }
@@ -2401,7 +2516,9 @@
             if (elements.resultCard) {
                 elements.resultCard.classList.add('active');
                 // Scroll to result
-                elements.resultCard.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                    elements.resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
             }
         }
 
@@ -2410,7 +2527,15 @@
             const message = elements.cardMessage ? elements.cardMessage.value.trim() : "This is a preview of your digital card";
             const theme = state.selectedTheme;
             
-            const previewUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&preview=true`;
+            // Check if we have uploaded media
+            let previewUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&preview=true`;
+            
+            // If there's uploaded media, we need to upload it first for preview
+            if (state.uploadedMedia) {
+                showAlert('Please generate card first to preview with media', 'warning');
+                return;
+            }
+            
             window.open(previewUrl, '_blank');
         }
 
@@ -2430,7 +2555,7 @@
             showAlert('Form reset successfully', 'info');
         }
 
-        function copyCardLink() {
+        async function copyCardLink() {
             const link = elements.generatedLink ? elements.generatedLink.textContent : '';
             
             if (!link || link === '') {
@@ -2438,313 +2563,84 @@
                 return;
             }
             
-            navigator.clipboard.writeText(link)
-                .then(() => showAlert('Link copied to clipboard!', 'success'))
-                .catch(err => {
-                    console.error('Failed to copy:', err);
+            try {
+                await navigator.clipboard.writeText(link);
+                showAlert('✅ Link copied to clipboard!', 'success');
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = link;
+                document.body.appendChild(textArea);
+                textArea.select();
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        showAlert('✅ Link copied to clipboard!', 'success');
+                    } else {
+                        showAlert('Failed to copy link', 'error');
+                    }
+                } catch (copyErr) {
                     showAlert('Failed to copy link', 'error');
-                });
+                }
+                
+                document.body.removeChild(textArea);
+            }
         }
 
-        // ========== CUSTOMER TABLE FUNCTIONS ==========
-        async function loadCustomersTable() {
+        // ========== CUSTOMER FUNCTIONS ==========
+        async function loadCustomers() {
             try {
-                showLoading(true, "Loading customers...");
-                
                 const response = await fetch(`${CONFIG.SCRIPT_URL}?type=customers&t=${Date.now()}`);
-                
                 if (response.ok) {
                     const data = await response.json();
                     state.customers = Array.isArray(data) ? data : [];
                     
-                    // Render table
-                    renderCustomersTable();
-                } else {
-                    throw new Error('Failed to fetch customers');
+                    // Update customer select dropdown
+                    updateCustomerSelect();
                 }
             } catch (error) {
                 console.error('Error loading customers:', error);
-                showAlert(`Failed to load customers: ${error.message}`, 'error');
-                renderCustomersTable(); // Render empty table
-            } finally {
-                showLoading(false);
+                state.customers = [];
             }
         }
 
-        function renderCustomersTable() {
-            const customersDiv = document.getElementById('customers');
-            if (!customersDiv) return;
+        function updateCustomerSelect() {
+            if (!elements.customerSelect) return;
             
-            let html = `
-                <div class="page-header">
-                    <h1 class="page-title">
-                        <i class="fas fa-users"></i>
-                        Customers
-                    </h1>
-                    <p class="page-subtitle">Manage your customer database</p>
-                </div>
-                
-                <div class="stat-card" style="margin-bottom: 30px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 style="color: var(--primary);">
-                            <i class="fas fa-database"></i> Customer Database
-                        </h3>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" class="form-control" id="searchCustomer" 
-                                   placeholder="Search customers..." style="width: 250px;">
-                            <button class="btn btn-secondary" onclick="searchCustomer()">
-                                <i class="fas fa-search"></i> Search
-                            </button>
-                            <button class="btn btn-primary" onclick="addNewCustomer()">
-                                <i class="fas fa-plus"></i> Add Customer
-                            </button>
-                        </div>
-                    </div>
-            `;
+            // Clear existing options except the first one
+            elements.customerSelect.innerHTML = '<option value="">Select existing customer...</option>';
             
-            if (state.customers.length === 0) {
-                html += `
-                    <div style="padding: 40px; text-align: center;">
-                        <div style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h3 style="color: var(--light); margin-bottom: 10px;">No Customers Yet</h3>
-                        <p style="color: var(--gray);">Start by adding your first customer!</p>
-                        <button class="btn btn-primary" onclick="addNewCustomer()" style="margin-top: 20px;">
-                            <i class="fas fa-plus"></i> Add First Customer
-                        </button>
-                    </div>
-                `;
-            } else {
-                html += `
-                    <div class="table-container">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Phone Number</th>
-                                    <th>Last Card</th>
-                                    <th>Total Cards</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-                
-                state.customers.forEach((customer, index) => {
-                    html += `
-                        <tr>
-                            <td>
-                                <div style="font-weight: 500;">${customer.nama || 'N/A'}</div>
-                                <small style="color: var(--gray);">${customer.catatan || 'No notes'}</small>
-                            </td>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-                                    ${customer.no_hp || 'N/A'}
-                                </div>
-                            </td>
-                            <td>
-                                ${customer.last_card_date || 'Never'}
-                            </td>
-                            <td>
-                                <span class="badge" style="background: rgba(212, 175, 55, 0.2); color: var(--primary); padding: 5px 10px; border-radius: 20px;">
-                                    ${customer.total_cards || 0}
-                                </span>
-                            </td>
-                            <td class="table-actions">
-                                <button class="btn btn-secondary btn-sm" onclick="useCustomer(${index})">
-                                    <i class="fas fa-gift"></i> Send Card
-                                </button>
-                                <button class="btn btn-info btn-sm" onclick="viewCustomerDetails(${index})">
-                                    <i class="fas fa-eye"></i> View
-                                </button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteCustomer(${index})">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                });
-                
-                html += `
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div style="margin-top: 20px; color: var(--gray); font-size: 0.9rem;">
-                        <i class="fas fa-info-circle"></i> Showing ${state.customers.length} customer(s)
-                    </div>
-                `;
-            }
-            
-            html += `
-                </div>
-            `;
-            
-            customersDiv.innerHTML = html;
+            // Add customer options
+            state.customers.forEach((customer, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${customer.nama} - ${customer.no_hp}`;
+                elements.customerSelect.appendChild(option);
+            });
         }
 
-        function searchCustomer() {
-            const searchInput = document.getElementById('searchCustomer');
-            if (!searchInput) return;
+        function fillCustomerInfo() {
+            const select = elements.customerSelect;
+            if (!select) return;
             
-            const query = searchInput.value.toLowerCase();
-            if (!query) {
-                renderCustomersTable();
-                return;
-            }
-            
-            const filtered = state.customers.filter(customer => 
-                (customer.nama && customer.nama.toLowerCase().includes(query)) ||
-                (customer.no_hp && customer.no_hp.includes(query)) ||
-                (customer.catatan && customer.catatan.toLowerCase().includes(query))
-            );
-            
-            // Create a temporary display
-            const originalCustomers = state.customers;
-            state.customers = filtered;
-            renderCustomersTable();
-            state.customers = originalCustomers;
-        }
-
-        function addNewCustomer() {
-            const name = prompt('Enter customer name:');
-            if (!name) return;
-            
-            const phone = prompt('Enter WhatsApp number:');
-            if (!phone) return;
-            
-            const notes = prompt('Enter notes (optional):', '');
-            
-            const newCustomer = {
-                nama: name,
-                no_hp: phone,
-                catatan: notes || '',
-                last_card_date: 'Never',
-                total_cards: 0
-            };
-            
-            state.customers.push(newCustomer);
-            saveCustomerToGoogleSheets(newCustomer);
-            renderCustomersTable();
-            showAlert('Customer added successfully!', 'success');
-        }
-
-        async function saveCustomerToGoogleSheets(customer) {
-            try {
-                const response = await fetch(CONFIG.SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        type: "customer",
-                        nama: customer.nama,
-                        no_hp: customer.no_hp,
-                        catatan: customer.catatan
-                    })
-                });
-                
-                if (response.ok) {
-                    return await response.json();
-                }
-            } catch (error) {
-                console.error('Error saving customer:', error);
-            }
-        }
-
-        function useCustomer(index) {
-            const customer = state.customers[index];
-            if (!customer) return;
-            
-            // Navigate to create card page
-            navigateTo('create-card');
-            
-            // Auto-fill form
-            setTimeout(() => {
+            const selectedIndex = parseInt(select.value);
+            if (!isNaN(selectedIndex) && state.customers[selectedIndex]) {
+                const customer = state.customers[selectedIndex];
                 if (elements.recipientName) {
-                    elements.recipientName.value = customer.nama;
+                    elements.recipientName.value = customer.nama || '';
                 }
                 if (elements.whatsappNumber) {
-                    elements.whatsappNumber.value = customer.no_hp;
+                    elements.whatsappNumber.value = customer.no_hp || '';
                 }
-                
-                showAlert(`Customer "${customer.nama}" loaded. Now create a card for them!`, 'success');
-            }, 500);
-        }
-
-        function viewCustomerDetails(index) {
-            const customer = state.customers[index];
-            if (!customer) return;
-            
-            const modalHtml = `
-                <div style="padding: 20px; max-width: 500px;">
-                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-user"></i> Customer Details
-                    </h3>
-                    
-                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <div>
-                                <label style="color: var(--gray); font-size: 0.9rem;">Name</label>
-                                <div style="color: var(--light); font-weight: 500;">${customer.nama || 'N/A'}</div>
-                            </div>
-                            <div>
-                                <label style="color: var(--gray); font-size: 0.9rem;">Phone</label>
-                                <div style="color: var(--light); font-weight: 500; display: flex; align-items: center; gap: 8px;">
-                                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-                                    ${customer.no_hp || 'N/A'}
-                                </div>
-                            </div>
-                            <div style="grid-column: span 2;">
-                                <label style="color: var(--gray); font-size: 0.9rem;">Notes</label>
-                                <div style="color: var(--light); padding: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; min-height: 60px;">
-                                    ${customer.catatan || 'No notes'}
-                                </div>
-                            </div>
-                            <div>
-                                <label style="color: var(--gray); font-size: 0.9rem;">Total Cards</label>
-                                <div style="color: var(--primary); font-weight: bold; font-size: 1.2rem;">
-                                    ${customer.total_cards || 0}
-                                </div>
-                            </div>
-                            <div>
-                                <label style="color: var(--gray); font-size: 0.9rem;">Last Card</label>
-                                <div style="color: var(--light); font-weight: 500;">
-                                    ${customer.last_card_date || 'Never'}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <button onclick="useCustomer(${index})" class="btn btn-primary">
-                            <i class="fas fa-gift"></i> Send Card
-                        </button>
-                        <button onclick="closeModal()" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Close
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            showModal(modalHtml);
-        }
-
-        function deleteCustomer(index) {
-            if (confirm('Are you sure you want to delete this customer?')) {
-                state.customers.splice(index, 1);
-                renderCustomersTable();
-                showAlert('Customer deleted', 'success');
+                showAlert(`Customer "${customer.nama}" loaded`, 'success');
             }
         }
 
         // ========== CARDS HISTORY FUNCTIONS ==========
-        async function loadCardsHistoryTable() {
+        async function loadCardsHistory() {
             try {
-                showLoading(true, "Loading cards history...");
-                
                 // Try to load from Google Sheets
                 const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
                 
@@ -2757,30 +2653,25 @@
                 const savedCards = localStorage.getItem('fior_recent_cards');
                 if (savedCards) {
                     const localCards = JSON.parse(savedCards);
-                    // Merge with server cards (avoid duplicates)
-                    state.cards = [...state.cards, ...localCards];
-                    // Remove duplicates by link
-                    state.cards = state.cards.filter((card, index, self) =>
-                        index === self.findIndex(c => c.link === card.link)
-                    );
+                    // Merge with server cards (avoid duplicates by link)
+                    const allCards = [...state.cards];
+                    localCards.forEach(localCard => {
+                        if (!allCards.some(serverCard => serverCard.link === localCard.link)) {
+                            allCards.push(localCard);
+                        }
+                    });
+                    state.cards = allCards;
                 }
-                
-                // Render table
-                renderCardsHistoryTable();
                 
             } catch (error) {
                 console.error('Error loading cards history:', error);
                 // Load from localStorage if server fails
                 const savedCards = localStorage.getItem('fior_recent_cards');
                 state.cards = savedCards ? JSON.parse(savedCards) : [];
-                renderCardsHistoryTable();
-                showAlert('Loaded from local cache only', 'warning');
-            } finally {
-                showLoading(false);
             }
         }
 
-        function renderCardsHistoryTable() {
+        function loadCardsHistoryTable() {
             const cardsDiv = document.getElementById('cards-history');
             if (!cardsDiv) return;
             
@@ -2846,10 +2737,10 @@
                     const dateA = new Date(a.date + ' ' + a.time);
                     const dateB = new Date(b.date + ' ' + b.time);
                     return dateB - dateA;
-                });
+                }).slice(0, 50); // Limit to 50 most recent
                 
                 sortedCards.forEach((card, index) => {
-                    const theme = THEMES.find(t => t.id === card.theme) || { name: card.theme, emoji: '🎴' };
+                    const theme = THEMES.find(t => t.id === card.theme) || { name: card.theme || 'Unknown', emoji: '🎴' };
                     
                     html += `
                         <tr>
@@ -2867,7 +2758,7 @@
                                 <small style="color: var(--gray);">${card.time || ''}</small>
                             </td>
                             <td>
-                                ${card.hasMedia ? 
+                                ${card.hasMedia || card.mediaUrl ? 
                                     '<span style="color: var(--success);"><i class="fas fa-check-circle"></i> Yes</span>' : 
                                     '<span style="color: var(--gray);"><i class="fas fa-times-circle"></i> No</span>'
                                 }
@@ -2881,11 +2772,8 @@
                                 <a href="${card.link}" target="_blank" class="btn btn-secondary btn-sm">
                                     <i class="fas fa-eye"></i> View
                                 </a>
-                                <button class="btn btn-info btn-sm" onclick="resendCard(${index})">
+                                <button class="btn btn-info btn-sm" onclick="resendCard('${card.link}', '${card.name || ''}')">
                                     <i class="fas fa-redo"></i> Resend
-                                </button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteCard(${index})">
-                                    <i class="fas fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
@@ -2899,7 +2787,7 @@
                     
                     <div style="margin-top: 20px; color: var(--gray); font-size: 0.9rem; display: flex; justify-content: space-between;">
                         <div>
-                            <i class="fas fa-info-circle"></i> Showing ${state.cards.length} card(s)
+                            <i class="fas fa-info-circle"></i> Showing ${Math.min(state.cards.length, 50)} of ${state.cards.length} card(s)
                         </div>
                         <button class="btn btn-secondary btn-sm" onclick="exportCards()">
                             <i class="fas fa-download"></i> Export CSV
@@ -2915,40 +2803,12 @@
             cardsDiv.innerHTML = html;
         }
 
-        function searchCards() {
-            const searchInput = document.getElementById('searchCards');
-            if (!searchInput) return;
-            
-            const query = searchInput.value.toLowerCase();
-            if (!query) {
-                renderCardsHistoryTable();
-                return;
-            }
-            
-            const filtered = state.cards.filter(card => 
-                (card.name && card.name.toLowerCase().includes(query)) ||
-                (card.theme && card.theme.toLowerCase().includes(query)) ||
-                (card.date && card.date.includes(query))
-            );
-            
-            // Update UI with filtered results
-            const originalCards = state.cards;
-            state.cards = filtered;
-            renderCardsHistoryTable();
-            state.cards = originalCards;
-        }
-
-        function resendCard(index) {
-            const card = state.cards[index];
-            if (!card) return;
-            
-            // Ask for phone number
+        function resendCard(cardLink, recipientName) {
             const phone = prompt('Enter WhatsApp number to resend:', '');
             if (!phone) return;
             
-            // Create WhatsApp message
             const whatsappNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
-            const whatsappMessage = `Halo, ini kartu ucapan digital dari ${CONFIG.COMPANY_NAME}:\n\n${card.link}\n\nKartu ini dikirim ulang karena permintaan. 🎉`;
+            const whatsappMessage = `Halo, ini kartu ucapan digital dari ${CONFIG.COMPANY_NAME} untuk ${recipientName}:\n\n${cardLink}\n\nKartu ini dikirim ulang karena permintaan. 🎉`;
             
             const whatsappUrl = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(whatsappMessage)}`;
             window.open(whatsappUrl, '_blank');
@@ -2956,23 +2816,11 @@
             showAlert('Card resent via WhatsApp!', 'success');
         }
 
-        function deleteCard(index) {
-            if (confirm('Are you sure you want to delete this card from history?')) {
-                state.cards.splice(index, 1);
-                
-                // Update localStorage
-                localStorage.setItem('fior_recent_cards', JSON.stringify(state.cards));
-                
-                renderCardsHistoryTable();
-                showAlert('Card deleted from history', 'success');
-            }
-        }
-
         function clearHistory() {
             if (confirm('Clear all local card history? This will not delete cards from Google Sheets.')) {
                 localStorage.removeItem('fior_recent_cards');
                 state.cards = state.cards.filter(card => card.fromServer); // Keep only server cards
-                renderCardsHistoryTable();
+                loadCardsHistoryTable();
                 showAlert('Local history cleared', 'success');
             }
         }
@@ -2984,10 +2832,10 @@
             }
             
             // Convert to CSV
-            let csv = 'Recipient,Theme,Date,Time,Link,Media\n';
+            let csv = 'Recipient,Theme,Date,Time,Link,Media,MediaURL\n';
             
             state.cards.forEach(card => {
-                csv += `"${card.name || ''}","${card.theme || ''}","${card.date || ''}","${card.time || ''}","${card.link || ''}","${card.hasMedia ? 'Yes' : 'No'}"\n`;
+                csv += `"${card.name || ''}","${card.theme || ''}","${card.date || ''}","${card.time || ''}","${card.link || ''}","${card.hasMedia ? 'Yes' : 'No'}","${card.mediaUrl || ''}"\n`;
             });
             
             // Download CSV
@@ -3023,6 +2871,7 @@
             
             let uploadedCount = 0;
             let errorCount = 0;
+            const uploadResults = [];
             
             for (let i = 0; i < filesToUpload.length; i++) {
                 const file = filesToUpload[i];
@@ -3045,8 +2894,8 @@
                     // Upload file
                     const mediaUrl = await uploadToGoogleDrive(file);
                     
-                    // Store in local state
-                    state.mediaFiles.push({
+                    // Store result
+                    uploadResults.push({
                         name: file.name,
                         type: file.type.startsWith('image/') ? 'image' : 'video',
                         size: file.size,
@@ -3073,6 +2922,14 @@
             if (elements.quickProgressStatus) {
                 elements.quickProgressStatus.textContent = 'Upload complete!';
             }
+            
+            // Add to state
+            uploadResults.forEach(result => {
+                state.mediaFiles.push(result);
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('fior_media_library', JSON.stringify(state.mediaFiles));
             
             // Update UI
             setTimeout(() => {
@@ -3124,7 +2981,7 @@
                         </div>
                         <h3 style="color: var(--light); margin-bottom: 10px;">No Media Files</h3>
                         <p style="color: var(--gray);">Upload your first image or video to get started!</p>
-                        <button class="btn btn-primary" onclick="navigateTo('create-card')" style="margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="document.getElementById('quickUpload').click()" style="margin-top: 20px;">
                             <i class="fas fa-upload"></i> Upload Media
                         </button>
                     </div>
@@ -3147,7 +3004,12 @@
                     <tbody>
             `;
             
-            state.mediaFiles.forEach((file, index) => {
+            // Sort by upload date (newest first)
+            const sortedFiles = [...state.mediaFiles].sort((a, b) => {
+                return new Date(b.uploadedAt) - new Date(a.uploadedAt);
+            }).slice(0, 50); // Limit to 50 most recent
+            
+            sortedFiles.forEach((file, index) => {
                 const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
                 const uploadedDate = new Date(file.uploadedAt).toLocaleDateString('id-ID');
                 
@@ -3190,18 +3052,85 @@
             html += `
                     </tbody>
                 </table>
+                <div style="padding: 15px; color: var(--gray); font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i> Showing ${Math.min(state.mediaFiles.length, 50)} of ${state.mediaFiles.length} files
+                </div>
             `;
             
             elements.mediaLibraryTable.innerHTML = html;
         }
 
         function useMedia(url, type) {
-            // Navigate to create card page and auto-fill media
+            // Navigate to create card page
             navigateTo('create-card');
             
-            // Simulate file selection (for demo)
-            // In real app, you would create a File object from the URL
-            showAlert(`Media selected (${type}). Use the upload section for actual files.`, 'info');
+            // Create a fake file object for the preview
+            const fakeFile = {
+                name: 'Selected Media',
+                type: type === 'image' ? 'image/jpeg' : 'video/mp4',
+                size: 0
+            };
+            
+            const mediaInfo = {
+                file: fakeFile,
+                type: type,
+                url: url
+            };
+            
+            state.uploadedMedia = mediaInfo;
+            
+            // Update UI
+            if (elements.uploadArea) {
+                elements.uploadArea.classList.add('has-file');
+            }
+            
+            if (elements.mediaPreview) {
+                elements.mediaPreview.style.display = 'block';
+            }
+            
+            if (type === 'image') {
+                if (elements.imagePreview) {
+                    elements.imagePreview.src = url;
+                    elements.imagePreview.style.display = 'block';
+                }
+                if (elements.videoPreview) {
+                    elements.videoPreview.style.display = 'none';
+                }
+            } else {
+                if (elements.videoPreview) {
+                    elements.videoPreview.src = url;
+                    elements.videoPreview.style.display = 'block';
+                }
+                if (elements.imagePreview) {
+                    elements.imagePreview.style.display = 'none';
+                }
+            }
+            
+            // Update file info
+            if (elements.fileInfoGrid) {
+                elements.fileInfoGrid.innerHTML = `
+                    <div class="file-info-item">
+                        <div class="file-info-label">
+                            <i class="fas fa-file"></i> Source
+                        </div>
+                        <div class="file-info-value">Media Library</div>
+                    </div>
+                    <div class="file-info-item">
+                        <div class="file-info-label">
+                            <i class="fas fa-expand-arrows-alt"></i> Type
+                        </div>
+                        <div class="file-info-value">${type.toUpperCase()}</div>
+                    </div>
+                    <div class="file-info-item">
+                        <div class="file-info-label">
+                            <i class="fas fa-link"></i> URL
+                        </div>
+                        <div class="file-info-value" style="font-size: 0.8rem;">${url.substring(0, 50)}...</div>
+                    </div>
+                `;
+            }
+            
+            showAlert('Media selected from library!', 'success');
         }
 
         function copyMediaUrl(url) {
@@ -3209,48 +3138,25 @@
                 .then(() => showAlert('Media URL copied to clipboard!', 'success'))
                 .catch(err => {
                     console.error('Failed to copy:', err);
-                    showAlert('Failed to copy URL', 'error');
+                    // Fallback
+                    const textArea = document.createElement('textarea');
+                    textArea.value = url;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showAlert('Media URL copied to clipboard!', 'success');
                 });
         }
 
         function deleteMedia(index) {
-            if (confirm('Are you sure you want to delete this media file?')) {
+            if (confirm('Are you sure you want to delete this media file from local library?')) {
                 state.mediaFiles.splice(index, 1);
                 localStorage.setItem('fior_media_library', JSON.stringify(state.mediaFiles));
                 loadMediaLibraryTable();
                 updateDashboardStats();
                 showAlert('Media file deleted', 'success');
             }
-        }
-
-        function searchMedia() {
-            const searchInput = document.getElementById('searchMedia');
-            if (!searchInput) return;
-            
-            const query = searchInput.value.toLowerCase();
-            if (!query) {
-                loadMediaLibraryTable();
-                return;
-            }
-            
-            const filtered = state.mediaFiles.filter(file => 
-                file.name.toLowerCase().includes(query) ||
-                file.type.toLowerCase().includes(query)
-            );
-            
-            if (filtered.length === 0) {
-                if (elements.mediaLibraryTable) {
-                    elements.mediaLibraryTable.innerHTML = `
-                        <p style="padding: 30px; text-align: center; color: var(--gray);">
-                            No media files found for "${query}"
-                        </p>
-                    `;
-                }
-                return;
-            }
-            
-            // Render filtered results (simplified for now)
-            loadMediaLibraryTable();
         }
 
         // ========== DASHBOARD FUNCTIONS ==========
@@ -3355,6 +3261,14 @@
                     elements.cardUrl.value = state.settings.cardUrl;
                     CONFIG.CARD_BASE_URL = state.settings.cardUrl;
                 }
+            } else {
+                // Set defaults
+                if (elements.scriptUrl) {
+                    elements.scriptUrl.value = CONFIG.SCRIPT_URL;
+                }
+                if (elements.cardUrl) {
+                    elements.cardUrl.value = CONFIG.CARD_BASE_URL;
+                }
             }
         }
 
@@ -3420,105 +3334,196 @@
             }
         }
 
-        // ========== CUSTOMER FUNCTIONS ==========
-        async function loadCustomers() {
+        // ========== CUSTOMER TABLE FUNCTIONS ==========
+        async function loadCustomersTable() {
             try {
-                const response = await fetch(`${CONFIG.SCRIPT_URL}?t=${Date.now()}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    state.customers = Array.isArray(data) ? data : [];
-                }
+                showLoading(true, "Loading customers...");
+                await loadCustomers();
+                
+                // Render table
+                renderCustomersTable();
+                
             } catch (error) {
                 console.error('Error loading customers:', error);
-                state.customers = [];
+                showAlert(`Failed to load customers: ${error.message}`, 'error');
+                renderCustomersTable(); // Render empty table
+            } finally {
+                showLoading(false);
             }
         }
 
-        async function loadCardsHistory() {
+        function renderCustomersTable() {
+            const customersDiv = document.getElementById('customers');
+            if (!customersDiv) return;
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-users"></i>
+                        Customers
+                    </h1>
+                    <p class="page-subtitle">Manage your customer database</p>
+                </div>
+                
+                <div class="stat-card" style="margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="color: var(--primary);">
+                            <i class="fas fa-database"></i> Customer Database
+                        </h3>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" class="form-control" id="searchCustomer" 
+                                   placeholder="Search customers..." style="width: 250px;">
+                            <button class="btn btn-secondary" onclick="searchCustomer()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button class="btn btn-primary" onclick="addNewCustomer()">
+                                <i class="fas fa-plus"></i> Add Customer
+                            </button>
+                        </div>
+                    </div>
+            `;
+            
+            if (state.customers.length === 0) {
+                html += `
+                    <div style="padding: 40px; text-align: center;">
+                        <div style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 style="color: var(--light); margin-bottom: 10px;">No Customers Yet</h3>
+                        <p style="color: var(--gray);">Start by adding your first customer!</p>
+                        <button class="btn btn-primary" onclick="addNewCustomer()" style="margin-top: 20px;">
+                            <i class="fas fa-plus"></i> Add First Customer
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                state.customers.forEach((customer, index) => {
+                    html += `
+                        <tr>
+                            <td>
+                                <div style="font-weight: 500;">${customer.nama || 'N/A'}</div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                                    ${customer.no_hp || 'N/A'}
+                                </div>
+                            </td>
+                            <td>
+                                <small style="color: var(--gray);">${customer.catatan || 'No notes'}</small>
+                            </td>
+                            <td class="table-actions">
+                                <button class="btn btn-primary btn-sm" onclick="useCustomer(${index})">
+                                    <i class="fas fa-gift"></i> Send Card
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 20px; color: var(--gray); font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> Showing ${state.customers.length} customer(s)
+                    </div>
+                `;
+            }
+            
+            html += `
+                </div>
+            `;
+            
+            customersDiv.innerHTML = html;
+        }
+
+        function addNewCustomer() {
+            const name = prompt('Enter customer name:');
+            if (!name) return;
+            
+            const phone = prompt('Enter WhatsApp number:');
+            if (!phone) return;
+            
+            const notes = prompt('Enter notes (optional):', '');
+            
+            const newCustomer = {
+                nama: name,
+                no_hp: phone,
+                catatan: notes || ''
+            };
+            
+            // Add to state
+            state.customers.push(newCustomer);
+            
+            // Save to Google Sheets
+            saveCustomerToGoogleSheets(newCustomer);
+            
+            // Update UI
+            updateCustomerSelect();
+            renderCustomersTable();
+            updateDashboardStats();
+            
+            showAlert('Customer added successfully!', 'success');
+        }
+
+        async function saveCustomerToGoogleSheets(customer) {
             try {
-                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: "customer",
+                        nama: customer.nama,
+                        no_hp: customer.no_hp,
+                        catatan: customer.catatan
+                    })
+                });
+                
                 if (response.ok) {
-                    const data = await response.json();
-                    state.cards = Array.isArray(data) ? data : [];
+                    return await response.json();
                 }
             } catch (error) {
-                console.error('Error loading cards history:', error);
-                // Load from localStorage as fallback
-                const saved = localStorage.getItem('fior_recent_cards');
-                state.cards = saved ? JSON.parse(saved) : [];
+                console.error('Error saving customer:', error);
+                // Continue even if save fails
             }
         }
 
-        function fillCustomerInfo() {
-            const select = document.getElementById('customerSelect');
-            if (!select) return;
+        function useCustomer(index) {
+            const customer = state.customers[index];
+            if (!customer) return;
             
-            const selectedIndex = select.selectedIndex;
-            if (selectedIndex > 0 && state.customers[selectedIndex - 1]) {
-                const customer = state.customers[selectedIndex - 1];
+            // Navigate to create card page
+            navigateTo('create-card');
+            
+            // Auto-fill form
+            setTimeout(() => {
                 if (elements.recipientName) {
-                    elements.recipientName.value = customer.nama || '';
+                    elements.recipientName.value = customer.nama;
                 }
                 if (elements.whatsappNumber) {
-                    elements.whatsappNumber.value = customer.no_hp || '';
+                    elements.whatsappNumber.value = customer.no_hp;
                 }
-                showAlert(`Customer "${customer.nama}" loaded`, 'success');
-            }
-        }
-
-        // ========== MODAL FUNCTIONS ==========
-        function showModal(content) {
-            // Remove existing modal if any
-            const existingModal = document.getElementById('customModal');
-            if (existingModal) {
-                existingModal.remove();
-            }
-            
-            const modal = document.createElement('div');
-            modal.id = 'customModal';
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.8);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 3000;
-                padding: 20px;
-            `;
-            
-            const modalContent = document.createElement('div');
-            modalContent.style.cssText = `
-                background: rgba(30,30,30,0.95);
-                border-radius: 15px;
-                border: 1px solid var(--border);
-                max-width: 600px;
-                width: 100%;
-                max-height: 90vh;
-                overflow-y: auto;
-                backdrop-filter: blur(10px);
-            `;
-            
-            modalContent.innerHTML = content;
-            modal.appendChild(modalContent);
-            document.body.appendChild(modal);
-            
-            // Close on background click
-            modal.onclick = function(e) {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            };
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('customModal');
-            if (modal) {
-                modal.remove();
-            }
+                
+                showAlert(`Customer "${customer.nama}" loaded. Now create a card for them!`, 'success');
+            }, 500);
         }
 
         // ========== ERROR HANDLING ==========
@@ -3532,9 +3537,99 @@
             showAlert(`An error occurred: ${e.reason.message || e.reason}`, 'error');
         });
 
+        // Network status monitoring
+        window.addEventListener('online', () => {
+            showAlert('Koneksi internet kembali normal', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            showAlert('Koneksi internet terputus', 'warning');
+        });
+
+        // ========== HELPER FUNCTIONS ==========
+        function searchCustomer() {
+            const searchInput = document.getElementById('searchCustomer');
+            if (!searchInput) return;
+            
+            const query = searchInput.value.toLowerCase();
+            if (!query) {
+                renderCustomersTable();
+                return;
+            }
+            
+            const filtered = state.customers.filter(customer => 
+                (customer.nama && customer.nama.toLowerCase().includes(query)) ||
+                (customer.no_hp && customer.no_hp.includes(query)) ||
+                (customer.catatan && customer.catatan.toLowerCase().includes(query))
+            );
+            
+            // Create a temporary display
+            const originalCustomers = state.customers;
+            state.customers = filtered;
+            renderCustomersTable();
+            state.customers = originalCustomers;
+        }
+
+        function searchCards() {
+            const searchInput = document.getElementById('searchCards');
+            if (!searchInput) return;
+            
+            const query = searchInput.value.toLowerCase();
+            if (!query) {
+                loadCardsHistoryTable();
+                return;
+            }
+            
+            const filtered = state.cards.filter(card => 
+                (card.name && card.name.toLowerCase().includes(query)) ||
+                (card.theme && card.theme.toLowerCase().includes(query)) ||
+                (card.date && card.date.includes(query))
+            );
+            
+            // Update UI with filtered results
+            const originalCards = state.cards;
+            state.cards = filtered;
+            loadCardsHistoryTable();
+            state.cards = originalCards;
+        }
+
+        function searchMedia() {
+            const searchInput = document.getElementById('searchMedia');
+            if (!searchInput) return;
+            
+            const query = searchInput.value.toLowerCase();
+            if (!query) {
+                loadMediaLibraryTable();
+                return;
+            }
+            
+            const filtered = state.mediaFiles.filter(file => 
+                file.name.toLowerCase().includes(query) ||
+                file.type.toLowerCase().includes(query)
+            );
+            
+            if (filtered.length === 0) {
+                if (elements.mediaLibraryTable) {
+                    elements.mediaLibraryTable.innerHTML = `
+                        <p style="padding: 30px; text-align: center; color: var(--gray);">
+                            No media files found for "${query}"
+                        </p>
+                    `;
+                }
+                return;
+            }
+            
+            // Render filtered results
+            const originalFiles = state.mediaFiles;
+            state.mediaFiles = filtered;
+            loadMediaLibraryTable();
+            state.mediaFiles = originalFiles;
+        }
+
         // Debug: Check if functions exist
-        console.log("loadCustomersTable exists:", typeof loadCustomersTable);
-        console.log("loadCardsHistoryTable exists:", typeof loadCardsHistoryTable);
+        console.log("FIOR Card Generator Admin Panel initialized");
+        console.log("CONFIG:", CONFIG);
+        console.log("Script URL:", CONFIG.SCRIPT_URL);
 
     </script>
 </body>
