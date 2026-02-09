@@ -1115,8 +1115,14 @@
     <!-- Main Card Container -->
     <div class="card-container">
         <div class="card" id="greetingCard">
-            
-            <!-- Card Header -->     
+            <!-- Card Header -->
+            <div class="card-header">
+                <a href="https://www.instagram.com/tokobungafior.jayapura?igsh=MWZqZHUyZjY1MnkyNw==" 
+                   target="_blank" class="logo">
+                    <div class="logo-icon"></div>
+                    <span>FIOR Florist</span>
+                </a>
+                
                 <div class="theme-icon" id="themeIcon">🎴</div>
                 <h1 class="greeting" id="greetingText">Greetings</h1>
                 <div class="to-label">Kepada Yth.</div>
@@ -1486,54 +1492,67 @@
                 <span>${message}</span>
             `;
             
-            container.appendChild(notification);
-            
-            // Auto remove after duration
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.style.animation = 'fadeOut 0.3s ease';
-                    setTimeout(() => notification.remove(), 300);
-                }
-            }, duration);
+            if (container) {
+                container.appendChild(notification);
+                
+                // Auto remove after duration
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.style.animation = 'fadeOut 0.3s ease';
+                        setTimeout(() => notification.remove(), 300);
+                    }
+                }, duration);
+            }
         }
 
         function showLoading(show) {
             const loading = document.getElementById('mediaLoading');
-            if (show) {
-                loading.classList.add('active');
-                hideElement('mediaError');
-                hideElement('mediaFallback');
-                hideElement('mediaContainer');
-            } else {
-                loading.classList.remove('active');
+            if (loading) {
+                if (show) {
+                    loading.classList.add('active');
+                    hideElement('mediaError');
+                    hideElement('mediaFallback');
+                    hideElement('mediaContainer');
+                } else {
+                    loading.classList.remove('active');
+                }
             }
         }
 
         function showError(message) {
             const errorDiv = document.getElementById('mediaError');
-            errorDiv.querySelector('p').innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
-            errorDiv.classList.add('active');
-            hideElement('mediaLoading');
-            hideElement('mediaFallback');
-            hideElement('mediaContainer');
+            if (errorDiv) {
+                const p = errorDiv.querySelector('p');
+                if (p) {
+                    p.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+                }
+                errorDiv.classList.add('active');
+                hideElement('mediaLoading');
+                hideElement('mediaFallback');
+                hideElement('mediaContainer');
+            }
         }
 
         function showFallback(url) {
             const fallback = document.getElementById('mediaFallback');
             const link = document.getElementById('mediaDirectLink');
-            link.href = url;
-            fallback.classList.add('active');
-            hideElement('mediaLoading');
-            hideElement('mediaError');
-            hideElement('mediaContainer');
+            if (fallback && link) {
+                link.href = url;
+                fallback.classList.add('active');
+                hideElement('mediaLoading');
+                hideElement('mediaError');
+                hideElement('mediaContainer');
+            }
         }
 
         function showMediaContainer() {
             const container = document.getElementById('mediaContainer');
-            container.style.display = 'block';
-            hideElement('mediaLoading');
-            hideElement('mediaError');
-            hideElement('mediaFallback');
+            if (container) {
+                container.style.display = 'block';
+                hideElement('mediaLoading');
+                hideElement('mediaError');
+                hideElement('mediaFallback');
+            }
         }
 
         function hideElement(id) {
@@ -1565,7 +1584,9 @@
         function toggleDebug() {
             state.debugMode = !state.debugMode;
             const debugDiv = document.getElementById('debugInfo');
-            debugDiv.style.display = state.debugMode ? 'block' : 'none';
+            if (debugDiv) {
+                debugDiv.style.display = state.debugMode ? 'block' : 'none';
+            }
             logDebug(`Debug mode ${state.debugMode ? 'enabled' : 'disabled'}`);
         }
 
@@ -1573,11 +1594,13 @@
             const progressBar = document.getElementById('progressBar');
             const progressFill = document.getElementById('progressFill');
             
-            if (percentage > 0) {
-                progressBar.style.display = 'block';
-                progressFill.style.width = `${percentage}%`;
-            } else {
-                progressBar.style.display = 'none';
+            if (progressBar && progressFill) {
+                if (percentage > 0) {
+                    progressBar.style.display = 'block';
+                    progressFill.style.width = `${percentage}%`;
+                } else {
+                    progressBar.style.display = 'none';
+                }
             }
             
             logDebug(`Progress: ${percentage}% - ${message}`);
@@ -1617,8 +1640,8 @@
             const snowContainer = document.getElementById('snow');
             
             // Clear existing particles
-            container.innerHTML = '';
-            snowContainer.innerHTML = '';
+            if (container) container.innerHTML = '';
+            if (snowContainer) snowContainer.innerHTML = '';
             
             if (type === 'none') return;
             
@@ -1636,6 +1659,7 @@
         }
 
         function createHeart(container) {
+            if (!container) return;
             const heart = document.createElement('div');
             heart.className = 'heart';
             heart.textContent = '❤️';
@@ -1657,6 +1681,7 @@
         }
 
         function createSnowflake(container) {
+            if (!container) return;
             const flake = document.createElement('div');
             flake.className = 'snowflake';
             
@@ -1678,6 +1703,7 @@
         }
 
         function createConfetti(container) {
+            if (!container) return;
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
             
@@ -1706,21 +1732,23 @@
             const toggleBtn = document.querySelector('.music-toggle i');
             
             if (state.isMusicPlaying) {
-                music.pause();
-                toggleBtn.className = 'fas fa-music';
+                if (music) music.pause();
+                if (toggleBtn) toggleBtn.className = 'fas fa-music';
                 state.isMusicPlaying = false;
                 showNotification('Music paused', 'info');
             } else {
-                const playPromise = music.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        toggleBtn.className = 'fas fa-pause';
-                        state.isMusicPlaying = true;
-                        showNotification('Background music playing', 'success');
-                    }).catch(error => {
-                        showNotification('Cannot play music automatically', 'warning');
-                        logDebug(`Music play error: ${error.message}`, 'error');
-                    });
+                if (music) {
+                    const playPromise = music.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            if (toggleBtn) toggleBtn.className = 'fas fa-pause';
+                            state.isMusicPlaying = true;
+                            showNotification('Background music playing', 'success');
+                        }).catch(error => {
+                            showNotification('Cannot play music automatically', 'warning');
+                            logDebug(`Music play error: ${error.message}`, 'error');
+                        });
+                    }
                 }
             }
         }
@@ -1731,18 +1759,19 @@
             
             const themeConfig = THEMES[theme];
             if (themeConfig && themeConfig.music) {
-                music.src = themeConfig.music;
-                musicTitle.textContent = `${themeConfig.greeting} Music`;
+                if (music) music.src = themeConfig.music;
+                if (musicTitle) musicTitle.textContent = `${themeConfig.greeting} Music`;
                 
                 // Try to autoplay based on URL parameter
                 const params = getUrlParams();
-                if (params.autoplay && params.music !== 'off') {
+                if (params.autoplay && params.music !== 'off' && music) {
                     setTimeout(() => {
                         const playPromise = music.play();
                         if (playPromise !== undefined) {
                             playPromise.then(() => {
                                 state.isMusicPlaying = true;
-                                document.querySelector('.music-toggle i').className = 'fas fa-pause';
+                                const toggleBtn = document.querySelector('.music-toggle i');
+                                if (toggleBtn) toggleBtn.className = 'fas fa-pause';
                             }).catch(error => {
                                 logDebug(`Autoplay blocked: ${error.message}`, 'warning');
                             });
@@ -1750,8 +1779,8 @@
                     }, 1000);
                 }
             } else {
-                music.src = '';
-                musicTitle.textContent = 'No music for this theme';
+                if (music) music.src = '';
+                if (musicTitle) musicTitle.textContent = 'No music for this theme';
             }
         }
 
@@ -1768,9 +1797,13 @@
             document.body.className = `theme-${theme}`;
             
             // Update theme elements
-            document.getElementById('themeIcon').textContent = themeConfig.emoji;
-            document.getElementById('greetingText').textContent = themeConfig.greeting;
-            document.getElementById('videoLockIcon').textContent = themeConfig.lockIcon;
+            const themeIcon = document.getElementById('themeIcon');
+            const greetingText = document.getElementById('greetingText');
+            const videoLockIcon = document.getElementById('videoLockIcon');
+            
+            if (themeIcon) themeIcon.textContent = themeConfig.emoji;
+            if (greetingText) greetingText.textContent = themeConfig.greeting;
+            if (videoLockIcon) videoLockIcon.textContent = themeConfig.lockIcon;
             
             // Update music
             setupMusic(theme);
@@ -1854,7 +1887,7 @@
             const lockScreen = document.getElementById('videoLockScreen');
             
             // Clear container
-            mediaContainer.innerHTML = '';
+            if (mediaContainer) mediaContainer.innerHTML = '';
             
             if (mediaType === 'video') {
                 // Setup video element
@@ -1868,13 +1901,17 @@
                 mediaElement.style.backgroundColor = '#000';
                 
                 // Set up lock screen for video
-                lockScreen.style.display = 'flex';
+                if (lockScreen) {
+                    lockScreen.style.display = 'flex';
+                }
                 
                 // Get video duration
                 mediaElement.addEventListener('loadedmetadata', function() {
                     const duration = Math.min(mediaElement.duration, 30); // Cap at 30 seconds
-                    document.getElementById('durationDisplay').textContent = 
-                        `Durasi: ${Math.round(duration)} detik`;
+                    const durationDisplay = document.getElementById('durationDisplay');
+                    if (durationDisplay) {
+                        durationDisplay.textContent = `Durasi: ${Math.round(duration)} detik`;
+                    }
                     
                     // Auto-stop after 30 seconds
                     if (mediaElement.duration > 30) {
@@ -1888,21 +1925,24 @@
                 });
                 
                 // Handle lock screen click
-                lockScreen.onclick = function() {
-                    mediaElement.play().then(() => {
-                        lockScreen.style.opacity = '0';
-                        setTimeout(() => {
-                            lockScreen.style.display = 'none';
-                        }, 500);
-                    }).catch(error => {
-                        logDebug(`Autoplay failed: ${error.message}`, 'warning');
-                        document.getElementById('videoLockIcon').textContent = '▶️';
-                        lockScreen.querySelector('.lock-instruction').textContent = 
-                            'Klik lagi untuk memutar';
-                    });
-                };
+                if (lockScreen) {
+                    lockScreen.onclick = function() {
+                        mediaElement.play().then(() => {
+                            lockScreen.style.opacity = '0';
+                            setTimeout(() => {
+                                lockScreen.style.display = 'none';
+                            }, 500);
+                        }).catch(error => {
+                            logDebug(`Autoplay failed: ${error.message}`, 'warning');
+                            const videoLockIcon = document.getElementById('videoLockIcon');
+                            const lockInstruction = lockScreen.querySelector('.lock-instruction');
+                            if (videoLockIcon) videoLockIcon.textContent = '▶️';
+                            if (lockInstruction) lockInstruction.textContent = 'Klik lagi untuk memutar';
+                        });
+                    };
+                }
                 
-                mediaContainer.appendChild(mediaElement);
+                if (mediaContainer) mediaContainer.appendChild(mediaElement);
                 
             } else if (mediaType === 'image') {
                 // Setup image element
@@ -1912,14 +1952,14 @@
                 mediaElement.style.cursor = 'pointer';
                 
                 // Hide lock screen for images
-                lockScreen.style.display = 'none';
+                if (lockScreen) lockScreen.style.display = 'none';
                 
                 // Make image clickable for zoom (in real app)
                 mediaElement.onclick = function() {
                     window.open(state.currentMediaManager.cleanUrl, '_blank');
                 };
                 
-                mediaContainer.appendChild(mediaElement);
+                if (mediaContainer) mediaContainer.appendChild(mediaElement);
             }
             
             // Show the media container
@@ -1945,13 +1985,18 @@
                 const params = getUrlParams();
                 
                 // Update basic info
-                document.getElementById('recipientName').textContent = params.to;
-                document.getElementById('messageText').textContent = params.msg;
+                const recipientName = document.getElementById('recipientName');
+                const messageText = document.getElementById('messageText');
+                const whatsappBtn = document.getElementById('whatsappBtn');
+                
+                if (recipientName) recipientName.textContent = params.to;
+                if (messageText) messageText.textContent = params.msg;
                 
                 // Update WhatsApp button
-                const whatsappMessage = `Halo ${params.to}, saya mengirimkan kartu ucapan digital untukmu dari FIOR Florist:\n\n${window.location.href}\n\nSemoga berkenan!`;
-                document.getElementById('whatsappBtn').href = 
-                    `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+                if (whatsappBtn) {
+                    const whatsappMessage = `Halo ${params.to}, saya mengirimkan kartu ucapan digital untukmu dari FIOR Florist:\n\n${window.location.href}\n\nSemoga berkenan!`;
+                    whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+                }
                 
                 // Set theme
                 updateProgress(20, 'Setting theme...');
@@ -2010,10 +2055,12 @@
                 if (e.code === 'Space' && state.currentMediaManager && state.currentMediaManager.type === 'video') {
                     e.preventDefault();
                     const video = state.currentMediaManager.getElement();
-                    if (video.paused) {
-                        video.play();
-                    } else {
-                        video.pause();
+                    if (video) {
+                        if (video.paused) {
+                            video.play();
+                        } else {
+                            video.pause();
+                        }
                     }
                 }
                 
@@ -2101,7 +2148,7 @@
             }
             
             const music = document.getElementById('backgroundMusic');
-            if (!music.paused) {
+            if (music && !music.paused) {
                 music.pause();
             }
             
@@ -2152,13 +2199,6 @@
         // ========== INITIALIZATION ==========
         document.addEventListener('DOMContentLoaded', function() {
             logDebug('DOM fully loaded', 'info');
-            
-            // Check for service worker support
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js').catch(error => {
-                    logDebug(`Service Worker registration failed: ${error}`, 'warning');
-                });
-            }
             
             // Initialize the card
             initCard();
