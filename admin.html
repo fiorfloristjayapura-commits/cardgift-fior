@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>FIOR Card - Admin Panel</title>
     
     <!-- Font Awesome -->
@@ -10,6 +10,9 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
         * {
@@ -102,6 +105,10 @@
             background: var(--white);
             border-right: 1px solid var(--gray-200);
             padding: 2rem 1rem;
+            position: sticky;
+            top: 73px;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
         }
 
         .nav-item {
@@ -165,6 +172,7 @@
             flex: 1;
             padding: 2rem;
             overflow-y: auto;
+            height: calc(100vh - 73px);
         }
 
         .page {
@@ -276,6 +284,9 @@
             flex-direction: column;
             gap: 0.75rem;
             margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
         }
 
         .url-item {
@@ -406,7 +417,7 @@
             font-size: 0.85rem;
         }
 
-        /* ===== RESULT CARD ===== */
+        /* ===== RESULT CARD DENGAN QR CODE ===== */
         .result-card {
             background: var(--white);
             border: 1px solid var(--success);
@@ -432,15 +443,53 @@
             }
         }
 
-        .link-box {
+        .link-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             background: var(--soft-white);
             padding: 1rem 1.25rem;
             border-radius: 0.75rem;
             border: 1px solid var(--gray-200);
+            margin: 1rem 0;
+        }
+
+        .short-link {
+            flex: 1;
             color: var(--navy);
             word-break: break-all;
             font-family: monospace;
-            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .copy-btn {
+            background: var(--navy);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--navy-light);
+        }
+
+        .qrcode-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        #qrcode {
+            padding: 0.5rem;
+            background: white;
+            border-radius: 0.5rem;
         }
 
         /* ===== TABLES ===== */
@@ -448,7 +497,8 @@
             background: var(--white);
             border: 1px solid var(--gray-200);
             border-radius: 1rem;
-            overflow: hidden;
+            overflow: auto;
+            max-height: 500px;
         }
 
         .table {
@@ -463,11 +513,82 @@
             padding: 1rem;
             text-align: left;
             border-bottom: 2px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            background: var(--gray-100);
+            z-index: 10;
         }
 
         .table td {
             padding: 1rem;
             border-bottom: 1px solid var(--gray-200);
+        }
+
+        /* ===== MODAL - FIX SCROLL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            position: sticky;
+            top: 0;
+            background: white;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .modal-header h3 {
+            color: var(--navy);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-600);
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            overflow-y: auto;
+            padding-right: 0.5rem;
         }
 
         /* ===== ALERTS ===== */
@@ -477,6 +598,7 @@
             margin-bottom: 1.5rem;
             display: none;
             border-left: 4px solid;
+            animation: slideInRight 0.3s ease;
         }
 
         .alert-success {
@@ -489,6 +611,17 @@
             background: rgba(185, 28, 28, 0.1);
             border-color: var(--danger);
             color: var(--danger);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* ===== LOADING ===== */
@@ -519,38 +652,33 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ===== MODAL ===== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal.active {
+        /* ===== SHORT LINK GENERATOR ===== */
+        .shortlink-info {
             display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
         }
 
-        .modal-content {
-            background: var(--white);
-            border-radius: 1rem;
-            max-width: 500px;
-            width: 90%;
-            padding: 2rem;
+        .shortlink-info i {
+            color: var(--gold);
         }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .container { flex-direction: column; }
-            .sidebar { width: 100%; }
+            .sidebar { 
+                width: 100%; 
+                position: relative;
+                top: 0;
+                height: auto;
+            }
             .url-media-group { flex-direction: column; }
             .btn-add-url { width: 100%; }
+            .link-container { flex-direction: column; }
+            .copy-btn { width: 100%; }
         }
     </style>
 </head>
@@ -701,24 +829,51 @@
                     </div>
                 </div>
 
-                <!-- Result Card -->
+                <!-- Result Card dengan QR Code -->
                 <div id="cardResult" class="result-card">
                     <h3 style="color: var(--success); margin-bottom: 1rem;">
                         <i class="fas fa-check-circle"></i> Card Berhasil Dibuat!
                     </h3>
+                    
                     <div class="form-group">
-                        <label class="form-label">Link Card</label>
-                        <div class="link-box" id="generatedLink"></div>
+                        <label class="form-label">
+                            <i class="fas fa-link"></i>
+                            Link Card (Short URL)
+                        </label>
+                        <div class="link-container">
+                            <span class="short-link" id="generatedLink"></span>
+                            <button class="copy-btn" onclick="copyLink()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="shortlink-info">
+                            <i class="fas fa-info-circle"></i>
+                            Link otomatis dipendekkan untuk memudahkan sharing
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 1rem;">
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-qrcode"></i>
+                            QR Code
+                        </label>
+                        <div class="qrcode-container">
+                            <div id="qrcode"></div>
+                        </div>
+                        <small style="color: var(--gray-600);">
+                            Scan QR Code untuk membuka card di HP
+                        </small>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
                         <a href="#" target="_blank" class="btn btn-success" id="whatsappResultBtn">
                             <i class="fab fa-whatsapp"></i> Kirim WA
                         </a>
                         <a href="#" target="_blank" class="btn btn-primary" id="previewResultBtn">
                             <i class="fas fa-eye"></i> Buka Card
                         </a>
-                        <button class="btn btn-primary" onclick="copyLink()">
-                            <i class="fas fa-copy"></i> Copy Link
+                        <button class="btn btn-primary" onclick="downloadQRCode()">
+                            <i class="fas fa-download"></i> Download QR
                         </button>
                     </div>
                 </div>
@@ -772,11 +927,12 @@
                                 <th>Tema</th>
                                 <th>Media</th>
                                 <th>Link</th>
+                                <th>QR</th>
                             </tr>
                         </thead>
                         <tbody id="historyTableBody">
                             <tr>
-                                <td colspan="5" style="text-align: center;">Memuat data...</td>
+                                <td colspan="6" style="text-align: center;">Memuat data...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -812,6 +968,18 @@
                                value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
                     </div>
 
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i>
+                            Shortener API URL
+                        </label>
+                        <input type="url" class="form-control" id="shortenerUrl" 
+                               placeholder="https://tinyurl.com/... (opsional)">
+                        <small style="color: var(--gray-600);">
+                            Kosongkan untuk menggunakan shortener bawaan
+                        </small>
+                    </div>
+
                     <div style="display: flex; gap: 1rem;">
                         <button class="btn btn-primary" onclick="saveSettings()">
                             <i class="fas fa-save"></i> Simpan Settings
@@ -825,44 +993,52 @@
         </main>
     </div>
 
-    <!-- Modal Tambah Customer - DENGAN KOLOM ALAMAT -->
+    <!-- Modal Tambah Customer - DENGAN SCROLL FIX -->
     <div id="customerModal" class="modal">
         <div class="modal-content">
-            <h3 style="color: var(--navy); margin-bottom: 1.5rem;">
-                <i class="fas fa-user-plus"></i> Tambah Customer
-            </h3>
-            
-            <div class="form-group">
-                <label class="form-label">Nama Lengkap *</label>
-                <input type="text" class="form-control" id="modalCustomerName" 
-                       placeholder="Masukkan nama">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-user-plus" style="color: var(--gold);"></i>
+                    Tambah Customer
+                </h3>
+                <button class="modal-close" onclick="closeCustomerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             
-            <div class="form-group">
-                <label class="form-label">No. WhatsApp *</label>
-                <input type="tel" class="form-control" id="modalCustomerPhone" 
-                       placeholder="081234567890">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap *</label>
+                    <input type="text" class="form-control" id="modalCustomerName" 
+                           placeholder="Masukkan nama">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">No. WhatsApp *</label>
+                    <input type="tel" class="form-control" id="modalCustomerPhone" 
+                           placeholder="081234567890">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="modalCustomerEmail" 
+                           placeholder="email@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Alamat</label>
+                    <textarea class="form-control" id="modalCustomerAddress" 
+                              rows="3" placeholder="Jl. Contoh No. 123, Kota"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Catatan</label>
+                    <textarea class="form-control" id="modalCustomerNotes" 
+                              rows="3" placeholder="Catatan khusus..."></textarea>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" id="modalCustomerEmail" 
-                       placeholder="email@example.com">
-            </div>
-            
-            <!-- ===== TAMBAHAN KOLOM ALAMAT ===== -->
-            <div class="form-group">
-                <label class="form-label">Alamat</label>
-                <textarea class="form-control" id="modalCustomerAddress" 
-                          rows="2" placeholder="Jl. Contoh No. 123, Kota"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Catatan</label>
-                <textarea class="form-control" id="modalCustomerNotes" rows="2"></textarea>
-            </div>
-            
-            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
                 <button class="btn btn-primary" onclick="saveCustomer()">
                     <i class="fas fa-save"></i> Simpan
                 </button>
@@ -875,13 +1051,14 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - FULL CONNECTION
+        // FIOR CARD ADMIN - FULL CONNECTION + QR CODE
         // ============================================
 
         // ========== KONFIGURASI ==========
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
             CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
+            SHORTENER_API: "https://tinyurl.com/api-create.php",
             DEFAULT_THEME: "birthday"
         };
 
@@ -900,7 +1077,8 @@
             customers: [],
             cards: [],
             selectedTheme: CONFIG.DEFAULT_THEME,
-            mediaUrls: []
+            mediaUrls: [],
+            currentQR: null
         };
 
         // ========== DOM ELEMENTS ==========
@@ -930,9 +1108,9 @@
                 'customerSelect', 'recipientName', 'whatsappNumber',
                 'cardMessage', 'mediaUrlInput', 'urlListContainer',
                 'mediaUrls', 'themeGrid', 'cardResult', 'generatedLink',
-                'whatsappResultBtn', 'previewResultBtn',
+                'whatsappResultBtn', 'previewResultBtn', 'qrcode',
                 'customersTableBody', 'historyTableBody',
-                'scriptUrl', 'cardBaseUrl',
+                'scriptUrl', 'cardBaseUrl', 'shortenerUrl',
                 'modalCustomerName', 'modalCustomerPhone', 
                 'modalCustomerEmail', 'modalCustomerAddress', 'modalCustomerNotes'
             ];
@@ -1051,6 +1229,61 @@
             el.urlListContainer.innerHTML = html;
         }
 
+        // ========== SHORTEN URL ==========
+        async function shortenUrl(longUrl) {
+            try {
+                // Gunakan TinyURL API
+                const response = await fetch(`${CONFIG.SHORTENER_API}?url=${encodeURIComponent(longUrl)}`);
+                if (response.ok) {
+                    const shortUrl = await response.text();
+                    return shortUrl.trim();
+                }
+            } catch (error) {
+                console.log('Shortener error, using original URL');
+            }
+            return longUrl;
+        }
+
+        // ========== GENERATE QR CODE ==========
+        function generateQRCode(url) {
+            if (!el.qrcode) return;
+            
+            // Clear previous QR code
+            el.qrcode.innerHTML = '';
+            
+            // Generate new QR code
+            try {
+                new QRCode(el.qrcode, {
+                    text: url,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#1e3a5f",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                state.currentQR = url;
+            } catch (error) {
+                console.error('QR Code generation error:', error);
+                el.qrcode.innerHTML = '<p style="color: var(--danger);">Gagal generate QR Code</p>';
+            }
+        }
+
+        // ========== DOWNLOAD QR CODE ==========
+        window.downloadQRCode = function() {
+            const qrcodeEl = el.qrcode?.querySelector('img');
+            if (!qrcodeEl) {
+                showAlert('QR Code belum tersedia', 'error');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = `fior-card-${Date.now()}.png`;
+            link.href = qrcodeEl.src;
+            link.click();
+            
+            showAlert('QR Code didownload!', 'success');
+        };
+
         // ========== CREATE CARD ==========
         window.createCard = async function() {
             const name = el.recipientName?.value.trim();
@@ -1080,32 +1313,31 @@
             showLoading(true);
             
             try {
-                // 1. Generate URL Card
-                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
+                // Generate card URL
+                let longUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
                 
                 if (state.mediaUrls.length === 1) {
-                    cardUrl += `&media=${encodeURIComponent(state.mediaUrls[0])}`;
+                    longUrl += `&media=${encodeURIComponent(state.mediaUrls[0])}`;
                 } else if (state.mediaUrls.length > 1) {
                     state.mediaUrls.forEach((url, i) => {
-                        cardUrl += `&media${i+1}=${encodeURIComponent(url)}`;
+                        longUrl += `&media${i+1}=${encodeURIComponent(url)}`;
                     });
                 }
                 
-                console.log('📤 Mengirim ke Google Sheets:', {
-                    nama: name,
-                    no_hp: phone,
-                    tema: theme,
-                    link: cardUrl
-                });
+                // Shorten URL
+                const shortUrl = await shortenUrl(longUrl);
                 
-                // 2. KIRIM KE GOOGLE APPS SCRIPT - VIA FORM DATA
+                // Generate QR Code
+                generateQRCode(shortUrl);
+                
+                // Kirim ke Google Sheets
                 const formData = new URLSearchParams();
                 formData.append('type', 'card');
                 formData.append('nama', name);
                 formData.append('no_hp', phone);
                 formData.append('tema', theme);
                 formData.append('pesan', message);
-                formData.append('link', cardUrl);
+                formData.append('link', shortUrl);
                 formData.append('media_url', state.mediaUrls.join('||'));
                 
                 const response = await fetch(CONFIG.SCRIPT_URL, {
@@ -1116,45 +1348,27 @@
                     body: formData.toString()
                 });
                 
-                // 3. BACA RESPONSE
                 const result = await response.json();
                 console.log('📩 Response dari server:', result);
                 
-                if (result.status === 'success' || result.status === undefined) {
-                    // Tampilkan hasil
-                    el.generatedLink.textContent = cardUrl;
-                    el.cardResult.classList.add('active');
-                    
-                    // Set WhatsApp button
-                    const waNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
-                    const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${cardUrl}`;
-                    el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
-                    el.previewResultBtn.href = cardUrl;
-                    
-                    showAlert('✅ Card berhasil dibuat!', 'success');
-                    
-                    // Reset form
-                    setTimeout(() => resetForm(), 2000);
-                } else {
-                    throw new Error(result.message || 'Gagal menyimpan');
-                }
+                // Tampilkan hasil
+                el.generatedLink.textContent = shortUrl;
+                el.cardResult.classList.add('active');
+                
+                // Set WhatsApp button
+                const waNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
+                const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${shortUrl}`;
+                el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
+                el.previewResultBtn.href = longUrl;
+                
+                showAlert('✅ Card berhasil dibuat!', 'success');
+                
+                // Reset form
+                setTimeout(() => resetForm(), 2000);
                 
             } catch (error) {
                 console.error('❌ Error:', error);
                 showAlert('Gagal: ' + error.message, 'error');
-                
-                // Tampilkan hasil tetap muncul meskipun error
-                if (el.generatedLink) {
-                    const cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
-                    el.generatedLink.textContent = cardUrl;
-                    el.cardResult.classList.add('active');
-                    
-                    const waNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
-                    const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${cardUrl}`;
-                    el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
-                    el.previewResultBtn.href = cardUrl;
-                }
-                
             } finally {
                 showLoading(false);
             }
@@ -1337,7 +1551,7 @@
             } catch (error) {
                 console.error('Load cards error:', error);
                 if (el.historyTableBody) {
-                    el.historyTableBody.innerHTML = '<tr><td colspan="5">Gagal memuat data</td></tr>';
+                    el.historyTableBody.innerHTML = '<tr><td colspan="6">Gagal memuat data</td></tr>';
                 }
             }
         }
@@ -1346,12 +1560,12 @@
             if (!el.historyTableBody) return;
             
             if (state.cards.length === 0) {
-                el.historyTableBody.innerHTML = '<tr><td colspan="5">Belum ada card</td></tr>';
+                el.historyTableBody.innerHTML = '<tr><td colspan="6">Belum ada card</td></tr>';
                 return;
             }
             
             let html = '';
-            state.cards.slice(0, 10).forEach(c => {
+            state.cards.slice(0, 10).forEach((c, i) => {
                 html += `
                     <tr>
                         <td>${c.date || ''} ${c.time || ''}</td>
@@ -1363,6 +1577,11 @@
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="showQRModal('${c.link}')">
+                                <i class="fas fa-qrcode"></i>
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -1370,7 +1589,12 @@
             el.historyTableBody.innerHTML = html;
         }
 
-        // ========== CUSTOMER MODAL - DENGAN ALAMAT ==========
+        window.showQRModal = function(url) {
+            // Bisa ditambahkan modal QR code untuk history
+            alert('QR Code untuk:\n' + url);
+        };
+
+        // ========== CUSTOMER MODAL - DENGAN SCROLL FIX ==========
         window.showAddCustomerModal = function() {
             document.getElementById('customerModal').classList.add('active');
         };
@@ -1448,6 +1672,10 @@
                         el.cardBaseUrl.value = settings.cardBaseUrl;
                         CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
                     }
+                    if (settings.shortenerUrl && el.shortenerUrl) {
+                        el.shortenerUrl.value = settings.shortenerUrl;
+                        CONFIG.SHORTENER_API = settings.shortenerUrl;
+                    }
                 } catch (e) {
                     console.error('Load settings error:', e);
                 }
@@ -1457,13 +1685,15 @@
         window.saveSettings = function() {
             const settings = {
                 scriptUrl: el.scriptUrl?.value || CONFIG.SCRIPT_URL,
-                cardBaseUrl: el.cardBaseUrl?.value || CONFIG.CARD_BASE_URL
+                cardBaseUrl: el.cardBaseUrl?.value || CONFIG.CARD_BASE_URL,
+                shortenerUrl: el.shortenerUrl?.value || CONFIG.SHORTENER_API
             };
             
             localStorage.setItem('fior_settings', JSON.stringify(settings));
             
             CONFIG.SCRIPT_URL = settings.scriptUrl;
             CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
+            CONFIG.SHORTENER_API = settings.shortenerUrl;
             
             showAlert('Settings tersimpan!', 'success');
         };
@@ -1491,12 +1721,14 @@
         window.previewCard = previewCard;
         window.resetForm = resetForm;
         window.copyLink = copyLink;
+        window.downloadQRCode = downloadQRCode;
         window.testConnection = testConnection;
         window.saveSettings = saveSettings;
         window.showAddCustomerModal = showAddCustomerModal;
         window.closeCustomerModal = closeCustomerModal;
         window.saveCustomer = saveCustomer;
         window.useCustomer = useCustomer;
+        window.showQRModal = showQRModal;
     </script>
 </body>
 </html>
