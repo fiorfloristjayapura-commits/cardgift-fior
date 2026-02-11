@@ -2,117 +2,947 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>🎴 Kartu Ucapan Digital - FIOR Florist</title>
+    
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* ===== CSS ANIMASI LENGKAP SAMA SEPERTI SEBELUMNYA ===== */
-        /* (Saya tidak mengulang CSS agar ringkas, di file asli tetap lengkap dengan animasi) */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --navy: #1e3a5f; --navy-light: #2b4c73; --gold: #d4af37;
-            --white: #ffffff; --soft-white: #f8fafc; --gray-200: #e2e8f0;
-            --gray-600: #475569; --success: #0f766e;
+        /* ========== VARIABLES & THEMES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        :root {
+            --navy-deep: #0a1929;
+            --navy: #1e3a5f;
+            --navy-light: #2b4c73;
+            --blue-bright: #2563eb;
+            --blue-soft: #60a5fa;
+            --blue-light: #dbeafe;
+            --gold: #d4af37;
+            --gold-light: #f5e8c6;
+            --white: #ffffff;
+            --soft-white: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+            --success: #0f766e;
+            --danger: #b91c1c;
+            --warning: #b45309;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.05);
+            --shadow-2xl: 0 25px 50px -12px rgba(0,0,0,0.25);
+            
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-3xl: 2rem;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Theme Variables */
+        .theme-birthday {
+            --theme-color: #2196f3;
+            --theme-dark: #1565c0;
+            --theme-light: #e3f2fd;
+            --theme-gradient: linear-gradient(145deg, #2196f3, #1565c0);
+            --theme-bg: linear-gradient(145deg, #e3f2fd, #bbdefb);
+            --theme-shadow: 0 20px 30px rgba(33,150,243,0.2);
+            --theme-emoji: '🎂';
+        }
+        .theme-valentine {
+            --theme-color: #e91e63;
+            --theme-dark: #c2185b;
+            --theme-light: #fce4ec;
+            --theme-gradient: linear-gradient(145deg, #e91e63, #c2185b);
+            --theme-bg: linear-gradient(145deg, #fce4ec, #f8bbd9);
+            --theme-shadow: 0 20px 30px rgba(233,30,99,0.2);
+            --theme-emoji: '❤️';
+        }
+        .theme-wedding {
+            --theme-color: #ff9800;
+            --theme-dark: #ef6c00;
+            --theme-light: #fff3e0;
+            --theme-gradient: linear-gradient(145deg, #ff9800, #ef6c00);
+            --theme-bg: linear-gradient(145deg, #fff3e0, #ffe0b2);
+            --theme-shadow: 0 20px 30px rgba(255,152,0,0.2);
+            --theme-emoji: '💍';
+        }
+        .theme-anniversary {
+            --theme-color: #9c27b0;
+            --theme-dark: #7b1fa2;
+            --theme-light: #f3e5f5;
+            --theme-gradient: linear-gradient(145deg, #9c27b0, #7b1fa2);
+            --theme-bg: linear-gradient(145deg, #f3e5f5, #e1bee7);
+            --theme-shadow: 0 20px 30px rgba(156,39,176,0.2);
+            --theme-emoji: '💑';
+        }
+        .theme-graduation {
+            --theme-color: #4caf50;
+            --theme-dark: #2e7d32;
+            --theme-light: #e8f5e9;
+            --theme-gradient: linear-gradient(145deg, #4caf50, #2e7d32);
+            --theme-bg: linear-gradient(145deg, #e8f5e9, #c8e6c9);
+            --theme-shadow: 0 20px 30px rgba(76,175,80,0.2);
+            --theme-emoji: '🎓';
+        }
+        .theme-condolence {
+            --theme-color: #607d8b;
+            --theme-dark: #455a64;
+            --theme-light: #eceff1;
+            --theme-gradient: linear-gradient(145deg, #607d8b, #455a64);
+            --theme-bg: linear-gradient(145deg, #eceff1, #cfd8dc);
+            --theme-shadow: 0 20px 30px rgba(96,125,139,0.2);
+            --theme-emoji: '🕊️';
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--theme-bg);
+            color: var(--gray-800);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            transition: all 0.3s;
+            transition: var(--transition);
+            position: relative;
+            overflow-x: hidden;
         }
-        .theme-birthday { --theme-color: #2196f3; --theme-dark: #1565c0; --theme-bg: linear-gradient(145deg, #e3f2fd, #bbdefb); --theme-emoji: '🎂'; }
-        .theme-valentine { --theme-color: #e91e63; --theme-dark: #c2185b; --theme-bg: linear-gradient(145deg, #fce4ec, #f8bbd9); --theme-emoji: '❤️'; }
-        .theme-wedding { --theme-color: #ff9800; --theme-dark: #ef6c00; --theme-bg: linear-gradient(145deg, #fff3e0, #ffe0b2); --theme-emoji: '💍'; }
-        .theme-anniversary { --theme-color: #9c27b0; --theme-dark: #7b1fa2; --theme-bg: linear-gradient(145deg, #f3e5f5, #e1bee7); --theme-emoji: '💑'; }
-        .theme-graduation { --theme-color: #4caf50; --theme-dark: #2e7d32; --theme-bg: linear-gradient(145deg, #e8f5e9, #c8e6c9); --theme-emoji: '🎓'; }
-        .theme-condolence { --theme-color: #607d8b; --theme-dark: #455a64; --theme-bg: linear-gradient(145deg, #eceff1, #cfd8dc); --theme-emoji: '🕊️'; }
-        
-        .card-container { max-width: 600px; width: 100%; }
-        .card { background: white; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); overflow: hidden; }
-        .card-header { background: var(--theme-gradient); padding: 2rem; text-align: center; color: white; }
-        .theme-icon { font-size: 4rem; animation: bounce 2s infinite; }
-        .greeting { font-size: 2.2rem; font-weight: bold; margin-bottom: 0.5rem; }
-        .recipient-name { font-size: 2rem; font-weight: bold; }
-        .card-body { padding: 2rem; }
-        .message-container { background: var(--soft-white); border-radius: 1rem; padding: 1.5rem; border: 2px dashed var(--theme-color); margin-bottom: 1.5rem; }
-        .message { font-size: 1.1rem; line-height: 1.6; font-style: italic; }
-        
-        /* ===== MEDIA SECTION - OTOMATIS TAMPIL ===== */
-        .media-section { margin-top: 1.5rem; }
-        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
-        .media-item { background: white; border: 1px solid var(--gray-200); border-radius: 0.75rem; padding: 1rem; }
-        .media-preview { margin-top: 1rem; }
-        .preview-image { max-width: 100%; max-height: 300px; border-radius: 0.75rem; border: 3px solid white; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .preview-video { max-width: 100%; max-height: 300px; border-radius: 0.75rem; background: black; }
-        
-        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .floating-hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .heart { position: absolute; font-size: 20px; animation: float 15s linear infinite; }
-        @keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* ===== FLOATING DECORATIONS ===== */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: float 15s linear infinite;
+            color: var(--theme-color);
+        }
+
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .snowflake {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background-color: var(--theme-color);
+            opacity: 0;
+            animation: confetti-fall 5s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ===== CARD CONTAINER ===== */
+        .card-container {
+            width: 100%;
+            max-width: 600px;
+            perspective: 1000px;
+            position: relative;
+            z-index: 10;
+            animation: slideInUp 0.8s ease;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-3xl);
+            box-shadow: var(--shadow-2xl), var(--theme-shadow);
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: var(--transition);
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.01);
+            box-shadow: var(--shadow-2xl), 0 30px 40px rgba(0,0,0,0.2);
+        }
+
+        /* ===== CARD HEADER ===== */
+        .card-header {
+            background: var(--theme-gradient);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.2;
+            animation: spin 60s linear infinite;
+        }
+
+        .card-header::after {
+            content: var(--theme-emoji);
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            font-size: 120px;
+            opacity: 0.1;
+            transform: rotate(-15deg);
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 0.9rem;
+            z-index: 20;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 22px;
+            height: 22px;
+            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: brightness(0) invert(1);
+        }
+
+        .theme-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+            display: inline-block;
+        }
+
+        .greeting {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: -0.02em;
+            animation: slideInLeft 0.6s ease;
+        }
+
+        .to-label {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            animation: slideInRight 0.6s ease 0.1s both;
+        }
+
+        .recipient-name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            word-break: break-word;
+            line-height: 1.2;
+            font-family: 'Playfair Display', serif;
+            animation: slideInRight 0.6s ease 0.2s both;
+        }
+
+        /* ===== CARD BODY ===== */
+        .card-body {
+            padding: 40px 30px;
+            background: var(--white);
+            position: relative;
+        }
+
+        .message-container {
+            background: linear-gradient(145deg, var(--soft-white), var(--white));
+            border-radius: var(--radius-2xl);
+            padding: 40px 30px;
+            border: 2px dashed var(--theme-color);
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+            animation: scaleIn 0.6s ease 0.3s both;
+            margin-bottom: 30px;
+        }
+
+        .message-container::before {
+            content: '💌';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            padding: 10px 15px;
+            border-radius: 50%;
+            border: 2px dashed var(--theme-color);
+            font-size: 1.8rem;
+            z-index: 2;
+            animation: pulse 2s infinite;
+        }
+
+        .message {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--gray-800);
+            text-align: center;
+            font-style: italic;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ===== URL MEDIA SECTION - TANPA ANIMASI BERLEBIH ===== */
+        .media-section {
+            margin-top: 30px;
+            animation: fadeIn 0.6s ease 0.5s both;
+        }
+
+        .media-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--theme-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--theme-light);
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .media-item {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 15px;
+            transition: var(--transition);
+            animation: slideInUp 0.5s ease;
+            animation-fill-mode: both;
+        }
+
+        .media-item:nth-child(1) { animation-delay: 0.1s; }
+        .media-item:nth-child(2) { animation-delay: 0.2s; }
+        .media-item:nth-child(3) { animation-delay: 0.3s; }
+        .media-item:nth-child(4) { animation-delay: 0.4s; }
+        .media-item:nth-child(5) { animation-delay: 0.5s; }
+
+        .media-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--theme-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .media-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .media-type {
+            margin-left: auto;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .media-url {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            word-break: break-all;
+            font-family: monospace;
+            background: var(--gray-100);
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .media-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .media-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: var(--radius-md);
+            background: var(--theme-gradient);
+            color: white;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: var(--transition);
+        }
+
+        .media-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .media-btn.secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+        }
+
+        .preview-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--gray-100);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--theme-color);
+            display: none;
+        }
+
+        .preview-container.active {
+            display: block;
+            animation: scaleIn 0.3s ease;
+        }
+
+        .preview-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: var(--radius-lg);
+            border: 3px solid white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .preview-video {
+            width: 100%;
+            max-height: 300px;
+            border-radius: var(--radius-lg);
+            border: 3px solid white;
+            box-shadow: var(--shadow-lg);
+            background: black;
+        }
+
+        /* ===== CARD FOOTER ===== */
+        .card-footer {
+            padding: 30px;
+            text-align: center;
+            background: var(--soft-white);
+            border-top: 1px solid var(--gray-200);
+            animation: fadeIn 0.6s ease 0.7s both;
+        }
+
+        .company-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .company-logo {
+            width: 25px;
+            height: 25px;
+            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .company-tagline {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .contact-link {
+            color: var(--navy);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .contact-link:hover {
+            background: var(--theme-color);
+            color: white;
+            border-color: var(--theme-color);
+            transform: translateY(-3px);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            background: var(--theme-gradient);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .action-btn.share {
+            background: linear-gradient(145deg, #25D366, #128C7E);
+        }
+
+        .action-btn.print {
+            background: linear-gradient(145deg, #6c757d, #495057);
+        }
+
+        /* ===== NOTIFICATION ===== */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: var(--radius-lg);
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 350px;
+            display: none;
+        }
+
+        .notification.show {
+            display: flex;
+        }
+
+        .notification.success {
+            background: linear-gradient(145deg, #0f766e, #0a5c4c);
+        }
+
+        .notification.error {
+            background: linear-gradient(145deg, #b91c1c, #991b1b);
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
+        /* ===== DEBUG PANEL ===== */
+        .debug-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+        }
+
+        .debug-toggle:hover {
+            background: rgba(0,0,0,0.9);
+            transform: scale(1.05);
+        }
+
+        .debug-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            max-width: 500px;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            font-family: monospace;
+            font-size: 0.8rem;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--gold);
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .debug-panel.active {
+            display: block;
+            animation: slideInUp 0.3s ease;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .card-header { padding: 30px 20px; }
+            .greeting { font-size: 2rem; }
+            .recipient-name { font-size: 1.8rem; }
+            .theme-icon { font-size: 4rem; }
+            .card-body { padding: 30px 20px; }
+            .message-container { padding: 30px 20px; }
+            .message { font-size: 1rem; }
+            .media-grid { grid-template-columns: 1fr; }
+            .action-buttons { flex-direction: column; }
+            .action-btn { width: 100%; }
+        }
+
+        @media (max-width: 400px) {
+            .greeting { font-size: 1.8rem; }
+            .recipient-name { font-size: 1.5rem; }
+            .theme-icon { font-size: 3.5rem; }
+            .card-footer { padding: 25px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+        }
     </style>
 </head>
 <body class="theme-birthday">
-    <!-- Floating Hearts -->
+    <!-- Floating Decorations -->
     <div class="floating-hearts" id="floatingHearts"></div>
+    <div class="snow" id="snow"></div>
 
-    <!-- Main Card -->
+    <!-- Debug Toggle -->
+    <button class="debug-toggle" onclick="toggleDebug()">
+        <i class="fas fa-bug"></i> Debug Info
+    </button>
+
+    <!-- Debug Panel -->
+    <div id="debugPanel" class="debug-panel"></div>
+
+    <!-- Main Card Container -->
     <div class="card-container">
         <div class="card">
+            <!-- Card Header -->
             <div class="card-header">
+                <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="logo">
+                    <div class="logo-icon"></div>
+                    <span>FIOR Florist</span>
+                </a>
+                
                 <div class="theme-icon" id="themeIcon">🎂</div>
                 <h1 class="greeting" id="greetingText">Happy Birthday</h1>
-                <div style="opacity: 0.9;">Kepada Yth.</div>
+                <div class="to-label">Kepada Yth.</div>
                 <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
             </div>
             
+            <!-- Card Body -->
             <div class="card-body">
-                <!-- Pesan -->
+                <!-- Message -->
                 <div class="message-container">
                     <div class="message" id="messageText">
                         [Pesan ucapan akan muncul di sini. Kartu ini dikirim dengan penuh kasih dari FIOR Florist.]
                     </div>
                 </div>
                 
-                <!-- ===== MEDIA FROM URL - OTOMATIS TAMPIL ===== -->
+                <!-- ===== MEDIA FROM URL SECTION ===== -->
                 <div id="mediaSection" class="media-section" style="display: none;">
-                    <h3 style="display: flex; align-items: center; gap: 0.5rem; color: var(--theme-color); margin-bottom: 1rem;">
-                        <i class="fas fa-link"></i> Media Spesial
-                    </h3>
+                    <div class="media-header">
+                        <i class="fas fa-link"></i>
+                        <span>Media Spesial</span>
+                        <span style="margin-left: auto; background: var(--theme-color); color: white; padding: 2px 12px; border-radius: 50px; font-size: 0.7rem;" id="mediaCount">0</span>
+                    </div>
+                    
+                    <!-- Media Grid -->
                     <div id="mediaGrid" class="media-grid"></div>
-                    <div id="previewContainer" style="margin-top: 1rem; display: none;"></div>
+                    
+                    <!-- Preview Container -->
+                    <div id="previewContainer" class="preview-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <span style="font-weight: 600; color: var(--navy);">
+                                <i class="fas fa-eye"></i> Preview
+                            </span>
+                            <button onclick="hidePreview()" style="background: none; border: none; color: var(--gray-600); cursor: pointer; font-size: 1.2rem;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div id="previewContent"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card Footer -->
+            <div class="card-footer">
+                <div class="company-name">
+                    <div class="company-logo"></div>
+                    FIOR Florist
+                </div>
+                <div class="company-tagline">Jayapura • Since 2020</div>
+                
+                <div class="contact-info">
+                    <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="contact-link">
+                        <i class="fab fa-instagram"></i> @tokobungafior.jayapura
+                    </a>
+                    <a href="https://wa.me/6285337777585" target="_blank" class="contact-link">
+                        <i class="fab fa-whatsapp"></i> +62 853-3777-7585
+                    </a>
                 </div>
                 
-                <!-- Footer -->
-                <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200);">
-                    <div style="font-weight: bold; color: var(--navy);">FIOR Florist</div>
-                    <div style="color: var(--gray-600); font-size: 0.9rem; margin: 0.5rem 0;">Jayapura • Since 2020</div>
-                    <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
-                        <a href="#" id="whatsappBtn" class="btn" style="background: #25D366; color: white; padding: 0.5rem 1.5rem; border-radius: 50px; text-decoration: none;">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </a>
-                    </div>
+                <div class="action-buttons">
+                    <button class="action-btn share" onclick="shareCard()">
+                        <i class="fas fa-share-alt"></i> Bagikan
+                    </button>
+                    <a href="#" class="action-btn" id="whatsappBtn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <button class="action-btn print" onclick="printCard()">
+                        <i class="fas fa-print"></i> Cetak
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
+    </div>
+
     <script>
         // ============================================
-        // CARD.HTML - OTOMATIS TAMPILKAN URL DARI ADMIN
+        // FIOR CARD DISPLAY - FULL ANIMATION
+        // VERSION: 9.0 - URL MEDIA ONLY
         // ============================================
 
         // ---------- THEMES ----------
         const THEMES = {
-            birthday: { emoji: '🎂', greeting: 'Happy Birthday', particles: 'confetti' },
-            valentine: { emoji: '❤️', greeting: 'Happy Valentine', particles: 'hearts' },
-            wedding: { emoji: '💍', greeting: 'Congratulations', particles: 'hearts' },
-            anniversary: { emoji: '💑', greeting: 'Happy Anniversary', particles: 'hearts' },
-            graduation: { emoji: '🎓', greeting: 'Congratulations!', particles: 'confetti' },
-            condolence: { emoji: '🕊️', greeting: 'Deepest Condolences', particles: 'snow' }
+            birthday: { 
+                emoji: '🎂', 
+                greeting: 'Happy Birthday',
+                particles: 'confetti'
+            },
+            valentine: { 
+                emoji: '❤️', 
+                greeting: 'Happy Valentine',
+                particles: 'hearts'
+            },
+            wedding: { 
+                emoji: '💍', 
+                greeting: 'Congratulations',
+                particles: 'hearts'
+            },
+            anniversary: { 
+                emoji: '💑', 
+                greeting: 'Happy Anniversary',
+                particles: 'hearts'
+            },
+            graduation: { 
+                emoji: '🎓', 
+                greeting: 'Congratulations!',
+                particles: 'confetti'
+            },
+            condolence: { 
+                emoji: '🕊️', 
+                greeting: 'Deepest Condolences',
+                particles: 'snow'
+            }
+        };
+
+        // ---------- STATE ----------
+        const state = {
+            theme: 'birthday',
+            mediaList: [],
+            params: {},
+            debugMode: false,
+            isMusicPlaying: false
+        };
+
+        // ---------- DOM ELEMENTS ----------
+        const el = {
+            themeIcon: document.getElementById('themeIcon'),
+            greetingText: document.getElementById('greetingText'),
+            recipientName: document.getElementById('recipientName'),
+            messageText: document.getElementById('messageText'),
+            whatsappBtn: document.getElementById('whatsappBtn'),
+            mediaSection: document.getElementById('mediaSection'),
+            mediaGrid: document.getElementById('mediaGrid'),
+            mediaCount: document.getElementById('mediaCount'),
+            previewContainer: document.getElementById('previewContainer'),
+            previewContent: document.getElementById('previewContent'),
+            notification: document.getElementById('notification'),
+            notificationMessage: document.getElementById('notificationMessage'),
+            debugPanel: document.getElementById('debugPanel'),
+            floatingHearts: document.getElementById('floatingHearts'),
+            snow: document.getElementById('snow')
         };
 
         // ---------- GET URL PARAMETERS ----------
@@ -120,114 +950,180 @@
             const params = new URLSearchParams(window.location.search);
             const result = {
                 to: params.get('to') || 'Sahabat',
-                msg: decodeURIComponent(params.get('msg') || 'Selamat dan sukses selalu!'),
+                msg: decodeURIComponent(params.get('msg') || 'Selamat dan sukses selalu! Semoga hari-harimu menyenangkan.'),
                 theme: params.get('theme') || 'birthday',
+                from: params.get('from') || 'FIOR Florist',
                 preview: params.get('preview') === 'true'
             };
 
-            // ===== KOLEKSI SEMUA URL MEDIA =====
+            // Collect all media URLs
             result.mediaList = [];
 
-            // 1. Parameter 'media' (single)
+            // Single media parameter
             if (params.get('media')) {
                 result.mediaList.push({
                     url: params.get('media'),
-                    type: detectMediaType(params.get('media'))
+                    type: detectMediaType(params.get('media')),
+                    label: 'Media'
                 });
             }
 
-            // 2. Parameter 'media1', 'media2', ... (multiple)
+            // Multiple media parameters: media1, media2, media3...
             let i = 1;
             while (params.get(`media${i}`)) {
                 result.mediaList.push({
                     url: params.get(`media${i}`),
-                    type: detectMediaType(params.get(`media${i}`))
+                    type: detectMediaType(params.get(`media${i}`)),
+                    label: `Media ${i}`
                 });
                 i++;
             }
 
+            // Alternative: url, url1, url2...
+            if (params.get('url') && !params.get('media')) {
+                result.mediaList.push({
+                    url: params.get('url'),
+                    type: detectMediaType(params.get('url')),
+                    label: 'URL'
+                });
+            }
+
+            i = 1;
+            while (params.get(`url${i}`)) {
+                result.mediaList.push({
+                    url: params.get(`url${i}`),
+                    type: detectMediaType(params.get(`url${i}`)),
+                    label: `URL ${i}`
+                });
+                i++;
+            }
+
+            // Remove duplicates
+            result.mediaList = result.mediaList.filter((item, index, self) =>
+                index === self.findIndex(t => t.url === item.url)
+            );
+
+            // Clean message
+            result.msg = result.msg.replace(/<[^>]*>/g, '');
+
             return result;
         }
 
-        // ---------- DETEKSI TIPE MEDIA ----------
+        // ---------- DETECT MEDIA TYPE ----------
         function detectMediaType(url) {
             if (!url) return 'link';
+            
             const urlLower = url.toLowerCase();
-            if (urlLower.includes('.mp4') || urlLower.includes('.mov') || urlLower.includes('.webm')) return 'video';
-            if (urlLower.includes('.jpg') || urlLower.includes('.jpeg') || urlLower.includes('.png') || 
-                urlLower.includes('.gif') || urlLower.includes('.webp')) return 'image';
+            
+            if (urlLower.includes('.mp4') || urlLower.includes('.mov') || 
+                urlLower.includes('.webm') || urlLower.includes('drive.google.com') ||
+                urlLower.includes('youtube.com') || urlLower.includes('youtu.be') ||
+                urlLower.includes('vimeo.com')) {
+                return 'video';
+            }
+            
+            if (urlLower.includes('.jpg') || urlLower.includes('.jpeg') || 
+                urlLower.includes('.png') || urlLower.includes('.gif') || 
+                urlLower.includes('.webp')) {
+                return 'image';
+            }
+            
             return 'link';
         }
 
         // ---------- INITIALIZATION ----------
         function init() {
-            const params = getUrlParams();
+            // Get URL parameters
+            state.params = getUrlParams();
             
             // Set basic info
-            document.getElementById('recipientName').textContent = params.to;
-            document.getElementById('messageText').textContent = params.msg;
+            if (el.recipientName) el.recipientName.textContent = state.params.to;
+            if (el.messageText) el.messageText.textContent = state.params.msg;
             
             // Set theme
-            const theme = THEMES[params.theme] || THEMES.birthday;
-            document.body.className = `theme-${params.theme}`;
-            document.getElementById('themeIcon').textContent = theme.emoji;
-            document.getElementById('greetingText').textContent = theme.greeting;
+            setTheme(state.params.theme);
             
             // Set WhatsApp button
-            const waBtn = document.getElementById('whatsappBtn');
-            if (waBtn) {
-                const waText = `Halo ${params.to}, saya mengirimkan kartu ucapan digital untukmu dari FIOR Florist:\n\n${window.location.href}`;
-                waBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
+            if (el.whatsappBtn) {
+                const waText = `Halo ${state.params.to}, saya mengirimkan kartu ucapan digital untukmu dari FIOR Florist:\n\n${window.location.href}`;
+                el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
             }
             
-            // ===== TAMPILKAN MEDIA DARI URL =====
-            if (params.mediaList && params.mediaList.length > 0) {
-                renderMedia(params.mediaList);
-            }
+            // Render media section
+            renderMediaSection();
             
-            // Create floating hearts
-            createParticles(theme.particles);
+            // Log initialization
+            logDebug('Card initialized');
+            logDebug(`Theme: ${state.params.theme}`);
+            logDebug(`Media count: ${state.mediaList.length}`);
         }
 
-        // ===== RENDER MEDIA - OTOMATIS TAMPIL =====
-        function renderMedia(mediaList) {
-            const mediaSection = document.getElementById('mediaSection');
-            const mediaGrid = document.getElementById('mediaGrid');
+        // ---------- SET THEME ----------
+        function setTheme(theme) {
+            if (!THEMES[theme]) theme = 'birthday';
+            state.theme = theme;
             
-            mediaSection.style.display = 'block';
+            document.body.className = `theme-${theme}`;
+            if (el.themeIcon) el.themeIcon.textContent = THEMES[theme].emoji;
+            if (el.greetingText) el.greetingText.textContent = THEMES[theme].greeting;
+            
+            createParticles(THEMES[theme].particles);
+        }
+
+        // ---------- RENDER MEDIA SECTION ----------
+        function renderMediaSection() {
+            state.mediaList = state.params.mediaList || [];
+            
+            if (state.mediaList.length === 0) {
+                if (el.mediaSection) el.mediaSection.style.display = 'none';
+                return;
+            }
+            
+            if (el.mediaSection) el.mediaSection.style.display = 'block';
+            if (el.mediaCount) el.mediaCount.textContent = state.mediaList.length;
             
             let html = '';
             
-            mediaList.forEach((media, index) => {
+            state.mediaList.forEach((media, index) => {
                 const isVideo = media.type === 'video';
                 const isImage = media.type === 'image';
                 
+                let icon = 'fa-link';
+                let typeLabel = 'Link';
+                
+                if (isVideo) { icon = 'fa-video'; typeLabel = 'Video'; }
+                if (isImage) { icon = 'fa-image'; typeLabel = 'Gambar'; }
+                
                 html += `
                     <div class="media-item">
-                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            <i class="fas ${isVideo ? 'fa-video' : isImage ? 'fa-image' : 'fa-link'}" style="color: var(--theme-color);"></i>
-                            <span style="font-weight: 600;">Media ${index + 1}</span>
-                            <span style="margin-left: auto; font-size: 0.7rem; background: var(--gray-200); padding: 0.2rem 0.5rem; border-radius: 12px;">
-                                ${isVideo ? 'Video' : isImage ? 'Gambar' : 'Link'}
-                            </span>
+                        <div class="media-label">
+                            <i class="fas ${icon}" style="color: var(--theme-color);"></i>
+                            <span>${media.label || `Media ${index + 1}`}</span>
+                            <span class="media-type">${typeLabel}</span>
                         </div>
-                        <div style="margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--gray-600); word-break: break-all;">
+                        <div class="media-url" title="${media.url}">
                             ${media.url.length > 50 ? media.url.substring(0, 50) + '...' : media.url}
                         </div>
-                        <button onclick="previewMedia('${escapeHTML(media.url)}', '${media.type}')" 
-                                style="width: 100%; padding: 0.5rem; background: var(--theme-color); color: white; border: none; border-radius: 0.5rem; cursor: pointer;">
-                            <i class="fas fa-eye"></i> Preview
-                        </button>
+                        <div class="media-actions">
+                            <button class="media-btn" onclick="previewMedia('${escapeHTML(media.url)}', '${media.type}')">
+                                <i class="fas fa-eye"></i> Preview
+                            </button>
+                            <button class="media-btn" onclick="copyURL('${escapeHTML(media.url)}')">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <a href="${escapeHTML(media.url)}" target="_blank" class="media-btn secondary">
+                                <i class="fas fa-external-link-alt"></i> Buka
+                            </a>
+                        </div>
                     </div>
                 `;
             });
             
-            mediaGrid.innerHTML = html;
+            if (el.mediaGrid) el.mediaGrid.innerHTML = html;
         }
 
-        // ===== PREVIEW MEDIA =====
+        // ---------- PREVIEW MEDIA ----------
         window.previewMedia = function(url, type) {
-            const previewContainer = document.getElementById('previewContainer');
             const isVideo = type === 'video';
             const isImage = type === 'image';
             
@@ -239,53 +1135,188 @@
                 previewHtml = `<img src="${escapeHTML(url)}" class="preview-image" alt="Preview" onerror="this.src='https://via.placeholder.com/400x300?text=Gambar+Tidak+Dapat+Dimuat'">`;
             } else {
                 previewHtml = `
-                    <div style="text-align: center; padding: 2rem; background: var(--soft-white); border-radius: 0.75rem;">
+                    <div style="text-align: center; padding: 30px; background: var(--gray-100); border-radius: var(--radius-lg);">
                         <i class="fas fa-link" style="font-size: 3rem; color: var(--gray-400);"></i>
-                        <p style="margin-top: 1rem;">Link tidak dapat dipreview</p>
-                        <a href="${escapeHTML(url)}" target="_blank" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1.5rem; background: var(--theme-color); color: white; text-decoration: none; border-radius: 50px;">
-                            Buka Link
+                        <p style="margin-top: 15px; color: var(--gray-600);">Link tidak dapat dipreview langsung</p>
+                        <a href="${escapeHTML(url)}" target="_blank" style="display: inline-block; margin-top: 15px; padding: 10px 25px; background: var(--theme-gradient); color: white; text-decoration: none; border-radius: 50px; font-weight: 500;">
+                            <i class="fas fa-external-link-alt"></i> Buka Link
                         </a>
                     </div>
                 `;
             }
             
-            previewContainer.innerHTML = previewHtml;
-            previewContainer.style.display = 'block';
+            if (el.previewContent) el.previewContent.innerHTML = previewHtml;
+            if (el.previewContainer) el.previewContainer.classList.add('active');
+            
+            logDebug(`Preview: ${type} - ${url.substring(0, 50)}...`);
         };
 
-        // ===== CREATE PARTICLES =====
-        function createParticles(type) {
-            const container = document.getElementById('floatingHearts');
-            container.innerHTML = '';
+        window.hidePreview = function() {
+            if (el.previewContainer) el.previewContainer.classList.remove('active');
+            if (el.previewContent) el.previewContent.innerHTML = '';
+        };
+
+        // ---------- COPY URL ----------
+        window.copyURL = async function(url) {
+            try {
+                await navigator.clipboard.writeText(url);
+                showNotification('URL berhasil disalin!', 'success');
+                logDebug('URL copied');
+            } catch (err) {
+                const textarea = document.createElement('textarea');
+                textarea.value = url;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showNotification('URL berhasil disalin!', 'success');
+            }
+        };
+
+        // ---------- SHARE CARD ----------
+        window.shareCard = function() {
+            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${state.params.to}\n\n${window.location.href}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Kartu Ucapan FIOR Florist',
+                    text: shareText,
+                    url: window.location.href
+                })
+                .then(() => showNotification('Berhasil dibagikan!', 'success'))
+                .catch(() => copyURL(window.location.href));
+            } else {
+                copyURL(window.location.href);
+                showNotification('Link disalin!', 'success');
+            }
+        };
+
+        // ---------- PRINT CARD ----------
+        window.printCard = function() {
+            showNotification('Mempersiapkan untuk dicetak...', 'info');
+            logDebug('Print initiated');
+            setTimeout(() => window.print(), 500);
+        };
+
+        // ---------- CREATE PARTICLES ----------
+        function createParticles(type = 'hearts') {
+            if (!el.floatingHearts || !el.snow) return;
+            
+            el.floatingHearts.innerHTML = '';
+            el.snow.innerHTML = '';
             
             if (type === 'none') return;
             
-            const count = type === 'snow' ? 30 : 20;
+            const count = type === 'snow' ? 40 : 25;
             
             for (let i = 0; i < count; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                
-                if (type === 'hearts') heart.textContent = '❤️';
-                else if (type === 'confetti') heart.textContent = ['🎉','🎊','✨','⭐'][Math.floor(Math.random() * 4)];
-                else if (type === 'snow') heart.textContent = '❄️';
-                
-                heart.style.left = `${Math.random() * 100}%`;
-                heart.style.fontSize = `${Math.random() * 20 + 15}px`;
-                heart.style.animationDuration = `${Math.random() * 10 + 10}s`;
-                heart.style.animationDelay = `${Math.random() * 5}s`;
-                
-                container.appendChild(heart);
+                if (type === 'snow') {
+                    createSnowflake();
+                } else if (type === 'confetti') {
+                    createConfetti();
+                } else {
+                    createHeart();
+                }
             }
         }
 
-        // ===== ESCAPE HTML =====
-        function escapeHTML(str) {
-            if (!str) return '';
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.fontSize = `${Math.random() * 20 + 15}px`;
+            heart.style.animationDuration = `${Math.random() * 10 + 10}s`;
+            heart.style.animationDelay = `${Math.random() * 5}s`;
+            
+            el.floatingHearts.appendChild(heart);
         }
 
-        // ===== START =====
+        function createSnowflake() {
+            const flake = document.createElement('div');
+            flake.className = 'snowflake';
+            
+            flake.style.left = `${Math.random() * 100}%`;
+            flake.style.width = `${Math.random() * 4 + 2}px`;
+            flake.style.height = flake.style.width;
+            flake.style.animationDuration = `${Math.random() * 10 + 10}s`;
+            flake.style.animationDelay = `${Math.random() * 5}s`;
+            flake.style.opacity = `${Math.random() * 0.5 + 0.3}`;
+            
+            el.snow.appendChild(flake);
+        }
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            
+            confetti.style.left = `${Math.random() * 100}%`;
+            confetti.style.width = `${Math.random() * 10 + 5}px`;
+            confetti.style.height = confetti.style.width;
+            confetti.style.animationDuration = `${Math.random() * 5 + 3}s`;
+            confetti.style.animationDelay = `${Math.random() * 2}s`;
+            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
+            
+            el.floatingHearts.appendChild(confetti);
+        }
+
+        // ---------- NOTIFICATION ----------
+        function showNotification(message, type = 'success') {
+            if (!el.notification) return;
+            
+            el.notificationMessage.textContent = message;
+            el.notification.className = `notification show ${type}`;
+            
+            setTimeout(() => {
+                el.notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // ---------- DEBUG ----------
+        window.toggleDebug = function() {
+            state.debugMode = !state.debugMode;
+            
+            if (state.debugMode) {
+                let debugHtml = '<strong style="color: var(--gold);">🔍 DEBUG INFORMATION</strong><br><br>';
+                debugHtml += `<strong>Theme:</strong> ${state.theme}<br>`;
+                debugHtml += `<strong>To:</strong> ${state.params.to}<br>`;
+                debugHtml += `<strong>Message length:</strong> ${state.params.msg.length} chars<br>`;
+                debugHtml += `<strong>Media count:</strong> ${state.mediaList.length}<br>`;
+                debugHtml += `<strong>Preview mode:</strong> ${state.params.preview ? 'Yes' : 'No'}<br>`;
+                debugHtml += `<strong>Timestamp:</strong> ${new Date().toLocaleString()}<br><br>`;
+                
+                if (state.mediaList.length > 0) {
+                    debugHtml += '<strong>Media URLs:</strong><br>';
+                    state.mediaList.forEach((m, i) => {
+                        debugHtml += `${i+1}. ${m.type} - ${m.url.substring(0, 50)}...<br>`;
+                    });
+                }
+                
+                el.debugPanel.innerHTML = debugHtml;
+                el.debugPanel.classList.add('active');
+            } else {
+                el.debugPanel.classList.remove('active');
+            }
+        };
+
+        function logDebug(message) {
+            if (!state.debugMode) return;
+            console.log(`[FIOR] ${message}`);
+        }
+
+        // ---------- ESCAPE HTML ----------
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // ---------- INITIALIZE ----------
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
