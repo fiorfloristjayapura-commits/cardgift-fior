@@ -40,7 +40,7 @@
             color: var(--gray-600);
         }
 
-        /* Header */
+        /* ===== HEADER DENGAN LOGO FIOR ===== */
         .header {
             background: var(--white);
             border-bottom: 1px solid var(--gray-200);
@@ -60,17 +60,14 @@
             gap: 1rem;
         }
 
-        .logo-icon {
+        .logo-image {
             width: 45px;
             height: 45px;
-            background: linear-gradient(145deg, var(--navy), var(--navy-light));
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.3rem;
-            transform: rotate(-5deg);
+            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
         .logo-text {
@@ -93,13 +90,13 @@
             font-weight: 500;
         }
 
-        /* Container */
+        /* ===== CONTAINER ===== */
         .container {
             display: flex;
             min-height: calc(100vh - 73px);
         }
 
-        /* Sidebar */
+        /* ===== SIDEBAR ===== */
         .sidebar {
             width: 280px;
             background: var(--white);
@@ -163,7 +160,7 @@
             50% { opacity: 0.6; transform: scale(1.2); }
         }
 
-        /* Main Content */
+        /* ===== MAIN CONTENT ===== */
         .main-content {
             flex: 1;
             padding: 2rem;
@@ -198,7 +195,7 @@
             color: var(--gold);
         }
 
-        /* Form Card */
+        /* ===== FORM CARD ===== */
         .form-card {
             background: var(--white);
             border: 1px solid var(--gray-200);
@@ -249,7 +246,7 @@
             resize: vertical;
         }
 
-        /* URL Media Section */
+        /* ===== URL MEDIA SECTION ===== */
         .url-media-group {
             display: flex;
             gap: 0.75rem;
@@ -329,7 +326,7 @@
             }
         }
 
-        /* Theme Grid */
+        /* ===== THEME GRID ===== */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -374,7 +371,7 @@
             color: var(--gray-700);
         }
 
-        /* Buttons */
+        /* ===== BUTTONS ===== */
         .btn {
             padding: 0.875rem 1.75rem;
             border: none;
@@ -409,7 +406,7 @@
             font-size: 0.85rem;
         }
 
-        /* Result Card */
+        /* ===== RESULT CARD ===== */
         .result-card {
             background: var(--white);
             border: 1px solid var(--success);
@@ -446,7 +443,7 @@
             margin: 1rem 0;
         }
 
-        /* Tables */
+        /* ===== TABLES ===== */
         .table-container {
             background: var(--white);
             border: 1px solid var(--gray-200);
@@ -473,7 +470,7 @@
             border-bottom: 1px solid var(--gray-200);
         }
 
-        /* Alerts */
+        /* ===== ALERTS ===== */
         .alert {
             padding: 1rem 1.5rem;
             border-radius: 0.75rem;
@@ -494,7 +491,7 @@
             color: var(--danger);
         }
 
-        /* Loading */
+        /* ===== LOADING ===== */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -522,7 +519,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Modal */
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -548,7 +545,7 @@
             padding: 2rem;
         }
 
-        /* Responsive */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .container { flex-direction: column; }
             .sidebar { width: 100%; }
@@ -563,12 +560,10 @@
         <div class="loading-spinner"></div>
     </div>
 
-    <!-- Header -->
+    <!-- Header dengan Logo FIOR -->
     <header class="header">
         <div class="logo">
-            <div class="logo-icon">
-                <i class="fas fa-gift"></i>
-            </div>
+            <div class="logo-image"></div>
             <div class="logo-text">FIOR<span>CARD</span></div>
         </div>
         <div class="datetime" id="currentDateTime">
@@ -729,7 +724,7 @@
                 </div>
             </div>
 
-            <!-- ===== CUSTOMERS PAGE ===== -->
+            <!-- ===== CUSTOMERS PAGE - DENGAN KOLOM ALAMAT ===== -->
             <div id="customers" class="page">
                 <h1 class="page-title">
                     <i class="fas fa-users"></i>
@@ -747,13 +742,14 @@
                                 <th>Nama</th>
                                 <th>No. WhatsApp</th>
                                 <th>Email</th>
+                                <th>Alamat</th>
                                 <th>Catatan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="customersTableBody">
                             <tr>
-                                <td colspan="5" style="text-align: center;">Memuat data...</td>
+                                <td colspan="6" style="text-align: center;">Memuat data...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -829,7 +825,7 @@
         </main>
     </div>
 
-    <!-- Modal Tambah Customer -->
+    <!-- Modal Tambah Customer - DENGAN KOLOM ALAMAT -->
     <div id="customerModal" class="modal">
         <div class="modal-content">
             <h3 style="color: var(--navy); margin-bottom: 1.5rem;">
@@ -854,6 +850,13 @@
                        placeholder="email@example.com">
             </div>
             
+            <!-- ===== TAMBAHAN KOLOM ALAMAT ===== -->
+            <div class="form-group">
+                <label class="form-label">Alamat</label>
+                <textarea class="form-control" id="modalCustomerAddress" 
+                          rows="2" placeholder="Jl. Contoh No. 123, Kota"></textarea>
+            </div>
+            
             <div class="form-group">
                 <label class="form-label">Catatan</label>
                 <textarea class="form-control" id="modalCustomerNotes" rows="2"></textarea>
@@ -876,7 +879,6 @@
         // ============================================
 
         // ========== KONFIGURASI ==========
-        // 🔴 GANTI URL INI DENGAN HASIL DEPLOY ANDA!
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
             CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
@@ -930,7 +932,9 @@
                 'mediaUrls', 'themeGrid', 'cardResult', 'generatedLink',
                 'whatsappResultBtn', 'previewResultBtn',
                 'customersTableBody', 'historyTableBody',
-                'scriptUrl', 'cardBaseUrl'
+                'scriptUrl', 'cardBaseUrl',
+                'modalCustomerName', 'modalCustomerPhone', 
+                'modalCustomerEmail', 'modalCustomerAddress', 'modalCustomerNotes'
             ];
             
             ids.forEach(id => el[id] = document.getElementById(id));
@@ -1047,7 +1051,7 @@
             el.urlListContainer.innerHTML = html;
         }
 
-        // ========== CREATE CARD - FULL KONEK ==========
+        // ========== CREATE CARD ==========
         window.createCard = async function() {
             const name = el.recipientName?.value.trim();
             const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
@@ -1253,7 +1257,7 @@
             } catch (error) {
                 console.error('Load customers error:', error);
                 if (el.customersTableBody) {
-                    el.customersTableBody.innerHTML = '<tr><td colspan="5">Gagal memuat data</td></tr>';
+                    el.customersTableBody.innerHTML = '<tr><td colspan="6">Gagal memuat data</td></tr>';
                 }
             }
         }
@@ -1262,7 +1266,7 @@
             if (!el.customersTableBody) return;
             
             if (state.customers.length === 0) {
-                el.customersTableBody.innerHTML = '<tr><td colspan="5">Belum ada data customer</td></tr>';
+                el.customersTableBody.innerHTML = '<tr><td colspan="6">Belum ada data customer</td></tr>';
                 return;
             }
             
@@ -1273,6 +1277,7 @@
                         <td>${c.nama || ''}</td>
                         <td>${c.no_hp || ''}</td>
                         <td>${c.email || ''}</td>
+                        <td>${c.alamat || ''}</td>
                         <td>${c.catatan || ''}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" onclick="useCustomer(${i})">
@@ -1365,7 +1370,7 @@
             el.historyTableBody.innerHTML = html;
         }
 
-        // ========== CUSTOMER MODAL ==========
+        // ========== CUSTOMER MODAL - DENGAN ALAMAT ==========
         window.showAddCustomerModal = function() {
             document.getElementById('customerModal').classList.add('active');
         };
@@ -1373,18 +1378,19 @@
         window.closeCustomerModal = function() {
             document.getElementById('customerModal').classList.remove('active');
             
-            ['modalCustomerName', 'modalCustomerPhone', 'modalCustomerEmail', 'modalCustomerNotes']
-                .forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.value = '';
-                });
+            ['modalCustomerName', 'modalCustomerPhone', 'modalCustomerEmail', 
+             'modalCustomerAddress', 'modalCustomerNotes'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
         };
 
         window.saveCustomer = async function() {
-            const name = document.getElementById('modalCustomerName')?.value.trim();
-            const phone = document.getElementById('modalCustomerPhone')?.value.trim();
-            const email = document.getElementById('modalCustomerEmail')?.value.trim();
-            const notes = document.getElementById('modalCustomerNotes')?.value.trim();
+            const name = el.modalCustomerName?.value.trim();
+            const phone = el.modalCustomerPhone?.value.trim();
+            const email = el.modalCustomerEmail?.value.trim();
+            const address = el.modalCustomerAddress?.value.trim();
+            const notes = el.modalCustomerNotes?.value.trim();
             
             if (!name || !phone) {
                 showAlert('Nama dan No. WA wajib diisi!', 'error');
@@ -1399,6 +1405,7 @@
                 formData.append('nama', name);
                 formData.append('no_hp', phone);
                 formData.append('email', email || '');
+                formData.append('alamat', address || '');
                 formData.append('catatan', notes || '');
                 
                 const response = await fetch(CONFIG.SCRIPT_URL, {
