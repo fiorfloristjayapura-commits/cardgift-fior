@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FIOR API Debug Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; }
+        .btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-primary { background: #4361ee; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .input-group { margin: 10px 0; }
+        input { padding: 10px; width: 100%; box-sizing: border-box; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow: auto; }
+        .status { padding: 5px 10px; border-radius: 20px; font-size: 12px; }
+        .status-online { background: #d4edda; color: #155724; }
+        .status-offline { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 FIOR API Debug Tool</h1>
+        
+        <div class="card">
+            <h3>1. API Configuration</h3>
+            <div class="input-group">
+                <label>Web App URL:</label>
+                <input type="text" id="apiUrl" placeholder="https://script.google.com/macros/s/.../exec" value="">
+                <small>Enter your deployed web app URL</small>
+            </div>
+            <button class="btn btn-primary" onclick="saveUrl()">Save URL</button>
+            <button class="btn" onclick="testConnection()">Test Connection</button>
+            <span id="connectionStatus" class="status status-offline">Disconnected</span>
+        </div>
+        
+        <div class="card">
+            <h3>2. Test Endpoints</h3>
+            <div class="input-group">
+                <button class="btn" onclick="testEndpoint('')">Test / (Info)</button>
+                <button class="btn" onclick="testEndpoint('?action=test')">Test /?action=test</button>
+                <button class="btn" onclick="testEndpoint('?action=ping')">Test /?action=ping</button>
+                <button class="btn" onclick="testEndpoint('?action=stats')">Test /?action=stats</button>
+                <button class="btn btn-success" onclick="setupSheets()">Setup Sheets (POST)</button>
+                <button class="btn" onclick="addSample()">Add Sample Data (POST)</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>3. Test Data Operations</h3>
+            <div class="input-group">
+                <button class="btn" onclick="testGetCustomers()">GET Customers</button>
+                <button class="btn" onclick="testGetCards()">GET Cards</button>
+                <button class="btn btn-success" onclick="testAddCustomer()">Add Customer (POST)</button>
+                <button class="btn btn-success" onclick="testAddCard()">Add Card (POST)</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>4. Response Output</h3>
+            <pre id="responseOutput">Response will appear here...</pre>
+        </div>
+        
+        <div class="card">
+            <h3>5. Troubleshooting Tips</h3>
+            <ul>
+                <li><strong>Error "Script function not found"</strong>: Make sure you deployed the correct script version</li>
+                <li><strong>Error "Cannot read properties of undefined"</strong>: The script has CORS or parameter handling issues</li>
+                <li><strong>No response</strong>: Check if web app is deployed and accessible</li>
+                <li><strong>403 Forbidden</strong>: Make sure "Who has access" is set to "Anyone"</li>
+                <li><strong>Check logs</strong>: Go to Google Apps Script > View > Logs</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        let API_URL = localStorage.getItem('fior_api_url') || '';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlInput = document.getElementById('apiUrl');
+            urlInput.value = API_URL;
+            
+            if (API_URL) {
+                testConnection();
+            }
+        });
+        
+        function saveUrl() {
+            const url = document.getElementById('apiUrl').value.trim();
+            if (url) {
+                API_URL = url;
+                localStorage.setItem('fior_api_url', url);
+                alert('URL saved!');
+                testConnection();
+            }
+        }
+        
+        function testConnection() {
+            if (!API_URL) {
+                alert('Please enter API URL first');
+                return;
+            }
+            
+            showOutput('Testing connection...');
+            updateStatus('Testing...', 'yellow');
+            
+            fetch(API_URL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    showOutput(data);
+                    updateStatus('Online', 'green');
+                })
+                .catch(error => {
+                    showOutput({
+                        error: error.message,
+                        url: API_URL,
+                        tip: 'Check if web app is deployed correctly'
+                    });
+                    updateStatus('Offline', 'red');
+                });
+        }
+        
+        function testEndpoint(endpoint) {
+            if (!API_URL) {
+                alert('Please enter API URL first');
+                return;
+            }
+            
+            showOutput(`Testing ${endpoint || '/'}...`);
+            
+            fetch(API_URL + endpoint)
+                .then(response => response.json())
+                .then(data => showOutput(data))
+                .catch(error => showOutput({ error: error.message }));
+        }
+        
+        function setupSheets() {
+            if (!API_URL) {
+                alert('Please enter API URL first');
+                return;
+            }
+            
+            showOutput('Setting up sheets...');
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'setup_sheets' })
+            })
+            .then(response => response.json())
+            .then(data => showOutput(data))
+            .catch(error => showOutput({ error: error.message }));
+        }
+        
+        function addSample() {
+            if (!API_URL) {
+                alert('Please enter API URL first');
+                return;
+            }
+            
+            showOutput('Adding sample data...');
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'add_sample' })
+            })
+            .then(response => response.json())
+            .then(data => showOutput(data))
+            .catch(error => showOutput({ error: error.message }));
+        }
+        
+        function testGetCustomers() {
+            testEndpoint('?action=customers');
+        }
+        
+        function testGetCards() {
+            testEndpoint('?action=cards');
+        }
+        
+        function testAddCustomer() {
+            if (!API_URL) {
+                alert('Please enter API URL first');
+                return;
+            }
+            
+            const customerData = {
+                nama: 'Test Customer',
+                no_hp: '081234567890',
+                email: 'test@example.com',
+                alamat: 'Test Address',
+                catatan: 'Test customer from debug tool'
+            };
+            
+            showOutput('Adding test customer...');
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'add_customer', ...customerData })
+            })
+            .then(response => response.json())
+            .then(data => showOutput(data))
+            .catch(error => showOutput({ error: error.message }));
+        }
+        
+        function testAddCard() {
+            if (!API_URL) {
+                alert('Please enter API URL first');
+                return;
+            }
+            
+            const cardData = {
+                nama_penerima: 'Test Recipient',
+                no_hp: '081234567890',
+                tema: 'birthday',
+                pesan: 'Test card from debug tool',
+                status: 'Draft'
+            };
+            
+            showOutput('Adding test card...');
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'add_card', ...cardData })
+            })
+            .then(response => response.json())
+            .then(data => showOutput(data))
+            .catch(error => showOutput({ error: error.message }));
+        }
+        
+        function showOutput(data) {
+            const output = document.getElementById('responseOutput');
+            if (typeof data === 'object') {
+                output.textContent = JSON.stringify(data, null, 2);
+            } else {
+                output.textContent = data;
+            }
+        }
+        
+        function updateStatus(text, color) {
+            const status = document.getElementById('connectionStatus');
+            status.textContent = text;
+            status.style.background = color === 'green' ? '#d4edda' : 
+                                   color === 'red' ? '#f8d7da' : '#fff3cd';
+            status.style.color = color === 'green' ? '#155724' : 
+                               color === 'red' ? '#721c24' : '#856404';
+        }
+    </script>
+</body>
+</html>
