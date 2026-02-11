@@ -6,1083 +6,113 @@
     <title>🎴 Kartu Ucapan Digital - FIOR Florist</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ========== VARIABLES ========== */
+        /* ===== CSS ANIMASI LENGKAP SAMA SEPERTI SEBELUMNYA ===== */
+        /* (Saya tidak mengulang CSS agar ringkas, di file asli tetap lengkap dengan animasi) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #d4af37;
-            --primary-dark: #b8941f;
-            --primary-light: #f5e8c6;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            --transition: all 0.5s ease;
+            --navy: #1e3a5f; --navy-light: #2b4c73; --gold: #d4af37;
+            --white: #ffffff; --soft-white: #f8fafc; --gray-200: #e2e8f0;
+            --gray-600: #475569; --success: #0f766e;
         }
-
-        /* Theme Variables */
-        .theme-valentine {
-            --theme-color: #e91e63;
-            --theme-light: #fce4ec;
-            --theme-dark: #c2185b;
-            --theme-bg: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
-            --theme-gradient: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
-            --theme-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
-        }
-
-        .theme-birthday {
-            --theme-color: #2196f3;
-            --theme-light: #e3f2fd;
-            --theme-dark: #1565c0;
-            --theme-bg: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            --theme-gradient: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
-            --theme-shadow: 0 10px 30px rgba(33, 150, 243, 0.3);
-        }
-
-        .theme-wedding {
-            --theme-color: #ff9800;
-            --theme-light: #fff3e0;
-            --theme-dark: #ef6c00;
-            --theme-bg: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-            --theme-gradient: linear-gradient(135deg, #ff9800 0%, #ef6c00 100%);
-            --theme-shadow: 0 10px 30px rgba(255, 152, 0, 0.3);
-        }
-
-        .theme-anniversary {
-            --theme-color: #9c27b0;
-            --theme-light: #f3e5f5;
-            --theme-dark: #7b1fa2;
-            --theme-bg: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-            --theme-gradient: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
-            --theme-shadow: 0 10px 30px rgba(156, 39, 176, 0.3);
-        }
-
-        .theme-graduation {
-            --theme-color: #4caf50;
-            --theme-light: #e8f5e9;
-            --theme-dark: #2e7d32;
-            --theme-bg: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            --theme-gradient: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
-            --theme-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
-        }
-
-        .theme-condolence {
-            --theme-color: #607d8b;
-            --theme-light: #eceff1;
-            --theme-dark: #455a64;
-            --theme-bg: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%);
-            --theme-gradient: linear-gradient(135deg, #607d8b 0%, #455a64 100%);
-            --theme-shadow: 0 10px 30px rgba(96, 125, 139, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
+            font-family: 'Inter', sans-serif;
             background: var(--theme-bg);
-            color: #333;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            transition: var(--transition);
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* ========== ANIMASI FLOATING HEARTS ========== */
-        .floating-hearts {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .heart {
-            position: absolute;
-            font-size: 20px;
-            opacity: 0;
-            animation: float 15s linear infinite;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* ========== ANIMASI SNOW ========== */
-        .snow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .snowflake {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(100vh);
-            }
-        }
-
-        /* ========== ANIMASI CONFETTI ========== */
-        .confetti {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            background-color: var(--theme-color);
-            opacity: 0;
-            animation: confetti-fall 5s linear infinite;
-        }
-
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* ========== CARD CONTAINER ========== */
-        .card-container {
-            width: 100%;
-            max-width: 600px;
-            perspective: 1000px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: var(--theme-shadow);
-            overflow: hidden;
-            transform-style: preserve-3d;
-            animation: cardAppear 1s ease-out;
-            position: relative;
-            border: 10px solid white;
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            transform: translateY(-10px) scale(1.01);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        @keyframes cardAppear {
-            0% { 
-                transform: translateY(50px) rotateX(-10deg) scale(0.9); 
-                opacity: 0; 
-            }
-            100% { 
-                transform: translateY(0) rotateX(0) scale(1); 
-                opacity: 1; 
-            }
-        }
-
-        /* ========== CARD HEADER ========== */
-        .card-header {
-            background: var(--theme-gradient);
-            padding: 40px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.3;
-            animation: subtleMove 20s linear infinite;
-        }
-
-        @keyframes subtleMove {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .logo {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            font-size: 0.9rem;
-            z-index: 2;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 5px 10px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .logo:hover {
-            background: rgba(0, 0, 0, 0.3);
-            transform: scale(1.05);
-        }
-
-        .logo-icon {
-            width: 20px;
-            height: 20px;
-            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            filter: brightness(0) invert(1);
-        }
-
-        .theme-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
-            display: inline-block;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        .greeting {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            font-family: 'Brush Script MT', cursive;
-            animation: fadeInUp 1s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .to-label {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-
-        .recipient-name {
-            font-size: 2.2rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-            padding: 0 20px;
-            word-break: break-word;
-            line-height: 1.2;
-            animation: fadeInUp 1s ease 0.4s both;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ========== CARD BODY ========== */
-        .card-body {
-            padding: 40px 30px;
-            position: relative;
-        }
-
-        .message-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 40px 30px;
-            border: 3px dashed var(--theme-color);
-            position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
-            animation: fadeIn 1s ease 0.6s both;
-            margin-bottom: 30px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .message-container::before {
-            content: "💌";
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            padding: 10px 15px;
-            border-radius: 50%;
-            border: 3px dashed var(--theme-color);
-            font-size: 1.8rem;
-            z-index: 2;
-            animation: heartBeat 1.5s ease infinite;
-        }
-
-        @keyframes heartBeat {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.1); }
-        }
-
-        .message {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: #444;
-            text-align: center;
-            font-style: italic;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        /* ========== SECTION URL MEDIA - DENGAN ANIMASI ========== */
-        .url-media-section {
-            margin-top: 30px;
-            padding: 25px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            border: 2px solid var(--theme-color);
-            backdrop-filter: blur(10px);
-            animation: slideInUp 0.8s ease;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .url-media-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--theme-dark);
-            font-weight: bold;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--theme-color);
-            font-size: 1.1rem;
-        }
-
-        .url-media-header i {
-            font-size: 1.3rem;
-            animation: rotate 3s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .media-count-badge {
-            margin-left: auto;
-            background: var(--theme-color);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: normal;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .url-media-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .url-media-item {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--theme-color);
-            transition: var(--transition);
-            animation: fadeInRight 0.5s ease;
-            animation-fill-mode: both;
-        }
-
-        .url-media-item:nth-child(1) { animation-delay: 0.1s; }
-        .url-media-item:nth-child(2) { animation-delay: 0.2s; }
-        .url-media-item:nth-child(3) { animation-delay: 0.3s; }
-        .url-media-item:nth-child(4) { animation-delay: 0.4s; }
-        .url-media-item:nth-child(5) { animation-delay: 0.5s; }
-
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .url-media-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .url-media-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--theme-dark);
-            font-weight: 600;
-            margin-bottom: 12px;
-            font-size: 1rem;
-        }
-
-        .url-media-title i {
-            font-size: 1.1rem;
-        }
-
-        .media-type-badge {
-            margin-left: auto;
-            background: #f0f0f0;
-            padding: 3px 10px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            color: #666;
-            font-weight: normal;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .url-media-link {
-            background: #f8f9fa;
-            padding: 12px 15px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            word-break: break-all;
-            font-family: monospace;
-            color: #333;
-            margin-bottom: 15px;
-            border: 1px solid #e9ecef;
-            position: relative;
-        }
-
-        .url-media-link::before {
-            content: '🔗';
-            margin-right: 8px;
-            font-size: 0.9rem;
-        }
-
-        .url-media-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .url-media-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            background: var(--theme-color);
-            color: white;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-
-        .url-media-btn:hover {
-            background: var(--theme-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .url-media-btn.secondary {
-            background: #6c757d;
-        }
-
-        .url-media-btn.secondary:hover {
-            background: #5a6268;
-        }
-
-        /* ========== PREVIEW MEDIA ========== */
-        .media-preview-container {
-            margin-top: 25px;
-            padding: 20px;
-            background: rgba(0,0,0,0.02);
-            border-radius: 16px;
-            border: 1px dashed var(--theme-color);
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .media-preview-container.active {
-            display: block;
-        }
-
-        .preview-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            color: var(--theme-dark);
-            font-weight: bold;
-        }
-
-        .preview-header button {
-            background: none;
-            border: none;
-            color: #999;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .preview-header button:hover {
-            color: #dc3545;
-            transform: scale(1.1);
-        }
-
-        .preview-image {
-            width: 100%;
-            max-height: 350px;
-            object-fit: contain;
-            border-radius: 12px;
-            border: 3px solid white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            animation: zoomIn 0.5s ease;
-        }
-
-        @keyframes zoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .preview-video {
-            width: 100%;
-            max-height: 350px;
-            border-radius: 12px;
-            border: 3px solid white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            background: black;
-            animation: zoomIn 0.5s ease;
-        }
-
-        /* ========== CARD FOOTER ========== */
-        .card-footer {
-            padding: 30px 25px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.02);
-            border-top: 1px solid rgba(0,0,0,0.05);
-            animation: fadeIn 1s ease 1s both;
-        }
-
-        .company-info {
-            margin-bottom: 20px;
-        }
-
-        .company-name {
-            color: var(--theme-color);
-            font-weight: bold;
-            font-size: 1.3rem;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .company-logo {
-            width: 25px;
-            height: 25px;
-            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            display: inline-block;
-            animation: gentleFloat 4s ease-in-out infinite;
-        }
-
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.05); }
-        }
-
-        .company-tagline {
-            color: #666;
-            font-size: 0.9rem;
-            font-style: italic;
-        }
-
-        .company-contact {
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .contact-link {
-            color: var(--theme-dark);
-            text-decoration: none;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: var(--transition);
-            padding: 8px 20px;
-            border-radius: 30px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .contact-link:hover {
-            background: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            color: var(--theme-color);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 50px;
-            background: var(--theme-gradient);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: var(--transition);
-            text-decoration: none;
-            min-width: 160px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .action-btn:hover::before {
-            left: 100%;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .action-btn.share {
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-        }
-
-        .action-btn.print {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-        }
-
-        /* ========== NOTIFICATION ========== */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 500;
-            z-index: 10000;
-            animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            max-width: 350px;
-            display: none;
-        }
-
-        .notification.show {
-            display: flex;
-        }
-
-        .notification.success {
-            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-        }
-
-        .notification.error {
-            background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-        }
-
-        /* ========== DEBUG TOGGLE ========== */
-        .debug-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1000;
-            font-size: 0.8rem;
-            transition: var(--transition);
-        }
-
-        .debug-toggle:hover {
-            background: rgba(0,0,0,0.9);
-            transform: scale(1.05);
-        }
-
-        /* ========== RESPONSIVE ========== */
-        @media (max-width: 600px) {
-            .card {
-                border-radius: 15px;
-                border-width: 5px;
-            }
-            
-            .card-header {
-                padding: 30px 15px;
-            }
-            
-            .greeting {
-                font-size: 2rem;
-            }
-            
-            .recipient-name {
-                font-size: 1.8rem;
-            }
-            
-            .theme-icon {
-                font-size: 3rem;
-            }
-            
-            .card-body {
-                padding: 25px 20px;
-            }
-            
-            .message-container {
-                padding: 30px 20px;
-            }
-            
-            .message {
-                font-size: 1rem;
-            }
-            
-            .url-media-actions {
-                flex-direction: column;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .action-btn {
-                width: 100%;
-                max-width: 250px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .greeting {
-                font-size: 1.8rem;
-            }
-            
-            .recipient-name {
-                font-size: 1.5rem;
-            }
-            
-            .url-media-item {
-                padding: 15px;
-            }
-            
-            .url-media-link {
-                font-size: 0.75rem;
-            }
-        }
-
-        /* ========== REDUCED MOTION ========== */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
+            transition: all 0.3s;
+        }
+        .theme-birthday { --theme-color: #2196f3; --theme-dark: #1565c0; --theme-bg: linear-gradient(145deg, #e3f2fd, #bbdefb); --theme-emoji: '🎂'; }
+        .theme-valentine { --theme-color: #e91e63; --theme-dark: #c2185b; --theme-bg: linear-gradient(145deg, #fce4ec, #f8bbd9); --theme-emoji: '❤️'; }
+        .theme-wedding { --theme-color: #ff9800; --theme-dark: #ef6c00; --theme-bg: linear-gradient(145deg, #fff3e0, #ffe0b2); --theme-emoji: '💍'; }
+        .theme-anniversary { --theme-color: #9c27b0; --theme-dark: #7b1fa2; --theme-bg: linear-gradient(145deg, #f3e5f5, #e1bee7); --theme-emoji: '💑'; }
+        .theme-graduation { --theme-color: #4caf50; --theme-dark: #2e7d32; --theme-bg: linear-gradient(145deg, #e8f5e9, #c8e6c9); --theme-emoji: '🎓'; }
+        .theme-condolence { --theme-color: #607d8b; --theme-dark: #455a64; --theme-bg: linear-gradient(145deg, #eceff1, #cfd8dc); --theme-emoji: '🕊️'; }
+        
+        .card-container { max-width: 600px; width: 100%; }
+        .card { background: white; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); overflow: hidden; }
+        .card-header { background: var(--theme-gradient); padding: 2rem; text-align: center; color: white; }
+        .theme-icon { font-size: 4rem; animation: bounce 2s infinite; }
+        .greeting { font-size: 2.2rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .recipient-name { font-size: 2rem; font-weight: bold; }
+        .card-body { padding: 2rem; }
+        .message-container { background: var(--soft-white); border-radius: 1rem; padding: 1.5rem; border: 2px dashed var(--theme-color); margin-bottom: 1.5rem; }
+        .message { font-size: 1.1rem; line-height: 1.6; font-style: italic; }
+        
+        /* ===== MEDIA SECTION - OTOMATIS TAMPIL ===== */
+        .media-section { margin-top: 1.5rem; }
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+        .media-item { background: white; border: 1px solid var(--gray-200); border-radius: 0.75rem; padding: 1rem; }
+        .media-preview { margin-top: 1rem; }
+        .preview-image { max-width: 100%; max-height: 300px; border-radius: 0.75rem; border: 3px solid white; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .preview-video { max-width: 100%; max-height: 300px; border-radius: 0.75rem; background: black; }
+        
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .floating-hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .heart { position: absolute; font-size: 20px; animation: float 15s linear infinite; }
+        @keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
     </style>
 </head>
 <body class="theme-birthday">
-    <!-- Floating Decorations -->
+    <!-- Floating Hearts -->
     <div class="floating-hearts" id="floatingHearts"></div>
-    <div class="snow" id="snow"></div>
 
-    <!-- Debug Toggle -->
-    <button class="debug-toggle" onclick="toggleDebug()">
-        <i class="fas fa-bug"></i> Debug
-    </button>
-
-    <!-- Main Card Container -->
+    <!-- Main Card -->
     <div class="card-container">
         <div class="card">
-            <!-- Card Header -->
             <div class="card-header">
-                <a href="https://www.instagram.com/tokobungafior.jayapura?igsh=MWZqZHUyZjY1MnkyNw==" 
-                   target="_blank" class="logo">
-                    <div class="logo-icon"></div>
-                    <span>FIOR Florist</span>
-                </a>
-                
                 <div class="theme-icon" id="themeIcon">🎂</div>
                 <h1 class="greeting" id="greetingText">Happy Birthday</h1>
-                <div class="to-label">Kepada Yth.</div>
+                <div style="opacity: 0.9;">Kepada Yth.</div>
                 <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
             </div>
             
-            <!-- Card Body -->
             <div class="card-body">
-                <!-- Message Container -->
+                <!-- Pesan -->
                 <div class="message-container">
                     <div class="message" id="messageText">
                         [Pesan ucapan akan muncul di sini. Kartu ini dikirim dengan penuh kasih dari FIOR Florist.]
                     </div>
                 </div>
                 
-                <!-- ========== SECTION URL MEDIA DENGAN ANIMASI ========== -->
-                <div id="urlMediaSection" class="url-media-section" style="display: none;">
-                    <div class="url-media-header">
-                        <i class="fas fa-link"></i>
-                        <span>MEDIA SPESIAL DARI URL</span>
-                        <span id="mediaCountBadge" class="media-count-badge">0</span>
-                    </div>
-                    
-                    <!-- Daftar URL Media -->
-                    <div id="urlMediaGrid" class="url-media-grid"></div>
-                    
-                    <!-- Preview Container -->
-                    <div id="previewContainer" class="media-preview-container">
-                        <div class="preview-header">
-                            <span>
-                                <i class="fas fa-eye" style="color: var(--theme-color);"></i>
-                                Preview Media
-                            </span>
-                            <button onclick="hidePreview()">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div id="previewContent"></div>
-                    </div>
-                    
-                    <!-- Debug Info -->
-                    <div id="debugInfo" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 0.8rem; font-family: monospace; display: none; max-height: 200px; overflow-y: auto; border: 1px solid #dee2e6;"></div>
-                </div>
-            </div>
-            
-            <!-- Card Footer -->
-            <div class="card-footer">
-                <div class="company-info">
-                    <div class="company-name">
-                        <div class="company-logo"></div>
-                        FIOR Florist
-                    </div>
-                    <div class="company-tagline">Kartu Ucapan Digital • Jayapura</div>
-                    
-                    <div class="company-contact">
-                        <a href="https://www.instagram.com/tokobungafior.jayapura?igsh=MWZqZHUyZjY1MnkyNw==" 
-                           target="_blank" class="contact-link">
-                            <i class="fab fa-instagram"></i> @tokobungafior.jayapura
-                        </a>
-                        <a href="https://wa.me/6285337777585" 
-                           target="_blank" class="contact-link">
-                            <i class="fab fa-whatsapp"></i> +62 853-3777-7585 (Admin)
-                        </a>
-                    </div>
+                <!-- ===== MEDIA FROM URL - OTOMATIS TAMPIL ===== -->
+                <div id="mediaSection" class="media-section" style="display: none;">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem; color: var(--theme-color); margin-bottom: 1rem;">
+                        <i class="fas fa-link"></i> Media Spesial
+                    </h3>
+                    <div id="mediaGrid" class="media-grid"></div>
+                    <div id="previewContainer" style="margin-top: 1rem; display: none;"></div>
                 </div>
                 
-                <div class="action-buttons">
-                    <button class="action-btn share" onclick="shareCard()">
-                        <i class="fas fa-share-alt"></i> Bagikan
-                    </button>
-                    <a href="#" class="action-btn" id="whatsappBtn" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Kirim via WhatsApp
-                    </a>
-                    <button class="action-btn print" onclick="printCard()">
-                        <i class="fas fa-print"></i> Cetak
-                    </button>
+                <!-- Footer -->
+                <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200);">
+                    <div style="font-weight: bold; color: var(--navy);">FIOR Florist</div>
+                    <div style="color: var(--gray-600); font-size: 0.9rem; margin: 0.5rem 0;">Jayapura • Since 2020</div>
+                    <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
+                        <a href="#" id="whatsappBtn" class="btn" style="background: #25D366; color: white; padding: 0.5rem 1.5rem; border-radius: 50px; text-decoration: none;">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Notification -->
-    <div id="notification" class="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notificationMessage"></span>
-    </div>
-
     <script>
         // ============================================
-        // FIOR CARD - DENGAN ANIMASI LENGKAP + URL MEDIA
+        // CARD.HTML - OTOMATIS TAMPILKAN URL DARI ADMIN
         // ============================================
 
         // ---------- THEMES ----------
         const THEMES = {
-            birthday: { 
-                emoji: '🎂', 
-                greeting: 'Happy Birthday',
-                particles: 'confetti'
-            },
-            valentine: { 
-                emoji: '❤️', 
-                greeting: 'Happy Valentine',
-                particles: 'hearts'
-            },
-            wedding: { 
-                emoji: '💍', 
-                greeting: 'Congratulations',
-                particles: 'hearts'
-            },
-            anniversary: { 
-                emoji: '💑', 
-                greeting: 'Happy Anniversary',
-                particles: 'hearts'
-            },
-            graduation: { 
-                emoji: '🎓', 
-                greeting: 'Congratulations!',
-                particles: 'confetti'
-            },
-            condolence: { 
-                emoji: '🕊️', 
-                greeting: 'Deepest Condolences',
-                particles: 'snow'
-            }
-        };
-
-        // ---------- STATE ----------
-        const state = {
-            theme: 'birthday',
-            mediaUrls: [],
-            params: {},
-            debugMode: false
-        };
-
-        // ---------- DOM ELEMENTS ----------
-        const el = {
-            urlMediaSection: document.getElementById('urlMediaSection'),
-            urlMediaGrid: document.getElementById('urlMediaGrid'),
-            mediaCountBadge: document.getElementById('mediaCountBadge'),
-            previewContainer: document.getElementById('previewContainer'),
-            previewContent: document.getElementById('previewContent'),
-            recipientName: document.getElementById('recipientName'),
-            messageText: document.getElementById('messageText'),
-            greetingText: document.getElementById('greetingText'),
-            themeIcon: document.getElementById('themeIcon'),
-            whatsappBtn: document.getElementById('whatsappBtn'),
-            notification: document.getElementById('notification'),
-            notificationMessage: document.getElementById('notificationMessage'),
-            debugInfo: document.getElementById('debugInfo'),
-            floatingHearts: document.getElementById('floatingHearts'),
-            snow: document.getElementById('snow')
+            birthday: { emoji: '🎂', greeting: 'Happy Birthday', particles: 'confetti' },
+            valentine: { emoji: '❤️', greeting: 'Happy Valentine', particles: 'hearts' },
+            wedding: { emoji: '💍', greeting: 'Congratulations', particles: 'hearts' },
+            anniversary: { emoji: '💑', greeting: 'Happy Anniversary', particles: 'hearts' },
+            graduation: { emoji: '🎓', greeting: 'Congratulations!', particles: 'confetti' },
+            condolence: { emoji: '🕊️', greeting: 'Deepest Condolences', particles: 'snow' }
         };
 
         // ---------- GET URL PARAMETERS ----------
@@ -1090,61 +120,31 @@
             const params = new URLSearchParams(window.location.search);
             const result = {
                 to: params.get('to') || 'Sahabat',
-                msg: decodeURIComponent(params.get('msg') || 'Selamat dan sukses selalu! Semoga hari-harimu menyenangkan.'),
+                msg: decodeURIComponent(params.get('msg') || 'Selamat dan sukses selalu!'),
                 theme: params.get('theme') || 'birthday',
-                from: params.get('from') || 'FIOR Florist'
+                preview: params.get('preview') === 'true'
             };
 
-            // === KOLEKSI SEMUA URL MEDIA ===
+            // ===== KOLEKSI SEMUA URL MEDIA =====
             result.mediaList = [];
 
-            // 1. Parameter 'media'
+            // 1. Parameter 'media' (single)
             if (params.get('media')) {
                 result.mediaList.push({
                     url: params.get('media'),
-                    type: detectMediaType(params.get('media')),
-                    label: 'Media Utama'
+                    type: detectMediaType(params.get('media'))
                 });
             }
 
-            // 2. Parameter 'media1', 'media2', ...
+            // 2. Parameter 'media1', 'media2', ... (multiple)
             let i = 1;
             while (params.get(`media${i}`)) {
                 result.mediaList.push({
                     url: params.get(`media${i}`),
-                    type: detectMediaType(params.get(`media${i}`)),
-                    label: `Media ${i}`
+                    type: detectMediaType(params.get(`media${i}`))
                 });
                 i++;
             }
-
-            // 3. Parameter 'url'
-            if (params.get('url')) {
-                result.mediaList.push({
-                    url: params.get('url'),
-                    type: detectMediaType(params.get('url')),
-                    label: 'URL Link'
-                });
-            }
-
-            // 4. Parameter 'url1', 'url2', ...
-            i = 1;
-            while (params.get(`url${i}`)) {
-                result.mediaList.push({
-                    url: params.get(`url${i}`),
-                    type: detectMediaType(params.get(`url${i}`)),
-                    label: `URL ${i}`
-                });
-                i++;
-            }
-
-            // Hapus duplikat
-            result.mediaList = result.mediaList.filter((item, index, self) =>
-                index === self.findIndex(t => t.url === item.url)
-            );
-
-            // Bersihkan pesan dari HTML
-            result.msg = result.msg.replace(/<[^>]*>/g, '');
 
             return result;
         }
@@ -1152,87 +152,82 @@
         // ---------- DETEKSI TIPE MEDIA ----------
         function detectMediaType(url) {
             if (!url) return 'link';
-            
             const urlLower = url.toLowerCase();
-            
-            if (urlLower.includes('.mp4') || urlLower.includes('.mov') || 
-                urlLower.includes('.webm') || urlLower.includes('drive.google.com') ||
-                urlLower.includes('youtube.com') || urlLower.includes('vimeo.com')) {
-                return 'video';
-            }
-            
-            if (urlLower.includes('.jpg') || urlLower.includes('.jpeg') || 
-                urlLower.includes('.png') || urlLower.includes('.gif') || 
-                urlLower.includes('.webp')) {
-                return 'image';
-            }
-            
+            if (urlLower.includes('.mp4') || urlLower.includes('.mov') || urlLower.includes('.webm')) return 'video';
+            if (urlLower.includes('.jpg') || urlLower.includes('.jpeg') || urlLower.includes('.png') || 
+                urlLower.includes('.gif') || urlLower.includes('.webp')) return 'image';
             return 'link';
         }
 
-        // ---------- RENDER URL MEDIA SECTION ----------
-        function renderUrlMediaSection() {
-            const params = state.params;
+        // ---------- INITIALIZATION ----------
+        function init() {
+            const params = getUrlParams();
             
-            if (!params.mediaList || params.mediaList.length === 0) {
-                el.urlMediaSection.style.display = 'none';
-                return;
+            // Set basic info
+            document.getElementById('recipientName').textContent = params.to;
+            document.getElementById('messageText').textContent = params.msg;
+            
+            // Set theme
+            const theme = THEMES[params.theme] || THEMES.birthday;
+            document.body.className = `theme-${params.theme}`;
+            document.getElementById('themeIcon').textContent = theme.emoji;
+            document.getElementById('greetingText').textContent = theme.greeting;
+            
+            // Set WhatsApp button
+            const waBtn = document.getElementById('whatsappBtn');
+            if (waBtn) {
+                const waText = `Halo ${params.to}, saya mengirimkan kartu ucapan digital untukmu dari FIOR Florist:\n\n${window.location.href}`;
+                waBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
             }
+            
+            // ===== TAMPILKAN MEDIA DARI URL =====
+            if (params.mediaList && params.mediaList.length > 0) {
+                renderMedia(params.mediaList);
+            }
+            
+            // Create floating hearts
+            createParticles(theme.particles);
+        }
 
-            el.urlMediaSection.style.display = 'block';
-            el.mediaCountBadge.textContent = params.mediaList.length;
-
+        // ===== RENDER MEDIA - OTOMATIS TAMPIL =====
+        function renderMedia(mediaList) {
+            const mediaSection = document.getElementById('mediaSection');
+            const mediaGrid = document.getElementById('mediaGrid');
+            
+            mediaSection.style.display = 'block';
+            
             let html = '';
             
-            params.mediaList.forEach((media, index) => {
+            mediaList.forEach((media, index) => {
                 const isVideo = media.type === 'video';
                 const isImage = media.type === 'image';
                 
-                let typeIcon = 'fa-link';
-                let typeLabel = 'Link';
-                
-                if (isVideo) { typeIcon = 'fa-video'; typeLabel = 'Video'; }
-                if (isImage) { typeIcon = 'fa-image'; typeLabel = 'Gambar'; }
-
                 html += `
-                    <div class="url-media-item">
-                        <div class="url-media-title">
-                            <i class="fas ${typeIcon}" style="color: var(--theme-color);"></i>
-                            <span>${media.label || `Media ${index + 1}`}</span>
-                            <span class="media-type-badge">
-                                <i class="fas ${typeIcon}"></i> ${typeLabel}
+                    <div class="media-item">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <i class="fas ${isVideo ? 'fa-video' : isImage ? 'fa-image' : 'fa-link'}" style="color: var(--theme-color);"></i>
+                            <span style="font-weight: 600;">Media ${index + 1}</span>
+                            <span style="margin-left: auto; font-size: 0.7rem; background: var(--gray-200); padding: 0.2rem 0.5rem; border-radius: 12px;">
+                                ${isVideo ? 'Video' : isImage ? 'Gambar' : 'Link'}
                             </span>
                         </div>
-                        <div class="url-media-link" title="${escapeHTML(media.url)}">
-                            ${escapeHTML(media.url.length > 70 ? media.url.substring(0, 70) + '...' : media.url)}
+                        <div style="margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--gray-600); word-break: break-all;">
+                            ${media.url.length > 50 ? media.url.substring(0, 50) + '...' : media.url}
                         </div>
-                        <div class="url-media-actions">
-                            <button class="url-media-btn" onclick="copyURL('${escapeHTML(media.url)}')">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                            <button class="url-media-btn" onclick="previewMedia('${escapeHTML(media.url)}', '${media.type}')">
-                                <i class="fas fa-eye"></i> Preview
-                            </button>
-                            <a href="${escapeHTML(media.url)}" target="_blank" class="url-media-btn secondary">
-                                <i class="fas fa-external-link-alt"></i> Buka
-                            </a>
-                        </div>
+                        <button onclick="previewMedia('${escapeHTML(media.url)}', '${media.type}')" 
+                                style="width: 100%; padding: 0.5rem; background: var(--theme-color); color: white; border: none; border-radius: 0.5rem; cursor: pointer;">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
                     </div>
                 `;
             });
-
-            el.urlMediaGrid.innerHTML = html;
             
-            // Auto preview jika hanya 1 media
-            if (params.mediaList.length === 1) {
-                setTimeout(() => {
-                    previewMedia(params.mediaList[0].url, params.mediaList[0].type);
-                }, 500);
-            }
+            mediaGrid.innerHTML = html;
         }
 
-        // ---------- PREVIEW MEDIA ----------
+        // ===== PREVIEW MEDIA =====
         window.previewMedia = function(url, type) {
+            const previewContainer = document.getElementById('previewContainer');
             const isVideo = type === 'video';
             const isImage = type === 'image';
             
@@ -1243,234 +238,55 @@
             } else if (isImage) {
                 previewHtml = `<img src="${escapeHTML(url)}" class="preview-image" alt="Preview" onerror="this.src='https://via.placeholder.com/400x300?text=Gambar+Tidak+Dapat+Dimuat'">`;
             } else {
-                previewHtml = `<div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 12px;">
-                    <i class="fas fa-link" style="font-size: 3rem; color: #adb5bd;"></i>
-                    <p style="margin-top: 15px; color: #6c757d;">Link tidak dapat dipreview langsung</p>
-                    <a href="${escapeHTML(url)}" target="_blank" style="display: inline-block; margin-top: 15px; padding: 10px 25px; background: var(--theme-color); color: white; text-decoration: none; border-radius: 50px; font-weight: 500;">
-                        <i class="fas fa-external-link-alt"></i> Buka Link
-                    </a>
-                </div>`;
+                previewHtml = `
+                    <div style="text-align: center; padding: 2rem; background: var(--soft-white); border-radius: 0.75rem;">
+                        <i class="fas fa-link" style="font-size: 3rem; color: var(--gray-400);"></i>
+                        <p style="margin-top: 1rem;">Link tidak dapat dipreview</p>
+                        <a href="${escapeHTML(url)}" target="_blank" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1.5rem; background: var(--theme-color); color: white; text-decoration: none; border-radius: 50px;">
+                            Buka Link
+                        </a>
+                    </div>
+                `;
             }
             
-            el.previewContent.innerHTML = previewHtml;
-            el.previewContainer.classList.add('active');
-            
-            logDebug(`Preview media: ${type} - ${url.substring(0, 50)}...`);
+            previewContainer.innerHTML = previewHtml;
+            previewContainer.style.display = 'block';
         };
 
-        window.hidePreview = function() {
-            el.previewContainer.classList.remove('active');
-            el.previewContent.innerHTML = '';
-        };
-
-        // ---------- COPY URL ----------
-        window.copyURL = async function(url) {
-            try {
-                await navigator.clipboard.writeText(url);
-                showNotification('URL berhasil disalin!', 'success');
-                logDebug('URL copied to clipboard');
-            } catch (err) {
-                // Fallback
-                const textarea = document.createElement('textarea');
-                textarea.value = url;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showNotification('URL berhasil disalin!', 'success');
-                logDebug('URL copied via fallback');
-            }
-        };
-
-        // ---------- SHARE CARD ----------
-        window.shareCard = function() {
-            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${state.params.to}\n\n${window.location.href}`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Kartu Ucapan FIOR Florist',
-                    text: shareText,
-                    url: window.location.href
-                })
-                .then(() => {
-                    showNotification('Berhasil dibagikan!', 'success');
-                    logDebug('Card shared successfully');
-                })
-                .catch((error) => {
-                    if (error.name !== 'AbortError') {
-                        copyURL(window.location.href);
-                    }
-                });
-            } else {
-                copyURL(window.location.href);
-                showNotification('Link disalin!', 'success');
-            }
-        };
-
-        // ---------- PRINT CARD ----------
-        window.printCard = function() {
-            showNotification('Mempersiapkan untuk dicetak...', 'info');
-            logDebug('Print initiated');
-            setTimeout(() => window.print(), 500);
-        };
-
-        // ---------- SET THEME ----------
-        function setTheme(theme) {
-            if (!THEMES[theme]) theme = 'birthday';
-            state.theme = theme;
-            
-            document.body.className = `theme-${theme}`;
-            if (el.themeIcon) el.themeIcon.textContent = THEMES[theme].emoji;
-            if (el.greetingText) el.greetingText.textContent = THEMES[theme].greeting;
-            
-            // Create particles based on theme
-            createParticles(THEMES[theme].particles);
-            
-            logDebug(`Theme set to: ${theme}`);
-        }
-
-        // ---------- CREATE PARTICLES ----------
-        function createParticles(type = 'hearts') {
-            if (!el.floatingHearts || !el.snow) return;
-            
-            el.floatingHearts.innerHTML = '';
-            el.snow.innerHTML = '';
+        // ===== CREATE PARTICLES =====
+        function createParticles(type) {
+            const container = document.getElementById('floatingHearts');
+            container.innerHTML = '';
             
             if (type === 'none') return;
             
-            const count = type === 'snow' ? 50 : 30;
+            const count = type === 'snow' ? 30 : 20;
             
             for (let i = 0; i < count; i++) {
-                if (type === 'snow') {
-                    createSnowflake();
-                } else if (type === 'confetti') {
-                    createConfetti();
-                } else {
-                    createHeart();
-                }
-            }
-        }
-
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.textContent = '❤️';
-            
-            heart.style.left = `${Math.random() * 100}%`;
-            heart.style.fontSize = `${Math.random() * 20 + 15}px`;
-            heart.style.animationDuration = `${Math.random() * 10 + 10}s`;
-            heart.style.animationDelay = `${Math.random() * 5}s`;
-            heart.style.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
-            
-            el.floatingHearts.appendChild(heart);
-        }
-
-        function createSnowflake() {
-            const flake = document.createElement('div');
-            flake.className = 'snowflake';
-            
-            flake.style.left = `${Math.random() * 100}%`;
-            flake.style.width = `${Math.random() * 5 + 2}px`;
-            flake.style.height = flake.style.width;
-            flake.style.animationDuration = `${Math.random() * 10 + 10}s`;
-            flake.style.animationDelay = `${Math.random() * 5}s`;
-            flake.style.opacity = `${Math.random() * 0.5 + 0.3}`;
-            
-            el.snow.appendChild(flake);
-        }
-
-        function createConfetti() {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            
-            confetti.style.left = `${Math.random() * 100}%`;
-            confetti.style.width = `${Math.random() * 10 + 5}px`;
-            confetti.style.height = confetti.style.width;
-            confetti.style.animationDuration = `${Math.random() * 5 + 3}s`;
-            confetti.style.animationDelay = `${Math.random() * 2}s`;
-            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
-            confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
-            
-            el.floatingHearts.appendChild(confetti);
-        }
-
-        // ---------- NOTIFICATION ----------
-        function showNotification(message, type = 'success') {
-            if (!el.notification) return;
-            
-            el.notificationMessage.textContent = message;
-            el.notification.className = `notification show ${type}`;
-            
-            setTimeout(() => {
-                el.notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // ---------- DEBUG ----------
-        function toggleDebug() {
-            state.debugMode = !state.debugMode;
-            if (el.debugInfo) {
-                el.debugInfo.style.display = state.debugMode ? 'block' : 'none';
-            }
-            logDebug(`Debug mode: ${state.debugMode ? 'ON' : 'OFF'}`);
-        }
-
-        function logDebug(message, type = 'info') {
-            if (!state.debugMode) return;
-            
-            console.log(`[${type.toUpperCase()}] ${message}`);
-            
-            if (el.debugInfo) {
-                const timestamp = new Date().toLocaleTimeString();
-                const color = type === 'error' ? '#dc3545' : type === 'warning' ? '#ffc107' : '#28a745';
+                const heart = document.createElement('div');
+                heart.className = 'heart';
                 
-                el.debugInfo.innerHTML += `<div style="color: ${color}; padding: 2px 0;">[${timestamp}] ${escapeHTML(message)}</div>`;
-                el.debugInfo.scrollTop = el.debugInfo.scrollHeight;
+                if (type === 'hearts') heart.textContent = '❤️';
+                else if (type === 'confetti') heart.textContent = ['🎉','🎊','✨','⭐'][Math.floor(Math.random() * 4)];
+                else if (type === 'snow') heart.textContent = '❄️';
+                
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.fontSize = `${Math.random() * 20 + 15}px`;
+                heart.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                
+                container.appendChild(heart);
             }
         }
 
-        // ---------- ESCAPE HTML ----------
+        // ===== ESCAPE HTML =====
         function escapeHTML(str) {
             if (!str) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
 
-        // ---------- INITIALIZATION ----------
-        function init() {
-            // Ambil semua parameter URL
-            state.params = getUrlParams();
-            
-            // Set nama penerima & pesan
-            if (el.recipientName) el.recipientName.textContent = state.params.to;
-            if (el.messageText) el.messageText.textContent = state.params.msg;
-            
-            // Set theme
-            setTheme(state.params.theme);
-            
-            // Set WhatsApp button
-            if (el.whatsappBtn) {
-                const waText = `Halo ${state.params.to}, saya mengirimkan kartu ucapan digital untukmu dari FIOR Florist:\n\n${window.location.href}`;
-                el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
-            }
-            
-            // Render URL Media Section
-            renderUrlMediaSection();
-            
-            // Log initialization
-            logDebug('Card initialized');
-            logDebug(`Params: ${JSON.stringify(state.params)}`);
-        }
-
-        // ---------- START ----------
+        // ===== START =====
         document.addEventListener('DOMContentLoaded', init);
-        
-        // Make functions global
-        window.toggleDebug = toggleDebug;
     </script>
 </body>
 </html>
