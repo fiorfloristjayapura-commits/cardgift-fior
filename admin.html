@@ -197,6 +197,21 @@
             border-radius: 4px;
         }
         
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         @media (max-width: 768px) {
             .sidebar {
                 min-height: auto;
@@ -333,6 +348,128 @@
         </div>
     </div>
     
+    <!-- Add Customer Modal -->
+    <div class="modal fade" id="addCustomerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i> Tambah Pelanggan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="customerForm">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Nama *</label>
+                            <input type="text" class="form-control" name="nama" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">No HP *</label>
+                            <input type="tel" class="form-control" name="no_hp" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alamat</label>
+                            <textarea class="form-control" name="alamat" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Catatan</label>
+                            <textarea class="form-control" name="catatan" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal Daftar</label>
+                            <input type="date" class="form-control" name="tgl_daftar">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Card Modal -->
+    <div class="modal fade" id="addCardModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-card-heading me-2"></i> Buat Kartu Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="cardForm">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nama Penerima *</label>
+                                <input type="text" class="form-control" name="nama_penerima" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">No HP Penerima *</label>
+                                <input type="tel" class="form-control" name="no_hp" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tema *</label>
+                            <select class="form-select" name="tema" required>
+                                <option value="">Pilih Tema</option>
+                                <option value="birthday">Ulang Tahun</option>
+                                <option value="anniversary">Hari Jadi</option>
+                                <option value="graduation">Wisuda</option>
+                                <option value="congrats">Selamat</option>
+                                <option value="get_well">Cepat Sembuh</option>
+                                <option value="thank_you">Terima Kasih</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Pesan *</label>
+                            <textarea class="form-control" name="pesan" rows="4" required placeholder="Tulis pesan ucapan Anda..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">URL Media (Opsional)</label>
+                            <input type="url" class="form-control" name="media_url" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" name="status">
+                                <option value="Draft">Draft</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Sent" selected>Terkirim</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Kartu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Setup Modal -->
+    <div class="modal fade" id="setupModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-gear me-2"></i> Setup Sistem</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="setupProgress">
+                        <div class="text-center">
+                            <div class="loader"></div>
+                            <p id="setupMessage">Menyiapkan sistem...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -343,27 +480,16 @@
             version: '1.0.0'
         };
         
-        // Data sample
-        let sampleData = {
+        // Data cache
+        let cacheData = {
+            customers: [],
+            cards: [],
             stats: {
-                totalCards: 152,
-                totalCustomers: 48,
-                cardsToday: 12,
-                pendingCards: 3
-            },
-            recentCards: [
-                { id: 1, name: "Ani Wijaya", theme: "birthday", message: "Selamat ulang tahun!", status: "sent", date: "2024-01-20" },
-                { id: 2, name: "Budi Santoso", theme: "anniversary", message: "Selamat hari jadi!", status: "pending", date: "2024-01-20" },
-                { id: 3, name: "Citra Lestari", theme: "graduation", message: "Selamat wisuda!", status: "sent", date: "2024-01-19" },
-                { id: 4, name: "Dian Pratama", theme: "birthday", message: "Panjang umur!", status: "sent", date: "2024-01-19" },
-                { id: 5, name: "Eko Susilo", theme: "congrats", message: "Selamat atas promosinya!", status: "draft", date: "2024-01-18" }
-            ],
-            recentCustomers: [
-                { id: 1, name: "Fajar Ramadhan", phone: "08123456789", email: "fajar@email.com", joinDate: "2024-01-20" },
-                { id: 2, name: "Gita Maharani", phone: "08234567890", email: "gita@email.com", joinDate: "2024-01-19" },
-                { id: 3, name: "Hendra Wijaya", phone: "08345678901", email: "hendra@email.com", joinDate: "2024-01-18" },
-                { id: 4, name: "Intan Permata", phone: "08456789012", email: "intan@email.com", joinDate: "2024-01-17" }
-            ]
+                totalCards: 0,
+                totalCustomers: 0,
+                cardsToday: 0,
+                pendingCards: 0
+            }
         };
         
         // Inisialisasi
@@ -371,15 +497,15 @@
             updateDateTime();
             setInterval(updateDateTime, 60000); // Update setiap menit
             
-            checkApiStatus();
-            loadDashboard();
-            
             // Coba load URL web app dari localStorage
             const savedUrl = localStorage.getItem('fior_webapp_url');
             if (savedUrl) {
                 CONFIG.webAppUrl = savedUrl;
                 document.getElementById('webAppUrl').value = savedUrl;
+                checkApiStatus();
             }
+            
+            loadDashboard();
         });
         
         // Fungsi untuk update tanggal dan waktu
@@ -403,24 +529,27 @@
             const statusText = document.getElementById('apiStatusText');
             
             if (!CONFIG.webAppUrl) {
-                statusElement.className = 'spinner-border spinner-border-sm text-warning me-2';
+                statusElement.className = 'bi bi-exclamation-triangle-fill text-warning me-2';
                 statusText.textContent = 'URL belum diatur';
                 return;
             }
             
             // Kirim request ke API
-            fetch(CONFIG.webAppUrl, {
-                method: 'GET',
-                mode: 'no-cors' // Karena CORS restrictions
-            })
-            .then(() => {
-                statusElement.className = 'bi bi-check-circle-fill text-success me-2';
-                statusText.textContent = 'API Online';
-            })
-            .catch(() => {
-                statusElement.className = 'bi bi-x-circle-fill text-danger me-2';
-                statusText.textElement = 'API Offline';
-            });
+            fetch(CONFIG.webAppUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        statusElement.className = 'bi bi-check-circle-fill text-success me-2';
+                        statusText.textContent = 'API Online';
+                    } else {
+                        statusElement.className = 'bi bi-x-circle-fill text-danger me-2';
+                        statusText.textContent = 'API Error';
+                    }
+                })
+                .catch(() => {
+                    statusElement.className = 'bi bi-x-circle-fill text-danger me-2';
+                    statusText.textContent = 'API Offline';
+                });
         }
         
         // Fungsi untuk test koneksi API
@@ -433,10 +562,10 @@
             fetch(CONFIG.webAppUrl)
                 .then(response => response.json())
                 .then(data => {
-                    alert('Koneksi berhasil!\nStatus: ' + data.status + '\nVersi: ' + data.version);
+                    alert('Koneksi berhasil!\nStatus: ' + data.status + '\nVersi: ' + data.version + '\nPesan: ' + data.message);
                 })
                 .catch(error => {
-                    alert('Gagal menghubungi API. Pastikan URL benar dan web app sudah dideploy.');
+                    alert('Gagal menghubungi API. Pastikan URL benar dan web app sudah dideploy.\n\nError: ' + error.message);
                     console.error('API Error:', error);
                 });
         }
@@ -462,17 +591,135 @@
             modal.show();
         }
         
-        // Fungsi untuk save URL web app
-        function saveWebAppUrl() {
-            const url = document.getElementById('webAppUrl').value;
-            if (url) {
-                CONFIG.webAppUrl = url;
-                localStorage.setItem('fior_webapp_url', url);
-                alert('URL berhasil disimpan!');
-                checkApiStatus();
-            } else {
-                alert('URL tidak boleh kosong');
+        // ========== GOOGLE SHEETS FUNCTIONS ==========
+        
+        // Fungsi untuk mengambil data dari Google Sheets
+        async function fetchFromGoogleSheets(sheetName) {
+            if (!CONFIG.webAppUrl) {
+                throw new Error('URL Web App belum diatur');
             }
+            
+            try {
+                const response = await fetch(CONFIG.webAppUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'fetch_data',
+                        sheet: sheetName
+                    })
+                });
+                
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                throw error;
+            }
+        }
+        
+        // Fungsi untuk mengirim data ke Google Sheets
+        async function sendToGoogleSheets(data, sheetName) {
+            if (!CONFIG.webAppUrl) {
+                alert('URL Web App belum diatur. Silakan atur di menu Pengaturan.');
+                return;
+            }
+            
+            try {
+                const response = await fetch(CONFIG.webAppUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'add_data',
+                        sheet: sheetName,
+                        data: data
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showAlert('success', 'Data berhasil disimpan ke Google Sheets!');
+                    return result;
+                } else {
+                    throw new Error(result.message || 'Gagal menyimpan data');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('danger', 'Gagal menyimpan data: ' + error.message);
+                throw error;
+            }
+        }
+        
+        // Fungsi untuk setup sistem melalui API
+        async function setupSystem() {
+            if (!CONFIG.webAppUrl) {
+                alert('URL Web App belum diatur');
+                return;
+            }
+            
+            const modal = new bootstrap.Modal(document.getElementById('setupModal'));
+            modal.show();
+            
+            try {
+                // Step 1: Test connection
+                updateSetupMessage('Menguji koneksi...');
+                const testResponse = await fetch(CONFIG.webAppUrl);
+                const testData = await testResponse.json();
+                
+                if (testData.status !== 'success') {
+                    throw new Error('Koneksi API gagal');
+                }
+                
+                // Step 2: Setup sheets
+                updateSetupMessage('Membuat sheet...');
+                const setupResponse = await fetch(CONFIG.webAppUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'setup_sheets'
+                    })
+                });
+                
+                const setupData = await setupResponse.json();
+                
+                // Step 3: Add sample data
+                updateSetupMessage('Menambahkan data contoh...');
+                const sampleResponse = await fetch(CONFIG.webAppUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'add_sample'
+                    })
+                });
+                
+                const sampleData = await sampleResponse.json();
+                
+                updateSetupMessage('✅ Setup berhasil!');
+                setTimeout(() => {
+                    modal.hide();
+                    showAlert('success', 'Sistem berhasil disetup!');
+                    loadDashboard();
+                }, 1000);
+                
+            } catch (error) {
+                updateSetupMessage('❌ Setup gagal: ' + error.message);
+                setTimeout(() => {
+                    modal.hide();
+                    showAlert('danger', 'Setup gagal: ' + error.message);
+                }, 2000);
+            }
+        }
+        
+        function updateSetupMessage(message) {
+            document.getElementById('setupMessage').textContent = message;
         }
         
         // ========== NAVIGATION FUNCTIONS ==========
@@ -534,166 +781,231 @@
         
         // ========== PAGE LOADING FUNCTIONS ==========
         
-        function loadDashboard() {
-            const content = `
-                <div class="row mb-4">
-                    <!-- Stat Cards -->
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card stat-card">
-                            <div class="card-body">
-                                <div class="stat-icon">
-                                    <i class="bi bi-card-heading"></i>
+        async function loadDashboard() {
+            try {
+                // Simulasi loading data
+                const content = `
+                    <div class="row mb-4">
+                        <!-- Stat Cards -->
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card stat-card">
+                                <div class="card-body">
+                                    <div class="stat-icon">
+                                        <i class="bi bi-card-heading"></i>
+                                    </div>
+                                    <div class="stat-number" id="totalCards">0</div>
+                                    <div class="stat-label">Total Kartu</div>
                                 </div>
-                                <div class="stat-number">${sampleData.stats.totalCards}</div>
-                                <div class="stat-label">Total Kartu</div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card stat-card">
-                            <div class="card-body">
-                                <div class="stat-icon">
-                                    <i class="bi bi-people"></i>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card stat-card">
+                                <div class="card-body">
+                                    <div class="stat-icon">
+                                        <i class="bi bi-people"></i>
+                                    </div>
+                                    <div class="stat-number" id="totalCustomers">0</div>
+                                    <div class="stat-label">Total Pelanggan</div>
                                 </div>
-                                <div class="stat-number">${sampleData.stats.totalCustomers}</div>
-                                <div class="stat-label">Total Pelanggan</div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card stat-card">
-                            <div class="card-body">
-                                <div class="stat-icon">
-                                    <i class="bi bi-calendar-day"></i>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card stat-card">
+                                <div class="card-body">
+                                    <div class="stat-icon">
+                                        <i class="bi bi-calendar-day"></i>
+                                    </div>
+                                    <div class="stat-number" id="cardsToday">0</div>
+                                    <div class="stat-label">Kartu Hari Ini</div>
                                 </div>
-                                <div class="stat-number">${sampleData.stats.cardsToday}</div>
-                                <div class="stat-label">Kartu Hari Ini</div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card stat-card">
-                            <div class="card-body">
-                                <div class="stat-icon">
-                                    <i class="bi bi-clock-history"></i>
-                                </div>
-                                <div class="stat-number">${sampleData.stats.pendingCards}</div>
-                                <div class="stat-label">Menunggu</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="bi bi-card-heading me-2"></i> Kartu Terbaru
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Nama</th>
-                                                <th>Tema</th>
-                                                <th>Pesan</th>
-                                                <th>Status</th>
-                                                <th>Tanggal</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${sampleData.recentCards.map(card => `
-                                                <tr>
-                                                    <td>${card.name}</td>
-                                                    <td>
-                                                        <span class="badge bg-info">${card.theme}</span>
-                                                    </td>
-                                                    <td>${card.message.substring(0, 30)}...</td>
-                                                    <td>
-                                                        <span class="badge ${getStatusBadgeClass(card.status)}">
-                                                            ${getStatusText(card.status)}
-                                                        </span>
-                                                    </td>
-                                                    <td>${card.date}</td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary" title="Lihat">
-                                                            <i class="bi bi-eye"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-success" title="Edit">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            `).join('')}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="text-end mt-3">
-                                    <button class="btn btn-primary" onclick="showCards()">
-                                        <i class="bi bi-plus-circle"></i> Buat Kartu Baru
-                                    </button>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card stat-card">
+                                <div class="card-body">
+                                    <div class="stat-icon">
+                                        <i class="bi bi-clock-history"></i>
+                                    </div>
+                                    <div class="stat-number" id="pendingCards">0</div>
+                                    <div class="stat-label">Menunggu</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="bi bi-people me-2"></i> Pelanggan Terbaru
-                            </div>
-                            <div class="card-body">
-                                <div class="list-group">
-                                    ${sampleData.recentCustomers.map(customer => `
-                                        <div class="list-group-item list-group-item-action">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <h6 class="mb-1">${customer.name}</h6>
-                                                <small>${customer.joinDate}</small>
-                                            </div>
-                                            <p class="mb-1">${customer.phone}</p>
-                                            <small>${customer.email}</small>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                                <div class="text-end mt-3">
-                                    <button class="btn btn-outline-primary" onclick="showCustomers()">
-                                        Lihat Semua
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-card-heading me-2"></i> Kartu Terbaru
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" onclick="showAddCardModal()">
+                                        <i class="bi bi-plus-circle"></i> Baru
                                     </button>
+                                </div>
+                                <div class="card-body">
+                                    <div id="recentCardsList">
+                                        <div class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="mt-2">Memuat data kartu...</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="card mt-4">
-                            <div class="card-header">
-                                <i class="bi bi-lightning me-2"></i> Aksi Cepat
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-people me-2"></i> Pelanggan Terbaru
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" onclick="showAddCustomerModal()">
+                                        <i class="bi bi-person-plus"></i> Baru
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div id="recentCustomersList">
+                                        <div class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="mt-2">Memuat data pelanggan...</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-outline-primary" onclick="showCards()">
-                                        <i class="bi bi-plus-circle"></i> Buat Kartu Baru
-                                    </button>
-                                    <button class="btn btn-outline-success" onclick="showCustomers()">
-                                        <i class="bi bi-person-plus"></i> Tambah Pelanggan
-                                    </button>
-                                    <button class="btn btn-outline-info" onclick="showMedia()">
-                                        <i class="bi bi-upload"></i> Upload Media
-                                    </button>
-                                    <button class="btn btn-outline-warning" onclick="testApiConnection()">
-                                        <i class="bi bi-plug"></i> Test Koneksi API
-                                    </button>
+                            
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <i class="bi bi-lightning me-2"></i> Aksi Cepat
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary" onclick="showAddCardModal()">
+                                            <i class="bi bi-plus-circle"></i> Buat Kartu Baru
+                                        </button>
+                                        <button class="btn btn-outline-success" onclick="showAddCustomerModal()">
+                                            <i class="bi bi-person-plus"></i> Tambah Pelanggan
+                                        </button>
+                                        <button class="btn btn-outline-warning" onclick="setupSystem()">
+                                            <i class="bi bi-gear"></i> Setup Sistem
+                                        </button>
+                                        <button class="btn btn-outline-info" onclick="testApiConnection()">
+                                            <i class="bi bi-plug"></i> Test Koneksi API
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
-            
-            document.getElementById('contentArea').innerHTML = content;
+                `;
+                
+                document.getElementById('contentArea').innerHTML = content;
+                
+                // Load sample data (nanti bisa diganti dengan data real dari Google Sheets)
+                simulateDataLoad();
+                
+            } catch (error) {
+                showAlert('danger', 'Gagal memuat dashboard: ' + error.message);
+            }
         }
         
-        function loadCardsManagement() {
+        function simulateDataLoad() {
+            // Simulasi data loading dengan timeout
+            setTimeout(() => {
+                document.getElementById('totalCards').textContent = '152';
+                document.getElementById('totalCustomers').textContent = '48';
+                document.getElementById('cardsToday').textContent = '12';
+                document.getElementById('pendingCards').textContent = '3';
+                
+                // Recent cards
+                const recentCardsHTML = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Tema</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Ani Wijaya</td>
+                                    <td><span class="badge bg-info">birthday</span></td>
+                                    <td><span class="badge bg-success">Terkirim</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Budi Santoso</td>
+                                    <td><span class="badge bg-warning">anniversary</span></td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Citra Lestari</td>
+                                    <td><span class="badge bg-success">graduation</span></td>
+                                    <td><span class="badge bg-success">Terkirim</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                document.getElementById('recentCardsList').innerHTML = recentCardsHTML;
+                
+                // Recent customers
+                const recentCustomersHTML = `
+                    <div class="list-group">
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Budi Santoso</h6>
+                                <small>2024-01-15</small>
+                            </div>
+                            <p class="mb-1">081234567890</p>
+                            <small>budi@email.com</small>
+                        </div>
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Ani Wijaya</h6>
+                                <small>2024-01-14</small>
+                            </div>
+                            <p class="mb-1">081223344556</p>
+                            <small>ani@email.com</small>
+                        </div>
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Citra Lestari</h6>
+                                <small>2024-01-13</small>
+                            </div>
+                            <p class="mb-1">081112223334</p>
+                            <small>citra@email.com</small>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('recentCustomersList').innerHTML = recentCustomersHTML;
+                
+            }, 1000);
+        }
+        
+        async function loadCardsManagement() {
             const content = `
                 <div class="row mb-4">
                     <div class="col-12">
@@ -702,108 +1014,17 @@
                                 <div>
                                     <i class="bi bi-card-heading me-2"></i> Daftar Kartu
                                 </div>
-                                <button class="btn btn-primary" onclick="showCreateCardModal()">
+                                <button class="btn btn-primary" onclick="showAddCardModal()">
                                     <i class="bi bi-plus-circle"></i> Buat Kartu Baru
                                 </button>
                             </div>
                             <div class="card-body">
-                                <!-- Tabs -->
-                                <ul class="nav nav-tabs" id="cardTabs" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button">Semua</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="sent-tab" data-bs-toggle="tab" data-bs-target="#sent" type="button">Terkirim</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button">Menunggu</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="draft-tab" data-bs-toggle="tab" data-bs-target="#draft" type="button">Draft</button>
-                                    </li>
-                                </ul>
-                                
-                                <!-- Tab Content -->
-                                <div class="tab-content mt-3">
-                                    <div class="tab-pane fade show active" id="all">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Nama Penerima</th>
-                                                        <th>No HP</th>
-                                                        <th>Tema</th>
-                                                        <th>Pesan</th>
-                                                        <th>Status</th>
-                                                        <th>Tanggal</th>
-                                                        <th>Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    ${sampleData.recentCards.map(card => `
-                                                        <tr>
-                                                            <td>#${card.id}</td>
-                                                            <td>${card.name}</td>
-                                                            <td>08*******</td>
-                                                            <td>
-                                                                <span class="badge bg-info">${card.theme}</span>
-                                                            </td>
-                                                            <td>${card.message.substring(0, 20)}...</td>
-                                                            <td>
-                                                                <span class="badge ${getStatusBadgeClass(card.status)}">
-                                                                    ${getStatusText(card.status)}
-                                                                </span>
-                                                            </td>
-                                                            <td>${card.date}</td>
-                                                            <td>
-                                                                <div class="btn-group btn-group-sm">
-                                                                    <button class="btn btn-outline-primary" title="Lihat">
-                                                                        <i class="bi bi-eye"></i>
-                                                                    </button>
-                                                                    <button class="btn btn-outline-success" title="Edit">
-                                                                        <i class="bi bi-pencil"></i>
-                                                                    </button>
-                                                                    <button class="btn btn-outline-danger" title="Hapus">
-                                                                        <i class="bi bi-trash"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    `).join('')}
-                                                </tbody>
-                                            </table>
+                                <div id="cardsTable">
+                                    <div class="text-center py-5">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
                                         </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="sent">Konten untuk kartu terkirim...</div>
-                                    <div class="tab-pane fade" id="pending">Konten untuk kartu menunggu...</div>
-                                    <div class="tab-pane fade" id="draft">Konten untuk draft kartu...</div>
-                                </div>
-                                
-                                <!-- Filter -->
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <label class="form-label">Filter Tanggal:</label>
-                                        <input type="date" class="form-control">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Filter Tema:</label>
-                                        <select class="form-select">
-                                            <option value="">Semua Tema</option>
-                                            <option value="birthday">Ulang Tahun</option>
-                                            <option value="anniversary">Hari Jadi</option>
-                                            <option value="graduation">Wisuda</option>
-                                            <option value="congrats">Selamat</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Filter Status:</label>
-                                        <select class="form-select">
-                                            <option value="">Semua Status</option>
-                                            <option value="sent">Terkirim</option>
-                                            <option value="pending">Menunggu</option>
-                                            <option value="draft">Draft</option>
-                                        </select>
+                                        <p class="mt-2">Memuat data kartu...</p>
                                     </div>
                                 </div>
                             </div>
@@ -814,18 +1035,62 @@
             
             document.getElementById('contentArea').innerHTML = content;
             
-            // Aktifkan Bootstrap tabs
-            const triggerTabList = [].slice.call(document.querySelectorAll('#cardTabs button'));
-            triggerTabList.forEach(triggerEl => {
-                const tabTrigger = new bootstrap.Tab(triggerEl);
-                triggerEl.addEventListener('click', event => {
-                    event.preventDefault();
-                    tabTrigger.show();
-                });
-            });
+            // Load data kartu
+            setTimeout(() => {
+                const cardsData = [
+                    { id: 1, nama_penerima: 'Ani Wijaya', no_hp: '081223344556', tema: 'birthday', pesan: 'Selamat ulang tahun!', status: 'Sent', timestamp: '2024-01-20 10:30:00' },
+                    { id: 2, nama_penerima: 'Budi Santoso', no_hp: '081234567890', tema: 'anniversary', pesan: 'Selamat hari jadi!', status: 'Pending', timestamp: '2024-01-20 11:45:00' },
+                    { id: 3, nama_penerima: 'Citra Lestari', no_hp: '081112223334', tema: 'graduation', pesan: 'Selamat wisuda!', status: 'Sent', timestamp: '2024-01-19 09:15:00' }
+                ];
+                
+                const cardsTableHTML = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Penerima</th>
+                                    <th>No HP</th>
+                                    <th>Tema</th>
+                                    <th>Pesan</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${cardsData.map((card, index) => `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${card.nama_penerima}</td>
+                                        <td>${card.no_hp}</td>
+                                        <td><span class="badge bg-info">${card.tema}</span></td>
+                                        <td>${card.pesan.substring(0, 30)}...</td>
+                                        <td><span class="badge ${card.status === 'Sent' ? 'bg-success' : 'bg-warning'}">${card.status}</span></td>
+                                        <td>${card.timestamp.split(' ')[0]}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" onclick="viewCard(${card.id})">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteCard(${card.id})">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted">Menampilkan ${cardsData.length} kartu</small>
+                    </div>
+                `;
+                
+                document.getElementById('cardsTable').innerHTML = cardsTableHTML;
+            }, 1500);
         }
         
-        function loadCustomersManagement() {
+        async function loadCustomersManagement() {
             const content = `
                 <div class="row">
                     <div class="col-12">
@@ -839,85 +1104,12 @@
                                 </button>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Nama</th>
-                                                <th>No HP</th>
-                                                <th>Email</th>
-                                                <th>Alamat</th>
-                                                <th>Tanggal Daftar</th>
-                                                <th>Total Kartu</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${sampleData.recentCustomers.map(customer => `
-                                                <tr>
-                                                    <td>#${customer.id}</td>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-sm me-2">
-                                                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                                                    ${customer.name.charAt(0)}
-                                                                </div>
-                                                            </div>
-                                                            <div>${customer.name}</div>
-                                                        </div>
-                                                    </td>
-                                                    <td>${customer.phone}</td>
-                                                    <td>${customer.email}</td>
-                                                    <td>Jl. Contoh No. 123</td>
-                                                    <td>${customer.joinDate}</td>
-                                                    <td>
-                                                        <span class="badge bg-primary">${Math.floor(Math.random() * 10) + 1}</span>
-                                                    </td>
-                                                    <td>
-                                                        <div class="btn-group btn-group-sm">
-                                                            <button class="btn btn-outline-primary" title="Detail">
-                                                                <i class="bi bi-eye"></i>
-                                                            </button>
-                                                            <button class="btn btn-outline-success" title="Edit">
-                                                                <i class="bi bi-pencil"></i>
-                                                            </button>
-                                                            <button class="btn btn-outline-info" title="Buat Kartu">
-                                                                <i class="bi bi-card-heading"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            `).join('')}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                                <!-- Search and Filter -->
-                                <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Cari pelanggan...">
-                                            <button class="btn btn-outline-primary" type="button">
-                                                <i class="bi bi-search"></i>
-                                            </button>
+                                <div id="customersTable">
+                                    <div class="text-center py-5">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
                                         </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select class="form-select">
-                                            <option value="">Sortir berdasarkan</option>
-                                            <option value="name">Nama</option>
-                                            <option value="date">Tanggal Daftar</option>
-                                            <option value="cards">Jumlah Kartu</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select class="form-select">
-                                            <option value="10">10 per halaman</option>
-                                            <option value="25">25 per halaman</option>
-                                            <option value="50">50 per halaman</option>
-                                            <option value="100">100 per halaman</option>
-                                        </select>
+                                        <p class="mt-2">Memuat data pelanggan...</p>
                                     </div>
                                 </div>
                             </div>
@@ -927,6 +1119,67 @@
             `;
             
             document.getElementById('contentArea').innerHTML = content;
+            
+            // Load data pelanggan
+            setTimeout(() => {
+                const customersData = [
+                    { id: 1, nama: 'Budi Santoso', no_hp: '081234567890', email: 'budi@email.com', alamat: 'Jl. Merdeka No. 1', tgl_daftar: '2024-01-15' },
+                    { id: 2, nama: 'Ani Wijaya', no_hp: '081223344556', email: 'ani@email.com', alamat: 'Jl. Sudirman No. 45', tgl_daftar: '2024-01-14' },
+                    { id: 3, nama: 'Citra Lestari', no_hp: '081112223334', email: 'citra@email.com', alamat: 'Jl. Thamrin No. 12', tgl_daftar: '2024-01-13' }
+                ];
+                
+                const customersTableHTML = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>No HP</th>
+                                    <th>Email</th>
+                                    <th>Alamat</th>
+                                    <th>Tanggal Daftar</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${customersData.map((customer, index) => `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm me-2">
+                                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                                        ${customer.nama.charAt(0)}
+                                                    </div>
+                                                </div>
+                                                <div>${customer.nama}</div>
+                                            </div>
+                                        </td>
+                                        <td>${customer.no_hp}</td>
+                                        <td>${customer.email}</td>
+                                        <td>${customer.alamat.substring(0, 20)}...</td>
+                                        <td>${customer.tgl_daftar}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" onclick="viewCustomer(${customer.id})">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteCustomer(${customer.id})">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted">Menampilkan ${customersData.length} pelanggan</small>
+                    </div>
+                `;
+                
+                document.getElementById('customersTable').innerHTML = customersTableHTML;
+            }, 1500);
         }
         
         function loadMediaManagement() {
@@ -944,7 +1197,6 @@
                             </div>
                             <div class="card-body">
                                 <div class="row" id="mediaGallery">
-                                    <!-- Media items akan dimuat di sini -->
                                     <div class="col-md-3 mb-3">
                                         <div class="card">
                                             <img src="https://via.placeholder.com/300x200/4361ee/ffffff?text=Birthday" class="card-img-top" alt="Birthday Theme">
@@ -984,19 +1236,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 mb-3">
-                                        <div class="card">
-                                            <img src="https://via.placeholder.com/300x200/7209b7/ffffff?text=Congratulations" class="card-img-top" alt="Congratulations Theme">
-                                            <div class="card-body">
-                                                <h6 class="card-title">Congratulations Theme</h6>
-                                                <p class="card-text small">210 KB • JPG</p>
-                                                <div class="btn-group w-100">
-                                                    <button class="btn btn-sm btn-outline-primary">Gunakan</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Hapus</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 
                                 <!-- Media Stats -->
@@ -1004,7 +1243,7 @@
                                     <div class="col-md-3">
                                         <div class="card">
                                             <div class="card-body text-center">
-                                                <h4 class="text-primary">24</h4>
+                                                <h4 class="text-primary">3</h4>
                                                 <p class="text-muted mb-0">Total Media</p>
                                             </div>
                                         </div>
@@ -1012,7 +1251,7 @@
                                     <div class="col-md-3">
                                         <div class="card">
                                             <div class="card-body text-center">
-                                                <h4 class="text-success">18.5 MB</h4>
+                                                <h4 class="text-success">750 KB</h4>
                                                 <p class="text-muted mb-0">Total Ukuran</p>
                                             </div>
                                         </div>
@@ -1020,15 +1259,15 @@
                                     <div class="col-md-3">
                                         <div class="card">
                                             <div class="card-body text-center">
-                                                <h4 class="text-info">12</h4>
-                                                <p class="text-muted mb-0">Tema Aktif</p>
+                                                <h4 class="text-info">3</h4>
+                                                <p class="text-muted mb-0">Tema Tersedia</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="card">
                                             <div class="card-body text-center">
-                                                <h4 class="text-warning">85%</h4>
+                                                <h4 class="text-warning">15%</h4>
                                                 <p class="text-muted mb-0">Storage Terpakai</p>
                                             </div>
                                         </div>
@@ -1059,9 +1298,9 @@
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <label class="form-label">URL Web App</label>
+                                        <label class="form-label">URL Web App *</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="settingsWebAppUrl" value="${CONFIG.webAppUrl}">
+                                            <input type="text" class="form-control" id="settingsWebAppUrl" value="${CONFIG.webAppUrl}" required>
                                             <button class="btn btn-outline-primary" type="button" onclick="testApiConnection()">
                                                 Test
                                             </button>
@@ -1088,21 +1327,6 @@
                                         </select>
                                     </div>
                                     
-                                    <div class="mb-3">
-                                        <label class="form-label">Limit Upload Media (MB)</label>
-                                        <input type="number" class="form-control" value="5" min="1" max="10">
-                                    </div>
-                                    
-                                    <div class="form-check form-switch mb-3">
-                                        <input class="form-check-input" type="checkbox" id="notificationsSwitch" checked>
-                                        <label class="form-check-label" for="notificationsSwitch">Aktifkan Notifikasi</label>
-                                    </div>
-                                    
-                                    <div class="form-check form-switch mb-3">
-                                        <input class="form-check-input" type="checkbox" id="autoSaveSwitch" checked>
-                                        <label class="form-check-label" for="autoSaveSwitch">Auto-save Draft</label>
-                                    </div>
-                                    
                                     <div class="text-end">
                                         <button type="button" class="btn btn-primary" onclick="saveSettings()">
                                             Simpan Pengaturan
@@ -1111,12 +1335,31 @@
                                 </form>
                             </div>
                         </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <i class="bi bi-wrench me-2"></i> Tools Sistem
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-primary" onclick="setupSystem()">
+                                        <i class="bi bi-gear"></i> Setup Sistem Lengkap
+                                    </button>
+                                    <button class="btn btn-outline-warning" onclick="clearCache()">
+                                        <i class="bi bi-trash"></i> Clear Cache
+                                    </button>
+                                    <button class="btn btn-outline-danger" onclick="resetSystem()">
+                                        <i class="bi bi-exclamation-triangle"></i> Reset Sistem
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-header">
-                                <i class="bi bi-shield-check me-2"></i> Sistem Info
+                                <i class="bi bi-info-circle me-2"></i> Sistem Info
                             </div>
                             <div class="card-body">
                                 <div class="mb-3">
@@ -1135,62 +1378,38 @@
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <label class="form-label">Terakhir Update</label>
-                                    <input type="text" class="form-control" value="${new Date().toLocaleDateString('id-ID')}" readonly>
+                                    <label class="form-label">Browser</label>
+                                    <input type="text" class="form-control" value="${navigator.userAgent.substring(0, 50)}..." readonly>
                                 </div>
                                 
-                                <hr>
-                                
-                                <h6 class="mb-3">Aksi Sistem</h6>
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-outline-primary" onclick="backupData()">
-                                        <i class="bi bi-download"></i> Backup Data
-                                    </button>
-                                    <button class="btn btn-outline-warning" onclick="clearCache()">
-                                        <i class="bi bi-trash"></i> Clear Cache
-                                    </button>
-                                    <button class="btn btn-outline-danger" onclick="resetSystem()">
-                                        <i class="bi bi-exclamation-triangle"></i> Reset Sistem
-                                    </button>
+                                <div class="mb-3">
+                                    <label class="form-label">Local Storage</label>
+                                    <input type="text" class="form-control" value="${localStorage.getItem('fior_webapp_url') ? 'Ada' : 'Kosong'}" readonly>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="card mt-4">
                             <div class="card-header">
-                                <i class="bi bi-info-circle me-2"></i> Panduan Cepat
+                                <i class="bi bi-question-circle me-2"></i> Bantuan
                             </div>
                             <div class="card-body">
                                 <div class="accordion" id="helpAccordion">
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
                                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help1">
-                                                Cara Deploy Web App
+                                                Cara Setup
                                             </button>
                                         </h2>
                                         <div id="help1" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
                                             <div class="accordion-body">
                                                 <ol class="small">
-                                                    <li>Buka Google Sheets</li>
-                                                    <li>Pilih <strong>Ekstensi > Apps Script</strong></li>
-                                                    <li>Klik <strong>Deploy > Deploy sebagai web app</strong></li>
-                                                    <li>Set <strong>"Execute as" = Me</strong></li>
-                                                    <li>Set <strong>"Who has access" = Anyone</strong></li>
-                                                    <li>Klik <strong>Deploy</strong></li>
-                                                    <li>Salin URL yang diberikan</li>
+                                                    <li>Deploy Google Apps Script sebagai web app</li>
+                                                    <li>Salin URL web app</li>
+                                                    <li>Tempel URL di pengaturan</li>
+                                                    <li>Klik "Setup Sistem Lengkap"</li>
+                                                    <li>Tunggu hingga proses selesai</li>
                                                 </ol>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help2">
-                                                Cara Menghubungkan Mobile App
-                                            </button>
-                                        </h2>
-                                        <div id="help2" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
-                                            <div class="accordion-body">
-                                                <p class="small">Masukkan URL web app di aplikasi mobile pada bagian pengaturan API.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1210,41 +1429,113 @@
             }, 1000);
         }
         
-        // ========== HELPER FUNCTIONS ==========
-        
-        function getStatusBadgeClass(status) {
-            switch(status) {
-                case 'sent': return 'bg-success';
-                case 'pending': return 'bg-warning';
-                case 'draft': return 'bg-secondary';
-                default: return 'bg-info';
-            }
-        }
-        
-        function getStatusText(status) {
-            switch(status) {
-                case 'sent': return 'Terkirim';
-                case 'pending': return 'Menunggu';
-                case 'draft': return 'Draft';
-                default: return status;
-            }
-        }
-        
-        // ========== ACTION FUNCTIONS ==========
-        
-        function showCreateCardModal() {
-            alert('Fitur "Buat Kartu Baru" akan segera tersedia!');
-            // Implementasi modal untuk membuat kartu baru
-        }
+        // ========== MODAL FUNCTIONS ==========
         
         function showAddCustomerModal() {
-            alert('Fitur "Tambah Pelanggan" akan segera tersedia!');
-            // Implementasi modal untuk menambah pelanggan
+            const modal = new bootstrap.Modal(document.getElementById('addCustomerModal'));
+            modal.show();
+            
+            // Setup form submission
+            document.getElementById('customerForm').onsubmit = function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    timestamp: new Date().toISOString(),
+                    nama: this.nama.value,
+                    no_hp: this.no_hp.value,
+                    email: this.email.value || '',
+                    alamat: this.alamat.value || '',
+                    catatan: this.catatan.value || '',
+                    tgl_daftar: this.tgl_daftar.value || new Date().toISOString().split('T')[0]
+                };
+                
+                // Simpan ke Google Sheets
+                sendToGoogleSheets(formData, 'customers')
+                    .then(() => {
+                        modal.hide();
+                        this.reset();
+                        showCustomers(); // Reload data
+                    })
+                    .catch(error => {
+                        console.error('Error saving customer:', error);
+                    });
+            };
+        }
+        
+        function showAddCardModal() {
+            const modal = new bootstrap.Modal(document.getElementById('addCardModal'));
+            modal.show();
+            
+            // Setup form submission
+            document.getElementById('cardForm').onsubmit = function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    timestamp: new Date().toISOString(),
+                    nama_penerima: this.nama_penerima.value,
+                    no_hp: this.no_hp.value,
+                    tema: this.tema.value,
+                    pesan: this.pesan.value,
+                    link: 'https://fiorcards.com/card/' + Math.random().toString(36).substr(2, 9),
+                    media_url: this.media_url.value || '',
+                    status: this.status.value
+                };
+                
+                // Simpan ke Google Sheets
+                sendToGoogleSheets(formData, 'cards')
+                    .then(() => {
+                        modal.hide();
+                        this.reset();
+                        showCards(); // Reload data
+                    })
+                    .catch(error => {
+                        console.error('Error saving card:', error);
+                    });
+            };
         }
         
         function showUploadMediaModal() {
-            alert('Fitur "Upload Media" akan segera tersedia!');
-            // Implementasi modal untuk upload media
+            alert('Fitur upload media akan segera tersedia di versi berikutnya!');
+        }
+        
+        // ========== HELPER FUNCTIONS ==========
+        
+        function showAlert(type, message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.querySelector('.main-content').insertBefore(alertDiv, document.querySelector('.main-content').firstChild);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentElement) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        function viewCard(cardId) {
+            alert(`Melihat detail kartu ID: ${cardId}\n\nFitur ini akan segera tersedia!`);
+        }
+        
+        function deleteCard(cardId) {
+            if (confirm('Apakah Anda yakin ingin menghapus kartu ini?')) {
+                showAlert('info', 'Menghapus kartu... (fitur akan segera tersedia)');
+            }
+        }
+        
+        function viewCustomer(customerId) {
+            alert(`Melihat detail pelanggan ID: ${customerId}\n\nFitur ini akan segera tersedia!`);
+        }
+        
+        function deleteCustomer(customerId) {
+            if (confirm('Apakah Anda yakin ingin menghapus pelanggan ini?')) {
+                showAlert('info', 'Menghapus pelanggan... (fitur akan segera tersedia)');
+            }
         }
         
         function saveSettings() {
@@ -1252,57 +1543,27 @@
             if (url) {
                 CONFIG.webAppUrl = url;
                 localStorage.setItem('fior_webapp_url', url);
-                alert('Pengaturan berhasil disimpan!');
+                document.getElementById('webAppUrl').value = url;
+                showAlert('success', 'Pengaturan berhasil disimpan!');
                 checkApiStatus();
             } else {
-                alert('URL Web App tidak boleh kosong');
+                showAlert('danger', 'URL Web App tidak boleh kosong');
             }
-        }
-        
-        function backupData() {
-            alert('Fitur backup data akan segera tersedia!');
         }
         
         function clearCache() {
             localStorage.removeItem('fior_webapp_url');
             CONFIG.webAppUrl = '';
-            alert('Cache berhasil dibersihkan!');
-            location.reload();
+            showAlert('info', 'Cache berhasil dibersihkan! Halaman akan dimuat ulang.');
+            setTimeout(() => location.reload(), 1000);
         }
         
         function resetSystem() {
-            if (confirm('Apakah Anda yakin ingin mereset sistem? Semua pengaturan akan dikembalikan ke default.')) {
+            if (confirm('Apakah Anda yakin ingin mereset sistem?\n\nSemua pengaturan akan dikembalikan ke default dan cache akan dibersihkan.')) {
                 localStorage.clear();
-                alert('Sistem berhasil direset! Halaman akan dimuat ulang.');
-                location.reload();
+                showAlert('warning', 'Sistem berhasil direset! Halaman akan dimuat ulang.');
+                setTimeout(() => location.reload(), 1000);
             }
-        }
-        
-        // ========== API FUNCTIONS ==========
-        
-        // Fungsi untuk mengirim data ke Google Apps Script
-        function sendToGoogleSheets(data, endpoint) {
-            if (!CONFIG.webAppUrl) {
-                alert('URL Web App belum diatur. Silakan atur di menu Pengaturan.');
-                return;
-            }
-            
-            fetch(CONFIG.webAppUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log('Success:', result);
-                alert('Data berhasil dikirim ke Google Sheets!');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Gagal mengirim data: ' + error.message);
-            });
         }
     </script>
 </body>
