@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>🎴 FIOR Card - Digital Greeting</title>
+    <title>FIOR Card - Admin Panel</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
-        /* ========== VARIABLES & THEMES ========== */
         * {
             margin: 0;
             padding: 0;
@@ -20,7 +22,6 @@
         }
 
         :root {
-            --navy-deep: #0a1929;
             --navy: #1e3a5f;
             --navy-light: #2b4c73;
             --gold: #d4af37;
@@ -31,1149 +32,1703 @@
             --gray-200: #e2e8f0;
             --gray-600: #475569;
             --success: #0f766e;
-            
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
+            --danger: #b91c1c;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.05);
-            
-            --radius-sm: 0.375rem;
-            --radius-md: 0.5rem;
-            --radius-lg: 0.75rem;
-            --radius-xl: 1rem;
-            --radius-2xl: 1.5rem;
-            
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Theme Variables */
-        .theme-birthday {
-            --theme-color: #2196f3;
-            --theme-dark: #1565c0;
-            --theme-light: #e3f2fd;
-            --theme-gradient: linear-gradient(145deg, #2196f3, #1565c0);
-            --theme-bg: linear-gradient(145deg, #e3f2fd, #bbdefb);
-            --theme-emoji: '🎂';
-            --theme-icon: '🎂';
-        }
-        .theme-valentine {
-            --theme-color: #e91e63;
-            --theme-dark: #c2185b;
-            --theme-light: #fce4ec;
-            --theme-gradient: linear-gradient(145deg, #e91e63, #c2185b);
-            --theme-bg: linear-gradient(145deg, #fce4ec, #f8bbd9);
-            --theme-emoji: '❤️';
-            --theme-icon: '❤️';
-        }
-        .theme-wedding {
-            --theme-color: #ff9800;
-            --theme-dark: #ef6c00;
-            --theme-light: #fff3e0;
-            --theme-gradient: linear-gradient(145deg, #ff9800, #ef6c00);
-            --theme-bg: linear-gradient(145deg, #fff3e0, #ffe0b2);
-            --theme-emoji: '💍';
-            --theme-icon: '💍';
-        }
-        .theme-anniversary {
-            --theme-color: #9c27b0;
-            --theme-dark: #7b1fa2;
-            --theme-light: #f3e5f5;
-            --theme-gradient: linear-gradient(145deg, #9c27b0, #7b1fa2);
-            --theme-bg: linear-gradient(145deg, #f3e5f5, #e1bee7);
-            --theme-emoji: '💑';
-            --theme-icon: '💑';
-        }
-        .theme-graduation {
-            --theme-color: #4caf50;
-            --theme-dark: #2e7d32;
-            --theme-light: #e8f5e9;
-            --theme-gradient: linear-gradient(145deg, #4caf50, #2e7d32);
-            --theme-bg: linear-gradient(145deg, #e8f5e9, #c8e6c9);
-            --theme-emoji: '🎓';
-            --theme-icon: '🎓';
-        }
-        .theme-condolence {
-            --theme-color: #607d8b;
-            --theme-dark: #455a64;
-            --theme-light: #eceff1;
-            --theme-gradient: linear-gradient(145deg, #607d8b, #455a64);
-            --theme-bg: linear-gradient(145deg, #eceff1, #cfd8dc);
-            --theme-emoji: '🕊️';
-            --theme-icon: '🕊️';
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--theme-bg);
+            background: var(--soft-white);
             color: var(--gray-600);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            transition: var(--transition);
-            position: relative;
-            overflow-x: hidden;
         }
 
-        /* ===== FLOATING ANIMATIONS ===== */
-        .floating-elements {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .floating-item {
-            position: absolute;
-            font-size: 20px;
-            opacity: 0;
-            animation: float 15s linear infinite;
-            color: var(--theme-color);
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-
-        .snowflake {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.7;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(100vh); }
-        }
-
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: var(--theme-color);
-            opacity: 0.6;
-            animation: confetti-fall 5s linear infinite;
-        }
-
-        @keyframes confetti-fall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 0.6; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-
-        /* ===== CARD CONTAINER ===== */
-        .card-wrapper {
-            width: 100%;
-            max-width: 600px;
-            perspective: 1000px;
-            position: relative;
-            z-index: 10;
-            animation: cardAppear 0.8s ease;
-        }
-
-        @keyframes cardAppear {
-            from { opacity: 0; transform: translateY(40px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .card {
+        /* ===== HEADER DENGAN LOGO FIOR ===== */
+        .header {
             background: var(--white);
-            border-radius: var(--radius-2xl);
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-            transition: var(--transition);
-            border: 1px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .card:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 30px 40px -10px rgba(0,0,0,0.15);
-        }
-
-        /* ===== CARD HEADER ===== */
-        .card-header {
-            background: var(--theme-gradient);
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.3;
-            animation: rotate 60s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: var(--shadow);
         }
 
         .logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            color: white;
-            font-size: 0.9rem;
-            z-index: 20;
-            background: rgba(255,255,255,0.15);
-            padding: 8px 16px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3);
-            text-decoration: none;
-            transition: var(--transition);
+            gap: 1rem;
         }
 
-        .logo:hover {
-            background: rgba(255,255,255,0.25);
-            transform: scale(1.05);
-        }
-
-        .logo-icon {
-            width: 22px;
-            height: 22px;
+        .logo-image {
+            width: 45px;
+            height: 45px;
             background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            filter: brightness(0) invert(1);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
-        .theme-icon {
-            font-size: 5rem;
-            margin-bottom: 15px;
-            animation: bounce 3s ease-in-out infinite;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
-            display: inline-block;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-
-        .greeting {
+        .logo-text {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            letter-spacing: -0.02em;
-            animation: fadeInUp 0.6s ease;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy);
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .logo-text span {
+            color: var(--gold);
         }
 
-        .to-label {
-            color: rgba(255,255,255,0.9);
-            font-size: 0.9rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
+        .datetime {
+            background: var(--gray-100);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            border: 1px solid var(--gray-200);
+            color: var(--navy);
+            font-weight: 500;
         }
 
-        .recipient-name {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            word-break: break-word;
-            line-height: 1.2;
-            font-family: 'Playfair Display', serif;
+        /* ===== CONTAINER ===== */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 73px);
         }
 
-        /* ===== CARD BODY ===== */
-        .card-body {
-            padding: 35px 30px;
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
             background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 73px;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
         }
 
-        .message-card {
-            background: linear-gradient(145deg, var(--soft-white), var(--white));
-            border-radius: var(--radius-xl);
-            padding: 35px 30px;
-            border: 2px dashed var(--theme-color);
-            position: relative;
-            margin-bottom: 30px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
-            animation: fadeIn 0.6s ease 0.2s both;
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--gray-600);
+            border-radius: 0.75rem;
+            margin-bottom: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .nav-item i {
+            width: 24px;
+            color: var(--gray-400);
         }
 
-        .message-card::before {
-            content: '💌';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--white);
-            padding: 10px 18px;
+        .nav-item:hover {
+            background: var(--gold-light);
+            color: var(--navy);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(145deg, var(--navy), var(--navy-light));
+            color: white;
+        }
+
+        .nav-item.active i {
+            color: white;
+        }
+
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--soft-white);
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--success);
             border-radius: 50%;
-            border: 2px dashed var(--theme-color);
-            font-size: 2rem;
-            z-index: 2;
             animation: pulse 2s infinite;
-            box-shadow: var(--shadow-md);
         }
 
         @keyframes pulse {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.1); }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
         }
 
-        .message {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--gray-600);
-            text-align: center;
-            font-style: italic;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Playfair Display', serif;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ===== MEDIA SECTION - RAPIH ===== */
-        .media-section {
-            margin-top: 30px;
-            animation: fadeIn 0.6s ease 0.3s both;
-        }
-
-        .media-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--theme-color);
-            font-weight: 600;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--theme-light);
-            font-size: 1.1rem;
-        }
-
-        .media-header i {
-            font-size: 1.2rem;
-        }
-
-        .media-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .media-card {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            transition: var(--transition);
-            animation: slideUp 0.5s ease;
-            animation-fill-mode: both;
-        }
-
-        .media-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--theme-color);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .media-card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .media-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--theme-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--theme-color);
-            font-size: 1.2rem;
-        }
-
-        .media-info {
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
             flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            height: calc(100vh - 73px);
         }
 
-        .media-title {
-            font-weight: 600;
-            color: var(--navy);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .media-badge {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 20px;
-            background: var(--gray-100);
-            color: var(--gray-600);
-            margin-left: auto;
-        }
-
-        .media-url {
-            font-size: 0.8rem;
-            color: var(--gray-600);
-            word-break: break-all;
-            background: var(--gray-100);
-            padding: 10px 12px;
-            border-radius: var(--radius-md);
-            margin: 12px 0;
-            border: 1px solid var(--gray-200);
-            font-family: monospace;
-        }
-
-        .media-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .media-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border: none;
-            border-radius: var(--radius-md);
-            background: var(--theme-gradient);
-            color: white;
-            font-size: 0.8rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: var(--transition);
-        }
-
-        .media-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .media-btn.secondary {
-            background: var(--gray-200);
-            color: var(--gray-800);
-        }
-
-        .preview-container {
-            margin-top: 25px;
-            padding: 25px;
-            background: var(--soft-white);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--theme-color);
+        .page {
             display: none;
-            animation: scaleIn 0.3s ease;
+            animation: fadeIn 0.3s ease;
         }
 
-        .preview-container.active {
+        .page.active {
             display: block;
         }
 
-        .preview-header {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .page-title i {
+            color: var(--gold);
+        }
+
+        /* ===== FORM CARD ===== */
+        .form-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label i {
+            color: var(--gold);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            background: var(--soft-white);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.75rem;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* ===== URL MEDIA SECTION ===== */
+        .url-media-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-add-url {
+            padding: 0.875rem 1.75rem;
+            background: var(--navy);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-add-url:hover {
+            background: var(--navy-light);
+            transform: translateY(-2px);
+        }
+
+        .url-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .url-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--soft-white);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.75rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .url-item i {
+            color: var(--gold);
+        }
+
+        .url-text {
+            flex: 1;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            word-break: break-all;
+        }
+
+        .url-item-remove {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .url-item-remove:hover {
+            background: rgba(185, 28, 28, 0.1);
+            transform: scale(1.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ===== THEME GRID ===== */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .theme-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-card:hover {
+            border-color: var(--gold);
+            background: var(--gold-light);
+            transform: translateY(-4px);
+        }
+
+        .theme-card.active {
+            background: linear-gradient(145deg, var(--navy), var(--navy-light));
+            border-color: var(--navy);
+        }
+
+        .theme-card.active .theme-emoji,
+        .theme-card.active .theme-name {
+            color: white;
+        }
+
+        .theme-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, var(--navy), var(--navy-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-success {
+            background: linear-gradient(145deg, var(--success), #0a5c4c);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* ===== RESULT CARD DENGAN QR CODE ===== */
+        .result-card {
+            background: var(--white);
+            border: 1px solid var(--success);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .result-card.active {
+            display: block;
+            animation: slideInUp 0.3s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .link-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--soft-white);
+            padding: 1rem 1.25rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            margin: 1rem 0;
+        }
+
+        .short-link {
+            flex: 1;
+            color: var(--navy);
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.95rem;
+        }
+
+        .copy-btn {
+            background: var(--navy);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--navy-light);
+        }
+
+        .qrcode-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        #qrcode {
+            padding: 0.5rem;
+            background: white;
+            border-radius: 0.5rem;
+        }
+
+        /* ===== TABLES ===== */
+        .table-container {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 1rem;
+            overflow: auto;
+            max-height: 500px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: var(--gray-100);
+            color: var(--navy);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            background: var(--gray-100);
+            z-index: 10;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        /* ===== MODAL - FIX SCROLL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            color: var(--navy);
-            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: sticky;
+            top: 0;
+            background: white;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
         }
 
-        .preview-close {
+        .modal-header h3 {
+            color: var(--navy);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .modal-close {
             background: none;
             border: none;
-            color: var(--gray-600);
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: var(--transition);
+            color: var(--gray-600);
+            transition: all 0.2s;
         }
 
-        .preview-close:hover {
+        .modal-close:hover {
             color: var(--danger);
             transform: scale(1.1);
         }
 
-        .preview-image {
-            width: 100%;
-            max-height: 350px;
-            object-fit: contain;
-            border-radius: var(--radius-lg);
-            border: 3px solid white;
-            box-shadow: var(--shadow-lg);
-            background: var(--white);
+        .modal-body {
+            overflow-y: auto;
+            padding-right: 0.5rem;
         }
 
-        .preview-video {
-            width: 100%;
-            max-height: 350px;
-            border-radius: var(--radius-lg);
-            border: 3px solid white;
-            box-shadow: var(--shadow-lg);
-            background: black;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* ===== CARD FOOTER ===== */
-        .card-footer {
-            padding: 30px;
-            text-align: center;
-            background: var(--soft-white);
-            border-top: 1px solid var(--gray-200);
-            animation: fadeIn 0.6s ease 0.4s both;
-        }
-
-        .company {
-            margin-bottom: 20px;
-        }
-
-        .company-logo {
-            width: 40px;
-            height: 40px;
-            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin: 0 auto 10px;
-            animation: gentleFloat 4s ease-in-out infinite;
-        }
-
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .company-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 5px;
-        }
-
-        .company-tagline {
-            color: var(--gray-600);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .contact-link {
-            color: var(--navy);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 20px;
-            border-radius: 50px;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            transition: var(--transition);
-            font-size: 0.9rem;
-        }
-
-        .contact-link:hover {
-            background: var(--theme-color);
-            color: white;
-            border-color: var(--theme-color);
-            transform: translateY(-3px);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            padding: 12px 28px;
-            border: none;
-            border-radius: 50px;
-            background: var(--theme-gradient);
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: var(--transition);
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-size: 0.95rem;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .action-btn.share {
-            background: linear-gradient(145deg, #25D366, #128C7E);
-        }
-
-        .action-btn.print {
-            background: linear-gradient(145deg, #6c757d, #495057);
-        }
-
-        /* ===== NOTIFICATION ===== */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: var(--radius-lg);
-            color: white;
-            font-weight: 500;
-            z-index: 10000;
-            animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
-            box-shadow: var(--shadow-xl);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            max-width: 350px;
+        /* ===== ALERTS ===== */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
             display: none;
+            border-left: 4px solid;
+            animation: slideInRight 0.3s ease;
         }
 
-        .notification.show {
-            display: flex;
+        .alert-success {
+            background: rgba(15, 118, 110, 0.1);
+            border-color: var(--success);
+            color: var(--success);
         }
 
-        .notification.success {
-            background: linear-gradient(145deg, #0f766e, #0a5c4c);
-        }
-
-        .notification.error {
-            background: linear-gradient(145deg, #b91c1c, #991b1b);
+        .alert-error {
+            background: rgba(185, 28, 28, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
         }
 
         @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(100%); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(100%); }
+        /* ===== LOADING ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--gold-light);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== SHORT LINK GENERATOR ===== */
+        .shortlink-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .shortlink-info i {
+            color: var(--gold);
         }
 
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 600px) {
-            .card-header { padding: 30px 20px; }
-            .greeting { font-size: 2rem; }
-            .recipient-name { font-size: 1.8rem; }
-            .theme-icon { font-size: 4rem; }
-            .card-body { padding: 25px 20px; }
-            .message-card { padding: 30px 20px; }
-            .message { font-size: 1rem; }
-            .media-grid { grid-template-columns: 1fr; }
-            .action-buttons { flex-direction: column; }
-            .action-btn { width: 100%; }
-        }
-
-        @media (max-width: 400px) {
-            .greeting { font-size: 1.8rem; }
-            .recipient-name { font-size: 1.5rem; }
-            .theme-icon { font-size: 3.5rem; }
-            .card-footer { padding: 25px; }
-        }
-
-        /* ===== PRINT STYLES ===== */
-        @media print {
-            .floating-elements, .action-buttons, .media-actions, .preview-close {
-                display: none !important;
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { 
+                width: 100%; 
+                position: relative;
+                top: 0;
+                height: auto;
             }
-            .card {
-                box-shadow: none;
-                border: 1px solid #ccc;
-            }
+            .url-media-group { flex-direction: column; }
+            .btn-add-url { width: 100%; }
+            .link-container { flex-direction: column; }
+            .copy-btn { width: 100%; }
         }
     </style>
 </head>
-<body class="theme-birthday">
-    <!-- Floating Animations -->
-    <div id="floatingContainer" class="floating-elements"></div>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
 
-    <!-- Main Card -->
-    <div class="card-wrapper">
-        <div class="card">
-            <!-- Card Header -->
-            <div class="card-header">
-                <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="logo">
-                    <div class="logo-icon"></div>
-                    <span>FIOR Florist</span>
-                </a>
-                
-                <div class="theme-icon" id="themeIcon">🎂</div>
-                <h1 class="greeting" id="greetingText">Happy Birthday</h1>
-                <div class="to-label">Kepada Yth.</div>
-                <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
-            </div>
-            
-            <!-- Card Body -->
-            <div class="card-body">
-                <!-- Message Card -->
-                <div class="message-card">
-                    <div class="message" id="messageText">
-                        [Pesan ucapan akan muncul di sini. Kartu ini dikirim dengan penuh kasih dari FIOR Florist.]
-                    </div>
+    <!-- Header dengan Logo FIOR -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-image"></div>
+            <div class="logo-text">FIOR<span>CARD</span></div>
+        </div>
+        <div class="datetime" id="currentDateTime">
+            Memuat...
+        </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <div class="nav-item active" data-page="create-card">
+                    <i class="fas fa-magic"></i>
+                    <span>Buat Card</span>
                 </div>
-                
-                <!-- Media Section -->
-                <div id="mediaSection" class="media-section" style="display: none;">
-                    <div class="media-header">
-                        <i class="fas fa-link"></i>
-                        <span>Media Spesial</span>
-                        <span style="margin-left: auto; background: var(--theme-color); color: white; padding: 4px 12px; border-radius: 50px; font-size: 0.8rem;" id="mediaCount">0</span>
+                <div class="nav-item" data-page="customers">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </div>
+                <div class="nav-item" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </nav>
+            <div class="status" id="connectionStatus">
+                <span class="status-dot"></span>
+                <span id="statusText">Mengecek koneksi...</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Alert -->
+            <div id="alertSuccess" class="alert alert-success"></div>
+            <div id="alertError" class="alert alert-error"></div>
+
+            <!-- ===== CREATE CARD PAGE ===== -->
+            <div id="create-card" class="page active">
+                <h1 class="page-title">
+                    <i class="fas fa-magic"></i>
+                    Buat Card Baru
+                </h1>
+
+                <div class="form-card">
+                    <!-- Pilih Customer -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user-tie"></i>
+                            Pilih Customer
+                        </label>
+                        <select class="form-control" id="customerSelect">
+                            <option value="">-- Pilih customer yang sudah tersimpan --</option>
+                        </select>
                     </div>
-                    
-                    <div id="mediaGrid" class="media-grid"></div>
-                    
-                    <div id="previewContainer" class="preview-container">
-                        <div class="preview-header">
-                            <span><i class="fas fa-eye" style="color: var(--theme-color);"></i> Preview</span>
-                            <button class="preview-close" onclick="closePreview()">
-                                <i class="fas fa-times"></i>
+
+                    <!-- Nama Penerima -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            Nama Penerima <span style="color: var(--danger);">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="recipientName" 
+                               placeholder="Masukkan nama penerima">
+                    </div>
+
+                    <!-- Nomor WhatsApp -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fab fa-whatsapp"></i>
+                            Nomor WhatsApp <span style="color: var(--danger);">*</span>
+                        </label>
+                        <input type="tel" class="form-control" id="whatsappNumber" 
+                               placeholder="081234567890">
+                        <small style="color: var(--gray-600);">Format: 08xx atau 628xx</small>
+                    </div>
+
+                    <!-- Pesan Ucapan -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-comment"></i>
+                            Pesan Ucapan <span style="color: var(--danger);">*</span>
+                        </label>
+                        <textarea class="form-control" id="cardMessage" 
+                                  placeholder="Tulis pesan ucapan Anda..." 
+                                  rows="5"></textarea>
+                        <small style="color: var(--gray-600);">Minimal 20 karakter</small>
+                    </div>
+
+                    <!-- URL Media -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i>
+                            URL Media (Opsional)
+                        </label>
+                        <div class="url-media-group">
+                            <input type="url" class="form-control" id="mediaUrlInput" 
+                                   placeholder="https://example.com/gambar.jpg">
+                            <button type="button" class="btn-add-url" onclick="addMediaUrl()">
+                                <i class="fas fa-plus"></i> Tambah
                             </button>
                         </div>
-                        <div id="previewContent"></div>
+                        <div id="urlListContainer" class="url-list"></div>
+                        <input type="hidden" id="mediaUrls" value="[]">
+                        <small style="color: var(--gray-600);">
+                            <i class="fas fa-info-circle"></i> 
+                            Gambar/Video dari URL akan tampil otomatis di card
+                        </small>
+                    </div>
+
+                    <!-- Pilih Tema -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-palette"></i>
+                            Pilih Tema
+                        </label>
+                        <div class="theme-grid" id="themeGrid"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-primary" style="flex: 2;" onclick="createCard()">
+                            <i class="fas fa-magic"></i> Generate Card
+                        </button>
+                        <button class="btn btn-primary" style="flex: 1; background: var(--success);" onclick="previewCard()">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                        <button class="btn btn-primary" style="flex: 1; background: var(--gray-600);" onclick="resetForm()">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result Card dengan QR Code -->
+                <div id="cardResult" class="result-card">
+                    <h3 style="color: var(--success); margin-bottom: 1rem;">
+                        <i class="fas fa-check-circle"></i> Card Berhasil Dibuat!
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i>
+                            Link Card (Short URL)
+                        </label>
+                        <div class="link-container">
+                            <span class="short-link" id="generatedLink"></span>
+                            <button class="copy-btn" onclick="copyLink()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="shortlink-info">
+                            <i class="fas fa-info-circle"></i>
+                            Link otomatis dipendekkan untuk memudahkan sharing
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-qrcode"></i>
+                            QR Code
+                        </label>
+                        <div class="qrcode-container">
+                            <div id="qrcode"></div>
+                        </div>
+                        <small style="color: var(--gray-600);">
+                            Scan QR Code untuk membuka card di HP
+                        </small>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <a href="#" target="_blank" class="btn btn-success" id="whatsappResultBtn">
+                            <i class="fab fa-whatsapp"></i> Kirim WA
+                        </a>
+                        <a href="#" target="_blank" class="btn btn-primary" id="previewResultBtn">
+                            <i class="fas fa-eye"></i> Buka Card
+                        </a>
+                        <button class="btn btn-primary" onclick="downloadQRCode()">
+                            <i class="fas fa-download"></i> Download QR
+                        </button>
                     </div>
                 </div>
             </div>
+
+            <!-- ===== CUSTOMERS PAGE - DENGAN KOLOM ALAMAT ===== -->
+            <div id="customers" class="page">
+                <h1 class="page-title">
+                    <i class="fas fa-users"></i>
+                    Data Customers
+                </h1>
+                
+                <button class="btn btn-primary" onclick="showAddCustomerModal()" style="margin-bottom: 1rem;">
+                    <i class="fas fa-plus"></i> Tambah Customer
+                </button>
+
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>No. WhatsApp</th>
+                                <th>Email</th>
+                                <th>Alamat</th>
+                                <th>Catatan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center;">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== HISTORY PAGE ===== -->
+            <div id="history" class="page">
+                <h1 class="page-title">
+                    <i class="fas fa-history"></i>
+                    History Cards
+                </h1>
+
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Penerima</th>
+                                <th>Tema</th>
+                                <th>Media</th>
+                                <th>Link</th>
+                                <th>QR</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center;">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== SETTINGS PAGE ===== -->
+            <div id="settings" class="page">
+                <h1 class="page-title">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </h1>
+
+                <div class="form-card">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i>
+                            Google Apps Script URL
+                        </label>
+                        <input type="url" class="form-control" id="scriptUrl" 
+                               placeholder="https://script.google.com/macros/s/.../exec">
+                        <small style="color: var(--gray-600);">
+                            URL setelah deploy web app
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-globe"></i>
+                            Card Base URL
+                        </label>
+                        <input type="url" class="form-control" id="cardBaseUrl" 
+                               value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i>
+                            Shortener API URL
+                        </label>
+                        <input type="url" class="form-control" id="shortenerUrl" 
+                               placeholder="https://tinyurl.com/... (opsional)">
+                        <small style="color: var(--gray-600);">
+                            Kosongkan untuk menggunakan shortener bawaan
+                        </small>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-primary" onclick="saveSettings()">
+                            <i class="fas fa-save"></i> Simpan Settings
+                        </button>
+                        <button class="btn btn-primary" onclick="testConnection()">
+                            <i class="fas fa-wifi"></i> Test Connection
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Tambah Customer - DENGAN SCROLL FIX -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-user-plus" style="color: var(--gold);"></i>
+                    Tambah Customer
+                </h3>
+                <button class="modal-close" onclick="closeCustomerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             
-            <!-- Card Footer -->
-            <div class="card-footer">
-                <div class="company">
-                    <div class="company-logo"></div>
-                    <div class="company-name">FIOR Florist</div>
-                    <div class="company-tagline">Jayapura • Since 2020</div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap *</label>
+                    <input type="text" class="form-control" id="modalCustomerName" 
+                           placeholder="Masukkan nama">
                 </div>
                 
-                <div class="contact-info">
-                    <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="contact-link">
-                        <i class="fab fa-instagram"></i> @tokobungafior.jayapura
-                    </a>
-                    <a href="https://wa.me/6285337777585" target="_blank" class="contact-link">
-                        <i class="fab fa-whatsapp"></i> +62 853-3777-7585
-                    </a>
+                <div class="form-group">
+                    <label class="form-label">No. WhatsApp *</label>
+                    <input type="tel" class="form-control" id="modalCustomerPhone" 
+                           placeholder="081234567890">
                 </div>
                 
-                <div class="action-buttons">
-                    <button class="action-btn share" onclick="shareCard()">
-                        <i class="fas fa-share-alt"></i> Bagikan
-                    </button>
-                    <a href="#" class="action-btn" id="whatsappBtn" target="_blank">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
-                    </a>
-                    <button class="action-btn print" onclick="printCard()">
-                        <i class="fas fa-print"></i> Cetak
-                    </button>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="modalCustomerEmail" 
+                           placeholder="email@example.com">
                 </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Alamat</label>
+                    <textarea class="form-control" id="modalCustomerAddress" 
+                              rows="3" placeholder="Jl. Contoh No. 123, Kota"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Catatan</label>
+                    <textarea class="form-control" id="modalCustomerNotes" 
+                              rows="3" placeholder="Catatan khusus..."></textarea>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+                <button class="btn btn-primary" onclick="saveCustomer()">
+                    <i class="fas fa-save"></i> Simpan
+                </button>
+                <button class="btn btn-primary" style="background: var(--gray-600);" onclick="closeCustomerModal()">
+                    Batal
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Notification -->
-    <div id="notification" class="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notificationMessage"></span>
-    </div>
-
     <script>
         // ============================================
-        // FIOR CARD - ELEGAN & RAPIH
+        // FIOR CARD ADMIN - FULL CONNECTION + QR CODE
         // ============================================
 
-        // ========== THEMES ==========
-        const THEMES = {
-            birthday: { 
-                emoji: '🎂', 
-                greeting: 'Happy Birthday',
-                particles: 'confetti',
-                floating: ['🎂', '🎈', '🎉', '🎁', '✨']
-            },
-            valentine: { 
-                emoji: '❤️', 
-                greeting: 'Happy Valentine',
-                particles: 'hearts',
-                floating: ['❤️', '💕', '💖', '💘', '🌹']
-            },
-            wedding: { 
-                emoji: '💍', 
-                greeting: 'Congratulations',
-                particles: 'hearts',
-                floating: ['💍', '💒', '🌸', '💐', '🥂']
-            },
-            anniversary: { 
-                emoji: '💑', 
-                greeting: 'Happy Anniversary',
-                particles: 'hearts',
-                floating: ['💑', '💝', '🥂', '🎊', '✨']
-            },
-            graduation: { 
-                emoji: '🎓', 
-                greeting: 'Congratulations!',
-                particles: 'confetti',
-                floating: ['🎓', '📚', '🏆', '🎉', '✨']
-            },
-            condolence: { 
-                emoji: '🕊️', 
-                greeting: 'Deepest Condolences',
-                particles: 'snow',
-                floating: ['🕊️', '☁️', '🕯️', '🌸', '🙏']
-            }
+        // ========== KONFIGURASI ==========
+        const CONFIG = {
+            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
+            CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
+            SHORTENER_API: "https://tinyurl.com/api-create.php",
+            DEFAULT_THEME: "birthday"
         };
+
+        // ========== THEMES ==========
+        const THEMES = [
+            { id: 'birthday', name: 'Birthday', emoji: '🎂' },
+            { id: 'valentine', name: 'Valentine', emoji: '❤️' },
+            { id: 'wedding', name: 'Wedding', emoji: '💍' },
+            { id: 'anniversary', name: 'Anniversary', emoji: '💑' },
+            { id: 'graduation', name: 'Graduation', emoji: '🎓' },
+            { id: 'condolence', name: 'Condolence', emoji: '🕊️' }
+        ];
 
         // ========== STATE ==========
         let state = {
-            theme: 'birthday',
-            mediaList: [],
-            params: {}
+            customers: [],
+            cards: [],
+            selectedTheme: CONFIG.DEFAULT_THEME,
+            mediaUrls: [],
+            currentQR: null
         };
 
         // ========== DOM ELEMENTS ==========
-        const el = {
-            themeIcon: document.getElementById('themeIcon'),
-            greetingText: document.getElementById('greetingText'),
-            recipientName: document.getElementById('recipientName'),
-            messageText: document.getElementById('messageText'),
-            whatsappBtn: document.getElementById('whatsappBtn'),
-            mediaSection: document.getElementById('mediaSection'),
-            mediaGrid: document.getElementById('mediaGrid'),
-            mediaCount: document.getElementById('mediaCount'),
-            previewContainer: document.getElementById('previewContainer'),
-            previewContent: document.getElementById('previewContent'),
-            notification: document.getElementById('notification'),
-            notificationMessage: document.getElementById('notificationMessage'),
-            floatingContainer: document.getElementById('floatingContainer')
-        };
-
-        // ========== URL PARAMETERS ==========
-        function getUrlParams() {
-            const params = new URLSearchParams(window.location.search);
-            const result = {
-                to: params.get('to') || 'Sahabat',
-                msg: decodeURIComponent(params.get('msg') || 'Selamat dan sukses selalu! Semoga hari-harimu menyenangkan.'),
-                theme: params.get('theme') || 'birthday',
-                from: params.get('from') || 'FIOR Florist',
-                preview: params.get('preview') === 'true'
-            };
-
-            // Collect media URLs
-            result.mediaList = [];
-
-            if (params.get('media')) {
-                result.mediaList.push({
-                    url: params.get('media'),
-                    type: detectMediaType(params.get('media')),
-                    label: 'Media'
-                });
-            }
-
-            let i = 1;
-            while (params.get(`media${i}`)) {
-                result.mediaList.push({
-                    url: params.get(`media${i}`),
-                    type: detectMediaType(params.get(`media${i}`)),
-                    label: `Media ${i}`
-                });
-                i++;
-            }
-
-            // Remove duplicates
-            result.mediaList = result.mediaList.filter((item, index, self) =>
-                index === self.findIndex(t => t.url === item.url)
-            );
-
-            result.msg = result.msg.replace(/<[^>]*>/g, '');
-
-            return result;
-        }
-
-        // ========== DETECT MEDIA TYPE ==========
-        function detectMediaType(url) {
-            if (!url) return 'link';
-            const urlLower = url.toLowerCase();
-            
-            if (urlLower.includes('.mp4') || urlLower.includes('.mov') || 
-                urlLower.includes('.webm') || urlLower.includes('drive.google.com')) {
-                return 'video';
-            }
-            
-            if (urlLower.includes('.jpg') || urlLower.includes('.jpeg') || 
-                urlLower.includes('.png') || urlLower.includes('.gif') || 
-                urlLower.includes('.webp')) {
-                return 'image';
-            }
-            
-            return 'link';
-        }
+        const el = {};
 
         // ========== INITIALIZATION ==========
-        function init() {
-            state.params = getUrlParams();
+        document.addEventListener('DOMContentLoaded', function() {
+            cacheElements();
+            loadSettings();
+            loadThemes();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            setupNavigation();
             
-            el.recipientName.textContent = state.params.to;
-            el.messageText.textContent = state.params.msg;
+            // Test koneksi otomatis
+            setTimeout(() => testConnection(), 1000);
             
-            setTheme(state.params.theme);
-            setupWhatsApp();
-            renderMediaSection();
-            createFloatingElements();
+            // Load data
+            loadCustomers();
+            loadCards();
+        });
+
+        function cacheElements() {
+            const ids = [
+                'loadingOverlay', 'alertSuccess', 'alertError',
+                'currentDateTime', 'connectionStatus', 'statusText',
+                'customerSelect', 'recipientName', 'whatsappNumber',
+                'cardMessage', 'mediaUrlInput', 'urlListContainer',
+                'mediaUrls', 'themeGrid', 'cardResult', 'generatedLink',
+                'whatsappResultBtn', 'previewResultBtn', 'qrcode',
+                'customersTableBody', 'historyTableBody',
+                'scriptUrl', 'cardBaseUrl', 'shortenerUrl',
+                'modalCustomerName', 'modalCustomerPhone', 
+                'modalCustomerEmail', 'modalCustomerAddress', 'modalCustomerNotes'
+            ];
+            
+            ids.forEach(id => el[id] = document.getElementById(id));
         }
 
-        // ========== SET THEME ==========
-        function setTheme(theme) {
-            if (!THEMES[theme]) theme = 'birthday';
-            state.theme = theme;
-            
-            document.body.className = `theme-${theme}`;
-            el.themeIcon.textContent = THEMES[theme].emoji;
-            el.greetingText.textContent = THEMES[theme].greeting;
+        function updateDateTime() {
+            if (el.currentDateTime) {
+                const now = new Date();
+                el.currentDateTime.innerHTML = now.toLocaleDateString('id-ID', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            }
         }
 
-        // ========== WHATSAPP BUTTON ==========
-        function setupWhatsApp() {
-            const waText = `Halo ${state.params.to}, saya mengirimkan kartu ucapan digital untukmu dari FIOR Florist:\n\n${window.location.href}`;
-            el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
+        function setupNavigation() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    document.getElementById(this.dataset.page).classList.add('active');
+                    
+                    // Load data sesuai halaman
+                    if (this.dataset.page === 'customers') loadCustomers();
+                    if (this.dataset.page === 'history') loadCards();
+                });
+            });
         }
 
-        // ========== RENDER MEDIA SECTION ==========
-        function renderMediaSection() {
-            state.mediaList = state.params.mediaList || [];
+        // ========== LOAD THEMES ==========
+        function loadThemes() {
+            if (!el.themeGrid) return;
             
-            if (state.mediaList.length === 0) {
-                el.mediaSection.style.display = 'none';
+            el.themeGrid.innerHTML = '';
+            
+            THEMES.forEach(theme => {
+                const div = document.createElement('div');
+                div.className = `theme-card ${theme.id === state.selectedTheme ? 'active' : ''}`;
+                div.dataset.theme = theme.id;
+                div.innerHTML = `
+                    <div class="theme-emoji">${theme.emoji}</div>
+                    <div class="theme-name">${theme.name}</div>
+                `;
+                div.onclick = () => {
+                    state.selectedTheme = theme.id;
+                    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+                    div.classList.add('active');
+                };
+                el.themeGrid.appendChild(div);
+            });
+        }
+
+        // ========== URL MEDIA MANAGEMENT ==========
+        window.addMediaUrl = function() {
+            const url = el.mediaUrlInput?.value.trim();
+            
+            if (!url) {
+                showAlert('Masukkan URL terlebih dahulu!', 'error');
                 return;
             }
             
-            el.mediaSection.style.display = 'block';
-            el.mediaCount.textContent = state.mediaList.length;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                showAlert('URL harus dimulai dengan http:// atau https://', 'error');
+                return;
+            }
+            
+            state.mediaUrls.push(url);
+            
+            if (el.mediaUrls) {
+                el.mediaUrls.value = JSON.stringify(state.mediaUrls);
+            }
+            
+            renderUrlList();
+            el.mediaUrlInput.value = '';
+            showAlert('URL berhasil ditambahkan!', 'success');
+        };
+
+        window.removeMediaUrl = function(index) {
+            state.mediaUrls.splice(index, 1);
+            if (el.mediaUrls) {
+                el.mediaUrls.value = JSON.stringify(state.mediaUrls);
+            }
+            renderUrlList();
+        };
+
+        function renderUrlList() {
+            if (!el.urlListContainer) return;
+            
+            if (state.mediaUrls.length === 0) {
+                el.urlListContainer.innerHTML = '';
+                return;
+            }
             
             let html = '';
-            state.mediaList.forEach((media, index) => {
-                const isVideo = media.type === 'video';
-                const isImage = media.type === 'image';
-                
-                let icon = isVideo ? 'fa-video' : isImage ? 'fa-image' : 'fa-link';
-                let typeLabel = isVideo ? 'Video' : isImage ? 'Gambar' : 'Link';
-                
+            state.mediaUrls.forEach((url, index) => {
                 html += `
-                    <div class="media-card" style="animation-delay: ${index * 0.1}s">
-                        <div class="media-card-header">
-                            <div class="media-icon">
-                                <i class="fas ${icon}"></i>
-                            </div>
-                            <div class="media-info">
-                                <div class="media-title">
-                                    ${media.label || `Media ${index + 1}`}
-                                    <span class="media-badge">${typeLabel}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="media-url" title="${media.url}">
-                            ${media.url.length > 50 ? media.url.substring(0, 50) + '...' : media.url}
-                        </div>
-                        <div class="media-actions">
-                            <button class="media-btn" onclick="previewMedia('${escapeHTML(media.url)}', '${media.type}')">
-                                <i class="fas fa-eye"></i> Preview
-                            </button>
-                            <button class="media-btn" onclick="copyURL('${escapeHTML(media.url)}')">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                            <a href="${escapeHTML(media.url)}" target="_blank" class="media-btn secondary">
-                                <i class="fas fa-external-link-alt"></i> Buka
-                            </a>
-                        </div>
+                    <div class="url-item">
+                        <i class="fas fa-link"></i>
+                        <span class="url-text">${url}</span>
+                        <button class="url-item-remove" onclick="removeMediaUrl(${index})">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 `;
             });
             
-            el.mediaGrid.innerHTML = html;
+            el.urlListContainer.innerHTML = html;
         }
 
-        // ========== PREVIEW MEDIA ==========
-        window.previewMedia = function(url, type) {
-            const isVideo = type === 'video';
-            const isImage = type === 'image';
-            
-            let html = '';
-            
-            if (isVideo) {
-                html = `<video src="${escapeHTML(url)}" controls class="preview-video" autoplay muted></video>`;
-            } else if (isImage) {
-                html = `<img src="${escapeHTML(url)}" class="preview-image" alt="Preview" onerror="this.src='https://via.placeholder.com/400x300?text=Gambar+Tidak+Dapat+Dimuat'">`;
-            } else {
-                html = `
-                    <div style="text-align: center; padding: 30px;">
-                        <i class="fas fa-link" style="font-size: 3rem; color: var(--gray-400);"></i>
-                        <p style="margin: 20px 0; color: var(--gray-600);">Link tidak dapat dipreview langsung</p>
-                        <a href="${escapeHTML(url)}" target="_blank" style="display: inline-block; padding: 10px 30px; background: var(--theme-gradient); color: white; text-decoration: none; border-radius: 50px; font-weight: 500;">
-                            <i class="fas fa-external-link-alt"></i> Buka Link
-                        </a>
-                    </div>
-                `;
-            }
-            
-            el.previewContent.innerHTML = html;
-            el.previewContainer.classList.add('active');
-        };
-
-        window.closePreview = function() {
-            el.previewContainer.classList.remove('active');
-            el.previewContent.innerHTML = '';
-        };
-
-        // ========== COPY URL ==========
-        window.copyURL = async function(url) {
+        // ========== SHORTEN URL ==========
+        async function shortenUrl(longUrl) {
             try {
-                await navigator.clipboard.writeText(url);
-                showNotification('URL berhasil disalin!', 'success');
-            } catch (err) {
-                const textarea = document.createElement('textarea');
-                textarea.value = url;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showNotification('URL berhasil disalin!', 'success');
+                // Gunakan TinyURL API
+                const response = await fetch(`${CONFIG.SHORTENER_API}?url=${encodeURIComponent(longUrl)}`);
+                if (response.ok) {
+                    const shortUrl = await response.text();
+                    return shortUrl.trim();
+                }
+            } catch (error) {
+                console.log('Shortener error, using original URL');
             }
-        };
+            return longUrl;
+        }
 
-        // ========== SHARE CARD ==========
-        window.shareCard = function() {
-            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${state.params.to}\n\n${window.location.href}`;
+        // ========== GENERATE QR CODE ==========
+        function generateQRCode(url) {
+            if (!el.qrcode) return;
             
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Kartu Ucapan FIOR Florist',
-                    text: shareText,
-                    url: window.location.href
-                })
-                .then(() => showNotification('Berhasil dibagikan!', 'success'))
-                .catch(() => copyURL(window.location.href));
-            } else {
-                copyURL(window.location.href);
-                showNotification('Link disalin!', 'success');
+            // Clear previous QR code
+            el.qrcode.innerHTML = '';
+            
+            // Generate new QR code
+            try {
+                new QRCode(el.qrcode, {
+                    text: url,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#1e3a5f",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                state.currentQR = url;
+            } catch (error) {
+                console.error('QR Code generation error:', error);
+                el.qrcode.innerHTML = '<p style="color: var(--danger);">Gagal generate QR Code</p>';
             }
+        }
+
+        // ========== DOWNLOAD QR CODE ==========
+        window.downloadQRCode = function() {
+            const qrcodeEl = el.qrcode?.querySelector('img');
+            if (!qrcodeEl) {
+                showAlert('QR Code belum tersedia', 'error');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = `fior-card-${Date.now()}.png`;
+            link.href = qrcodeEl.src;
+            link.click();
+            
+            showAlert('QR Code didownload!', 'success');
         };
 
-        // ========== PRINT CARD ==========
-        window.printCard = function() {
-            showNotification('Mempersiapkan untuk dicetak...', 'info');
-            setTimeout(() => window.print(), 500);
-        };
-
-        // ========== FLOATING ELEMENTS ==========
-        function createFloatingElements() {
-            if (!el.floatingContainer) return;
+        // ========== CREATE CARD ==========
+        window.createCard = async function() {
+            const name = el.recipientName?.value.trim();
+            const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
+            const message = el.cardMessage?.value.trim();
+            const theme = state.selectedTheme;
             
-            el.floatingContainer.innerHTML = '';
+            // Validasi
+            if (!name) {
+                showAlert('Nama penerima harus diisi!', 'error');
+                el.recipientName?.focus();
+                return;
+            }
             
-            const theme = THEMES[state.theme];
-            const items = theme.floating || ['✨', '💫', '⭐'];
-            const count = 25;
+            if (!phone || phone.length < 10) {
+                showAlert('Nomor WhatsApp tidak valid!', 'error');
+                el.whatsappNumber?.focus();
+                return;
+            }
             
-            for (let i = 0; i < count; i++) {
-                const element = document.createElement('div');
-                element.className = 'floating-item';
+            if (!message || message.length < 20) {
+                showAlert('Pesan minimal 20 karakter!', 'error');
+                el.cardMessage?.focus();
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                // Generate card URL
+                let longUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
                 
-                if (theme.particles === 'snow') {
-                    element.className = 'snowflake';
-                    element.style.width = `${Math.random() * 6 + 2}px`;
-                    element.style.height = element.style.width;
-                    element.style.left = `${Math.random() * 100}%`;
-                    element.style.animationDuration = `${Math.random() * 10 + 10}s`;
-                    element.style.animationDelay = `${Math.random() * 5}s`;
-                } else if (theme.particles === 'confetti') {
-                    element.className = 'confetti';
-                    element.style.left = `${Math.random() * 100}%`;
-                    element.style.animationDuration = `${Math.random() * 5 + 3}s`;
-                    element.style.animationDelay = `${Math.random() * 2}s`;
-                    element.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
-                } else {
-                    element.textContent = items[Math.floor(Math.random() * items.length)];
-                    element.style.left = `${Math.random() * 100}%`;
-                    element.style.fontSize = `${Math.random() * 20 + 15}px`;
-                    element.style.animationDuration = `${Math.random() * 10 + 10}s`;
-                    element.style.animationDelay = `${Math.random() * 5}s`;
+                if (state.mediaUrls.length === 1) {
+                    longUrl += `&media=${encodeURIComponent(state.mediaUrls[0])}`;
+                } else if (state.mediaUrls.length > 1) {
+                    state.mediaUrls.forEach((url, i) => {
+                        longUrl += `&media${i+1}=${encodeURIComponent(url)}`;
+                    });
                 }
                 
-                el.floatingContainer.appendChild(element);
+                // Shorten URL
+                const shortUrl = await shortenUrl(longUrl);
+                
+                // Generate QR Code
+                generateQRCode(shortUrl);
+                
+                // Kirim ke Google Sheets
+                const formData = new URLSearchParams();
+                formData.append('type', 'card');
+                formData.append('nama', name);
+                formData.append('no_hp', phone);
+                formData.append('tema', theme);
+                formData.append('pesan', message);
+                formData.append('link', shortUrl);
+                formData.append('media_url', state.mediaUrls.join('||'));
+                
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData.toString()
+                });
+                
+                const result = await response.json();
+                console.log('📩 Response dari server:', result);
+                
+                // Tampilkan hasil
+                el.generatedLink.textContent = shortUrl;
+                el.cardResult.classList.add('active');
+                
+                // Set WhatsApp button
+                const waNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
+                const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${shortUrl}`;
+                el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
+                el.previewResultBtn.href = longUrl;
+                
+                showAlert('✅ Card berhasil dibuat!', 'success');
+                
+                // Reset form
+                setTimeout(() => resetForm(), 2000);
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                showAlert('Gagal: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        };
+
+        // ========== PREVIEW CARD ==========
+        window.previewCard = function() {
+            const name = el.recipientName?.value.trim() || 'Preview';
+            const message = el.cardMessage?.value.trim() || 'Preview message';
+            const theme = state.selectedTheme;
+            
+            let url = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&preview=true`;
+            
+            if (state.mediaUrls.length === 1) {
+                url += `&media=${encodeURIComponent(state.mediaUrls[0])}`;
+            } else if (state.mediaUrls.length > 1) {
+                state.mediaUrls.forEach((url, i) => {
+                    url += `&media${i+1}=${encodeURIComponent(state.mediaUrls[i])}`;
+                });
+            }
+            
+            window.open(url, '_blank');
+        };
+
+        // ========== RESET FORM ==========
+        window.resetForm = function() {
+            if (el.recipientName) el.recipientName.value = '';
+            if (el.whatsappNumber) el.whatsappNumber.value = '';
+            if (el.cardMessage) el.cardMessage.value = '';
+            
+            state.mediaUrls = [];
+            if (el.mediaUrls) el.mediaUrls.value = '[]';
+            renderUrlList();
+            
+            state.selectedTheme = CONFIG.DEFAULT_THEME;
+            document.querySelectorAll('.theme-card').forEach(c => {
+                c.classList.toggle('active', c.dataset.theme === CONFIG.DEFAULT_THEME);
+            });
+            
+            if (el.cardResult) el.cardResult.classList.remove('active');
+        };
+
+        // ========== COPY LINK ==========
+        window.copyLink = function() {
+            const link = el.generatedLink?.textContent;
+            if (!link) {
+                showAlert('Tidak ada link untuk dicopy', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(link)
+                .then(() => showAlert('Link dicopy!', 'success'))
+                .catch(() => showAlert('Gagal copy', 'error'));
+        };
+
+        // ========== TEST CONNECTION ==========
+        window.testConnection = async function() {
+            showLoading(true);
+            
+            try {
+                console.log('🔍 Testing koneksi ke:', CONFIG.SCRIPT_URL);
+                
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ type: 'test' }).toString()
+                });
+                
+                const result = await response.json();
+                console.log('📩 Test response:', result);
+                
+                if (result.status === 'success' || result.message?.includes('CONNECTED')) {
+                    showAlert('✅ Koneksi ke Google Sheets berhasil!', 'success');
+                    if (el.statusText) el.statusText.textContent = 'Terhubung';
+                } else {
+                    showAlert('⚠️ Koneksi berhasil tapi response tidak valid', 'error');
+                }
+                
+            } catch (error) {
+                console.error('❌ Connection test failed:', error);
+                showAlert('❌ Gagal konek: ' + error.message, 'error');
+                if (el.statusText) el.statusText.textContent = 'Gagal konek';
+            } finally {
+                showLoading(false);
+            }
+        };
+
+        // ========== LOAD CUSTOMERS ==========
+        async function loadCustomers() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=customers&t=${Date.now()}`);
+                const data = await response.json();
+                
+                state.customers = Array.isArray(data) ? data : [];
+                renderCustomersTable();
+                updateCustomerSelect();
+                
+            } catch (error) {
+                console.error('Load customers error:', error);
+                if (el.customersTableBody) {
+                    el.customersTableBody.innerHTML = '<tr><td colspan="6">Gagal memuat data</td></tr>';
+                }
             }
         }
 
-        // ========== NOTIFICATION ==========
-        function showNotification(message, type = 'success') {
-            el.notificationMessage.textContent = message;
-            el.notification.className = `notification show ${type}`;
+        function renderCustomersTable() {
+            if (!el.customersTableBody) return;
             
-            setTimeout(() => {
-                el.notification.classList.remove('show');
-            }, 3000);
+            if (state.customers.length === 0) {
+                el.customersTableBody.innerHTML = '<tr><td colspan="6">Belum ada data customer</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            state.customers.slice(0, 10).forEach((c, i) => {
+                html += `
+                    <tr>
+                        <td>${c.nama || ''}</td>
+                        <td>${c.no_hp || ''}</td>
+                        <td>${c.email || ''}</td>
+                        <td>${c.alamat || ''}</td>
+                        <td>${c.catatan || ''}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="useCustomer(${i})">
+                                <i class="fas fa-gift"></i> Pilih
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            el.customersTableBody.innerHTML = html;
         }
 
-        // ========== ESCAPE HTML ==========
-        function escapeHTML(str) {
-            if (!str) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+        function updateCustomerSelect() {
+            if (!el.customerSelect) return;
+            
+            el.customerSelect.innerHTML = '<option value="">-- Pilih customer --</option>';
+            
+            state.customers.forEach((c, i) => {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${c.nama || 'Unknown'} - ${c.no_hp || ''}`;
+                el.customerSelect.appendChild(option);
+            });
+            
+            el.customerSelect.onchange = function() {
+                const idx = this.value;
+                if (idx) {
+                    const c = state.customers[idx];
+                    if (el.recipientName) el.recipientName.value = c.nama || '';
+                    if (el.whatsappNumber) el.whatsappNumber.value = c.no_hp || '';
+                    showAlert(`Customer "${c.nama}" dipilih`, 'success');
+                }
+            };
         }
 
-        // ========== START ==========
-        document.addEventListener('DOMContentLoaded', init);
+        window.useCustomer = function(index) {
+            const c = state.customers[index];
+            if (c) {
+                if (el.recipientName) el.recipientName.value = c.nama || '';
+                if (el.whatsappNumber) el.whatsappNumber.value = c.no_hp || '';
+                
+                document.querySelector('.nav-item[data-page="create-card"]').click();
+                showAlert(`Customer "${c.nama}" dimuat`, 'success');
+            }
+        };
+
+        // ========== LOAD CARDS ==========
+        async function loadCards() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
+                const data = await response.json();
+                
+                state.cards = Array.isArray(data) ? data : [];
+                renderCardsTable();
+                
+            } catch (error) {
+                console.error('Load cards error:', error);
+                if (el.historyTableBody) {
+                    el.historyTableBody.innerHTML = '<tr><td colspan="6">Gagal memuat data</td></tr>';
+                }
+            }
+        }
+
+        function renderCardsTable() {
+            if (!el.historyTableBody) return;
+            
+            if (state.cards.length === 0) {
+                el.historyTableBody.innerHTML = '<tr><td colspan="6">Belum ada card</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            state.cards.slice(0, 10).forEach((c, i) => {
+                html += `
+                    <tr>
+                        <td>${c.date || ''} ${c.time || ''}</td>
+                        <td>${c.name || ''}</td>
+                        <td>${c.theme || ''}</td>
+                        <td>${c.hasMedia ? '✅' : '❌'}</td>
+                        <td>
+                            <a href="${c.link}" target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="showQRModal('${c.link}')">
+                                <i class="fas fa-qrcode"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            el.historyTableBody.innerHTML = html;
+        }
+
+        window.showQRModal = function(url) {
+            // Bisa ditambahkan modal QR code untuk history
+            alert('QR Code untuk:\n' + url);
+        };
+
+        // ========== CUSTOMER MODAL - DENGAN SCROLL FIX ==========
+        window.showAddCustomerModal = function() {
+            document.getElementById('customerModal').classList.add('active');
+        };
+
+        window.closeCustomerModal = function() {
+            document.getElementById('customerModal').classList.remove('active');
+            
+            ['modalCustomerName', 'modalCustomerPhone', 'modalCustomerEmail', 
+             'modalCustomerAddress', 'modalCustomerNotes'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+        };
+
+        window.saveCustomer = async function() {
+            const name = el.modalCustomerName?.value.trim();
+            const phone = el.modalCustomerPhone?.value.trim();
+            const email = el.modalCustomerEmail?.value.trim();
+            const address = el.modalCustomerAddress?.value.trim();
+            const notes = el.modalCustomerNotes?.value.trim();
+            
+            if (!name || !phone) {
+                showAlert('Nama dan No. WA wajib diisi!', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const formData = new URLSearchParams();
+                formData.append('type', 'customer');
+                formData.append('nama', name);
+                formData.append('no_hp', phone);
+                formData.append('email', email || '');
+                formData.append('alamat', address || '');
+                formData.append('catatan', notes || '');
+                
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData.toString()
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showAlert('Customer berhasil disimpan!', 'success');
+                    closeCustomerModal();
+                    await loadCustomers();
+                } else {
+                    throw new Error(result.message || 'Gagal menyimpan');
+                }
+                
+            } catch (error) {
+                console.error('Save customer error:', error);
+                showAlert('Gagal: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        };
+
+        // ========== SETTINGS ==========
+        function loadSettings() {
+            const saved = localStorage.getItem('fior_settings');
+            if (saved) {
+                try {
+                    const settings = JSON.parse(saved);
+                    if (settings.scriptUrl && el.scriptUrl) {
+                        el.scriptUrl.value = settings.scriptUrl;
+                        CONFIG.SCRIPT_URL = settings.scriptUrl;
+                    }
+                    if (settings.cardBaseUrl && el.cardBaseUrl) {
+                        el.cardBaseUrl.value = settings.cardBaseUrl;
+                        CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
+                    }
+                    if (settings.shortenerUrl && el.shortenerUrl) {
+                        el.shortenerUrl.value = settings.shortenerUrl;
+                        CONFIG.SHORTENER_API = settings.shortenerUrl;
+                    }
+                } catch (e) {
+                    console.error('Load settings error:', e);
+                }
+            }
+        }
+
+        window.saveSettings = function() {
+            const settings = {
+                scriptUrl: el.scriptUrl?.value || CONFIG.SCRIPT_URL,
+                cardBaseUrl: el.cardBaseUrl?.value || CONFIG.CARD_BASE_URL,
+                shortenerUrl: el.shortenerUrl?.value || CONFIG.SHORTENER_API
+            };
+            
+            localStorage.setItem('fior_settings', JSON.stringify(settings));
+            
+            CONFIG.SCRIPT_URL = settings.scriptUrl;
+            CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
+            CONFIG.SHORTENER_API = settings.shortenerUrl;
+            
+            showAlert('Settings tersimpan!', 'success');
+        };
+
+        // ========== UTILITY ==========
+        function showAlert(message, type = 'success') {
+            const alertEl = document.getElementById(type === 'success' ? 'alertSuccess' : 'alertError');
+            if (alertEl) {
+                alertEl.textContent = message;
+                alertEl.style.display = 'block';
+                setTimeout(() => alertEl.style.display = 'none', 3000);
+            }
+        }
+
+        function showLoading(show) {
+            if (el.loadingOverlay) {
+                el.loadingOverlay.style.display = show ? 'flex' : 'none';
+            }
+        }
+
+        // ========== EXPOSE FUNCTIONS ==========
+        window.addMediaUrl = addMediaUrl;
+        window.removeMediaUrl = removeMediaUrl;
+        window.createCard = createCard;
+        window.previewCard = previewCard;
+        window.resetForm = resetForm;
+        window.copyLink = copyLink;
+        window.downloadQRCode = downloadQRCode;
+        window.testConnection = testConnection;
+        window.saveSettings = saveSettings;
+        window.showAddCustomerModal = showAddCustomerModal;
+        window.closeCustomerModal = closeCustomerModal;
+        window.saveCustomer = saveCustomer;
+        window.useCustomer = useCustomer;
+        window.showQRModal = showQRModal;
     </script>
 </body>
 </html>
