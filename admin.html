@@ -3,56 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIOR Cards - Admin Panel</title>
+    <title>FIOR Cards - Admin Panel (Fast)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style>
         :root {
             --primary: #4361ee;
             --secondary: #3a0ca3;
-            --success: #4cc9f0;
         }
         
         body {
             background: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
         }
         
-        .sidebar {
-            background: linear-gradient(180deg, var(--primary), var(--secondary));
-            color: white;
-            min-height: 100vh;
-        }
-        
-        .sidebar-brand {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 12px 20px;
-            margin: 5px 15px;
+        /* Minimal CSS untuk kecepatan */
+        .card {
+            border: none;
             border-radius: 8px;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            color: white;
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .stat-card {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary);
         }
         
         .btn-primary {
@@ -60,1111 +30,723 @@
             border: none;
         }
         
-        .btn-primary:hover {
-            background: var(--secondary);
-        }
-        
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1050;
-        }
-        
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary);
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            min-width: 300px;
+        }
     </style>
 </head>
 <body>
-    <!-- Toast Notifications -->
-    <div class="toast-container"></div>
-    
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar d-none d-md-block">
-                <div class="sidebar-brand">
-                    <h4><i class="bi bi-card-text"></i> FIOR Cards</h4>
-                    <small>Admin Panel v2.0</small>
+    <div class="container-fluid p-0">
+        <!-- Simple Header -->
+        <nav class="navbar navbar-dark bg-primary p-3">
+            <div class="container-fluid">
+                <span class="navbar-brand">
+                    <i class="bi bi-card-heading"></i> FIOR Cards Admin
+                </span>
+                <div class="d-flex align-items-center">
+                    <span class="text-white me-3" id="apiStatusText">Loading...</span>
+                    <button class="btn btn-light btn-sm" onclick="showConfig()">
+                        <i class="bi bi-gear"></i>
+                    </button>
                 </div>
-                <nav class="nav flex-column mt-4">
-                    <a class="nav-link active" href="#" onclick="showPage('dashboard')">
-                        <i class="bi bi-speedometer2"></i> Dashboard
-                    </a>
-                    <a class="nav-link" href="#" onclick="showPage('cards')">
-                        <i class="bi bi-card-heading"></i> Kartu Ucapan
-                    </a>
-                    <a class="nav-link" href="#" onclick="showPage('customers')">
-                        <i class="bi bi-people"></i> Pelanggan
-                    </a>
-                    <a class="nav-link" href="#" onclick="showPage('settings')">
-                        <i class="bi bi-gear"></i> Pengaturan
-                    </a>
-                </nav>
-                <div class="mt-5 px-3">
-                    <small>API Status:</small>
-                    <div class="d-flex align-items-center mt-2">
-                        <div id="apiStatus" class="spinner-border spinner-border-sm text-light me-2"></div>
-                        <small id="apiStatusText">Checking...</small>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <div class="container-fluid p-3">
+            <!-- Quick Stats -->
+            <div class="row g-3 mb-4" id="quickStats">
+                <div class="col-6 col-md-3">
+                    <div class="card p-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-people text-primary fs-4 me-3"></i>
+                            <div>
+                                <h4 class="mb-0" id="statCustomers">0</h4>
+                                <small class="text-muted">Pelanggan</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card p-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-card-heading text-success fs-4 me-3"></i>
+                            <div>
+                                <h4 class="mb-0" id="statCards">0</h4>
+                                <small class="text-muted">Kartu</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card p-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar-day text-warning fs-4 me-3"></i>
+                            <div>
+                                <h4 class="mb-0" id="statToday">0</h4>
+                                <small class="text-muted">Hari Ini</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card p-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-clock text-info fs-4 me-3"></i>
+                            <div>
+                                <h4 class="mb-0" id="statPending">0</h4>
+                                <small class="text-muted">Pending</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Main Content -->
-            <div class="col-md-9 col-lg-10 ms-auto p-4">
-                <!-- Header -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div>
-                        <h3 id="pageTitle">Dashboard</h3>
-                        <p class="text-muted mb-0" id="pageSubtitle">Selamat datang di FIOR Cards Admin</p>
-                    </div>
-                    <div>
-                        <button class="btn btn-primary" onclick="showSetupModal()">
-                            <i class="bi bi-cloud-upload"></i> Setup API
-                        </button>
+            <!-- Main Cards -->
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Kartu Terbaru</h5>
+                            <div>
+                                <button class="btn btn-sm btn-primary" onclick="showModal('card')">
+                                    <i class="bi bi-plus"></i> Baru
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="loadCards()">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="cardsList">
+                                <div class="text-center py-4">
+                                    <div class="loader mx-auto"></div>
+                                    <p class="mt-2">Memuat data...</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Content Area -->
-                <div id="contentArea">
-                    <!-- Content will be loaded here -->
-                </div>
-                
-                <!-- Footer -->
-                <div class="mt-5 pt-4 border-top text-center text-muted">
-                    <small>FIOR Card Generator &copy; 2024 | API v2.0 | Status: <span id="footerStatus">Checking...</span></small>
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Pelanggan</h5>
+                            <button class="btn btn-sm btn-success" onclick="showModal('customer')">
+                                <i class="bi bi-person-plus"></i> Baru
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="customersList">
+                                <div class="text-center py-4">
+                                    <div class="loader mx-auto"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Aksi Cepat</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" onclick="showModal('card')">
+                                    <i class="bi bi-card-heading"></i> Buat Kartu
+                                </button>
+                                <button class="btn btn-success" onclick="showModal('customer')">
+                                    <i class="bi bi-person-plus"></i> Tambah Pelanggan
+                                </button>
+                                <button class="btn btn-warning" onclick="setupSheets()">
+                                    <i class="bi bi-gear"></i> Setup Sistem
+                                </button>
+                                <button class="btn btn-info" onclick="testConnection()">
+                                    <i class="bi bi-plug"></i> Test Koneksi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
     <!-- Modals -->
-    <div class="modal fade" id="setupModal">
+    <div class="modal fade" id="configModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title"><i class="bi bi-cloud-upload"></i> Setup API</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title">Konfigurasi API</h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="hideModal('config')"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">URL Web App API</label>
+                        <label>URL API</label>
                         <input type="text" class="form-control" id="apiUrl" 
                                placeholder="https://script.google.com/macros/s/.../exec">
-                        <small class="text-muted">Salin URL dari Google Apps Script setelah deploy</small>
+                        <small class="text-muted">URL dari Google Apps Script</small>
                     </div>
-                    
                     <div class="alert alert-info">
-                        <h6><i class="bi bi-info-circle"></i> Cara Mendapatkan URL:</h6>
-                        <ol class="small mb-0">
-                            <li>Buka Google Sheets</li>
-                            <li>Ekstensi > Apps Script</li>
-                            <li>Klik Deploy > New deployment</li>
-                            <li>Pilih Web app</li>
-                            <li>Set: "Execute as" = Me</li>
-                            <li>Set: "Who has access" = Anyone</li>
-                            <li>Klik Deploy dan salin URL</li>
-                        </ol>
-                    </div>
-                    
-                    <div class="text-center mt-3">
-                        <button class="btn btn-success btn-sm" onclick="testApiConnection()">
-                            <i class="bi bi-plug"></i> Test Koneksi
-                        </button>
-                        <button class="btn btn-warning btn-sm ms-2" onclick="setupSheets()">
-                            <i class="bi bi-gear"></i> Setup Sheets
-                        </button>
+                        <small>
+                            <i class="bi bi-info-circle"></i> 
+                            Pastikan web app sudah dideploy dengan:<br>
+                            • Execute as: Me<br>
+                            • Who has access: Anyone
+                        </small>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary" onclick="saveApiUrl()">Simpan URL</button>
+                    <button class="btn btn-secondary" onclick="hideModal('config')">Batal</button>
+                    <button class="btn btn-primary" onclick="saveConfig()">Simpan</button>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Add Customer Modal -->
+    <!-- Customer Modal -->
     <div class="modal fade" id="customerModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title"><i class="bi bi-person-plus"></i> Tambah Pelanggan</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title">Tambah Pelanggan</h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="hideModal('customer')"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label>Nama *</label>
-                        <input type="text" class="form-control" id="customerName" required>
+                        <input type="text" class="form-control" id="custName" placeholder="Nama" required>
                     </div>
                     <div class="mb-3">
-                        <label>No HP *</label>
-                        <input type="tel" class="form-control" id="customerPhone" required>
+                        <input type="tel" class="form-control" id="custPhone" placeholder="No HP" required>
                     </div>
                     <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email" class="form-control" id="customerEmail">
-                    </div>
-                    <div class="mb-3">
-                        <label>Alamat</label>
-                        <textarea class="form-control" id="customerAddress" rows="2"></textarea>
+                        <input type="email" class="form-control" id="custEmail" placeholder="Email (opsional)">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-success" onclick="saveCustomer()">Simpan</button>
+                    <button class="btn btn-secondary" onclick="hideModal('customer')">Batal</button>
+                    <button class="btn btn-success" onclick="saveCustomer()">Simpan</button>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Add Card Modal -->
+    <!-- Card Modal -->
     <div class="modal fade" id="cardModal">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title"><i class="bi bi-card-heading"></i> Buat Kartu Ucapan</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title">Buat Kartu Ucapan</h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="hideModal('card')"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Nama Penerima *</label>
-                            <input type="text" class="form-control" id="cardRecipient" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>No HP Penerima *</label>
-                            <input type="tel" class="form-control" id="cardPhone" required>
-                        </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="cardName" placeholder="Nama Penerima" required>
                     </div>
                     <div class="mb-3">
-                        <label>Tema *</label>
+                        <input type="tel" class="form-control" id="cardPhone" placeholder="No HP Penerima" required>
+                    </div>
+                    <div class="mb-3">
                         <select class="form-select" id="cardTheme" required>
                             <option value="">Pilih Tema</option>
                             <option value="birthday">Ulang Tahun</option>
                             <option value="anniversary">Hari Jadi</option>
                             <option value="graduation">Wisuda</option>
-                            <option value="congrats">Selamat</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label>Pesan *</label>
-                        <textarea class="form-control" id="cardMessage" rows="4" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label>Status</label>
-                        <select class="form-select" id="cardStatus">
-                            <option value="Draft">Draft</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Sent">Terkirim</option>
-                        </select>
+                        <textarea class="form-control" id="cardMessage" rows="3" placeholder="Pesan" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-info" onclick="saveCard()">Simpan Kartu</button>
+                    <button class="btn btn-secondary" onclick="hideModal('card')">Batal</button>
+                    <button class="btn btn-info" onclick="saveCard()">Simpan</button>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Loading Modal -->
-    <div class="modal fade" id="loadingModal" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-transparent border-0">
-                <div class="modal-body text-center">
-                    <div class="loader"></div>
-                    <p class="text-white mt-3" id="loadingText">Memproses...</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
 
-    <!-- Bootstrap & Scripts -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-        // Configuration
+        // ========== CONFIGURATION ==========
         const CONFIG = {
-            apiUrl: localStorage.getItem('fior_api_url') || '',
-            version: '2.0'
+            apiUrl: localStorage.getItem('fior_fast_api_url') || '',
+            cache: {
+                stats: null,
+                cards: null,
+                customers: null,
+                lastUpdate: 0
+            },
+            timeout: 10000, // 10 detik timeout
+            retryCount: 0,
+            maxRetries: 3
         };
         
-        // Initialize
+        // ========== INITIALIZATION ==========
         document.addEventListener('DOMContentLoaded', function() {
-            // Load saved API URL
+            console.log('🚀 Admin Panel Fast Loaded');
+            
+            // Load saved config
             if (CONFIG.apiUrl) {
                 document.getElementById('apiUrl').value = CONFIG.apiUrl;
-                checkApiStatus();
+                checkConnection();
+            } else {
+                showModal('config');
             }
             
-            // Load dashboard
-            showPage('dashboard');
+            // Load initial data
+            loadAllData();
+            
+            // Auto refresh setiap 30 detik
+            setInterval(() => {
+                if (CONFIG.apiUrl) {
+                    loadStats();
+                }
+            }, 30000);
         });
         
-        // ========== API FUNCTIONS ==========
-        
-        async function callApi(endpoint = '', method = 'GET', data = null) {
+        // ========== API FUNCTIONS (OPTIMIZED) ==========
+        async function apiCall(endpoint = '', data = null) {
             if (!CONFIG.apiUrl) {
-                showToast('warning', 'URL API belum diatur', 'Silakan atur URL API terlebih dahulu.');
+                showToast('warning', 'URL API belum diatur');
                 throw new Error('API URL not set');
             }
             
-            const url = CONFIG.apiUrl + endpoint;
-            const options = {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
-            
-            if (data && (method === 'POST' || method === 'PUT')) {
-                options.body = JSON.stringify(data);
-            }
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), CONFIG.timeout);
             
             try {
-                console.log(`API Call: ${method} ${url}`, data);
+                const url = CONFIG.apiUrl + endpoint;
+                const options = {
+                    method: data ? 'POST' : 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    signal: controller.signal
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                
+                console.log(`📡 API Call: ${options.method} ${url}`);
+                const startTime = Date.now();
+                
                 const response = await fetch(url, options);
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    throw new Error(`HTTP ${response.status}`);
                 }
                 
                 const result = await response.json();
-                console.log('API Response:', result);
-                return result;
-            } catch (error) {
-                console.error('API Error:', error);
-                throw error;
-            }
-        }
-        
-        async function checkApiStatus() {
-            const statusIcon = document.getElementById('apiStatus');
-            const statusText = document.getElementById('apiStatusText');
-            const footerStatus = document.getElementById('footerStatus');
-            
-            if (!CONFIG.apiUrl) {
-                updateStatus('URL belum diatur', 'warning');
-                return false;
-            }
-            
-            try {
-                updateStatus('Checking...', 'info');
+                const duration = Date.now() - startTime;
                 
-                const result = await callApi('?action=ping');
+                console.log(`✅ API Response (${duration}ms):`, result);
                 
                 if (result.status === 'success') {
-                    updateStatus('API Online', 'success');
-                    showToast('success', 'API Connected', 'Koneksi ke Google Sheets berhasil!');
-                    return true;
+                    CONFIG.retryCount = 0; // Reset retry count on success
+                    return result;
                 } else {
                     throw new Error(result.message || 'API error');
                 }
+                
             } catch (error) {
-                updateStatus('API Offline', 'danger');
-                showToast('error', 'Koneksi Gagal', error.message || 'Tidak dapat menghubungi API');
-                return false;
-            }
-            
-            function updateStatus(text, type) {
-                statusText.textContent = text;
-                footerStatus.textContent = text;
+                console.error('❌ API Error:', error);
                 
-                // Update icon
-                const icons = {
-                    'warning': 'bi-exclamation-triangle text-warning',
-                    'info': 'spinner-border spinner-border-sm text-info',
-                    'success': 'bi-check-circle text-success',
-                    'danger': 'bi-x-circle text-danger'
-                };
+                if (error.name === 'AbortError') {
+                    throw new Error('Request timeout (10s)');
+                }
                 
-                statusIcon.className = icons[type] || 'spinner-border spinner-border-sm';
+                // Retry logic
+                if (CONFIG.retryCount < CONFIG.maxRetries) {
+                    CONFIG.retryCount++;
+                    console.log(`Retrying... (${CONFIG.retryCount}/${CONFIG.maxRetries})`);
+                    await new Promise(resolve => setTimeout(resolve, 1000 * CONFIG.retryCount));
+                    return apiCall(endpoint, data);
+                }
+                
+                throw error;
+                
+            } finally {
+                clearTimeout(timeoutId);
             }
         }
         
-        async function testApiConnection() {
-            showLoading('Menguji koneksi API...');
+        // ========== DATA LOADING FUNCTIONS ==========
+        async function checkConnection() {
+            const statusEl = document.getElementById('apiStatusText');
             
             try {
-                const result = await callApi('?action=test');
+                statusEl.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Testing...';
                 
-                hideLoading();
+                const result = await apiCall('?action=ping');
                 
                 if (result.status === 'success') {
-                    showToast('success', 'Koneksi Berhasil!', 
-                        `API Version: ${result.version || '2.0'}\nMessage: ${result.message}`);
-                } else {
-                    showToast('error', 'Koneksi Gagal', result.message);
+                    statusEl.innerHTML = '<i class="bi bi-check-circle text-success"></i> Online';
+                    showToast('success', 'API Connected', 'Koneksi berhasil!');
+                    return true;
                 }
             } catch (error) {
-                hideLoading();
-                showToast('error', 'Koneksi Gagal', 
-                    'Tidak dapat menghubungi API. Periksa URL dan koneksi internet.');
+                statusEl.innerHTML = '<i class="bi bi-x-circle text-danger"></i> Offline';
+                return false;
             }
         }
         
+        async function loadAllData() {
+            console.log('📊 Loading all data...');
+            
+            // Load stats first (usually fastest)
+            await loadStats();
+            
+            // Load cards and customers in parallel
+            await Promise.all([
+                loadCards(),
+                loadCustomers()
+            ]);
+            
+            console.log('✅ All data loaded');
+        }
+        
+        async function loadStats() {
+            try {
+                const result = await apiCall('?action=stats');
+                
+                if (result.status === 'success' && result.data) {
+                    CONFIG.cache.stats = result.data;
+                    CONFIG.cache.lastUpdate = Date.now();
+                    
+                    // Update UI
+                    document.getElementById('statCustomers').textContent = result.data.totalCustomers || 0;
+                    document.getElementById('statCards').textContent = result.data.totalCards || 0;
+                    document.getElementById('statToday').textContent = result.data.cardsToday || 0;
+                    document.getElementById('statPending').textContent = result.data.pendingCards || 0;
+                }
+            } catch (error) {
+                console.error('Load stats error:', error);
+            }
+        }
+        
+        async function loadCards() {
+            const cardsList = document.getElementById('cardsList');
+            
+            try {
+                cardsList.innerHTML = '<div class="text-center py-2"><div class="loader mx-auto"></div></div>';
+                
+                const result = await apiCall('?action=cards');
+                
+                if (result.status === 'success') {
+                    CONFIG.cache.cards = result.data || [];
+                    displayCards(CONFIG.cache.cards.slice(0, 10)); // Show only 10 latest
+                }
+            } catch (error) {
+                cardsList.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> Gagal memuat data kartu
+                        <button class="btn btn-sm btn-outline-primary ms-2" onclick="loadCards()">
+                            <i class="bi bi-arrow-clockwise"></i> Coba Lagi
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        async function loadCustomers() {
+            const customersList = document.getElementById('customersList');
+            
+            try {
+                customersList.innerHTML = '<div class="text-center py-2"><div class="loader mx-auto"></div></div>';
+                
+                const result = await apiCall('?action=customers');
+                
+                if (result.status === 'success') {
+                    CONFIG.cache.customers = result.data || [];
+                    displayCustomers(CONFIG.cache.customers.slice(0, 5)); // Show only 5 latest
+                }
+            } catch (error) {
+                customersList.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> Gagal memuat data pelanggan
+                    </div>
+                `;
+            }
+        }
+        
+        // ========== DISPLAY FUNCTIONS ==========
+        function displayCards(cards) {
+            const cardsList = document.getElementById('cardsList');
+            
+            if (!cards || cards.length === 0) {
+                cardsList.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="bi bi-card-heading text-muted fs-1"></i>
+                        <p class="mt-2 text-muted">Belum ada kartu</p>
+                        <button class="btn btn-sm btn-primary" onclick="showModal('card')">
+                            Buat Kartu Pertama
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="list-group list-group-flush">';
+            
+            cards.forEach((card, index) => {
+                if (index >= 10) return; // Limit to 10 items
+                
+                const name = card.Nama_Penerima || card[1] || '-';
+                const theme = card.Tema || card[3] || '-';
+                const status = card.Status || card[7] || 'Draft';
+                
+                html += `
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>${name}</strong>
+                                <div class="text-muted small">${theme}</div>
+                            </div>
+                            <span class="badge ${getStatusClass(status)}">${status}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            cardsList.innerHTML = html;
+        }
+        
+        function displayCustomers(customers) {
+            const customersList = document.getElementById('customersList');
+            
+            if (!customers || customers.length === 0) {
+                customersList.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="bi bi-people text-muted fs-1"></i>
+                        <p class="mt-2 text-muted">Belum ada pelanggan</p>
+                        <button class="btn btn-sm btn-success" onclick="showModal('customer')">
+                            Tambah Pelanggan
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="list-group list-group-flush">';
+            
+            customers.forEach((customer, index) => {
+                if (index >= 5) return; // Limit to 5 items
+                
+                const name = customer.Nama || customer[1] || '-';
+                const phone = customer.No_HP || customer[2] || '-';
+                
+                html += `
+                    <div class="list-group-item">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                 style="width: 32px; height: 32px; font-size: 0.8rem">
+                                ${name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <div><strong>${name}</strong></div>
+                                <small class="text-muted">${phone}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            customersList.innerHTML = html;
+        }
+        
+        // ========== CRUD OPERATIONS ==========
+        async function saveCustomer() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            
+            if (!name || !phone) {
+                showToast('warning', 'Nama dan No HP wajib diisi');
+                return;
+            }
+            
+            try {
+                const result = await apiCall('', {
+                    type: 'add_customer',
+                    nama: name,
+                    no_hp: phone,
+                    email: document.getElementById('custEmail').value.trim()
+                });
+                
+                if (result.status === 'success') {
+                    hideModal('customer');
+                    showToast('success', 'Berhasil!', `Pelanggan "${name}" ditambahkan`);
+                    
+                    // Clear form
+                    document.getElementById('custName').value = '';
+                    document.getElementById('custPhone').value = '';
+                    document.getElementById('custEmail').value = '';
+                    
+                    // Refresh data
+                    await Promise.all([
+                        loadStats(),
+                        loadCustomers()
+                    ]);
+                }
+            } catch (error) {
+                showToast('error', 'Gagal', error.message);
+            }
+        }
+        
+        async function saveCard() {
+            const name = document.getElementById('cardName').value.trim();
+            const phone = document.getElementById('cardPhone').value.trim();
+            const theme = document.getElementById('cardTheme').value;
+            const message = document.getElementById('cardMessage').value.trim();
+            
+            if (!name || !phone || !theme || !message) {
+                showToast('warning', 'Semua field wajib diisi');
+                return;
+            }
+            
+            try {
+                const result = await apiCall('', {
+                    type: 'add_card',
+                    nama_penerima: name,
+                    no_hp: phone,
+                    tema: theme,
+                    pesan: message
+                });
+                
+                if (result.status === 'success') {
+                    hideModal('card');
+                    showToast('success', 'Berhasil!', `Kartu untuk "${name}" dibuat`);
+                    
+                    // Clear form
+                    document.getElementById('cardName').value = '';
+                    document.getElementById('cardPhone').value = '';
+                    document.getElementById('cardTheme').value = '';
+                    document.getElementById('cardMessage').value = '';
+                    
+                    // Refresh data
+                    await Promise.all([
+                        loadStats(),
+                        loadCards()
+                    ]);
+                }
+            } catch (error) {
+                showToast('error', 'Gagal', error.message);
+            }
+        }
+        
+        // ========== SYSTEM FUNCTIONS ==========
         async function setupSheets() {
             if (!confirm('Setup akan membuat/mengosongkan sheet di Google Sheets. Lanjutkan?')) {
                 return;
             }
             
-            showLoading('Menyiapkan sheets...');
-            
             try {
-                const result = await callApi('', 'POST', { type: 'setup_sheets' });
+                const result = await apiCall('', { type: 'setup_sheets' });
                 
                 if (result.status === 'success') {
-                    // Add sample data
-                    const sampleResult = await callApi('', 'POST', { type: 'add_sample' });
+                    showToast('info', 'Setup dimulai', 'Sheets sedang disiapkan...');
                     
-                    hideLoading();
-                    showToast('success', 'Setup Berhasil!', 
-                        result.message + '\n' + sampleResult.message);
-                    
-                    // Refresh dashboard
-                    if (window.currentPage === 'dashboard') {
-                        loadDashboard();
-                    }
-                } else {
-                    hideLoading();
-                    showToast('error', 'Setup Gagal', result.message);
+                    // Tunggu sebentar lalu refresh
+                    setTimeout(async () => {
+                        await loadAllData();
+                        showToast('success', 'Setup selesai', 'Sistem siap digunakan!');
+                    }, 3000);
                 }
             } catch (error) {
-                hideLoading();
-                showToast('error', 'Setup Gagal', error.message);
+                showToast('error', 'Setup gagal', error.message);
             }
         }
         
-        async function getStats() {
-            try {
-                const result = await callApi('?action=stats');
-                return result.data || {};
-            } catch (error) {
-                console.error('Get stats error:', error);
-                return {};
+        async function testConnection() {
+            showToast('info', 'Testing...', 'Menguji koneksi API');
+            
+            const success = await checkConnection();
+            
+            if (success) {
+                showToast('success', 'Koneksi OK', 'API berhasil dihubungi');
+            } else {
+                showToast('error', 'Koneksi gagal', 'Periksa URL API');
             }
         }
         
-        async function getCustomers() {
-            try {
-                const result = await callApi('?action=customers');
-                return result.data || [];
-            } catch (error) {
-                console.error('Get customers error:', error);
-                return [];
-            }
-        }
-        
-        async function getCards() {
-            try {
-                const result = await callApi('?action=cards');
-                return result.data || [];
-            } catch (error) {
-                console.error('Get cards error:', error);
-                return [];
-            }
-        }
-        
-        async function addCustomer(customerData) {
-            try {
-                const result = await callApi('', 'POST', { 
-                    type: 'add_customer',
-                    ...customerData 
-                });
-                
-                if (result.status === 'success') {
-                    return result;
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                throw error;
-            }
-        }
-        
-        async function addCard(cardData) {
-            try {
-                const result = await callApi('', 'POST', { 
-                    type: 'add_card',
-                    ...cardData 
-                });
-                
-                if (result.status === 'success') {
-                    return result;
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                throw error;
-            }
-        }
-        
-        // ========== UI FUNCTIONS ==========
-        
-        function showPage(page) {
-            window.currentPage = page;
-            
-            // Update active nav
-            document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
-            event?.currentTarget?.classList?.add('active');
-            
-            // Update page title
-            const titles = {
-                dashboard: 'Dashboard',
-                cards: 'Kartu Ucapan',
-                customers: 'Pelanggan',
-                settings: 'Pengaturan'
-            };
-            
-            document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
-            
-            // Load page content
-            if (page === 'dashboard') {
-                loadDashboard();
-            } else if (page === 'cards') {
-                loadCardsPage();
-            } else if (page === 'customers') {
-                loadCustomersPage();
-            } else if (page === 'settings') {
-                loadSettingsPage();
-            }
-        }
-        
-        async function loadDashboard() {
-            const content = `
-                <div class="row mb-4">
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <i class="bi bi-people-fill text-primary" style="font-size: 2rem;"></i>
-                            <div class="stat-number" id="totalCustomers">0</div>
-                            <div class="text-muted">Total Pelanggan</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <i class="bi bi-card-heading text-success" style="font-size: 2rem;"></i>
-                            <div class="stat-number" id="totalCards">0</div>
-                            <div class="text-muted">Total Kartu</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <i class="bi bi-calendar-day text-warning" style="font-size: 2rem;"></i>
-                            <div class="stat-number" id="cardsToday">0</div>
-                            <div class="text-muted">Kartu Hari Ini</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <i class="bi bi-clock-history text-info" style="font-size: 2rem;"></i>
-                            <div class="stat-number" id="pendingCards">0</div>
-                            <div class="text-muted">Menunggu</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0"><i class="bi bi-card-heading"></i> Kartu Terbaru</h5>
-                                <button class="btn btn-sm btn-primary" onclick="showCardModal()">
-                                    <i class="bi bi-plus"></i> Buat Kartu
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <div id="recentCards">
-                                    <div class="text-center py-4">
-                                        <div class="spinner-border text-primary"></div>
-                                        <p class="mt-2">Memuat data...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0"><i class="bi bi-people"></i> Pelanggan Terbaru</h5>
-                                <button class="btn btn-sm btn-success" onclick="showCustomerModal()">
-                                    <i class="bi bi-plus"></i> Tambah
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <div id="recentCustomers">
-                                    <div class="text-center py-4">
-                                        <div class="spinner-border text-primary"></div>
-                                        <p class="mt-2">Memuat data...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card mt-4">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="bi bi-lightning"></i> Aksi Cepat</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-outline-primary" onclick="showCardModal()">
-                                        <i class="bi bi-card-heading"></i> Buat Kartu
-                                    </button>
-                                    <button class="btn btn-outline-success" onclick="showCustomerModal()">
-                                        <i class="bi bi-person-plus"></i> Tambah Pelanggan
-                                    </button>
-                                    <button class="btn btn-outline-warning" onclick="setupSheets()">
-                                        <i class="bi bi-gear"></i> Setup Sistem
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('contentArea').innerHTML = content;
-            
-            // Load data
-            loadDashboardData();
-        }
-        
-        async function loadDashboardData() {
-            try {
-                const stats = await getStats();
-                
-                // Update stats
-                document.getElementById('totalCustomers').textContent = stats.totalCustomers || 0;
-                document.getElementById('totalCards').textContent = stats.totalCards || 0;
-                document.getElementById('cardsToday').textContent = stats.cardsToday || 0;
-                document.getElementById('pendingCards').textContent = stats.pendingCards || 0;
-                
-                // Load recent cards
-                const cards = await getCards();
-                const recentCards = cards.slice(0, 5);
-                
-                let cardsHtml = '';
-                if (recentCards.length > 0) {
-                    cardsHtml = `
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Penerima</th>
-                                    <th>Tema</th>
-                                    <th>Status</th>
-                                    <th>Tanggal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${recentCards.map(card => `
-                                    <tr>
-                                        <td>${card.Nama_Penerima || '-'}</td>
-                                        <td><span class="badge bg-info">${card.Tema || '-'}</span></td>
-                                        <td><span class="badge ${getStatusClass(card.Status)}">${card.Status || '-'}</span></td>
-                                        <td>${formatDate(card.Timestamp)}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    `;
-                } else {
-                    cardsHtml = `
-                        <div class="text-center py-4">
-                            <i class="bi bi-card-heading text-muted" style="font-size: 3rem;"></i>
-                            <p class="mt-2 text-muted">Belum ada kartu</p>
-                            <button class="btn btn-sm btn-primary" onclick="showCardModal()">
-                                Buat Kartu Pertama
-                            </button>
-                        </div>
-                    `;
-                }
-                
-                document.getElementById('recentCards').innerHTML = cardsHtml;
-                
-                // Load recent customers
-                const customers = await getCustomers();
-                const recentCustomers = customers.slice(0, 5);
-                
-                let customersHtml = '';
-                if (recentCustomers.length > 0) {
-                    customersHtml = `
-                        <div class="list-group">
-                            ${recentCustomers.map(customer => `
-                                <div class="list-group-item">
-                                    <div class="d-flex justify-content-between">
-                                        <strong>${customer.Nama || '-'}</strong>
-                                        <small>${formatDate(customer.Tgl_Daftar)}</small>
-                                    </div>
-                                    <small class="text-muted">${customer.No_HP || '-'}</small>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                } else {
-                    customersHtml = `
-                        <div class="text-center py-4">
-                            <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
-                            <p class="mt-2 text-muted">Belum ada pelanggan</p>
-                            <button class="btn btn-sm btn-success" onclick="showCustomerModal()">
-                                Tambah Pelanggan
-                            </button>
-                        </div>
-                    `;
-                }
-                
-                document.getElementById('recentCustomers').innerHTML = customersHtml;
-                
-            } catch (error) {
-                console.error('Load dashboard error:', error);
-            }
-        }
-        
-        async function loadCardsPage() {
-            showLoading('Memuat data kartu...');
-            
-            try {
-                const cards = await getCards();
-                
-                const content = `
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="bi bi-card-heading"></i> Daftar Kartu Ucapan</h5>
-                            <button class="btn btn-primary" onclick="showCardModal()">
-                                <i class="bi bi-plus"></i> Buat Kartu Baru
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            ${cards.length > 0 ? `
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Penerima</th>
-                                                <th>No HP</th>
-                                                <th>Tema</th>
-                                                <th>Pesan</th>
-                                                <th>Status</th>
-                                                <th>Tanggal</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${cards.map((card, index) => `
-                                                <tr>
-                                                    <td>${index + 1}</td>
-                                                    <td>${card.Nama_Penerima || '-'}</td>
-                                                    <td>${card.No_HP || '-'}</td>
-                                                    <td><span class="badge bg-info">${card.Tema || '-'}</span></td>
-                                                    <td>${truncateText(card.Pesan || '', 30)}</td>
-                                                    <td><span class="badge ${getStatusClass(card.Status)}">${card.Status || '-'}</span></td>
-                                                    <td>${formatDate(card.Timestamp)}</td>
-                                                </tr>
-                                            `).join('')}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="mt-3">
-                                    <small class="text-muted">Total: ${cards.length} kartu</small>
-                                </div>
-                            ` : `
-                                <div class="text-center py-5">
-                                    <i class="bi bi-card-heading text-muted" style="font-size: 4rem;"></i>
-                                    <h5 class="mt-3 text-muted">Belum ada kartu</h5>
-                                    <p class="text-muted">Mulai dengan membuat kartu ucapan pertama</p>
-                                    <button class="btn btn-primary mt-2" onclick="showCardModal()">
-                                        <i class="bi bi-plus"></i> Buat Kartu Pertama
-                                    </button>
-                                </div>
-                            `}
-                        </div>
-                    </div>
-                `;
-                
-                document.getElementById('contentArea').innerHTML = content;
-                hideLoading();
-                
-            } catch (error) {
-                hideLoading();
-                document.getElementById('contentArea').innerHTML = `
-                    <div class="alert alert-danger">
-                        <i class="bi bi-exclamation-triangle"></i> Gagal memuat data: ${error.message}
-                    </div>
-                `;
-            }
-        }
-        
-        async function loadCustomersPage() {
-            showLoading('Memuat data pelanggan...');
-            
-            try {
-                const customers = await getCustomers();
-                
-                const content = `
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="bi bi-people"></i> Daftar Pelanggan</h5>
-                            <button class="btn btn-success" onclick="showCustomerModal()">
-                                <i class="bi bi-plus"></i> Tambah Pelanggan
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            ${customers.length > 0 ? `
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama</th>
-                                                <th>No HP</th>
-                                                <th>Email</th>
-                                                <th>Alamat</th>
-                                                <th>Tanggal Daftar</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${customers.map((customer, index) => `
-                                                <tr>
-                                                    <td>${index + 1}</td>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                                                 style="width: 32px; height: 32px;">
-                                                                ${(customer.Nama || '?').charAt(0).toUpperCase()}
-                                                            </div>
-                                                            ${customer.Nama || '-'}
-                                                        </div>
-                                                    </td>
-                                                    <td>${customer.No_HP || '-'}</td>
-                                                    <td>${customer.Email || '-'}</td>
-                                                    <td>${truncateText(customer.Alamat || '', 20)}</td>
-                                                    <td>${formatDate(customer.Tgl_Daftar || customer.Timestamp)}</td>
-                                                </tr>
-                                            `).join('')}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="mt-3">
-                                    <small class="text-muted">Total: ${customers.length} pelanggan</small>
-                                </div>
-                            ` : `
-                                <div class="text-center py-5">
-                                    <i class="bi bi-people text-muted" style="font-size: 4rem;"></i>
-                                    <h5 class="mt-3 text-muted">Belum ada pelanggan</h5>
-                                    <p class="text-muted">Mulai dengan menambahkan pelanggan pertama</p>
-                                    <button class="btn btn-success mt-2" onclick="showCustomerModal()">
-                                        <i class="bi bi-plus"></i> Tambah Pelanggan Pertama
-                                    </button>
-                                </div>
-                            `}
-                        </div>
-                    </div>
-                `;
-                
-                document.getElementById('contentArea').innerHTML = content;
-                hideLoading();
-                
-            } catch (error) {
-                hideLoading();
-                document.getElementById('contentArea').innerHTML = `
-                    <div class="alert alert-danger">
-                        <i class="bi bi-exclamation-triangle"></i> Gagal memuat data: ${error.message}
-                    </div>
-                `;
-            }
-        }
-        
-        function loadSettingsPage() {
-            const content = `
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="bi bi-gear"></i> Pengaturan API</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label class="form-label">URL Web App</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="settingsApiUrl" value="${CONFIG.apiUrl}">
-                                        <button class="btn btn-outline-primary" onclick="testApiConnection()">
-                                            Test
-                                        </button>
-                                    </div>
-                                    <small class="text-muted">URL dari Google Apps Script</small>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Status Koneksi</label>
-                                    <input type="text" class="form-control" id="connectionStatus" value="Checking..." readonly>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Versi Sistem</label>
-                                    <input type="text" class="form-control" value="${CONFIG.version}" readonly>
-                                </div>
-                                
-                                <button class="btn btn-primary" onclick="saveSettings()">
-                                    Simpan Pengaturan
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="card mt-4">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="bi bi-tools"></i> Tools Sistem</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-outline-warning" onclick="setupSheets()">
-                                        <i class="bi bi-gear"></i> Setup Sheets
-                                    </button>
-                                    <button class="btn btn-outline-danger" onclick="clearCache()">
-                                        <i class="bi bi-trash"></i> Clear Cache
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Informasi</h5>
-                            </div>
-                            <div class="card-body">
-                                <h6>API Endpoints:</h6>
-                                <ul class="small">
-                                    <li><code>GET ?action=info</code> - Info API</li>
-                                    <li><code>GET ?action=test</code> - Test koneksi</li>
-                                    <li><code>GET ?action=stats</code> - Statistik</li>
-                                    <li><code>GET ?action=customers</code> - Data pelanggan</li>
-                                    <li><code>GET ?action=cards</code> - Data kartu</li>
-                                    <li><code>POST type=add_customer</code> - Tambah pelanggan</li>
-                                    <li><code>POST type=add_card</code> - Tambah kartu</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('contentArea').innerHTML = content;
-            
-            // Update connection status
-            document.getElementById('connectionStatus').value = 
-                document.getElementById('apiStatusText').textContent;
-        }
-        
-        // ========== MODAL FUNCTIONS ==========
-        
-        function showSetupModal() {
-            const modal = new bootstrap.Modal(document.getElementById('setupModal'));
+        // ========== UI HELPER FUNCTIONS ==========
+        function showModal(type) {
+            const modal = new bootstrap.Modal(document.getElementById(`${type}Modal`));
             modal.show();
         }
         
-        function showCustomerModal() {
-            const modal = new bootstrap.Modal(document.getElementById('customerModal'));
-            modal.show();
+        function hideModal(type) {
+            const modalEl = document.getElementById(`${type}Modal`);
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
         }
         
-        function showCardModal() {
-            const modal = new bootstrap.Modal(document.getElementById('cardModal'));
-            modal.show();
+        function showConfig() {
+            showModal('config');
         }
         
-        function saveApiUrl() {
+        function saveConfig() {
             const url = document.getElementById('apiUrl').value.trim();
             
             if (!url) {
-                showToast('warning', 'URL kosong', 'Silakan masukkan URL API.');
-                return;
-            }
-            
-            if (!url.includes('https://script.google.com/')) {
-                if (!confirm('URL tidak terlihat seperti Google Apps Script URL. Lanjutkan?')) {
-                    return;
-                }
-            }
-            
-            CONFIG.apiUrl = url;
-            localStorage.setItem('fior_api_url', url);
-            
-            showToast('success', 'URL disimpan!', 'URL API berhasil disimpan.');
-            
-            // Test connection
-            setTimeout(() => {
-                checkApiStatus();
-            }, 1000);
-            
-            // Close modal
-            bootstrap.Modal.getInstance(document.getElementById('setupModal')).hide();
-        }
-        
-        function saveSettings() {
-            const url = document.getElementById('settingsApiUrl').value.trim();
-            
-            if (!url) {
-                showToast('warning', 'URL kosong', 'Silakan masukkan URL API.');
+                showToast('warning', 'URL tidak boleh kosong');
                 return;
             }
             
             CONFIG.apiUrl = url;
-            localStorage.setItem('fior_api_url', url);
+            localStorage.setItem('fior_fast_api_url', url);
             
-            showToast('success', 'Pengaturan disimpan!', 'URL API berhasil diperbarui.');
+            hideModal('config');
+            showToast('success', 'URL disimpan', 'Konfigurasi berhasil disimpan');
             
             setTimeout(() => {
-                checkApiStatus();
-                loadSettingsPage(); // Refresh settings page
+                checkConnection();
+                loadAllData();
             }, 1000);
         }
         
-        async function saveCustomer() {
-            const name = document.getElementById('customerName').value;
-            const phone = document.getElementById('customerPhone').value;
-            
-            if (!name || !phone) {
-                showToast('warning', 'Data tidak lengkap', 'Nama dan No HP wajib diisi.');
-                return;
-            }
-            
-            const customerData = {
-                nama: name,
-                no_hp: phone,
-                email: document.getElementById('customerEmail').value,
-                alamat: document.getElementById('customerAddress').value
-            };
-            
-            showLoading('Menyimpan pelanggan...');
-            
-            try {
-                const result = await addCustomer(customerData);
-                
-                hideLoading();
-                
-                if (result.status === 'success') {
-                    // Close modal
-                    bootstrap.Modal.getInstance(document.getElementById('customerModal')).hide();
-                    
-                    // Clear form
-                    document.getElementById('customerName').value = '';
-                    document.getElementById('customerPhone').value = '';
-                    document.getElementById('customerEmail').value = '';
-                    document.getElementById('customerAddress').value = '';
-                    
-                    // Show success
-                    showToast('success', 'Berhasil!', `Pelanggan "${name}" berhasil ditambahkan.`);
-                    
-                    // Refresh page
-                    if (window.currentPage === 'customers') {
-                        loadCustomersPage();
-                    } else if (window.currentPage === 'dashboard') {
-                        loadDashboard();
-                    }
-                }
-            } catch (error) {
-                hideLoading();
-                showToast('error', 'Gagal menyimpan', error.message);
-            }
-        }
-        
-        async function saveCard() {
-            const recipient = document.getElementById('cardRecipient').value;
-            const phone = document.getElementById('cardPhone').value;
-            const theme = document.getElementById('cardTheme').value;
-            const message = document.getElementById('cardMessage').value;
-            
-            if (!recipient || !phone || !theme || !message) {
-                showToast('warning', 'Data tidak lengkap', 'Semua field wajib diisi.');
-                return;
-            }
-            
-            const cardData = {
-                nama_penerima: recipient,
-                no_hp: phone,
-                tema: theme,
-                pesan: message,
-                status: document.getElementById('cardStatus').value
-            };
-            
-            showLoading('Menyimpan kartu...');
-            
-            try {
-                const result = await addCard(cardData);
-                
-                hideLoading();
-                
-                if (result.status === 'success') {
-                    // Close modal
-                    bootstrap.Modal.getInstance(document.getElementById('cardModal')).hide();
-                    
-                    // Clear form
-                    document.getElementById('cardRecipient').value = '';
-                    document.getElementById('cardPhone').value = '';
-                    document.getElementById('cardTheme').value = '';
-                    document.getElementById('cardMessage').value = '';
-                    
-                    // Show success
-                    showToast('success', 'Berhasil!', `Kartu untuk "${recipient}" berhasil dibuat.`);
-                    
-                    // Refresh page
-                    if (window.currentPage === 'cards') {
-                        loadCardsPage();
-                    } else if (window.currentPage === 'dashboard') {
-                        loadDashboard();
-                    }
-                }
-            } catch (error) {
-                hideLoading();
-                showToast('error', 'Gagal menyimpan', error.message);
-            }
-        }
-        
-        function clearCache() {
-            if (confirm('Hapus semua cache lokal? Ini akan menghapus pengaturan yang disimpan.')) {
-                localStorage.removeItem('fior_api_url');
-                CONFIG.apiUrl = '';
-                
-                showToast('info', 'Cache dibersihkan', 'Pengaturan lokal telah dihapus.');
-                
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-            }
-        }
-        
-        // ========== HELPER FUNCTIONS ==========
-        
-        function showToast(type, title, message) {
-            const container = document.querySelector('.toast-container');
+        function showToast(type, title, message = '') {
             const toastId = 'toast-' + Date.now();
-            
             const toastHtml = `
-                <div id="${toastId}" class="toast" role="alert">
-                    <div class="toast-header bg-${type} text-white">
-                        <strong class="me-auto">${title}</strong>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <strong>${title}</strong> ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                     </div>
-                    <div class="toast-body">${message}</div>
                 </div>
             `;
             
-            container.insertAdjacentHTML('beforeend', toastHtml);
+            document.getElementById('toastContainer').insertAdjacentHTML('beforeend', toastHtml);
             
             const toast = new bootstrap.Toast(document.getElementById(toastId), {
-                delay: 5000
+                delay: 3000
             });
             
             toast.show();
@@ -1175,48 +757,43 @@
             });
         }
         
-        function showLoading(text) {
-            document.getElementById('loadingText').textContent = text || 'Memproses...';
-            const modal = new bootstrap.Modal(document.getElementById('loadingModal'));
-            modal.show();
-        }
-        
-        function hideLoading() {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('loadingModal'));
-            if (modal) {
-                modal.hide();
-            }
-        }
-        
-        function formatDate(dateString) {
-            if (!dateString) return '-';
-            try {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('id-ID');
-            } catch {
-                return dateString;
-            }
-        }
-        
-        function truncateText(text, length) {
-            if (!text) return '-';
-            if (text.length <= length) return text;
-            return text.substring(0, length) + '...';
-        }
-        
         function getStatusClass(status) {
             if (!status) return 'bg-secondary';
-            status = status.toLowerCase();
             
-            if (status.includes('sent') || status.includes('terkirim')) {
-                return 'bg-success';
-            } else if (status.includes('pending') || status.includes('menunggu')) {
-                return 'bg-warning';
-            } else if (status.includes('draft')) {
-                return 'bg-secondary';
-            } else {
-                return 'bg-info';
-            }
+            const s = status.toLowerCase();
+            if (s.includes('sent')) return 'bg-success';
+            if (s.includes('pending')) return 'bg-warning';
+            if (s.includes('draft')) return 'bg-secondary';
+            return 'bg-info';
+        }
+        
+        // ========== PERFORMANCE OPTIMIZATIONS ==========
+        // Debounce untuk input
+        let debounceTimer;
+        function debounce(func, wait) {
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(debounceTimer);
+                    func(...args);
+                };
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(later, wait);
+            };
+        }
+        
+        // Lazy loading images
+        function lazyLoadImages() {
+            const images = document.querySelectorAll('img[data-src]');
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+            images.forEach(img => imageObserver.observe(img));
         }
     </script>
 </body>
