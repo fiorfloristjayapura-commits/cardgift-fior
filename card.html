@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts Premium -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -23,7 +23,6 @@
         }
 
         :root {
-            /* Premium Color Palette */
             --cream: #fef9f4;
             --ivory: #fffff0;
             --champagne: #fae5d7;
@@ -40,6 +39,10 @@
             --taupe: #8b7d7b;
             --sage: #c1c0aa;
             --dusty-rose: #dbbeb8;
+            --coral: #ff7f50;
+            --coral-light: #ffd7c4;
+            --teal: #008080;
+            --teal-light: #b3d9d9;
             
             --shadow-sm: 0 5px 20px rgba(0,0,0,0.02);
             --shadow-md: 0 10px 30px rgba(0,0,0,0.05);
@@ -65,8 +68,10 @@
             --theme-bg: linear-gradient(145deg, #fffcf9, #fff9f5);
             --theme-accent: #ffd700;
             --theme-emoji: '🎂';
+            --theme-greeting: 'Happy Birthday';
             --theme-particles: #ffd700;
             --theme-characters: ['🦊', '🐼', '🐨', '🦝', '🐥', '🦄', '🐌', '🐢'];
+            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3';
         }
         
         .theme-valentine {
@@ -77,8 +82,10 @@
             --theme-bg: linear-gradient(145deg, #fffafc, #fff5f8);
             --theme-accent: #ffb6c1;
             --theme-emoji: '❤️';
+            --theme-greeting: 'Happy Valentine';
             --theme-particles: #ffb6c1;
-            --theme-characters: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼'];
+            --theme-characters: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🦝'];
+            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3';
         }
         
         .theme-wedding {
@@ -89,10 +96,13 @@
             --theme-bg: linear-gradient(145deg, #fffefc, #fffcf9);
             --theme-accent: #d4c4a8;
             --theme-emoji: '💍';
+            --theme-greeting: 'Congratulations';
             --theme-particles: #e6d5b8;
-            --theme-characters: ['🕊️', '🐇', '🐿️', '🦌', '🐕', '🐩', '🦢', '🐋'];
+            --theme-characters: ['🕊️', '🐇', '🐿️', '🦌', '🐕', '🐩', '🦢', '🐋', '🐚', '🐬'];
+            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3';
         }
         
+        /* ===== LOGO ANNIVERSARY DIGANTI DENGAN 🎉 ===== */
         .theme-anniversary {
             --theme-primary: #9c89b8;
             --theme-secondary: #e0b0b5;
@@ -100,9 +110,11 @@
             --theme-soft: linear-gradient(145deg, #f9f2fd, #f5ebf9);
             --theme-bg: linear-gradient(145deg, #fefaff, #fbf5ff);
             --theme-accent: #d4af37;
-            --theme-emoji: '💑';
+            --theme-emoji: '🎉';  /* DIGANTI DARI 💑 MENJADI 🎉 */
+            --theme-greeting: 'Happy Anniversary';
             --theme-particles: #e0b0b5;
-            --theme-characters: ['🦋', '🐞', '🐝', '🦉', '🐧', '🐦', '🐤', '🐣'];
+            --theme-characters: ['🎉', '🎊', '✨', '🌟', '⭐', '💫', '🎂', '🍾', '🥂', '🎈'];
+            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3';
         }
         
         .theme-graduation {
@@ -113,8 +125,10 @@
             --theme-bg: linear-gradient(145deg, #fbfef9, #f7fcf5);
             --theme-accent: #c5b783;
             --theme-emoji: '🎓';
+            --theme-greeting: 'Congratulations!';
             --theme-particles: #c5b783;
-            --theme-characters: ['🦉', '🐿️', '🦝', '🐨', '🐼', '🦊', '🐧', '🐌'];
+            --theme-characters: ['🦉', '🐿️', '🦝', '🐨', '🐼', '🦊', '🐧', '🐌', '🐢', '🐆'];
+            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3';
         }
         
         .theme-condolence {
@@ -125,8 +139,25 @@
             --theme-bg: linear-gradient(145deg, #fefdfc, #fbfaf8);
             --theme-accent: #a5a58d;
             --theme-emoji: '🕊️';
+            --theme-greeting: 'Deepest Condolences';
             --theme-particles: #d4d4c4;
-            --theme-characters: ['🕊️', '🦢', '🐋', '🐚', '🌿', '🌸', '🍃', '🌼'];
+            --theme-characters: ['🕊️', '🦢', '🐋', '🐚', '🌿', '🌸', '🍃', '🌼', '🕯️', '🙏'];
+            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3';
+        }
+
+        /* ===== TEMA BARU: CONGRATULATION / GRAND OPENING ===== */
+        .theme-congratulation {
+            --theme-primary: #ff7f50;      /* Coral */
+            --theme-secondary: #ffb347;     /* Orange */
+            --theme-gradient: linear-gradient(145deg, #ff7f50, #ff9f4b);
+            --theme-soft: linear-gradient(145deg, #fff0e6, #ffe6d5);
+            --theme-bg: linear-gradient(145deg, #fffaf5, #fff5ed);
+            --theme-accent: #ffd700;
+            --theme-emoji: '🎊';           /* Confetti ball */
+            --theme-greeting: 'Congratulations!';
+            --theme-particles: #ffb347;
+            --theme-characters: ['🎊', '🎉', '✨', '🌟', '⭐', '💫', '🎈', '🎁', '🏆', '🥂'];
+            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3';
         }
 
         body {
@@ -143,7 +174,7 @@
             transition: var(--transition);
         }
 
-        /* ========== ANIMASI LUCU-LUCU BACKGROUND ========== */
+        /* ===== ANIMASI LUCU-LUCU BACKGROUND ===== */
         .cute-animals {
             position: fixed;
             top: 0;
@@ -170,121 +201,14 @@
         }
 
         @keyframes cuteFloat {
-            0% {
-                transform: translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateY(-20px) rotate(5deg);
-            }
-            50% {
-                transform: translateY(0) rotate(0deg);
-            }
-            75% {
-                transform: translateY(20px) rotate(-5deg);
-            }
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
+            0% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(20px) rotate(-5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
         }
 
-        /* Bouncing Balls */
-        .bouncing-ball {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--theme-secondary);
-            opacity: 0.1;
-            animation: bounce 12s infinite ease-in-out;
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0) translateX(0);
-            }
-            25% {
-                transform: translateY(-30px) translateX(15px);
-            }
-            50% {
-                transform: translateY(0) translateX(30px);
-            }
-            75% {
-                transform: translateY(30px) translateX(15px);
-            }
-        }
-
-        /* Floating Hearts/Stars */
-        .floating-deco {
-            position: absolute;
-            color: var(--theme-secondary);
-            opacity: 0.15;
-            animation: spinFloat 20s infinite linear;
-        }
-
-        @keyframes spinFloat {
-            from {
-                transform: rotate(0deg) translateY(0);
-            }
-            to {
-                transform: rotate(360deg) translateY(-50px);
-            }
-        }
-
-        /* Walking Animation */
-        .walking-character {
-            position: absolute;
-            font-size: 2rem;
-            opacity: 0.15;
-            animation: walk 25s infinite linear;
-        }
-
-        @keyframes walk {
-            from {
-                left: -100px;
-                transform: scaleX(1);
-            }
-            to {
-                left: calc(100% + 100px);
-                transform: scaleX(1);
-            }
-        }
-
-        .walking-character-reverse {
-            position: absolute;
-            font-size: 2rem;
-            opacity: 0.15;
-            animation: walkReverse 30s infinite linear;
-        }
-
-        @keyframes walkReverse {
-            from {
-                right: -100px;
-                transform: scaleX(-1);
-            }
-            to {
-                right: calc(100% + 100px);
-                transform: scaleX(-1);
-            }
-        }
-
-        /* Jumping */
-        .jumping-character {
-            position: absolute;
-            font-size: 2rem;
-            opacity: 0.15;
-            animation: jump 2s infinite ease-in-out;
-        }
-
-        @keyframes jump {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-40px);
-            }
-        }
-
-        /* ========== MUSIC PLAYER ELEGAN ========== */
+        /* ===== MUSIC PLAYER ELEGAN ===== */
         .music-player {
             position: fixed;
             bottom: 30px;
@@ -548,7 +472,6 @@
             color: var(--theme-secondary);
         }
 
-        /* MAIN PREVIEW PREMIUM */
         .main-preview {
             width: 100%;
             border-radius: 24px;
@@ -604,7 +527,6 @@
             transform: scale(1.1);
         }
 
-        /* THUMBNAIL GRID PREMIUM */
         .thumbnails {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -670,7 +592,7 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        /* ========== CONTACT ADMIN - DIRECT WA FIX ========== */
+        /* ========== CONTACT ADMIN ========== */
         .contact-elegant {
             display: flex;
             align-items: center;
@@ -695,7 +617,6 @@
             border-radius: 50px;
             transition: var(--transition);
             font-weight: 500;
-            cursor: pointer;
         }
 
         .contact-elegant-item:hover {
@@ -921,52 +842,6 @@
             }
         }
 
-        /* ========== RESPONSIVE ========== */
-        @media (max-width: 600px) {
-            .card-header { padding: 40px 25px 50px; }
-            .greeting { font-size: 2.2rem; }
-            .recipient-name { font-size: 1.8rem; }
-            .theme-emoji-large { font-size: 65px; }
-            .card-body { padding: 35px 25px; }
-            .message-container { padding: 35px 25px; }
-            .message { font-size: 1.1rem; }
-            
-            .thumbnails {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: 10px;
-            }
-            
-            .contact-elegant {
-                flex-direction: column;
-                gap: 10px;
-                border-radius: 30px;
-                padding: 20px;
-            }
-            
-            .contact-divider {
-                display: none;
-            }
-            
-            .contact-elegant-item {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .action-btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .modal-close {
-                top: -40px;
-                right: 0;
-            }
-        }
-
         /* ========== DEBUG PANEL ========== */
         .debug-panel {
             position: fixed;
@@ -1026,13 +901,59 @@
             transform: translateY(-3px);
             box-shadow: var(--shadow-xl);
         }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 600px) {
+            .card-header { padding: 40px 25px 50px; }
+            .greeting { font-size: 2.2rem; }
+            .recipient-name { font-size: 1.8rem; }
+            .theme-emoji-large { font-size: 65px; }
+            .card-body { padding: 35px 25px; }
+            .message-container { padding: 35px 25px; }
+            .message { font-size: 1.1rem; }
+            
+            .thumbnails {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 10px;
+            }
+            
+            .contact-elegant {
+                flex-direction: column;
+                gap: 10px;
+                border-radius: 30px;
+                padding: 20px;
+            }
+            
+            .contact-divider {
+                display: none;
+            }
+            
+            .contact-elegant-item {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .modal-close {
+                top: -40px;
+                right: 0;
+            }
+        }
     </style>
 </head>
 <body class="theme-birthday">
-    <!-- ========== ANIMASI LUCU-LUCU BACKGROUND ========== -->
+    <!-- Cute Animals Background -->
     <div id="cuteAnimals" class="cute-animals"></div>
 
-    <!-- Music Player Premium -->
+    <!-- Music Player -->
     <div class="music-player">
         <button id="musicBtn" class="music-btn" onclick="toggleMusic()">
             <i class="fas fa-music"></i>
@@ -1053,7 +974,7 @@
         <div id="debugContent" style="margin-top: 12px;"></div>
     </div>
 
-    <!-- Modal Zoom Premium -->
+    <!-- Modal Zoom -->
     <div id="mediaModal" class="modal">
         <button class="modal-close" onclick="closeModal()">
             <i class="fas fa-times"></i>
@@ -1064,10 +985,10 @@
         </div>
     </div>
 
-    <!-- Main Card Premium -->
+    <!-- Main Card -->
     <div class="card-wrapper">
         <div class="card">
-            <!-- Card Header Premium -->
+            <!-- Card Header -->
             <div class="card-header">
                 <div class="ornament">
                     <i class="fas fa-star"></i>
@@ -1083,9 +1004,9 @@
                 <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
             </div>
             
-            <!-- Card Body Premium -->
+            <!-- Card Body -->
             <div class="card-body">
-                <!-- Message Premium -->
+                <!-- Message -->
                 <div class="message-container" data-aos="fade-up">
                     <div class="message-quote">
                         <i class="fas fa-quote-right"></i>
@@ -1095,7 +1016,7 @@
                     </div>
                 </div>
                 
-                <!-- ===== MEDIA SECTION PREMIUM ===== -->
+                <!-- Media Section -->
                 <div id="mediaSection" class="media-section">
                     <div class="media-header" data-aos="fade-up">
                         <i class="fas fa-camera-retro"></i>
@@ -1110,13 +1031,13 @@
                     <div id="thumbnails" class="thumbnails"></div>
                 </div>
 
-                <!-- ===== CONTACT ADMIN - DIRECT WA FIX ===== -->
+                <!-- Contact Admin -->
                 <div class="contact-elegant" data-aos="fade-up" data-aos-delay="100">
                     <a href="https://wa.me/6285337777585?text=Halo%20admin%20FIOR%20Florist%2C%20saya%20ingin%20bertanya%20tentang%20pemesanan%20kartu%20ucapan" 
                        target="_blank" 
                        class="contact-elegant-item whatsapp">
                         <i class="fab fa-whatsapp"></i>
-                        <span>Hubungi Admin</span>
+                        <span>Kontak Admin FIOR</span>
                     </a>
                     <span class="contact-divider"></span>
                     <a href="https://www.instagram.com/tokobungafior.jayapura" 
@@ -1128,7 +1049,7 @@
                 </div>
             </div>
             
-            <!-- Card Footer Premium -->
+            <!-- Card Footer -->
             <div class="card-footer">
                 <div class="company">
                     <div class="company-logo"></div>
@@ -1151,7 +1072,7 @@
         </div>
     </div>
 
-    <!-- Notification Premium -->
+    <!-- Notification -->
     <div id="notification" class="notification">
         <i class="fas fa-check-circle" style="color: var(--gold);"></i>
         <span id="notificationMessage"></span>
@@ -1162,7 +1083,7 @@
     
     <script>
         // ============================================
-        // FIOR CARD - ULTRA ELEGAN + ANIMASI LUCU
+        // FIOR CARD - 7 TEMA PREMIUM
         // ============================================
 
         // ========== THEMES PREMIUM ==========
@@ -1173,9 +1094,7 @@
                 name: 'Birthday', 
                 greeting: 'Happy Birthday',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3',
-                particles: ['🎂', '🎈', '🎉', '🎁', '✨'],
-                characters: ['🦊', '🐼', '🐨', '🦝', '🐥', '🦄', '🐌', '🐢', '🐿️', '🦔'],
-                deco: ['🎈', '🎊', '🎀', '🎁', '✨']
+                characters: ['🦊', '🐼', '🐨', '🦝', '🐥', '🦄', '🐌', '🐢']
             },
             valentine: { 
                 emoji: '❤️', 
@@ -1183,9 +1102,7 @@
                 name: 'Valentine', 
                 greeting: 'Happy Valentine',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3',
-                particles: ['❤️', '💕', '💖', '🌹', '✨'],
-                characters: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🦝'],
-                deco: ['❤️', '💘', '💝', '💗', '🌹']
+                characters: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼']
             },
             wedding: { 
                 emoji: '💍', 
@@ -1193,19 +1110,15 @@
                 name: 'Wedding', 
                 greeting: 'Congratulations',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3',
-                particles: ['💍', '💒', '🌸', '💐', '✨'],
-                characters: ['🕊️', '🐇', '🐿️', '🦌', '🐕', '🐩', '🦢', '🐋', '🐚', '🐬'],
-                deco: ['💒', '💐', '🌸', '🌷', '🌺']
+                characters: ['🕊️', '🐇', '🐿️', '🦌', '🐕', '🐩', '🦢', '🐋']
             },
             anniversary: { 
-                emoji: '💑', 
-                emojiLarge: '💑',
+                emoji: '🎉',  // DIGANTI DARI 💑 MENJADI 🎉
+                emojiLarge: '🎉',
                 name: 'Anniversary', 
                 greeting: 'Happy Anniversary',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3',
-                particles: ['💑', '💝', '🥂', '🎊', '✨'],
-                characters: ['🦋', '🐞', '🐝', '🦉', '🐧', '🐦', '🐤', '🐣', '🐌', '🐞'],
-                deco: ['💝', '💞', '💗', '💕', '💖']
+                characters: ['🎉', '🎊', '✨', '🌟', '⭐', '💫', '🎂', '🥂']
             },
             graduation: { 
                 emoji: '🎓', 
@@ -1213,9 +1126,7 @@
                 name: 'Graduation', 
                 greeting: 'Congratulations!',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3',
-                particles: ['🎓', '📚', '🏆', '🎉', '✨'],
-                characters: ['🦉', '🐿️', '🦝', '🐨', '🐼', '🦊', '🐧', '🐌', '🐢', '🐆'],
-                deco: ['📚', '🏆', '🎓', '⭐', '🌟']
+                characters: ['🦉', '🐿️', '🦝', '🐨', '🐼', '🦊', '🐧', '🐌']
             },
             condolence: { 
                 emoji: '🕊️', 
@@ -1223,9 +1134,16 @@
                 name: 'Condolence', 
                 greeting: 'Deepest Condolences',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3',
-                particles: ['🕊️', '☁️', '🕯️', '🌸', '✨'],
-                characters: ['🕊️', '🦢', '🐋', '🐚', '🐬', '🐟', '🐠', '🐡', '🐙', '🦑'],
-                deco: ['🕯️', '🌿', '🍃', '🌸', '🌼']
+                characters: ['🕊️', '🦢', '🐋', '🐚', '🌿', '🌸', '🍃', '🕯️']
+            },
+            // ===== TEMA BARU: CONGRATULATION / GRAND OPENING =====
+            congratulation: { 
+                emoji: '🎊', 
+                emojiLarge: '🎊',
+                name: 'Congratulation', 
+                greeting: 'Congratulations!',
+                music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3',
+                characters: ['🎊', '🎉', '✨', '🌟', '⭐', '💫', '🎈', '🎁', '🏆', '🥂']
             }
         };
 
@@ -1286,9 +1204,8 @@
             
             const themeData = THEMES[state.theme] || THEMES.birthday;
             const characters = themeData.characters || ['🦊', '🐼', '🐨', '🦝', '🐥'];
-            const deco = themeData.deco || ['✨', '⭐', '🌟'];
             
-            // 1. Floating Characters (Lucu-lucu)
+            // Floating Characters
             for (let i = 0; i < 20; i++) {
                 const char = document.createElement('div');
                 char.className = 'cute-character';
@@ -1299,70 +1216,6 @@
                 char.style.animationDelay = `${Math.random() * 5}s`;
                 char.textContent = characters[Math.floor(Math.random() * characters.length)];
                 el.cuteAnimals.appendChild(char);
-            }
-            
-            // 2. Walking Characters (Jalan dari kiri ke kanan)
-            for (let i = 0; i < 5; i++) {
-                const walker = document.createElement('div');
-                walker.className = 'walking-character';
-                walker.style.top = `${Math.random() * 80}%`;
-                walker.style.fontSize = `${Math.random() * 25 + 20}px`;
-                walker.style.animationDuration = `${Math.random() * 10 + 20}s`;
-                walker.style.animationDelay = `${Math.random() * 5}s`;
-                walker.textContent = characters[Math.floor(Math.random() * characters.length)];
-                el.cuteAnimals.appendChild(walker);
-            }
-            
-            // 3. Walking Characters Reverse (Jalan dari kanan ke kiri)
-            for (let i = 0; i < 5; i++) {
-                const walkerRev = document.createElement('div');
-                walkerRev.className = 'walking-character-reverse';
-                walkerRev.style.top = `${Math.random() * 80}%`;
-                walkerRev.style.fontSize = `${Math.random() * 25 + 20}px`;
-                walkerRev.style.animationDuration = `${Math.random() * 10 + 25}s`;
-                walkerRev.style.animationDelay = `${Math.random() * 5}s`;
-                walkerRev.textContent = characters[Math.floor(Math.random() * characters.length)];
-                el.cuteAnimals.appendChild(walkerRev);
-            }
-            
-            // 4. Jumping Characters
-            for (let i = 0; i < 8; i++) {
-                const jumper = document.createElement('div');
-                jumper.className = 'jumping-character';
-                jumper.style.left = `${Math.random() * 90}%`;
-                jumper.style.top = `${Math.random() * 80}%`;
-                jumper.style.fontSize = `${Math.random() * 25 + 20}px`;
-                jumper.style.animationDuration = `${Math.random() * 1 + 1.5}s`;
-                jumper.style.animationDelay = `${Math.random() * 2}s`;
-                jumper.textContent = characters[Math.floor(Math.random() * characters.length)];
-                el.cuteAnimals.appendChild(jumper);
-            }
-            
-            // 5. Bouncing Balls
-            for (let i = 0; i < 15; i++) {
-                const ball = document.createElement('div');
-                ball.className = 'bouncing-ball';
-                ball.style.left = `${Math.random() * 100}%`;
-                ball.style.top = `${Math.random() * 100}%`;
-                ball.style.width = `${Math.random() * 15 + 10}px`;
-                ball.style.height = ball.style.width;
-                ball.style.background = `hsl(${Math.random() * 60 + 40}, 70%, 70%)`;
-                ball.style.animationDuration = `${Math.random() * 8 + 8}s`;
-                ball.style.animationDelay = `${Math.random() * 3}s`;
-                el.cuteAnimals.appendChild(ball);
-            }
-            
-            // 6. Floating Decorations
-            for (let i = 0; i < 12; i++) {
-                const flake = document.createElement('div');
-                flake.className = 'floating-deco';
-                flake.style.left = `${Math.random() * 100}%`;
-                flake.style.top = `${Math.random() * 100}%`;
-                flake.style.fontSize = `${Math.random() * 20 + 15}px`;
-                flake.style.animationDuration = `${Math.random() * 15 + 15}s`;
-                flake.style.animationDelay = `${Math.random() * 5}s`;
-                flake.textContent = deco[Math.floor(Math.random() * deco.length)];
-                el.cuteAnimals.appendChild(flake);
             }
             
             log('🎪 Animasi lucu-lucu dibuat:', characters.length + ' karakter');
@@ -1426,19 +1279,16 @@
             
             const u = url.toLowerCase();
             
-            // Video
             if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || 
                 u.includes('drive.google.com') || u.includes('youtube') || u.includes('vimeo')) {
                 return 'video';
             }
             
-            // Image
             if (u.includes('.jpg') || u.includes('.jpeg') || u.includes('.png') || 
                 u.includes('.gif') || u.includes('.webp') || u.includes('.bmp')) {
                 return 'image';
             }
             
-            // Default
             return 'image';
         }
 
@@ -1464,25 +1314,25 @@
             el.messageText.textContent = state.params.msg;
             
             // Set theme
-            const theme = THEMES[state.params.theme] || THEMES.birthday;
+            const themeData = THEMES[state.theme] || THEMES.birthday;
             document.body.className = `theme-${state.theme}`;
-            el.themeEmoji.textContent = theme.emojiLarge;
-            el.greetingText.textContent = theme.greeting;
+            el.themeEmoji.textContent = themeData.emojiLarge;
+            el.greetingText.textContent = themeData.greeting;
             
             // Set WhatsApp button
             const waText = `Halo ${state.params.to}, ini kartu ucapan digital dari FIOR Florist:\n\n${window.location.href}`;
             el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
             
-            // ===== CREATE CUTE ANIMALS =====
+            // Create cute animals
             createCuteAnimals();
             
-            // ===== RENDER MEDIA =====
+            // Render media
             renderMedia();
             
-            // ===== SETUP MUSIC =====
+            // Setup music
             setupMusic(state.params.theme);
             
-            log('✅ INIT COMPLETE');
+            log('✅ INIT COMPLETE - Theme:', state.theme);
         }
 
         // ========== RENDER MEDIA ==========
@@ -1557,7 +1407,6 @@
                 else el.classList.remove('active');
             });
             
-            // Render main media
             const isVideo = media.type === 'video';
             
             let mediaHtml = '';
