@@ -6,153 +6,86 @@
     <title>FIOR Card - Digital Greeting</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ===== RESET ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         :root {
             --navy: #1e3a5f;
-            --navy-light: #2b4c73;
             --gold: #d4af37;
-            --gold-light: #f5e8c6;
             --cream: #fdfaf7;
-            --charcoal: #36454F;
-            --taupe: #8b8589;
-            --shadow-lg: 0 15px 35px rgba(0,0,0,0.08);
-            --shadow-xl: 0 25px 50px rgba(0,0,0,0.12);
-            --transition: all 0.3s ease;
+            --shadow-lg: 0 15px 35px rgba(0,0,0,0.1);
         }
-        
-        /* THEMES */
-        .theme-birthday { --theme-primary: #1e3a5f; --theme-secondary: #d4af37; --theme-gradient: linear-gradient(145deg, #1e3a5f, #2b4c73); --theme-soft: #eef5ff; --theme-bg: linear-gradient(145deg, #fafcff, #f5f9ff); }
-        .theme-valentine { --theme-primary: #b76e79; --theme-secondary: #e8c1c7; --theme-gradient: linear-gradient(145deg, #b76e79, #c98b95); --theme-soft: #fdf2f4; --theme-bg: linear-gradient(145deg, #fff5f7, #ffe9ee); }
-        .theme-wedding { --theme-primary: #b2ac88; --theme-secondary: #e6d5b8; --theme-gradient: linear-gradient(145deg, #b2ac88, #c5bf9c); --theme-soft: #faf8f2; --theme-bg: linear-gradient(145deg, #fffcf7, #fef9f0); }
-        .theme-anniversary { --theme-primary: #9c89b8; --theme-secondary: #e0b0b5; --theme-gradient: linear-gradient(145deg, #9c89b8, #b39bc0); --theme-soft: #f7f1fa; --theme-bg: linear-gradient(145deg, #fcf8ff, #f8f0ff); }
-        .theme-graduation { --theme-primary: #6b8c5e; --theme-secondary: #c5b783; --theme-gradient: linear-gradient(145deg, #6b8c5e, #86a075); --theme-soft: #f0f5ec; --theme-bg: linear-gradient(145deg, #f9fcf7, #f3f9ee); }
-        .theme-condolence { --theme-primary: #6b705c; --theme-secondary: #b7b7a4; --theme-gradient: linear-gradient(145deg, #6b705c, #848875); --theme-soft: #f4f3ee; --theme-bg: linear-gradient(145deg, #fcfbf9, #f7f6f2); }
         
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--theme-bg);
+            background: #f5f5f5;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            transition: var(--transition);
         }
-
-        .card-wrapper { max-width: 600px; width: 100%; }
+        
+        .card-wrapper {
+            max-width: 600px;
+            width: 100%;
+        }
+        
         .card {
             background: white;
             border-radius: 30px;
-            box-shadow: var(--shadow-xl);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.5);
         }
         
         /* HEADER */
         .card-header {
-            background: var(--theme-gradient);
-            padding: 40px 30px 50px;
+            background: linear-gradient(145deg, #1e3a5f, #2b4c73);
+            padding: 40px 30px;
             text-align: center;
             color: white;
-            position: relative;
         }
         
-        .theme-emoji {
-            font-size: 70px;
-            margin-bottom: 15px;
-            animation: float 4s ease-in-out infinite;
-            display: inline-block;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .greeting {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
-        }
-        
-        .to-label {
-            font-size: 0.75rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0.9;
-            margin-bottom: 8px;
-        }
-        
-        .recipient-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: white;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-            word-break: break-word;
-        }
+        .theme-emoji { font-size: 70px; margin-bottom: 15px; }
+        .greeting { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
+        .recipient-name { font-size: 2rem; font-weight: 700; word-break: break-word; }
         
         /* BODY */
-        .card-body {
-            padding: 35px 30px;
-            background: white;
-        }
+        .card-body { padding: 35px 30px; }
         
         .message-container {
             background: var(--cream);
             border-radius: 20px;
             padding: 30px;
-            position: relative;
+            border: 1px dashed var(--gold);
             margin-bottom: 30px;
-            border: 1px dashed var(--theme-secondary);
-        }
-        
-        .message-quote {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--theme-gradient);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid white;
         }
         
         .message {
             font-size: 1.1rem;
             line-height: 1.8;
-            color: var(--charcoal);
             text-align: center;
             font-style: italic;
-            white-space: pre-wrap;
         }
         
-        /* ===== MEDIA SECTION - FULL DISPLAY ===== */
+        /* ===== MEDIA SECTION - FIX 100% MUNCUL ===== */
         .media-section {
             margin-top: 20px;
+            display: none;
         }
         
         .media-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            color: var(--theme-primary);
+            color: var(--navy);
             font-weight: 600;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid var(--theme-soft);
+            border-bottom: 2px solid #eef5ff;
         }
         
-        /* MAIN PREVIEW - LAYAR PENUH */
+        /* MAIN PREVIEW - BESAR */
         .main-preview {
             width: 100%;
             border-radius: 16px;
@@ -160,7 +93,10 @@
             background: #000;
             margin-bottom: 20px;
             box-shadow: var(--shadow-lg);
-            position: relative;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .preview-image {
@@ -168,7 +104,6 @@
             max-height: 450px;
             object-fit: contain;
             display: block;
-            background: #f5f5f5;
         }
         
         .preview-video {
@@ -176,58 +111,28 @@
             max-height: 450px;
             object-fit: contain;
             display: block;
-            background: #000;
-        }
-        
-        /* PLAY/PAUSE OVERLAY */
-        .video-control {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.3);
-            transition: var(--transition);
-        }
-        
-        .video-control:hover {
-            background: var(--theme-primary);
-            transform: scale(1.1);
         }
         
         /* THUMBNAIL GRID */
         .thumbnails {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 12px;
+            gap: 10px;
             margin-top: 15px;
         }
         
         .thumbnail {
             position: relative;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
             border: 3px solid transparent;
-            transition: var(--transition);
             aspect-ratio: 1;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: #f0f0f0;
         }
         
         .thumbnail.active {
-            border-color: var(--theme-primary);
-            box-shadow: 0 0 0 2px var(--theme-secondary);
-        }
-        
-        .thumbnail:hover {
-            transform: scale(1.05);
+            border-color: var(--navy);
         }
         
         .thumbnail-img {
@@ -241,32 +146,17 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.7);
             color: white;
-            width: 35px;
-            height: 35px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
-            border: 2px solid rgba(255,255,255,0.3);
         }
         
-        .thumbnail-badge {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-        
-        /* CONTACT MINI */
+        /* CONTACT */
         .contact-mini {
             display: flex;
             align-items: center;
@@ -276,28 +166,21 @@
             padding: 12px 20px;
             background: var(--cream);
             border-radius: 50px;
-            border: 1px solid rgba(212,175,55,0.2);
         }
         
         .contact-mini-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--charcoal);
+            color: #36454F;
             text-decoration: none;
             font-size: 0.85rem;
             padding: 5px 12px;
             border-radius: 50px;
-            transition: var(--transition);
         }
         
-        .contact-mini-item:hover {
-            background: var(--theme-primary);
-            color: white;
-        }
-        
-        .contact-mini-item.whatsapp:hover { background: #25D366; }
-        .contact-mini-item.instagram:hover { background: #E4405F; }
+        .contact-mini-item.whatsapp:hover { background: #25D366; color: white; }
+        .contact-mini-item.instagram:hover { background: #E4405F; color: white; }
         
         /* FOOTER */
         .card-footer {
@@ -308,50 +191,24 @@
         }
         
         .company-name {
-            font-family: 'Playfair Display', serif;
             font-size: 1.3rem;
             font-weight: 700;
-            color: var(--theme-primary);
+            color: var(--navy);
             margin-bottom: 5px;
         }
         
-        .company-tagline {
-            color: var(--taupe);
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        
         .action-btn {
+            display: inline-block;
             padding: 10px 20px;
             border: none;
             border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition);
+            background: var(--navy);
             color: white;
-            background: var(--theme-gradient);
+            font-weight: 600;
+            cursor: pointer;
             text-decoration: none;
+            margin: 5px;
         }
-        
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .action-btn.share { background: #25D366; }
-        .action-btn.print { background: #6c757d; }
         
         /* MODAL ZOOM */
         .modal {
@@ -365,231 +222,227 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 20px;
         }
-        
         .modal.active { display: flex; }
-        
-        .modal-content {
-            max-width: 90%;
-            max-height: 90%;
-        }
-        
-        .modal-image, .modal-video {
-            max-width: 100%;
-            max-height: 80vh;
-            border-radius: 12px;
-            box-shadow: var(--shadow-xl);
-        }
-        
+        .modal-image, .modal-video { max-width: 90%; max-height: 80vh; border-radius: 10px; }
         .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: white;
-            color: black;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
+            position: absolute; top: 20px; right: 20px;
+            background: white; width: 40px; height: 40px; border-radius: 50%;
+            border: none; font-size: 1.2rem; cursor: pointer;
         }
         
-        .modal-close:hover {
-            background: var(--danger);
-            color: white;
-            transform: rotate(90deg);
-        }
-        
-        /* NOTIFICATION */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            background: white;
-            border-radius: 50px;
-            box-shadow: var(--shadow-lg);
-            display: none;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            border-left: 4px solid var(--gold);
-        }
-        
-        .notification.show { display: flex; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-        
-        /* MUSIC PLAYER */
-        .music-player {
+        /* DEBUG PANEL */
+        .debug-panel {
             position: fixed;
             bottom: 20px;
-            right: 20px;
-            z-index: 100;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: #0f0;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            z-index: 2000;
+            max-width: 90%;
+            display: none;
+        }
+        .debug-panel.show { display: block; }
+        .debug-toggle {
+            position: fixed; bottom: 20px; left: 20px; z-index: 2001;
+            background: var(--navy); color: white; border: none;
+            padding: 8px 16px; border-radius: 50px; cursor: pointer;
         }
         
-        .music-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: white;
-            border: none;
-            box-shadow: var(--shadow-lg);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--theme-primary);
-            transition: var(--transition);
-            border: 1px solid rgba(212,175,55,0.3);
-        }
-        
-        .music-btn:hover {
-            transform: scale(1.1);
-            color: var(--theme-secondary);
-        }
-        
-        /* RESPONSIVE */
         @media (max-width: 600px) {
             .greeting { font-size: 2rem; }
-            .recipient-name { font-size: 1.6rem; }
-            .theme-emoji { font-size: 55px; }
-            .card-body { padding: 25px 20px; }
-            .message-container { padding: 25px 20px; }
-            .message { font-size: 1rem; }
-            .thumbnails { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
-            .contact-mini { flex-direction: column; gap: 10px; border-radius: 20px; }
-            .action-buttons { flex-direction: column; }
-            .action-btn { width: 100%; justify-content: center; }
+            .recipient-name { font-size: 1.5rem; }
+            .thumbnails { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
         }
     </style>
 </head>
-<body class="theme-birthday">
-    <!-- Music Player -->
-    <div class="music-player">
-        <button id="musicBtn" class="music-btn" onclick="toggleMusic()">
-            <i class="fas fa-music"></i>
-        </button>
-        <audio id="bgMusic" loop>
-            <source id="musicSource" src="" type="audio/mpeg">
-        </audio>
+<body>
+    <!-- DEBUG BUTTON -->
+    <button class="debug-toggle" onclick="toggleDebug()">
+        <i class="fas fa-bug"></i> Debug
+    </button>
+    
+    <!-- DEBUG PANEL -->
+    <div id="debugPanel" class="debug-panel">
+        <strong style="color: #ff0;">🔍 DEBUG INFO</strong><br>
+        <div id="debugContent"></div>
     </div>
 
-    <!-- Modal Zoom -->
+    <!-- MODAL ZOOM -->
     <div id="mediaModal" class="modal">
-        <button class="modal-close" onclick="closeModal()">
-            <i class="fas fa-times"></i>
-        </button>
+        <button class="modal-close" onclick="closeModal()">✕</button>
         <div class="modal-content">
             <img id="modalImage" class="modal-image" style="display: none;">
             <video id="modalVideo" class="modal-video" controls style="display: none;"></video>
         </div>
     </div>
 
-    <!-- Main Card -->
+    <!-- MAIN CARD -->
     <div class="card-wrapper">
         <div class="card">
-            <!-- Card Header -->
+            <!-- HEADER -->
             <div class="card-header">
                 <div class="theme-emoji" id="themeEmoji">🎂</div>
                 <h1 class="greeting" id="greetingText">Happy Birthday</h1>
-                <div class="to-label">KEPADA YTH.</div>
+                <div style="opacity: 0.8; font-size: 0.8rem; letter-spacing: 2px;">KEPADA YTH.</div>
                 <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
             </div>
             
-            <!-- Card Body -->
+            <!-- BODY -->
             <div class="card-body">
-                <!-- Message -->
+                <!-- PESAN -->
                 <div class="message-container">
-                    <div class="message-quote">
-                        <i class="fas fa-quote-right"></i>
-                    </div>
                     <div class="message" id="messageText">
-                        [Pesan ucapan akan muncul di sini. Kartu ini dikirim dengan penuh kasih dari FIOR Florist.]
+                        [Pesan ucapan akan muncul di sini.]
                     </div>
                 </div>
                 
-                <!-- ===== MEDIA SECTION - LANGSUNG TAMPIL ===== -->
-                <div id="mediaSection" class="media-section" style="display: none;">
+                <!-- ===== MEDIA SECTION - FIX TOTAL ===== -->
+                <div id="mediaSection" class="media-section">
                     <div class="media-header">
                         <i class="fas fa-images"></i>
                         <span>Media Spesial</span>
-                        <span id="mediaCount" style="margin-left: auto; background: var(--theme-soft); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem;">0</span>
+                        <span id="mediaCount" style="margin-left: auto; background: #eef5ff; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem;">0</span>
                     </div>
                     
-                    <!-- MAIN PREVIEW - FULL DISPLAY -->
-                    <div id="mainPreview" class="main-preview" style="display: none;"></div>
+                    <!-- MAIN PREVIEW -->
+                    <div id="mainPreview" class="main-preview" style="display: none; background: #f5f5f5;">
+                        <!-- AKAN DIISI JAVASCRIPT -->
+                    </div>
                     
-                    <!-- THUMBNAIL GRID -->
+                    <!-- THUMBNAILS -->
                     <div id="thumbnails" class="thumbnails"></div>
                 </div>
 
-                <!-- Contact Admin Mini -->
+                <!-- CONTACT MINI -->
                 <div class="contact-mini">
-                    <a href="https://wa.me/6285337777585?text=Halo%20admin%20FIOR%20Florist%2C%20saya%20ingin%20bertanya" target="_blank" class="contact-mini-item whatsapp">
+                    <a href="https://wa.me/6285337777585" target="_blank" class="contact-mini-item whatsapp">
                         <i class="fab fa-whatsapp"></i> +62 853-3777-7585
                     </a>
-                    <span style="width: 1px; height: 20px; background: rgba(0,0,0,0.1);"></span>
+                    <span style="width:1px; height:20px; background:#ddd;"></span>
                     <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="contact-mini-item instagram">
                         <i class="fab fa-instagram"></i> @tokobungafior
                     </a>
                 </div>
             </div>
             
-            <!-- Card Footer -->
+            <!-- FOOTER -->
             <div class="card-footer">
                 <div class="company-name">FIOR Florist</div>
-                <div class="company-tagline">JAYAPURA • SINCE 2020</div>
-                <div class="action-buttons">
-                    <button class="action-btn share" onclick="shareCard()">
+                <div style="color: #8b8589; font-size: 0.75rem; margin: 10px 0;">JAYAPURA • SINCE 2020</div>
+                <div>
+                    <button class="action-btn" onclick="shareCard()">
                         <i class="fas fa-share-alt"></i> Bagikan
                     </button>
-                    <a href="#" class="action-btn" id="whatsappBtn" target="_blank">
+                    <a href="#" class="action-btn" id="whatsappBtn">
                         <i class="fab fa-whatsapp"></i> WhatsApp
                     </a>
-                    <button class="action-btn print" onclick="printCard()">
-                        <i class="fas fa-print"></i> Cetak
-                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Notification -->
-    <div id="notification" class="notification">
-        <i class="fas fa-check-circle" style="color: var(--gold);"></i>
-        <span id="notificationMessage"></span>
-    </div>
-
     <script>
         // ============================================
-        // CARD.HTML - MEDIA LANGSUNG TAMPIL (BUKAN LINK)
+        // CARD.HTML - FIX TOTAL! MEDIA 100% MUNCUL
         // ============================================
 
-        // ========== THEMES ==========
-        const THEMES = {
-            birthday: { emoji: '🎂', greeting: 'Happy Birthday', music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3' },
-            valentine: { emoji: '❤️', greeting: 'Happy Valentine', music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3' },
-            wedding: { emoji: '💍', greeting: 'Congratulations', music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3' },
-            anniversary: { emoji: '💑', greeting: 'Happy Anniversary', music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3' },
-            graduation: { emoji: '🎓', greeting: 'Congratulations!', music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3' },
-            condolence: { emoji: '🕊️', greeting: 'Deepest Condolences', music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3' }
+        // ========== DEBUG MODE ==========
+        let DEBUG = true;
+        
+        function log(msg, data = null) {
+            if (!DEBUG) return;
+            console.log(`[CARD] ${msg}`, data || '');
+            
+            const debugContent = document.getElementById('debugContent');
+            if (debugContent) {
+                debugContent.innerHTML += `<div style="color: #0f0; margin-top: 5px;">🔹 ${msg} ${data ? JSON.stringify(data).substring(0,100) : ''}</div>`;
+            }
+        }
+        
+        window.toggleDebug = function() {
+            const panel = document.getElementById('debugPanel');
+            panel.classList.toggle('show');
+            log('Debug panel toggled');
         };
 
-        // ========== STATE ==========
-        let state = {
-            theme: 'birthday',
-            mediaList: [],
-            params: {},
-            isPlaying: false,
-            currentIndex: 0
-        };
+        // ========== GET URL PARAMETERS - FIXED ==========
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            log('Full URL:', window.location.href);
+            log('All params:', Object.fromEntries(params.entries()));
+            
+            const result = {
+                to: params.get('to') || 'Sahabat',
+                msg: decodeURIComponent(params.get('msg') || 'Selamat dan sukses selalu!'),
+                theme: params.get('theme') || 'birthday'
+            };
+
+            // ===== KOLEKSI SEMUA MEDIA URL =====
+            result.mediaList = [];
+
+            // SINGLE MEDIA
+            if (params.get('media')) {
+                const url = params.get('media');
+                log('Found media param:', url);
+                result.mediaList.push({
+                    url: url,
+                    type: detectMediaType(url),
+                    index: 0
+                });
+            }
+
+            // MULTIPLE MEDIA (media1, media2, ...)
+            let i = 1;
+            while (params.get(`media${i}`)) {
+                const url = params.get(`media${i}`);
+                log(`Found media${i}:`, url);
+                result.mediaList.push({
+                    url: url,
+                    type: detectMediaType(url),
+                    index: i
+                });
+                i++;
+            }
+
+            // REMOVE DUPLICATES
+            result.mediaList = result.mediaList.filter((v,i,a)=>a.findIndex(t=>t.url===v.url)===i);
+            
+            log('TOTAL MEDIA FOUND:', result.mediaList.length);
+            log('MEDIA LIST:', result.mediaList);
+            
+            return result;
+        }
+
+        // ========== DETECT MEDIA TYPE - FIXED ==========
+        function detectMediaType(url) {
+            if (!url) return 'image';
+            
+            const u = url.toLowerCase();
+            log('Detecting media type for:', u.substring(0, 50) + '...');
+            
+            // VIDEO
+            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || 
+                u.includes('drive.google.com') || u.includes('youtube') || u.includes('vimeo')) {
+                log('✅ DETECTED AS VIDEO');
+                return 'video';
+            }
+            
+            // IMAGE
+            if (u.includes('.jpg') || u.includes('.jpeg') || u.includes('.png') || 
+                u.includes('.gif') || u.includes('.webp') || u.includes('.bmp')) {
+                log('✅ DETECTED AS IMAGE');
+                return 'image';
+            }
+            
+            // DEFAULT - COBA SEBAGAI IMAGE
+            log('⚠️ UNKNOWN TYPE, DEFAULT TO IMAGE');
+            return 'image';
+        }
 
         // ========== DOM ELEMENTS ==========
         const el = {
@@ -602,190 +455,182 @@
             mediaCount: document.getElementById('mediaCount'),
             mainPreview: document.getElementById('mainPreview'),
             thumbnails: document.getElementById('thumbnails'),
-            notification: document.getElementById('notification'),
-            notificationMessage: document.getElementById('notificationMessage'),
-            bgMusic: document.getElementById('bgMusic'),
-            musicSource: document.getElementById('musicSource'),
-            musicBtn: document.getElementById('musicBtn'),
             modal: document.getElementById('mediaModal'),
             modalImage: document.getElementById('modalImage'),
             modalVideo: document.getElementById('modalVideo')
         };
 
-        // ========== GET URL PARAMETERS ==========
-        function getUrlParams() {
-            const params = new URLSearchParams(window.location.search);
-            const result = {
-                to: params.get('to') || 'Sahabat',
-                msg: decodeURIComponent(params.get('msg') || 'Selamat dan sukses selalu!'),
-                theme: params.get('theme') || 'birthday'
-            };
+        // ========== STATE ==========
+        let state = {
+            params: {},
+            mediaList: [],
+            currentIndex: 0
+        };
 
-            // ===== KOLEKSI SEMUA MEDIA URL =====
-            result.mediaList = [];
-
-            // Single media
-            if (params.get('media')) {
-                result.mediaList.push({
-                    url: params.get('media'),
-                    type: detectMediaType(params.get('media'))
-                });
-            }
-
-            // Multiple media (media1, media2, ...)
-            let i = 1;
-            while (params.get(`media${i}`)) {
-                result.mediaList.push({
-                    url: params.get(`media${i}`),
-                    type: detectMediaType(params.get(`media${i}`))
-                });
-                i++;
-            }
-
-            // Hapus duplikat
-            result.mediaList = result.mediaList.filter((v,i,a)=>a.findIndex(t=>t.url===v.url)===i);
-            
-            console.log('📦 MEDIA DETECTED:', result.mediaList.length, 'files');
-            return result;
-        }
-
-        // ========== DETECT MEDIA TYPE ==========
-        function detectMediaType(url) {
-            if (!url) return 'link';
-            const u = url.toLowerCase();
-            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || u.includes('drive.google.com')) return 'video';
-            if (u.includes('.jpg') || u.includes('.jpeg') || u.includes('.png') || u.includes('.gif') || u.includes('.webp')) return 'image';
-            return 'image'; // FORCE AS IMAGE - BUKAN LINK
-        }
-
-        // ========== INIT ==========
+        // ========== INIT - FIXED ==========
         function init() {
-            state.params = getUrlParams();
+            log('='.repeat(50));
+            log('CARD INITIALIZATION STARTED');
+            log('='.repeat(50));
             
-            // Set basic info
+            // GET URL PARAMETERS
+            state.params = getUrlParams();
+            state.mediaList = state.params.mediaList || [];
+            
+            // SET BASIC INFO
             el.recipientName.textContent = state.params.to;
             el.messageText.textContent = state.params.msg;
             
-            // Set theme
-            const theme = THEMES[state.params.theme] || THEMES.birthday;
-            state.theme = state.params.theme;
-            document.body.className = `theme-${state.theme}`;
-            el.themeEmoji.textContent = theme.emoji;
-            el.greetingText.textContent = theme.greeting;
+            // SET THEME
+            document.body.className = `theme-${state.params.theme}`;
             
-            // Set WhatsApp button
+            // SET WHATSAPP BUTTON
             const waText = `Halo ${state.params.to}, ini kartu ucapan digital dari FIOR Florist:\n\n${window.location.href}`;
             el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
             
             // ===== RENDER MEDIA =====
             renderMedia();
             
-            // ===== SETUP MUSIC =====
-            setupMusic(state.params.theme);
+            log('='.repeat(50));
+            log('INIT COMPLETE');
+            log('='.repeat(50));
         }
 
-        // ========== RENDER MEDIA - LANGSUNG TAMPIL ==========
+        // ========== RENDER MEDIA - FIXED ==========
         function renderMedia() {
-            state.mediaList = state.params.mediaList || [];
+            log('='.repeat(40));
+            log('RENDER MEDIA');
+            log('='.repeat(40));
+            
+            log('Media list length:', state.mediaList.length);
             
             if (state.mediaList.length === 0) {
+                log('❌ NO MEDIA FOUND - Hiding section');
                 el.mediaSection.style.display = 'none';
                 return;
             }
             
+            // SHOW MEDIA SECTION
+            log('✅ MEDIA FOUND - Showing section');
             el.mediaSection.style.display = 'block';
             el.mediaCount.textContent = `${state.mediaList.length} Media`;
             
-            // Render thumbnails
+            // RENDER THUMBNAILS
             renderThumbnails();
             
             // AUTO PLAY MEDIA PERTAMA
-            if (state.mediaList.length > 0) {
-                setTimeout(() => {
-                    playMedia(0);
-                }, 500);
-            }
+            log('Auto-playing first media');
+            setTimeout(() => {
+                playMedia(0);
+            }, 300);
         }
 
-        // ========== RENDER THUMBNAILS ==========
+        // ========== RENDER THUMBNAILS - FIXED ==========
         function renderThumbnails() {
-            if (!el.thumbnails) return;
+            log('Rendering thumbnails...');
+            
+            if (!el.thumbnails) {
+                log('❌ Thumbnails element not found');
+                return;
+            }
             
             let html = '';
             
             state.mediaList.forEach((media, index) => {
                 const isVideo = media.type === 'video';
                 
-                html += `
-                    <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="playMedia(${index})">
-                        ${isVideo ? 
-                            `<div style="width:100%; height:100%; background: linear-gradient(145deg, #000, #1a1a1a); display: flex; align-items: center; justify-content: center; position: relative;">
+                if (isVideo) {
+                    html += `
+                        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="playMedia(${index})">
+                            <div style="width:100%; height:100%; background: linear-gradient(145deg, #000, #1a1a1a); display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-video" style="font-size: 2rem; color: white; opacity: 0.8;"></i>
                                 <div class="thumbnail-icon"><i class="fas fa-play"></i></div>
-                            </div>` :
-                            `<img src="${escapeHTML(media.url)}" class="thumbnail-img" onerror="this.src='https://via.placeholder.com/80x80?text=Image'">`
-                        }
-                        <span class="thumbnail-badge">${isVideo ? 'MP4' : 'IMG'}</span>
-                    </div>
-                `;
+                            </div>
+                            <span style="position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem;">MP4</span>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="playMedia(${index})">
+                            <img src="${escapeHTML(media.url)}" class="thumbnail-img" 
+                                 onerror="this.src='https://via.placeholder.com/80x80?text=Error'; console.error('Failed to load:', '${escapeHTML(media.url)}')"
+                                 onload="console.log('Thumbnail loaded:', '${escapeHTML(media.url.substring(0,30))}...')">
+                            <span style="position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem;">IMG</span>
+                        </div>
+                    `;
+                }
             });
             
             el.thumbnails.innerHTML = html;
+            log('Thumbnails rendered:', state.mediaList.length);
         }
 
-        // ========== PLAY MEDIA - LANGSUNG TAMPIL ==========
+        // ========== PLAY MEDIA - FIXED ==========
         window.playMedia = function(index) {
-            if (!state.mediaList[index]) return;
+            log('='.repeat(30));
+            log('PLAY MEDIA INDEX:', index);
+            log('='.repeat(30));
+            
+            if (!state.mediaList[index]) {
+                log('❌ Media not found at index:', index);
+                return;
+            }
             
             state.currentIndex = index;
             const media = state.mediaList[index];
             
-            // Update active thumbnail
+            log('Media URL:', media.url.substring(0, 50) + '...');
+            log('Media Type:', media.type);
+            
+            // UPDATE ACTIVE THUMBNAIL
             document.querySelectorAll('.thumbnail').forEach((el, i) => {
                 if (i === index) el.classList.add('active');
                 else el.classList.remove('active');
             });
             
-            // Render main media - LANGSUNG TAMPIL, BUKAN LINK
+            // RENDER MAIN MEDIA
             const isVideo = media.type === 'video';
             
             let mediaHtml = '';
             
             if (isVideo) {
-                // VIDEO - AUTO PLAY, MUTED, LOOP, CONTROLS
+                log('Rendering VIDEO');
                 mediaHtml = `
-                    <div style="position: relative;">
-                        <video id="mainVideo" src="${escapeHTML(media.url)}" controls autoplay muted loop playsinline class="preview-video"></video>
-                        <div class="video-control" onclick="toggleVideoPlay()">
-                            <i id="videoPlayIcon" class="fas fa-pause"></i>
-                        </div>
-                    </div>
+                    <video src="${escapeHTML(media.url)}" 
+                           controls 
+                           autoplay 
+                           muted 
+                           loop 
+                           playsinline 
+                           class="preview-video"
+                           style="width: 100%; max-height: 450px;"
+                           onerror="this.outerHTML='<div style=\'padding:50px; text-align:center; background:#fee;\'><i class=\'fas fa-exclamation-triangle\' style=\'color:#c00;\'></i><p>Video tidak dapat dimuat</p><a href=\'${escapeHTML(media.url)}\' target=\'_blank\' style=\'display:inline-block; margin-top:10px; padding:8px 20px; background:#1e3a5f; color:white; border-radius:50px; text-decoration:none;\'>Buka Link</a></div>';">
+                        Your browser does not support the video tag.
+                    </video>
                 `;
             } else {
-                // IMAGE - LANGSUNG TAMPIL, BISA DI-ZOOM
-                mediaHtml = `<img src="${escapeHTML(media.url)}" class="preview-image" alt="Media" onclick="openModal('${escapeHTML(media.url)}', false)" style="cursor: pointer;">`;
+                log('Rendering IMAGE');
+                mediaHtml = `
+                    <img src="${escapeHTML(media.url)}" 
+                         class="preview-image" 
+                         alt="Media"
+                         style="width: 100%; max-height: 450px; object-fit: contain; cursor: pointer;"
+                         onclick="openModal('${escapeHTML(media.url)}', false)"
+                         onerror="this.outerHTML='<div style=\'padding:50px; text-align:center; background:#fee;\'><i class=\'fas fa-exclamation-triangle\' style=\'color:#c00;\'></i><p>Gambar tidak dapat dimuat</p><a href=\'${escapeHTML(media.url)}\' target=\'_blank\' style=\'display:inline-block; margin-top:10px; padding:8px 20px; background:#1e3a5f; color:white; border-radius:50px; text-decoration:none;\'>Buka Link</a></div>';"
+                         onload="console.log('Image loaded successfully:', '${escapeHTML(media.url.substring(0,30))}...')">
+                `;
             }
             
             el.mainPreview.innerHTML = mediaHtml;
             el.mainPreview.style.display = 'block';
-        };
-
-        // ========== TOGGLE VIDEO PLAY ==========
-        window.toggleVideoPlay = function() {
-            const video = document.getElementById('mainVideo');
-            const icon = document.getElementById('videoPlayIcon');
             
-            if (video.paused) {
-                video.play();
-                icon.className = 'fas fa-pause';
-            } else {
-                video.pause();
-                icon.className = 'fas fa-play';
-            }
+            log('Main preview updated');
         };
 
         // ========== MODAL ZOOM ==========
         window.openModal = function(url, isVideo) {
+            log('Opening modal:', url.substring(0, 50) + '...');
+            
             if (isVideo) {
                 el.modalImage.style.display = 'none';
                 el.modalVideo.style.display = 'block';
@@ -796,6 +641,7 @@
                 el.modalVideo.style.display = 'none';
                 el.modalImage.src = url;
             }
+            
             el.modal.classList.add('active');
         };
 
@@ -807,78 +653,24 @@
             }
         };
 
-        // ========== MUSIC ==========
-        function setupMusic(theme) {
-            const themeData = THEMES[theme] || THEMES.birthday;
-            if (themeData.music) {
-                el.musicSource.src = themeData.music;
-                el.bgMusic.load();
-                setTimeout(() => {
-                    el.bgMusic.play()
-                        .then(() => { 
-                            state.isPlaying = true; 
-                            el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>'; 
-                        })
-                        .catch(() => {});
-                }, 1000);
-            }
-        }
-
-        window.toggleMusic = function() {
-            if (state.isPlaying) {
-                el.bgMusic.pause();
-                state.isPlaying = false;
-                el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-            } else {
-                el.bgMusic.play()
-                    .then(() => { 
-                        state.isPlaying = true; 
-                        el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>'; 
-                    })
-                    .catch(() => {});
-            }
-        };
-
         // ========== SHARE CARD ==========
         window.shareCard = function() {
             const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${state.params.to}\n\n${window.location.href}`;
             
             if (navigator.share) {
                 navigator.share({
-                    title: `Kartu Ucapan ${THEMES[state.theme].name} - FIOR Florist`,
+                    title: 'Kartu Ucapan FIOR Florist',
                     text: shareText,
                     url: window.location.href
-                })
-                .then(() => showNotification('Berhasil dibagikan!'))
-                .catch(() => copyURL(window.location.href));
+                }).catch(() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('Link disalin!');
+                });
             } else {
-                copyURL(window.location.href);
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link disalin!');
             }
         };
-
-        function copyURL(url) {
-            navigator.clipboard.writeText(url)
-                .then(() => showNotification('Link disalin!'))
-                .catch(() => alert('Gagal menyalin link'));
-        }
-
-        // ========== PRINT CARD ==========
-        window.printCard = function() {
-            if (state.isPlaying) {
-                el.bgMusic.pause();
-                state.isPlaying = false;
-                el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-            }
-            showNotification('Menyiapkan untuk dicetak...');
-            setTimeout(() => window.print(), 500);
-        };
-
-        // ========== NOTIFICATION ==========
-        function showNotification(message) {
-            el.notificationMessage.textContent = message;
-            el.notification.classList.add('show');
-            setTimeout(() => el.notification.classList.remove('show'), 3000);
-        }
 
         // ========== ESCAPE HTML ==========
         function escapeHTML(str) {
