@@ -4,378 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>FIOR Card - Digital Greeting</title>
-    
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts Premium -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
     <style>
-        /* ========== RESET & VARIABLES ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --navy: #1e3a5f;
-            --navy-light: #2b4c73;
-            --gold: #d4af37;
-            --gold-light: #f5e8c6;
-            --cream: #fdfaf7;
-            --charcoal: #36454F;
-            --taupe: #8b8589;
-            --whatsapp: #25D366;
-            --instagram: #E4405F;
-            
-            --shadow-sm: 0 5px 15px rgba(0,0,0,0.03);
-            --shadow-md: 0 10px 25px rgba(0,0,0,0.05);
+            --navy: #1e3a5f; --navy-light: #2b4c73; --gold: #d4af37;
+            --cream: #fdfaf7; --charcoal: #36454F; --taupe: #8b8589;
             --shadow-lg: 0 15px 35px rgba(0,0,0,0.08);
-            --shadow-xl: 0 25px 50px rgba(0,0,0,0.1);
-            
-            --radius-sm: 0.5rem;
-            --radius-md: 1rem;
-            --radius-lg: 1.5rem;
-            --radius-xl: 2rem;
-            --radius-full: 9999px;
-            
             --transition: all 0.3s ease;
         }
-
-        /* ========== THEMES ========== */
-        .theme-birthday {
-            --theme-primary: #1e3a5f;
-            --theme-secondary: #d4af37;
-            --theme-gradient: linear-gradient(145deg, #1e3a5f, #2b4c73);
-            --theme-soft: linear-gradient(145deg, #eef5ff, #e0e9fa);
-            --theme-bg: linear-gradient(145deg, #fafcff, #f5f9ff);
-            --theme-emoji: '🎂';
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3';
-        }
         
-        .theme-valentine {
-            --theme-primary: #b76e79;
-            --theme-secondary: #e8c1c7;
-            --theme-gradient: linear-gradient(145deg, #b76e79, #c98b95);
-            --theme-soft: linear-gradient(145deg, #fdf2f4, #fce7ea);
-            --theme-bg: linear-gradient(145deg, #fff5f7, #ffe9ee);
-            --theme-emoji: '❤️';
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3';
-        }
+        .theme-birthday { --theme-primary: #1e3a5f; --theme-secondary: #d4af37; --theme-gradient: linear-gradient(145deg, #1e3a5f, #2b4c73); --theme-soft: #eef5ff; --theme-bg: linear-gradient(145deg, #fafcff, #f5f9ff); }
+        .theme-valentine { --theme-primary: #b76e79; --theme-secondary: #e8c1c7; --theme-gradient: linear-gradient(145deg, #b76e79, #c98b95); --theme-soft: #fdf2f4; --theme-bg: linear-gradient(145deg, #fff5f7, #ffe9ee); }
+        .theme-wedding { --theme-primary: #b2ac88; --theme-secondary: #e6d5b8; --theme-gradient: linear-gradient(145deg, #b2ac88, #c5bf9c); --theme-soft: #faf8f2; --theme-bg: linear-gradient(145deg, #fffcf7, #fef9f0); }
         
-        .theme-wedding {
-            --theme-primary: #b2ac88;
-            --theme-secondary: #e6d5b8;
-            --theme-gradient: linear-gradient(145deg, #b2ac88, #c5bf9c);
-            --theme-soft: linear-gradient(145deg, #faf8f2, #f5f2e8);
-            --theme-bg: linear-gradient(145deg, #fffcf7, #fef9f0);
-            --theme-emoji: '💍';
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3';
-        }
-        
-        .theme-anniversary {
-            --theme-primary: #9c89b8;
-            --theme-secondary: #e0b0b5;
-            --theme-gradient: linear-gradient(145deg, #9c89b8, #b39bc0);
-            --theme-soft: linear-gradient(145deg, #f7f1fa, #f0e7f2);
-            --theme-bg: linear-gradient(145deg, #fcf8ff, #f8f0ff);
-            --theme-emoji: '💑';
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3';
-        }
-        
-        .theme-graduation {
-            --theme-primary: #6b8c5e;
-            --theme-secondary: #c5b783;
-            --theme-gradient: linear-gradient(145deg, #6b8c5e, #86a075);
-            --theme-soft: linear-gradient(145deg, #f0f5ec, #e8efe2);
-            --theme-bg: linear-gradient(145deg, #f9fcf7, #f3f9ee);
-            --theme-emoji: '🎓';
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3';
-        }
-        
-        .theme-condolence {
-            --theme-primary: #6b705c;
-            --theme-secondary: #b7b7a4;
-            --theme-gradient: linear-gradient(145deg, #6b705c, #848875);
-            --theme-soft: linear-gradient(145deg, #f4f3ee, #e9e8e2);
-            --theme-bg: linear-gradient(145deg, #fcfbf9, #f7f6f2);
-            --theme-emoji: '🕊️';
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3';
-        }
-
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--theme-bg);
-            color: var(--charcoal);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            position: relative;
             transition: var(--transition);
         }
 
-        /* ========== MUSIC PLAYER MINIMAL ========== */
-        .music-player {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-        }
-
-        .music-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: white;
-            border: none;
-            box-shadow: var(--shadow-lg);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--theme-primary);
-            transition: var(--transition);
-            border: 1px solid rgba(212,175,55,0.2);
-        }
-
-        .music-btn:hover {
-            transform: scale(1.1);
-            color: var(--theme-secondary);
-        }
-
-        /* ========== CARD CONTAINER ========== */
-        .card-wrapper {
-            max-width: 600px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
-            animation: cardEntrance 0.8s ease;
-        }
-
-        @keyframes cardEntrance {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            background: white;
-            border-radius: 30px;
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--theme-gradient);
-        }
-
-        /* ========== CARD HEADER ========== */
-        .card-header {
-            background: var(--theme-gradient);
-            padding: 40px 30px 50px;
-            text-align: center;
-            position: relative;
-        }
-
-        .logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            font-size: 0.85rem;
-            background: rgba(255,255,255,0.15);
-            padding: 8px 16px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 20px;
-            height: 20px;
-            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
-            background-size: contain;
-            filter: brightness(0) invert(1);
-        }
-
-        .theme-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            padding: 8px 16px;
-            border-radius: 50px;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
-        }
-
-        .theme-emoji-large {
-            font-size: 60px;
-            margin-bottom: 15px;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .greeting {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .to-label {
-            color: rgba(255,255,255,0.9);
-            font-size: 0.75rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .recipient-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: white;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-            word-break: break-word;
-        }
-
-        /* ========== CARD BODY ========== */
-        .card-body {
-            padding: 35px 30px;
-            background: white;
-        }
-
-        .message-container {
-            background: var(--cream);
-            border-radius: 20px;
-            padding: 35px 25px;
-            position: relative;
-            margin-bottom: 30px;
-            border: 1px dashed var(--theme-secondary);
-        }
-
-        .message-quote {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--theme-gradient);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            border: 2px solid white;
-        }
-
-        .message {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--charcoal);
-            text-align: center;
-            font-style: italic;
-            white-space: pre-wrap;
-        }
-
-        /* ========== MEDIA SECTION - FOKUS UTAMA ========== */
-        .media-section {
-            margin-top: 20px;
-        }
-
-        .media-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--theme-primary);
-            font-weight: 600;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--theme-soft);
-            font-size: 1rem;
-        }
-
-        .media-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* ===== PREVIEW UTAMA - AUTO PLAY ===== */
-        .media-preview-main {
+        .card-wrapper { max-width: 600px; width: 100%; }
+        .card { background: white; border-radius: 30px; box-shadow: var(--shadow-lg); overflow: hidden; }
+        
+        /* HEADER */
+        .card-header { background: var(--theme-gradient); padding: 40px 30px; text-align: center; color: white; }
+        .theme-emoji { font-size: 60px; margin-bottom: 15px; animation: float 4s ease infinite; }
+        .greeting { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
+        .recipient-name { font-size: 2rem; font-weight: 700; word-break: break-word; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        
+        /* BODY */
+        .card-body { padding: 35px 30px; }
+        .message-container { background: var(--cream); border-radius: 20px; padding: 30px; border: 1px dashed var(--theme-secondary); margin-bottom: 30px; }
+        .message { font-size: 1.1rem; line-height: 1.8; text-align: center; font-style: italic; }
+        
+        /* ===== MEDIA SECTION - FIXED AUTO PLAY ===== */
+        .media-section { margin-top: 20px; }
+        .media-header { display: flex; align-items: center; gap: 10px; color: var(--theme-primary); font-weight: 600; margin-bottom: 20px; }
+        
+        /* MAIN PREVIEW */
+        .main-preview {
             width: 100%;
             border-radius: 16px;
             overflow: hidden;
             background: #000;
-            position: relative;
+            margin-bottom: 20px;
             box-shadow: var(--shadow-lg);
-            margin-bottom: 5px;
         }
-
+        
         .preview-image {
             width: 100%;
-            max-height: 350px;
+            max-height: 400px;
             object-fit: contain;
             display: block;
             background: #f5f5f5;
         }
-
+        
         .preview-video {
             width: 100%;
-            max-height: 350px;
+            max-height: 400px;
             object-fit: contain;
             display: block;
             background: #000;
         }
-
-        .preview-caption {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 15px;
-            background: white;
-            border-bottom: 1px solid var(--theme-soft);
-            color: var(--theme-primary);
-            font-size: 0.85rem;
-        }
-
-        /* ===== THUMBNAIL LIST ===== */
-        .media-thumbnails {
+        
+        /* THUMBNAILS */
+        .thumbnails {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
             gap: 10px;
             margin-top: 15px;
         }
-
-        .thumbnail-item {
+        
+        .thumbnail {
             position: relative;
             border-radius: 10px;
             overflow: hidden;
@@ -384,23 +91,19 @@
             transition: var(--transition);
             aspect-ratio: 1;
         }
-
-        .thumbnail-item:hover {
-            transform: scale(1.05);
-        }
-
-        .thumbnail-item.active {
+        
+        .thumbnail.active {
             border-color: var(--theme-primary);
             box-shadow: 0 0 0 2px var(--theme-secondary);
         }
-
+        
         .thumbnail-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
-        .thumbnail-video-icon {
+        
+        .thumbnail-icon {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -413,21 +116,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
         }
-
-        .thumbnail-type {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-        }
-
-        /* ========== CONTACT ADMIN - MINIMALIS ========== */
+        
+        /* CONTACT MINI */
         .contact-mini {
             display: flex;
             align-items: center;
@@ -437,9 +128,8 @@
             padding: 12px 20px;
             background: var(--cream);
             border-radius: 50px;
-            border: 1px solid rgba(212,175,55,0.2);
         }
-
+        
         .contact-mini-item {
             display: flex;
             align-items: center;
@@ -447,163 +137,45 @@
             color: var(--charcoal);
             text-decoration: none;
             font-size: 0.85rem;
-            transition: var(--transition);
             padding: 5px 12px;
             border-radius: 50px;
         }
-
-        .contact-mini-item:hover {
-            background: var(--theme-primary);
-            color: white;
-        }
-
-        .contact-mini-item i {
-            font-size: 1rem;
-        }
-
-        .contact-mini-item.whatsapp:hover {
-            background: #25D366;
-        }
-
-        .contact-mini-item.instagram:hover {
-            background: #E4405F;
-        }
-
-        .contact-mini-divider {
-            width: 1px;
-            height: 20px;
-            background: rgba(0,0,0,0.1);
-        }
-
-        /* ========== CARD FOOTER ========== */
-        .card-footer {
-            padding: 30px;
-            text-align: center;
-            background: var(--cream);
-            border-top: 1px solid rgba(212,175,55,0.1);
-        }
-
-        .company-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--theme-primary);
-            margin-bottom: 5px;
-        }
-
-        .company-tagline {
-            color: var(--taupe);
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
+        
+        .contact-mini-item:hover { background: var(--theme-primary); color: white; }
+        .contact-mini-item.whatsapp:hover { background: #25D366; }
+        .contact-mini-item.instagram:hover { background: #E4405F; }
+        
+        /* FOOTER */
+        .card-footer { padding: 30px; text-align: center; background: var(--cream); }
+        .company-name { font-size: 1.3rem; font-weight: 700; color: var(--theme-primary); }
         .action-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition);
-            color: white;
-            background: var(--theme-gradient);
-            text-decoration: none;
+            display: inline-block; padding: 10px 20px; border: none; border-radius: 50px;
+            background: var(--theme-gradient); color: white; font-weight: 600; cursor: pointer;
+            text-decoration: none; margin: 5px;
         }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .action-btn.share {
-            background: #25D366;
-        }
-
-        .action-btn.print {
-            background: #6c757d;
-        }
-
-        /* ========== NOTIFICATION ========== */
+        
         .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 50px;
-            background: white;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            display: none;
-            border-left: 4px solid var(--gold);
+            position: fixed; top: 20px; right: 20px; padding: 12px 20px;
+            background: white; border-radius: 50px; box-shadow: var(--shadow-lg);
+            display: none; border-left: 4px solid var(--gold);
         }
-
-        .notification.show {
-            display: flex;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        /* ========== RESPONSIVE ========== */
+        .notification.show { display: flex; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        
         @media (max-width: 600px) {
-            .card-header { padding: 35px 25px 45px; }
-            .greeting { font-size: 2rem; }
-            .recipient-name { font-size: 1.6rem; }
-            .theme-emoji-large { font-size: 50px; }
-            .card-body { padding: 25px 20px; }
-            .message-container { padding: 30px 20px; }
-            .message { font-size: 1rem; }
-            
-            .contact-mini {
-                flex-direction: column;
-                gap: 10px;
-                border-radius: 20px;
-            }
-            
-            .contact-mini-divider {
-                display: none;
-            }
-            
-            .contact-mini-item {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .action-btn {
-                width: 100%;
-                justify-content: center;
-            }
+            .greeting { font-size: 1.8rem; }
+            .recipient-name { font-size: 1.5rem; }
+            .contact-mini { flex-direction: column; }
         }
     </style>
 </head>
 <body class="theme-birthday">
-    <!-- Music Player Minimal -->
-    <div class="music-player">
-        <button id="musicBtn" class="music-btn" onclick="toggleMusic()">
+    <!-- Music Player -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
+        <button id="musicBtn" style="width: 45px; height: 45px; border-radius: 50%; border: none; background: white; box-shadow: var(--shadow-lg); cursor: pointer;">
             <i class="fas fa-music"></i>
         </button>
-        <audio id="bgMusic" loop preload="metadata">
+        <audio id="bgMusic" loop>
             <source id="musicSource" src="" type="audio/mpeg">
         </audio>
     </div>
@@ -611,37 +183,22 @@
     <!-- Main Card -->
     <div class="card-wrapper">
         <div class="card">
-            <!-- Card Header -->
             <div class="card-header">
-                <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="logo">
-                    <div class="logo-icon"></div>
-                    <span>FIOR</span>
-                </a>
-                
-                <div class="theme-badge">
-                    <span id="themeBadgeEmoji">🎂</span>
-                    <span id="themeBadgeText">Birthday</span>
-                </div>
-                
-                <div class="theme-emoji-large" id="themeEmoji">🎂</div>
+                <div class="theme-emoji" id="themeEmoji">🎂</div>
                 <h1 class="greeting" id="greetingText">Happy Birthday</h1>
-                <div class="to-label">KEPADA YTH.</div>
+                <div style="opacity: 0.8; font-size: 0.8rem; letter-spacing: 2px;">KEPADA YTH.</div>
                 <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
             </div>
             
-            <!-- Card Body -->
             <div class="card-body">
                 <!-- Message -->
                 <div class="message-container">
-                    <div class="message-quote">
-                        <i class="fas fa-quote-right"></i>
-                    </div>
                     <div class="message" id="messageText">
-                        [Pesan ucapan akan muncul di sini. Kartu ini dikirim dengan penuh kasih dari FIOR Florist.]
+                        [Pesan ucapan akan muncul di sini.]
                     </div>
                 </div>
                 
-                <!-- ===== MEDIA SECTION - AUTO PLAY & THUMBNAILS ===== -->
+                <!-- ===== MEDIA SECTION - AUTO PLAY ===== -->
                 <div id="mediaSection" class="media-section" style="display: none;">
                     <div class="media-header">
                         <i class="fas fa-images"></i>
@@ -649,60 +206,36 @@
                         <span id="mediaCount" style="margin-left: auto; background: var(--theme-soft); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem;">0</span>
                     </div>
                     
-                    <!-- Main Preview - Auto Play -->
-                    <div id="mainPreviewContainer" style="display: none;">
-                        <div class="media-preview-main" id="mainMediaContainer">
-                            <!-- Akan diisi JavaScript -->
-                        </div>
-                        <div id="previewCaption" class="preview-caption">
-                            <i class="fas fa-play-circle"></i>
-                            <span id="mediaTitle">Memutar media...</span>
-                        </div>
-                    </div>
+                    <!-- Main Preview - AUTO PLAY -->
+                    <div id="mainPreview" class="main-preview" style="display: none;"></div>
                     
-                    <!-- Thumbnail Grid -->
-                    <div id="thumbnailGrid" class="media-thumbnails"></div>
+                    <!-- Thumbnails -->
+                    <div id="thumbnails" class="thumbnails"></div>
                 </div>
 
-                <!-- ===== CONTACT ADMIN - MINIMALIS ===== -->
+                <!-- Contact Admin Mini -->
                 <div class="contact-mini">
-                    <a href="https://wa.me/6285337777585?text=Halo%20admin%20FIOR%20Florist%2C%20saya%20ingin%20bertanya" 
-                       target="_blank" 
-                       class="contact-mini-item whatsapp">
-                        <i class="fab fa-whatsapp"></i>
-                        <span>+62 853-3777-7585</span>
+                    <a href="https://wa.me/6285337777585" target="_blank" class="contact-mini-item whatsapp">
+                        <i class="fab fa-whatsapp"></i> +62 853-3777-7585
                     </a>
-                    <span class="contact-mini-divider"></span>
-                    <a href="https://www.instagram.com/tokobungafior.jayapura" 
-                       target="_blank" 
-                       class="contact-mini-item instagram">
-                        <i class="fab fa-instagram"></i>
-                        <span>@tokobungafior</span>
+                    <span style="width: 1px; height: 20px; background: #ddd;"></span>
+                    <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="contact-mini-item instagram">
+                        <i class="fab fa-instagram"></i> @tokobungafior
                     </a>
                 </div>
             </div>
             
-            <!-- Card Footer -->
             <div class="card-footer">
                 <div class="company-name">FIOR Florist</div>
-                <div class="company-tagline">JAYAPURA • SINCE 2020</div>
-                
-                <div class="action-buttons">
-                    <button class="action-btn share" onclick="shareCard()">
-                        <i class="fas fa-share-alt"></i> Bagikan
-                    </button>
-                    <a href="#" class="action-btn" id="whatsappBtn" target="_blank">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
-                    </a>
-                    <button class="action-btn print" onclick="printCard()">
-                        <i class="fas fa-print"></i> Cetak
-                    </button>
+                <div style="color: var(--taupe); font-size: 0.75rem; margin: 10px 0;">JAYAPURA • SINCE 2020</div>
+                <div>
+                    <button class="action-btn" onclick="shareCard()"><i class="fas fa-share-alt"></i> Bagikan</button>
+                    <a href="#" class="action-btn" id="whatsappBtn"><i class="fab fa-whatsapp"></i> WA</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Notification -->
     <div id="notification" class="notification">
         <i class="fas fa-check-circle" style="color: var(--gold);"></i>
         <span id="notificationMessage"></span>
@@ -710,35 +243,16 @@
 
     <script>
         // ============================================
-        // FIOR CARD - FOKUS MEDIA + AUTO PLAY
+        // CARD.HTML - FIXED: MEDIA MUNCUL + AUTO PLAY
         // ============================================
 
-        // ========== THEMES ==========
         const THEMES = {
-            birthday: { 
-                emoji: '🎂', emojiLarge: '🎂', name: 'Birthday', greeting: 'Happy Birthday',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3'
-            },
-            valentine: { 
-                emoji: '❤️', emojiLarge: '❤️', name: 'Valentine', greeting: 'Happy Valentine',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3'
-            },
-            wedding: { 
-                emoji: '💍', emojiLarge: '💍', name: 'Wedding', greeting: 'Congratulations',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3'
-            },
-            anniversary: { 
-                emoji: '💑', emojiLarge: '💑', name: 'Anniversary', greeting: 'Happy Anniversary',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3'
-            },
-            graduation: { 
-                emoji: '🎓', emojiLarge: '🎓', name: 'Graduation', greeting: 'Congratulations!',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3'
-            },
-            condolence: { 
-                emoji: '🕊️', emojiLarge: '🕊️', name: 'Condolence', greeting: 'Deepest Condolences',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3'
-            }
+            birthday: { emoji: '🎂', greeting: 'Happy Birthday', music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3' },
+            valentine: { emoji: '❤️', greeting: 'Happy Valentine', music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3' },
+            wedding: { emoji: '💍', greeting: 'Congratulations', music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3' },
+            anniversary: { emoji: '💑', greeting: 'Happy Anniversary', music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3' },
+            graduation: { emoji: '🎓', greeting: 'Congratulations!', music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3' },
+            condolence: { emoji: '🕊️', greeting: 'Deepest Condolences', music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3' }
         };
 
         // ========== STATE ==========
@@ -747,27 +261,28 @@
             mediaList: [],
             params: {},
             isPlaying: false,
-            currentMediaIndex: 0
+            currentIndex: 0
         };
 
-        // ========== DOM ELEMENTS ==========
-        const el = {};
+        // ========== DOM ==========
+        const el = {
+            themeEmoji: document.getElementById('themeEmoji'),
+            greetingText: document.getElementById('greetingText'),
+            recipientName: document.getElementById('recipientName'),
+            messageText: document.getElementById('messageText'),
+            whatsappBtn: document.getElementById('whatsappBtn'),
+            mediaSection: document.getElementById('mediaSection'),
+            mediaCount: document.getElementById('mediaCount'),
+            mainPreview: document.getElementById('mainPreview'),
+            thumbnails: document.getElementById('thumbnails'),
+            notification: document.getElementById('notification'),
+            notificationMessage: document.getElementById('notificationMessage'),
+            bgMusic: document.getElementById('bgMusic'),
+            musicSource: document.getElementById('musicSource'),
+            musicBtn: document.getElementById('musicBtn')
+        };
 
-        // ========== CACHE DOM ==========
-        function cacheElements() {
-            const ids = [
-                'themeEmoji', 'greetingText', 'recipientName', 'messageText',
-                'whatsappBtn', 'mediaSection', 'mediaCount',
-                'mainPreviewContainer', 'mainMediaContainer', 'previewCaption', 'mediaTitle',
-                'thumbnailGrid', 'notification', 'notificationMessage',
-                'bgMusic', 'musicSource', 'musicBtn',
-                'themeBadgeEmoji', 'themeBadgeText'
-            ];
-            
-            ids.forEach(id => el[id] = document.getElementById(id));
-        }
-
-        // ========== URL PARAMETERS ==========
+        // ========== GET URL PARAMETERS ==========
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
             const result = {
@@ -776,63 +291,67 @@
                 theme: params.get('theme') || 'birthday'
             };
 
-            // Collect media URLs
+            // ===== KOLEKSI SEMUA MEDIA URL =====
             result.mediaList = [];
 
             // Single media
             if (params.get('media')) {
                 result.mediaList.push({
                     url: params.get('media'),
-                    type: detectMediaType(params.get('media')),
-                    label: 'Media'
+                    type: detectMediaType(params.get('media'))
                 });
             }
 
-            // Multiple media (media1, media2, etc)
+            // Multiple media (media1, media2, ...)
             let i = 1;
             while (params.get(`media${i}`)) {
                 result.mediaList.push({
                     url: params.get(`media${i}`),
-                    type: detectMediaType(params.get(`media${i}`)),
-                    label: `Media ${i}`
+                    type: detectMediaType(params.get(`media${i}`))
                 });
                 i++;
             }
 
-            // Remove duplicates
-            result.mediaList = result.mediaList.filter((item, index, self) =>
-                index === self.findIndex(t => t.url === item.url)
-            );
-
+            // Hapus duplikat
+            result.mediaList = result.mediaList.filter((v,i,a)=>a.findIndex(t=>t.url===v.url)===i);
+            
+            console.log('📦 MEDIA DETECTED:', result.mediaList.length, 'files');
             return result;
         }
 
         // ========== DETECT MEDIA TYPE ==========
         function detectMediaType(url) {
             if (!url) return 'link';
-            const urlLower = url.toLowerCase();
-            
-            if (urlLower.includes('.mp4') || urlLower.includes('.mov') || 
-                urlLower.includes('.webm') || urlLower.includes('drive.google.com')) {
-                return 'video';
-            }
-            
-            if (urlLower.includes('.jpg') || urlLower.includes('.jpeg') || 
-                urlLower.includes('.png') || urlLower.includes('.gif') || 
-                urlLower.includes('.webp')) {
-                return 'image';
-            }
-            
+            const u = url.toLowerCase();
+            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm')) return 'video';
+            if (u.includes('.jpg') || u.includes('.jpeg') || u.includes('.png') || u.includes('.gif') || u.includes('.webp')) return 'image';
             return 'link';
         }
 
-        // ========== GET THUMBNAIL URL ==========
-        function getThumbnailUrl(url, type) {
-            if (type === 'video') {
-                // Untuk video, gunakan icon
-                return null;
-            }
-            return url;
+        // ========== INIT ==========
+        function init() {
+            state.params = getUrlParams();
+            
+            // Set basic info
+            el.recipientName.textContent = state.params.to;
+            el.messageText.textContent = state.params.msg;
+            
+            // Set theme
+            const theme = THEMES[state.params.theme] || THEMES.birthday;
+            state.theme = state.params.theme;
+            document.body.className = `theme-${state.theme}`;
+            el.themeEmoji.textContent = theme.emoji;
+            el.greetingText.textContent = theme.greeting;
+            
+            // Set WhatsApp button
+            const waText = `Halo ${state.params.to}, ini kartu ucapan digital dari FIOR Florist:\n\n${window.location.href}`;
+            el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
+            
+            // ===== RENDER MEDIA =====
+            renderMedia();
+            
+            // ===== SETUP MUSIC =====
+            setupMusic(state.params.theme);
         }
 
         // ========== RENDER MEDIA - AUTO PLAY ==========
@@ -850,7 +369,7 @@
             // Render thumbnails
             renderThumbnails();
             
-            // Auto play media pertama
+            // AUTO PLAY MEDIA PERTAMA
             if (state.mediaList.length > 0) {
                 setTimeout(() => {
                     playMedia(0);
@@ -860,7 +379,7 @@
 
         // ========== RENDER THUMBNAILS ==========
         function renderThumbnails() {
-            if (!el.thumbnailGrid) return;
+            if (!el.thumbnails) return;
             
             let html = '';
             
@@ -869,156 +388,72 @@
                 const isImage = media.type === 'image';
                 
                 html += `
-                    <div class="thumbnail-item ${index === 0 ? 'active' : ''}" 
-                         onclick="playMedia(${index})"
-                         data-index="${index}">
+                    <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="playMedia(${index})">
                         ${isImage ? 
-                            `<img src="${escapeHTML(media.url)}" class="thumbnail-img" alt="Thumbnail" 
-                                  onerror="this.src='https://via.placeholder.com/80x80?text=Error'">` :
-                            `<div class="thumbnail-img" style="background: linear-gradient(145deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
+                            `<img src="${escapeHTML(media.url)}" class="thumbnail-img" onerror="this.src='https://via.placeholder.com/80?text=Error'">` :
+                            `<div style="width:100%; height:100%; background: linear-gradient(145deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
                                 <i class="fas ${isVideo ? 'fa-video' : 'fa-link'}" style="font-size: 1.5rem; color: var(--theme-primary); opacity: 0.5;"></i>
                             </div>`
                         }
-                        ${isVideo ? '<div class="thumbnail-video-icon"><i class="fas fa-play"></i></div>' : ''}
-                        <span class="thumbnail-type">${isVideo ? 'MP4' : isImage ? 'IMG' : 'LNK'}</span>
+                        ${isVideo ? '<div class="thumbnail-icon"><i class="fas fa-play"></i></div>' : ''}
                     </div>
                 `;
             });
             
-            el.thumbnailGrid.innerHTML = html;
+            el.thumbnails.innerHTML = html;
         }
 
         // ========== PLAY MEDIA - AUTO PLAY ==========
         window.playMedia = function(index) {
             if (!state.mediaList[index]) return;
             
-            state.currentMediaIndex = index;
+            state.currentIndex = index;
             const media = state.mediaList[index];
             
             // Update active thumbnail
-            document.querySelectorAll('.thumbnail-item').forEach((item, i) => {
-                if (i === index) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
+            document.querySelectorAll('.thumbnail').forEach((el, i) => {
+                if (i === index) el.classList.add('active');
+                else el.classList.remove('active');
             });
             
             // Render main media
-            let mediaHtml = '';
             const isVideo = media.type === 'video';
             const isImage = media.type === 'image';
             
+            let mediaHtml = '';
+            
             if (isVideo) {
-                mediaHtml = `<video src="${escapeHTML(media.url)}" controls autoplay muted class="preview-video" loop playsinline></video>`;
+                // VIDEO - AUTO PLAY, MUTED, LOOP
+                mediaHtml = `<video src="${escapeHTML(media.url)}" controls autoplay muted loop playsinline class="preview-video"></video>`;
             } else if (isImage) {
-                mediaHtml = `<img src="${escapeHTML(media.url)}" class="preview-image" alt="Media" loading="eager">`;
+                // IMAGE
+                mediaHtml = `<img src="${escapeHTML(media.url)}" class="preview-image" alt="Media">`;
             } else {
+                // LINK
                 mediaHtml = `
-                    <div style="width: 100%; height: 250px; background: var(--cream); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 15px;">
+                    <div style="width:100%; height:250px; background: var(--cream); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 15px;">
                         <i class="fas fa-link" style="font-size: 3rem; color: var(--theme-primary); opacity: 0.3;"></i>
-                        <span style="color: var(--taupe);">Link tidak dapat ditampilkan</span>
-                        <a href="${escapeHTML(media.url)}" target="_blank" style="padding: 8px 20px; background: var(--theme-gradient); color: white; text-decoration: none; border-radius: 50px; font-size: 0.85rem;">
-                            <i class="fas fa-external-link-alt"></i> Buka Link
+                        <span>Link tidak dapat ditampilkan</span>
+                        <a href="${escapeHTML(media.url)}" target="_blank" style="padding: 8px 20px; background: var(--theme-gradient); color: white; border-radius: 50px; text-decoration: none;">
+                            Buka Link
                         </a>
                     </div>
                 `;
             }
             
-            el.mainMediaContainer.innerHTML = mediaHtml;
-            el.mainPreviewContainer.style.display = 'block';
-            el.mediaTitle.textContent = `${media.label || 'Media'} • ${isVideo ? 'Video' : isImage ? 'Gambar' : 'Link'}`;
-            
-            // Update caption
-            el.previewCaption.innerHTML = `
-                <i class="fas ${isVideo ? 'fa-video' : isImage ? 'fa-image' : 'fa-link'}"></i>
-                <span>${media.label || `Media ${index + 1}`} • ${isVideo ? 'Video' : isImage ? 'Gambar' : 'Link'}</span>
-            `;
-        };
-
-        // ========== INITIALIZATION ==========
-        function init() {
-            cacheElements();
-            
-            state.params = getUrlParams();
-            
-            el.recipientName.textContent = state.params.to;
-            el.messageText.textContent = state.params.msg;
-            
-            setTheme(state.params.theme);
-            setupWhatsApp();
-            renderMedia();
-            setupMusic(state.params.theme);
-        }
-
-        // ========== SET THEME ==========
-        function setTheme(theme) {
-            if (!THEMES[theme]) theme = 'birthday';
-            state.theme = theme;
-            
-            const themeData = THEMES[theme];
-            
-            document.body.className = `theme-${theme}`;
-            el.themeEmoji.textContent = themeData.emojiLarge;
-            el.greetingText.textContent = themeData.greeting;
-            el.themeBadgeEmoji.textContent = themeData.emoji;
-            el.themeBadgeText.textContent = themeData.name;
-        }
-
-        // ========== WHATSAPP BUTTON ==========
-        function setupWhatsApp() {
-            const waText = `Halo ${state.params.to}, saya mengirimkan kartu ucapan digital untukmu dari FIOR Florist:\n\n${window.location.href}`;
-            el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
-        }
-
-        // ========== SHARE CARD ==========
-        window.shareCard = function() {
-            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${state.params.to}\n\n${window.location.href}`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: `Kartu Ucapan ${THEMES[state.theme].name} - FIOR Florist`,
-                    text: shareText,
-                    url: window.location.href
-                })
-                .then(() => showNotification('Berhasil dibagikan!'))
-                .catch(() => copyURL(window.location.href));
-            } else {
-                copyURL(window.location.href);
-            }
-        };
-
-        // ========== COPY URL ==========
-        function copyURL(url) {
-            navigator.clipboard.writeText(url)
-                .then(() => showNotification('Link disalin!'))
-                .catch(() => alert('Gagal menyalin link'));
-        }
-
-        // ========== PRINT CARD ==========
-        window.printCard = function() {
-            if (state.isPlaying) {
-                document.getElementById('bgMusic').pause();
-            }
-            showNotification('Menyiapkan untuk dicetak...');
-            setTimeout(() => window.print(), 500);
+            el.mainPreview.innerHTML = mediaHtml;
+            el.mainPreview.style.display = 'block';
         };
 
         // ========== MUSIC ==========
         function setupMusic(theme) {
             const themeData = THEMES[theme] || THEMES.birthday;
-            
             if (themeData.music) {
                 el.musicSource.src = themeData.music;
                 el.bgMusic.load();
-                
-                // Auto play
                 setTimeout(() => {
                     el.bgMusic.play()
-                        .then(() => {
-                            state.isPlaying = true;
-                            el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                        })
+                        .then(() => { state.isPlaying = true; el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>'; })
                         .catch(() => {});
                 }, 1000);
             }
@@ -1031,37 +466,44 @@
                 el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
             } else {
                 el.bgMusic.play()
-                    .then(() => {
-                        state.isPlaying = true;
-                        el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                    })
+                    .then(() => { state.isPlaying = true; el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>'; })
                     .catch(() => {});
             }
         };
 
-        // ========== NOTIFICATION ==========
-        function showNotification(message) {
-            el.notificationMessage.textContent = message;
-            el.notification.classList.add('show');
-            
-            setTimeout(() => {
-                el.notification.classList.remove('show');
-            }, 3000);
+        // ========== SHARE ==========
+        window.shareCard = function() {
+            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${state.params.to}\n\n${window.location.href}`;
+            if (navigator.share) {
+                navigator.share({ title: 'Kartu Ucapan FIOR', text: shareText, url: window.location.href })
+                    .then(() => showNotification('Berhasil dibagikan!'))
+                    .catch(() => copyURL(window.location.href));
+            } else {
+                copyURL(window.location.href);
+            }
+        };
+
+        function copyURL(url) {
+            navigator.clipboard.writeText(url)
+                .then(() => showNotification('Link disalin!'))
+                .catch(() => alert('Gagal menyalin link'));
         }
 
-        // ========== ESCAPE HTML ==========
+        function showNotification(msg) {
+            el.notificationMessage.textContent = msg;
+            el.notification.classList.add('show');
+            setTimeout(() => el.notification.classList.remove('show'), 3000);
+        }
+
         function escapeHTML(str) {
             if (!str) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
         }
 
         // ========== START ==========
         document.addEventListener('DOMContentLoaded', init);
+        window.toggleMusic = toggleMusic;
+        window.playMedia = playMedia;
     </script>
 </body>
 </html>
