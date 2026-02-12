@@ -14,6 +14,9 @@
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
     <style>
         /* ========== RESET & VARIABLES PREMIUM ========== */
         * {
@@ -72,6 +75,7 @@
             --theme-particles: #ffd700;
             --theme-characters: ['🦊', '🐼', '🐨', '🦝', '🐥', '🦄', '🐌', '🐢'];
             --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3';
+            --theme-music-name: 'Happy Birthday';
         }
         
         .theme-valentine {
@@ -86,6 +90,7 @@
             --theme-particles: #ffb6c1;
             --theme-characters: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🦝'];
             --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3';
+            --theme-music-name: 'Romantic Sunset';
         }
         
         .theme-wedding {
@@ -100,9 +105,9 @@
             --theme-particles: #e6d5b8;
             --theme-characters: ['🕊️', '🐇', '🐿️', '🦌', '🐕', '🐩', '🦢', '🐋', '🐚', '🐬'];
             --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3';
+            --theme-music-name: 'Wedding Processional';
         }
         
-        /* ===== LOGO ANNIVERSARY DIGANTI DENGAN 🎉 ===== */
         .theme-anniversary {
             --theme-primary: #9c89b8;
             --theme-secondary: #e0b0b5;
@@ -110,11 +115,12 @@
             --theme-soft: linear-gradient(145deg, #f9f2fd, #f5ebf9);
             --theme-bg: linear-gradient(145deg, #fefaff, #fbf5ff);
             --theme-accent: #d4af37;
-            --theme-emoji: '🎉';  /* DIGANTI DARI 💑 MENJADI 🎉 */
+            --theme-emoji: '🎉';
             --theme-greeting: 'Happy Anniversary';
             --theme-particles: #e0b0b5;
             --theme-characters: ['🎉', '🎊', '✨', '🌟', '⭐', '💫', '🎂', '🍾', '🥂', '🎈'];
             --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3';
+            --theme-music-name: 'Romantic Sunset';
         }
         
         .theme-graduation {
@@ -129,6 +135,7 @@
             --theme-particles: #c5b783;
             --theme-characters: ['🦉', '🐿️', '🦝', '🐨', '🐼', '🦊', '🐧', '🐌', '🐢', '🐆'];
             --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3';
+            --theme-music-name: 'Achievement Bell';
         }
         
         .theme-condolence {
@@ -143,21 +150,22 @@
             --theme-particles: #d4d4c4;
             --theme-characters: ['🕊️', '🦢', '🐋', '🐚', '🌿', '🌸', '🍃', '🌼', '🕯️', '🙏'];
             --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3';
+            --theme-music-name: 'Sad Moment';
         }
 
-        /* ===== TEMA BARU: CONGRATULATION / GRAND OPENING ===== */
         .theme-congratulation {
-            --theme-primary: #ff7f50;      /* Coral */
-            --theme-secondary: #ffb347;     /* Orange */
+            --theme-primary: #ff7f50;
+            --theme-secondary: #ffb347;
             --theme-gradient: linear-gradient(145deg, #ff7f50, #ff9f4b);
             --theme-soft: linear-gradient(145deg, #fff0e6, #ffe6d5);
             --theme-bg: linear-gradient(145deg, #fffaf5, #fff5ed);
             --theme-accent: #ffd700;
-            --theme-emoji: '🎊';           /* Confetti ball */
+            --theme-emoji: '🎊';
             --theme-greeting: 'Congratulations!';
             --theme-particles: #ffb347;
             --theme-characters: ['🎊', '🎉', '✨', '🌟', '⭐', '💫', '🎈', '🎁', '🏆', '🥂'];
             --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3';
+            --theme-music-name: 'Achievement Bell';
         }
 
         body {
@@ -215,6 +223,10 @@
             right: 30px;
             z-index: 100;
             animation: slideIn 0.8s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
         }
 
         @keyframes slideIn {
@@ -269,9 +281,28 @@
             100% { transform: scale(1.3); opacity: 0; }
         }
 
+        .music-info {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--theme-primary);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(212,175,55,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-info i {
+            color: var(--gold);
+        }
+
         /* ========== CARD CONTAINER PREMIUM ========== */
         .card-wrapper {
-            max-width: 650px;
+            max-width: 750px;
             width: 100%;
             position: relative;
             z-index: 10;
@@ -448,10 +479,11 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* ========== MEDIA SECTION PREMIUM ========== */
+        /* ========== CAROUSEL MEDIA PREMIUM ========== */
         .media-section {
             margin-top: 30px;
             display: none;
+            padding: 0 0 20px 0;
         }
 
         .media-header {
@@ -472,47 +504,104 @@
             color: var(--theme-secondary);
         }
 
-        .main-preview {
+        .carousel-container {
+            position: relative;
             width: 100%;
             border-radius: 24px;
             overflow: hidden;
-            background: #000;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             box-shadow: var(--shadow-xl);
-            position: relative;
-            display: none;
         }
 
-        .preview-image {
+        .swiper {
             width: 100%;
-            max-height: 450px;
-            object-fit: contain;
-            display: block;
+            height: 400px;
+            border-radius: 24px;
+        }
+
+        .swiper-slide {
+            text-align: center;
             background: #f8f8f8;
-            transition: transform 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
 
-        .preview-image:hover {
-            transform: scale(1.02);
-        }
-
-        .preview-video {
+        .swiper-slide img,
+        .swiper-slide video {
             width: 100%;
-            max-height: 450px;
+            height: 100%;
             object-fit: contain;
+            background: #0a0a0a;
             display: block;
-            background: #000;
         }
 
-        .video-control {
+        .swiper-slide video {
+            object-fit: contain;
+        }
+
+        .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            background: white;
+            opacity: 0.7;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--theme-primary);
+            opacity: 1;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: white;
+            background: rgba(0,0,0,0.5);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            backdrop-filter: blur(5px);
+            transition: var(--transition);
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background: var(--theme-primary);
+            transform: scale(1.1);
+        }
+
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 1.2rem;
+        }
+
+        .media-type-badge {
             position: absolute;
             bottom: 20px;
             right: 20px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(5px);
             color: white;
-            width: 50px;
-            height: 50px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            z-index: 10;
+        }
+
+        .video-control-carousel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            color: white;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -520,34 +609,74 @@
             cursor: pointer;
             border: 2px solid rgba(255,255,255,0.3);
             transition: var(--transition);
+            z-index: 10;
         }
 
-        .video-control:hover {
+        .video-control-carousel:hover {
             background: var(--theme-primary);
             transform: scale(1.1);
         }
 
+        .carousel-counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 10;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .carousel-counter i {
+            margin-right: 6px;
+            color: var(--gold);
+        }
+
         .thumbnails {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 15px 5px;
+            margin-top: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--theme-primary) rgba(0,0,0,0.1);
+        }
+
+        .thumbnails::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .thumbnails::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+        }
+
+        .thumbnails::-webkit-scrollbar-thumb {
+            background: var(--theme-primary);
+            border-radius: 10px;
         }
 
         .thumbnail {
-            position: relative;
+            flex: 0 0 90px;
+            height: 90px;
             border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
             border: 3px solid transparent;
             transition: var(--transition);
-            aspect-ratio: 1;
             box-shadow: var(--shadow-md);
+            position: relative;
         }
 
         .thumbnail.active {
             border-color: var(--theme-primary);
             box-shadow: 0 0 0 3px var(--theme-secondary);
+            transform: scale(1.05);
         }
 
         .thumbnail:hover {
@@ -579,16 +708,15 @@
 
         .thumbnail-badge {
             position: absolute;
-            bottom: 8px;
-            right: 8px;
+            bottom: 5px;
+            right: 5px;
             background: rgba(0,0,0,0.8);
             backdrop-filter: blur(5px);
             color: white;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 50px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
             border: 1px solid rgba(255,255,255,0.2);
         }
 
@@ -695,6 +823,7 @@
             gap: 15px;
             justify-content: center;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
 
         .action-btn {
@@ -754,7 +883,7 @@
             bottom: 0;
             background: rgba(0,0,0,0.98);
             backdrop-filter: blur(10px);
-            z-index: 1000;
+            z-index: 2000;
             justify-content: center;
             align-items: center;
             padding: 30px;
@@ -773,7 +902,7 @@
         .modal-content {
             position: relative;
             max-width: 90%;
-            max-height: 80vh;
+            max-height: 90vh;
         }
 
         .modal-image, .modal-video {
@@ -842,66 +971,6 @@
             }
         }
 
-        /* ========== DEBUG PANEL ========== */
-        .debug-panel {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(10px);
-            color: #0f0;
-            padding: 20px;
-            border-radius: 16px;
-            font-family: monospace;
-            font-size: 0.8rem;
-            z-index: 2000;
-            max-width: 350px;
-            display: none;
-            border: 1px solid var(--gold);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .debug-panel.show {
-            display: block;
-            animation: slideInLeft 0.3s ease;
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .debug-toggle {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            z-index: 2001;
-            background: var(--theme-gradient);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: var(--shadow-lg);
-            transition: var(--transition);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .debug-toggle:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-xl);
-        }
-
         /* ========== RESPONSIVE ========== */
         @media (max-width: 600px) {
             .card-header { padding: 40px 25px 50px; }
@@ -912,9 +981,17 @@
             .message-container { padding: 35px 25px; }
             .message { font-size: 1.1rem; }
             
+            .swiper {
+                height: 300px;
+            }
+            
             .thumbnails {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: 10px;
+                gap: 8px;
+            }
+            
+            .thumbnail {
+                flex: 0 0 70px;
+                height: 70px;
             }
             
             .contact-elegant {
@@ -946,6 +1023,11 @@
                 top: -40px;
                 right: 0;
             }
+            
+            .music-player {
+                bottom: 20px;
+                right: 20px;
+            }
         }
     </style>
 </head>
@@ -955,23 +1037,16 @@
 
     <!-- Music Player -->
     <div class="music-player">
+        <div class="music-info" id="musicInfo">
+            <i class="fas fa-music"></i>
+            <span id="musicName">Happy Birthday</span>
+        </div>
         <button id="musicBtn" class="music-btn" onclick="toggleMusic()">
             <i class="fas fa-music"></i>
         </button>
-        <audio id="bgMusic" loop preload="metadata">
+        <audio id="bgMusic" loop preload="auto">
             <source id="musicSource" src="" type="audio/mpeg">
         </audio>
-    </div>
-
-    <!-- Debug Toggle -->
-    <button class="debug-toggle" onclick="toggleDebug()">
-        <i class="fas fa-bug"></i> Debug Info
-    </button>
-
-    <!-- Debug Panel -->
-    <div id="debugPanel" class="debug-panel">
-        <strong style="color: var(--gold); font-size: 0.9rem;">🔍 FIOR DEBUG</strong>
-        <div id="debugContent" style="margin-top: 12px;"></div>
     </div>
 
     <!-- Modal Zoom -->
@@ -1016,18 +1091,31 @@
                     </div>
                 </div>
                 
-                <!-- Media Section -->
+                <!-- Media Carousel Section -->
                 <div id="mediaSection" class="media-section">
                     <div class="media-header" data-aos="fade-up">
                         <i class="fas fa-camera-retro"></i>
-                        <span>Koleksi Spesial</span>
-                        <span id="mediaCount" style="margin-left: auto; background: var(--theme-soft); padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 600;">0</span>
+                        <span>Galeri Spesial</span>
+                        <span id="mediaCount" style="margin-left: auto; background: var(--theme-soft); padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 600;">0 Media</span>
                     </div>
                     
-                    <!-- Main Preview -->
-                    <div id="mainPreview" class="main-preview" style="display: none;"></div>
+                    <!-- Swiper Carousel -->
+                    <div class="carousel-container" data-aos="fade-up">
+                        <div class="swiper" id="mediaSwiper">
+                            <div class="swiper-wrapper" id="carouselWrapper">
+                                <!-- Slides akan diisi oleh JavaScript -->
+                            </div>
+                            <div class="swiper-pagination"></div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="carousel-counter" id="carouselCounter">
+                                <i class="fas fa-images"></i>
+                                <span id="currentSlide">1</span> / <span id="totalSlides">0</span>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <!-- Thumbnail Grid -->
+                    <!-- Thumbnails -->
                     <div id="thumbnails" class="thumbnails"></div>
                 </div>
 
@@ -1081,9 +1169,12 @@
     <!-- AOS Script -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
     <script>
         // ============================================
-        // FIOR CARD - 7 TEMA PREMIUM
+        // FIOR CARD - 7 TEMA PREMIUM + CAROUSEL + MUSIC REALTIME
         // ============================================
 
         // ========== THEMES PREMIUM ==========
@@ -1094,6 +1185,7 @@
                 name: 'Birthday', 
                 greeting: 'Happy Birthday',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3',
+                musicName: 'Happy Birthday',
                 characters: ['🦊', '🐼', '🐨', '🦝', '🐥', '🦄', '🐌', '🐢']
             },
             valentine: { 
@@ -1102,6 +1194,7 @@
                 name: 'Valentine', 
                 greeting: 'Happy Valentine',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3',
+                musicName: 'Romantic Sunset',
                 characters: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼']
             },
             wedding: { 
@@ -1110,14 +1203,16 @@
                 name: 'Wedding', 
                 greeting: 'Congratulations',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3',
+                musicName: 'Wedding Processional',
                 characters: ['🕊️', '🐇', '🐿️', '🦌', '🐕', '🐩', '🦢', '🐋']
             },
             anniversary: { 
-                emoji: '🎉',  // DIGANTI DARI 💑 MENJADI 🎉
+                emoji: '🎉',
                 emojiLarge: '🎉',
                 name: 'Anniversary', 
                 greeting: 'Happy Anniversary',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3',
+                musicName: 'Romantic Sunset',
                 characters: ['🎉', '🎊', '✨', '🌟', '⭐', '💫', '🎂', '🥂']
             },
             graduation: { 
@@ -1126,6 +1221,7 @@
                 name: 'Graduation', 
                 greeting: 'Congratulations!',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3',
+                musicName: 'Achievement Bell',
                 characters: ['🦉', '🐿️', '🦝', '🐨', '🐼', '🦊', '🐧', '🐌']
             },
             condolence: { 
@@ -1134,15 +1230,16 @@
                 name: 'Condolence', 
                 greeting: 'Deepest Condolences',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3',
+                musicName: 'Sad Moment',
                 characters: ['🕊️', '🦢', '🐋', '🐚', '🌿', '🌸', '🍃', '🕯️']
             },
-            // ===== TEMA BARU: CONGRATULATION / GRAND OPENING =====
             congratulation: { 
                 emoji: '🎊', 
                 emojiLarge: '🎊',
                 name: 'Congratulation', 
                 greeting: 'Congratulations!',
                 music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3',
+                musicName: 'Achievement Bell',
                 characters: ['🎊', '🎉', '✨', '🌟', '⭐', '💫', '🎈', '🎁', '🏆', '🥂']
             }
         };
@@ -1153,7 +1250,10 @@
             mediaList: [],
             currentIndex: 0,
             isPlaying: false,
-            theme: 'birthday'
+            theme: 'birthday',
+            swiper: null,
+            audioContext: null,
+            isAudioInitialized: false
         };
 
         // ========== DOM ELEMENTS ==========
@@ -1164,37 +1264,16 @@
             const ids = [
                 'themeEmoji', 'greetingText', 'recipientName', 'messageText',
                 'whatsappBtn', 'mediaSection', 'mediaCount',
-                'mainPreview', 'thumbnails',
+                'carouselWrapper', 'thumbnails',
                 'modal', 'modalImage', 'modalVideo',
                 'notification', 'notificationMessage',
                 'bgMusic', 'musicSource', 'musicBtn',
-                'debugPanel', 'debugContent',
-                'cuteAnimals'
+                'musicInfo', 'musicName',
+                'cuteAnimals', 'currentSlide', 'totalSlides'
             ];
             
             ids.forEach(id => el[id] = document.getElementById(id));
         }
-
-        // ========== DEBUG ==========
-        let DEBUG = true;
-        
-        function log(msg, data = null) {
-            if (!DEBUG) return;
-            console.log(`[CARD] ${msg}`, data || '');
-            
-            if (el.debugContent) {
-                const timestamp = new Date().toLocaleTimeString('id-ID', { hour12: false });
-                el.debugContent.innerHTML += `<div style="color: #a8e6cf; margin-top: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px;">
-                    <span style="color: var(--gold);">[${timestamp}]</span> ${msg} ${data ? JSON.stringify(data).substring(0,80) : ''}
-                </div>`;
-                el.debugContent.scrollTop = el.debugContent.scrollHeight;
-            }
-        }
-
-        window.toggleDebug = function() {
-            el.debugPanel.classList.toggle('show');
-            log('Debug panel toggled');
-        };
 
         // ========== CREATE CUTE ANIMALS BACKGROUND ==========
         function createCuteAnimals() {
@@ -1205,7 +1284,6 @@
             const themeData = THEMES[state.theme] || THEMES.birthday;
             const characters = themeData.characters || ['🦊', '🐼', '🐨', '🦝', '🐥'];
             
-            // Floating Characters
             for (let i = 0; i < 20; i++) {
                 const char = document.createElement('div');
                 char.className = 'cute-character';
@@ -1217,19 +1295,15 @@
                 char.textContent = characters[Math.floor(Math.random() * characters.length)];
                 el.cuteAnimals.appendChild(char);
             }
-            
-            log('🎪 Animasi lucu-lucu dibuat:', characters.length + ' karakter');
         }
 
         // ========== GET URL PARAMETERS ==========
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
             
-            log('='.repeat(50));
-            log('🚀 CARD INITIALIZATION');
-            log('='.repeat(50));
-            log('Full URL:', window.location.href);
-            log('All params:', Object.fromEntries(params.entries()));
+            console.log('='.repeat(50));
+            console.log('🚀 CARD INITIALIZATION');
+            console.log('='.repeat(50));
             
             const result = {
                 to: params.get('to') || 'Sahabat',
@@ -1243,7 +1317,6 @@
             // Single media
             if (params.get('media')) {
                 const url = params.get('media');
-                log('📎 Found media:', url.substring(0, 50) + '...');
                 result.mediaList.push({
                     url: url,
                     type: detectMediaType(url),
@@ -1255,7 +1328,6 @@
             let i = 1;
             while (params.get(`media${i}`)) {
                 const url = params.get(`media${i}`);
-                log(`📎 Found media${i}:`, url.substring(0, 50) + '...');
                 result.mediaList.push({
                     url: url,
                     type: detectMediaType(url),
@@ -1266,9 +1338,6 @@
 
             // Remove duplicates
             result.mediaList = result.mediaList.filter((v,i,a)=>a.findIndex(t=>t.url===v.url)===i);
-            
-            log('📊 TOTAL MEDIA:', result.mediaList.length);
-            log('📋 MEDIA LIST:', result.mediaList);
             
             return result;
         }
@@ -1284,78 +1353,186 @@
                 return 'video';
             }
             
-            if (u.includes('.jpg') || u.includes('.jpeg') || u.includes('.png') || 
-                u.includes('.gif') || u.includes('.webp') || u.includes('.bmp')) {
-                return 'image';
-            }
-            
             return 'image';
         }
 
-        // ========== INIT ==========
-        function init() {
-            cacheElements();
-            
-            // Initialize AOS
-            AOS.init({
-                duration: 800,
-                once: true,
-                mirror: false,
-                offset: 50
-            });
-            
-            // Get params
-            state.params = getUrlParams();
-            state.mediaList = state.params.mediaList || [];
-            state.theme = state.params.theme;
-            
-            // Set basic info
-            el.recipientName.textContent = state.params.to;
-            el.messageText.textContent = state.params.msg;
-            
-            // Set theme
-            const themeData = THEMES[state.theme] || THEMES.birthday;
-            document.body.className = `theme-${state.theme}`;
-            el.themeEmoji.textContent = themeData.emojiLarge;
-            el.greetingText.textContent = themeData.greeting;
-            
-            // Set WhatsApp button
-            const waText = `Halo ${state.params.to}, ini kartu ucapan digital dari FIOR Florist:\n\n${window.location.href}`;
-            el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
-            
-            // Create cute animals
-            createCuteAnimals();
-            
-            // Render media
-            renderMedia();
-            
-            // Setup music
-            setupMusic(state.params.theme);
-            
-            log('✅ INIT COMPLETE - Theme:', state.theme);
+        // ========== MUSIC REALTIME ==========
+        function initAudioContext() {
+            try {
+                // Create AudioContext untuk kontrol yang lebih baik
+                state.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                state.isAudioInitialized = true;
+                
+                // Resume AudioContext saat interaksi pertama
+                document.addEventListener('click', function resumeAudio() {
+                    if (state.audioContext && state.audioContext.state === 'suspended') {
+                        state.audioContext.resume();
+                    }
+                    document.removeEventListener('click', resumeAudio);
+                }, { once: true });
+                
+                console.log('🎵 AudioContext initialized');
+            } catch (error) {
+                console.warn('AudioContext not supported:', error);
+            }
         }
 
-        // ========== RENDER MEDIA ==========
-        function renderMedia() {
+        function setupMusic(theme) {
+            const themeData = THEMES[theme] || THEMES.birthday;
+            
+            // Update music info display
+            if (el.musicName) {
+                el.musicName.textContent = themeData.musicName;
+            }
+            
+            if (themeData.music) {
+                // Set audio source
+                el.musicSource.src = themeData.music;
+                el.bgMusic.load();
+                
+                // Auto-play setelah delay (untuk user experience)
+                setTimeout(() => {
+                    // Cek apakah AudioContext sudah di-initialize
+                    if (!state.isAudioInitialized) {
+                        initAudioContext();
+                    }
+                    
+                    // Play music dengan promise handling
+                    const playPromise = el.bgMusic.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => {
+                                state.isPlaying = true;
+                                el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                                console.log(`🎵 Playing: ${themeData.musicName}`);
+                            })
+                            .catch(error => {
+                                console.log('🎵 Autoplay prevented - waiting for user interaction');
+                                // Autoplay biasanya diblokir browser, siapkan untuk play manual
+                                state.isPlaying = false;
+                                el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
+                                
+                                // Tambahkan event listener sekali untuk play saat interaksi
+                                const playOnInteraction = function() {
+                                    el.bgMusic.play()
+                                        .then(() => {
+                                            state.isPlaying = true;
+                                            el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                                            console.log('🎵 Music started after interaction');
+                                        })
+                                        .catch(e => console.warn('Still cannot play:', e));
+                                    document.removeEventListener('click', playOnInteraction);
+                                    document.removeEventListener('touchstart', playOnInteraction);
+                                };
+                                
+                                document.addEventListener('click', playOnInteraction, { once: true });
+                                document.addEventListener('touchstart', playOnInteraction, { once: true });
+                            });
+                    }
+                }, 1000);
+            }
+        }
+
+        window.toggleMusic = function() {
+            if (state.isPlaying) {
+                el.bgMusic.pause();
+                state.isPlaying = false;
+                el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
+                console.log('🎵 Music paused');
+            } else {
+                el.bgMusic.play()
+                    .then(() => {
+                        state.isPlaying = true;
+                        el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        console.log('🎵 Music resumed');
+                    })
+                    .catch(error => {
+                        console.warn('🎵 Cannot play music:', error);
+                        showNotification('Klik tombol musik untuk memutar lagu');
+                    });
+            }
+        };
+
+        // ========== RENDER CAROUSEL ==========
+        function renderCarousel() {
+            if (!el.carouselWrapper) return;
+            
             if (state.mediaList.length === 0) {
                 el.mediaSection.style.display = 'none';
-                log('❌ No media found - section hidden');
                 return;
             }
             
             el.mediaSection.style.display = 'block';
             el.mediaCount.textContent = `${state.mediaList.length} Media`;
-            log('✅ Media section shown');
+            
+            if (el.totalSlides) {
+                el.totalSlides.textContent = state.mediaList.length;
+            }
+            
+            // Build slides
+            let slidesHTML = '';
+            
+            state.mediaList.forEach((media, index) => {
+                const isVideo = media.type === 'video';
+                
+                if (isVideo) {
+                    slidesHTML += `
+                        <div class="swiper-slide">
+                            <video id="video-${index}" src="${escapeHTML(media.url)}" 
+                                   loop playsinline muted
+                                   onerror="this.outerHTML='<div style=\'width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#1a1a1a; color:white;\'><i class=\'fas fa-exclamation-triangle\' style=\'font-size:2rem; color:#ff6b6b;\'></i><p style=\'margin-top:15px;\'>Video tidak dapat dimuat</p><a href=\'${escapeHTML(media.url)}\' target=\'_blank\' style=\'margin-top:15px; padding:10px 20px; background:var(--theme-primary); color:white; border-radius:50px; text-decoration:none;\'>Buka Link</a></div>';">
+                            </video>
+                            <div class="media-type-badge">
+                                <i class="fas fa-film"></i> VIDEO
+                            </div>
+                            <div class="video-control-carousel" onclick="toggleVideoPlay(${index})">
+                                <i id="playIcon-${index}" class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    slidesHTML += `
+                        <div class="swiper-slide" onclick="openModal('${escapeHTML(media.url)}', false)">
+                            <img src="${escapeHTML(media.url)}" 
+                                 alt="Media ${index + 1}"
+                                 onerror="this.outerHTML='<div style=\'width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#1a1a1a; color:white;\'><i class=\'fas fa-exclamation-triangle\' style=\'font-size:2rem; color:#ff6b6b;\'></i><p style=\'margin-top:15px;\'>Gambar tidak dapat dimuat</p><a href=\'${escapeHTML(media.url)}\' target=\'_blank\' style=\'margin-top:15px; padding:10px 20px; background:var(--theme-primary); color:white; border-radius:50px; text-decoration:none;\'>Buka Link</a></div>';">
+                            <div class="media-type-badge">
+                                <i class="fas fa-image"></i> FOTO
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            el.carouselWrapper.innerHTML = slidesHTML;
+            
+            // Initialize Swiper
+            state.swiper = new Swiper('.swiper', {
+                loop: state.mediaList.length > 1,
+                autoplay: false,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                on: {
+                    slideChange: function() {
+                        const activeIndex = this.realIndex;
+                        state.currentIndex = activeIndex;
+                        updateActiveThumbnail(activeIndex);
+                        if (el.currentSlide) {
+                            el.currentSlide.textContent = activeIndex + 1;
+                        }
+                    }
+                }
+            });
             
             // Render thumbnails
             renderThumbnails();
-            
-            // Auto play first media
-            if (state.mediaList.length > 0) {
-                setTimeout(() => {
-                    playMedia(0);
-                }, 500);
-            }
         }
 
         // ========== RENDER THUMBNAILS ==========
@@ -1367,81 +1544,29 @@
             state.mediaList.forEach((media, index) => {
                 const isVideo = media.type === 'video';
                 
-                if (isVideo) {
-                    html += `
-                        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="playMedia(${index})">
+                html += `
+                    <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
+                        ${isVideo ? `
                             <div style="width:100%; height:100%; background: linear-gradient(145deg, #000, #1a1a1a); display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-film" style="font-size: 2rem; color: white; opacity: 0.7;"></i>
                                 <div class="thumbnail-icon"><i class="fas fa-play"></i></div>
                             </div>
-                            <span class="thumbnail-badge">VIDEO</span>
-                        </div>
-                    `;
-                } else {
-                    html += `
-                        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="playMedia(${index})">
+                        ` : `
                             <img src="${escapeHTML(media.url)}" class="thumbnail-img" 
                                  onerror="this.src='https://via.placeholder.com/100x100?text=Image'; this.onerror=null;">
-                            <span class="thumbnail-badge">PHOTO</span>
-                        </div>
-                    `;
-                }
+                        `}
+                        <span class="thumbnail-badge">${isVideo ? 'VIDEO' : 'FOTO'}</span>
+                    </div>
+                `;
             });
             
             el.thumbnails.innerHTML = html;
-            log('🖼️ Thumbnails rendered:', state.mediaList.length);
         }
 
-        // ========== PLAY MEDIA ==========
-        window.playMedia = function(index) {
-            if (!state.mediaList[index]) return;
-            
-            state.currentIndex = index;
-            const media = state.mediaList[index];
-            
-            log('▶️ Playing media:', index, media.type);
-            
-            // Update active thumbnail
-            document.querySelectorAll('.thumbnail').forEach((el, i) => {
-                if (i === index) el.classList.add('active');
-                else el.classList.remove('active');
-            });
-            
-            const isVideo = media.type === 'video';
-            
-            let mediaHtml = '';
-            
-            if (isVideo) {
-                mediaHtml = `
-                    <div style="position: relative;">
-                        <video id="mainVideo" src="${escapeHTML(media.url)}" 
-                               controls autoplay muted loop playsinline 
-                               class="preview-video"
-                               onerror="this.outerHTML='<div style=\'padding:50px; text-align:center; background:#fef2f2;\'><i class=\'fas fa-exclamation-triangle\' style=\'color:#c00;\'></i><p style=\'margin-top:10px;\'>Video tidak dapat dimuat</p><a href=\'${escapeHTML(media.url)}\' target=\'_blank\' style=\'display:inline-block; margin-top:15px; padding:10px 25px; background:var(--theme-primary); color:white; border-radius:50px; text-decoration:none;\'>Buka Link</a></div>';">
-                        </video>
-                        <div class="video-control" onclick="toggleVideoPlay()">
-                            <i id="videoPlayIcon" class="fas fa-pause"></i>
-                        </div>
-                    </div>
-                `;
-            } else {
-                mediaHtml = `
-                    <img src="${escapeHTML(media.url)}" 
-                         class="preview-image" 
-                         alt="Media"
-                         onclick="openModal('${escapeHTML(media.url)}', false)"
-                         onerror="this.outerHTML='<div style=\'padding:50px; text-align:center; background:#fef2f2;\'><i class=\'fas fa-exclamation-triangle\' style=\'color:#c00;\'></i><p style=\'margin-top:10px;\'>Gambar tidak dapat dimuat</p><a href=\'${escapeHTML(media.url)}\' target=\'_blank\' style=\'display:inline-block; margin-top:15px; padding:10px 25px; background:var(--theme-primary); color:white; border-radius:50px; text-decoration:none;\'>Buka Link</a></div>';">
-                `;
-            }
-            
-            el.mainPreview.innerHTML = mediaHtml;
-            el.mainPreview.style.display = 'block';
-        };
-
         // ========== TOGGLE VIDEO PLAY ==========
-        window.toggleVideoPlay = function() {
-            const video = document.getElementById('mainVideo');
-            const icon = document.getElementById('videoPlayIcon');
+        window.toggleVideoPlay = function(index) {
+            const video = document.getElementById(`video-${index}`);
+            const icon = document.getElementById(`playIcon-${index}`);
             
             if (video) {
                 if (video.paused) {
@@ -1453,6 +1578,22 @@
                 }
             }
         };
+
+        // ========== JUMP TO SLIDE ==========
+        window.jumpToSlide = function(index) {
+            if (state.swiper) {
+                state.swiper.slideToLoop(index);
+                updateActiveThumbnail(index);
+            }
+        };
+
+        // ========== UPDATE ACTIVE THUMBNAIL ==========
+        function updateActiveThumbnail(index) {
+            document.querySelectorAll('.thumbnail').forEach((el, i) => {
+                if (i === index) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+        }
 
         // ========== MODAL ZOOM ==========
         window.openModal = function(url, isVideo) {
@@ -1474,40 +1615,6 @@
             if (el.modalVideo) {
                 el.modalVideo.pause();
                 el.modalVideo.src = '';
-            }
-        };
-
-        // ========== MUSIC ==========
-        function setupMusic(theme) {
-            const themeData = THEMES[theme] || THEMES.birthday;
-            
-            if (themeData.music) {
-                el.musicSource.src = themeData.music;
-                el.bgMusic.load();
-                
-                setTimeout(() => {
-                    el.bgMusic.play()
-                        .then(() => {
-                            state.isPlaying = true;
-                            el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                        })
-                        .catch(() => {});
-                }, 1000);
-            }
-        }
-
-        window.toggleMusic = function() {
-            if (state.isPlaying) {
-                el.bgMusic.pause();
-                state.isPlaying = false;
-                el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-            } else {
-                el.bgMusic.play()
-                    .then(() => {
-                        state.isPlaying = true;
-                        el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                    })
-                    .catch(() => {});
             }
         };
 
@@ -1563,9 +1670,51 @@
                 .replace(/'/g, '&#039;');
         }
 
+        // ========== INIT ==========
+        function init() {
+            cacheElements();
+            
+            // Initialize AOS
+            AOS.init({
+                duration: 800,
+                once: true,
+                mirror: false,
+                offset: 50
+            });
+            
+            // Get params
+            state.params = getUrlParams();
+            state.mediaList = state.params.mediaList || [];
+            state.theme = state.params.theme;
+            
+            // Set basic info
+            el.recipientName.textContent = state.params.to;
+            el.messageText.textContent = state.params.msg;
+            
+            // Set theme
+            const themeData = THEMES[state.theme] || THEMES.birthday;
+            document.body.className = `theme-${state.theme}`;
+            el.themeEmoji.textContent = themeData.emojiLarge;
+            el.greetingText.textContent = themeData.greeting;
+            
+            // Set WhatsApp button
+            const waText = `Halo ${state.params.to}, ini kartu ucapan digital dari FIOR Florist:\n\n${window.location.href}`;
+            el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
+            
+            // Create cute animals
+            createCuteAnimals();
+            
+            // Render carousel
+            renderCarousel();
+            
+            // Setup music (realtime sesuai tema)
+            setupMusic(state.params.theme);
+            
+            console.log('✅ INIT COMPLETE - Theme:', state.theme, 'Music:', themeData.musicName);
+        }
+
         // ========== START ==========
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
-
