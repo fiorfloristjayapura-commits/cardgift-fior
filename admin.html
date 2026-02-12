@@ -41,6 +41,10 @@
             --danger-light: #fee2e2;
             --warning: #b45309;
             --warning-light: #ffedd5;
+            --coral: #ff7f50;
+            --coral-light: #ffd7c4;
+            --teal: #008080;
+            --teal-light: #b3d9d9;
             
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
@@ -459,7 +463,7 @@
             }
         }
 
-        /* ===== THEME GRID ===== */
+        /* ===== THEME GRID - 7 TEMA ===== */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -503,6 +507,30 @@
             font-size: 0.8rem;
             font-weight: 600;
             color: var(--gray-700);
+        }
+
+        /* Theme Anniversary - Updated */
+        .theme-card[data-theme="anniversary"] .theme-emoji {
+            color: #9c89b8;
+        }
+        
+        .theme-card[data-theme="anniversary"].active .theme-emoji {
+            color: white;
+        }
+
+        /* Theme Congratulation - New */
+        .theme-card[data-theme="congratulation"] .theme-emoji {
+            color: #ff7f50;
+        }
+        
+        .theme-card[data-theme="congratulation"]:hover {
+            border-color: #ff7f50;
+            background: #ffd7c4;
+        }
+        
+        .theme-card[data-theme="congratulation"].active {
+            background: linear-gradient(145deg, #ff7f50, #ff9f4b);
+            border-color: #ff7f50;
         }
 
         /* ===== BUTTONS ===== */
@@ -974,11 +1002,11 @@
                         </small>
                     </div>
 
-                    <!-- Pilih Tema -->
+                    <!-- Pilih Tema - 7 TEMA -->
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-palette"></i>
-                            Pilih Tema
+                            Pilih Tema (7 Tema Premium)
                         </label>
                         <div class="theme-grid" id="themeGrid"></div>
                     </div>
@@ -1039,7 +1067,7 @@
                 </div>
             </div>
 
-            <!-- ===== CUSTOMERS PAGE - DENGAN CATATAN, EMAIL, ALAMAT ===== -->
+            <!-- ===== CUSTOMERS PAGE ===== -->
             <div id="customers" class="page">
                 <h1 class="page-title">
                     <i class="fas fa-users"></i>
@@ -1152,7 +1180,7 @@
         </main>
     </div>
 
-    <!-- ===== MODAL TAMBAH CUSTOMER - DENGAN CATATAN, EMAIL, ALAMAT ===== -->
+    <!-- ===== MODAL TAMBAH CUSTOMER ===== -->
     <div id="customerModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1231,7 +1259,7 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - FULL CUSTOMER DATA
+        // FIOR CARD ADMIN - 7 TEMA PREMIUM
         // ============================================
 
         // ========== KONFIGURASI ==========
@@ -1241,14 +1269,15 @@
             DEFAULT_THEME: "birthday"
         };
 
-        // ========== THEMES ==========
+        // ========== THEMES - 7 TEMA ==========
         const THEMES = [
             { id: 'birthday', name: 'Birthday', emoji: '🎂' },
             { id: 'valentine', name: 'Valentine', emoji: '❤️' },
             { id: 'wedding', name: 'Wedding', emoji: '💍' },
-            { id: 'anniversary', name: 'Anniversary', emoji: '💑' },
+            { id: 'anniversary', name: 'Anniversary', emoji: '🎉' },  // DIGANTI DARI 💑 KE 🎉
             { id: 'graduation', name: 'Graduation', emoji: '🎓' },
-            { id: 'condolence', name: 'Condolence', emoji: '🕊️' }
+            { id: 'condolence', name: 'Condolence', emoji: '🕊️' },
+            { id: 'congratulation', name: 'Congratulation', emoji: '🎊' } // TEMA BARU
         ];
 
         // ========== STATE ==========
@@ -1327,7 +1356,7 @@
             });
         }
 
-        // ========== LOAD THEMES ==========
+        // ========== LOAD THEMES - 7 TEMA ==========
         function loadThemes() {
             if (!el.themeGrid) return;
             
@@ -1406,7 +1435,7 @@
             el.urlListContainer.innerHTML = html;
         }
 
-        // ========== CREATE CARD ==========
+        // ========== CREATE CARD - SUPPORT 7 TEMA ==========
         window.createCard = async function() {
             const name = el.recipientName?.value.trim();
             const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
@@ -1675,7 +1704,7 @@
             el.historyTableBody.innerHTML = html;
         }
 
-        // ========== CUSTOMER MODAL - SAVE DENGAN CATATAN, EMAIL, ALAMAT ==========
+        // ========== CUSTOMER MODAL ==========
         window.showAddCustomerModal = function() {
             document.getElementById('customerModal').classList.add('active');
         };
