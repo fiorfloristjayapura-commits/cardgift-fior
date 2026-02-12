@@ -8,15 +8,25 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --navy: #1e3a5f; --navy-light: #2b4c73; --gold: #d4af37;
-            --cream: #fdfaf7; --charcoal: #36454F; --taupe: #8b8589;
+            --navy: #1e3a5f;
+            --navy-light: #2b4c73;
+            --gold: #d4af37;
+            --gold-light: #f5e8c6;
+            --cream: #fdfaf7;
+            --charcoal: #36454F;
+            --taupe: #8b8589;
             --shadow-lg: 0 15px 35px rgba(0,0,0,0.08);
+            --shadow-xl: 0 25px 50px rgba(0,0,0,0.12);
             --transition: all 0.3s ease;
         }
         
+        /* THEMES */
         .theme-birthday { --theme-primary: #1e3a5f; --theme-secondary: #d4af37; --theme-gradient: linear-gradient(145deg, #1e3a5f, #2b4c73); --theme-soft: #eef5ff; --theme-bg: linear-gradient(145deg, #fafcff, #f5f9ff); }
         .theme-valentine { --theme-primary: #b76e79; --theme-secondary: #e8c1c7; --theme-gradient: linear-gradient(145deg, #b76e79, #c98b95); --theme-soft: #fdf2f4; --theme-bg: linear-gradient(145deg, #fff5f7, #ffe9ee); }
         .theme-wedding { --theme-primary: #b2ac88; --theme-secondary: #e6d5b8; --theme-gradient: linear-gradient(145deg, #b2ac88, #c5bf9c); --theme-soft: #faf8f2; --theme-bg: linear-gradient(145deg, #fffcf7, #fef9f0); }
+        .theme-anniversary { --theme-primary: #9c89b8; --theme-secondary: #e0b0b5; --theme-gradient: linear-gradient(145deg, #9c89b8, #b39bc0); --theme-soft: #f7f1fa; --theme-bg: linear-gradient(145deg, #fcf8ff, #f8f0ff); }
+        .theme-graduation { --theme-primary: #6b8c5e; --theme-secondary: #c5b783; --theme-gradient: linear-gradient(145deg, #6b8c5e, #86a075); --theme-soft: #f0f5ec; --theme-bg: linear-gradient(145deg, #f9fcf7, #f3f9ee); }
+        .theme-condolence { --theme-primary: #6b705c; --theme-secondary: #b7b7a4; --theme-gradient: linear-gradient(145deg, #6b705c, #848875); --theme-soft: #f4f3ee; --theme-bg: linear-gradient(145deg, #fcfbf9, #f7f6f2); }
         
         body {
             font-family: 'Inter', sans-serif;
@@ -30,25 +40,119 @@
         }
 
         .card-wrapper { max-width: 600px; width: 100%; }
-        .card { background: white; border-radius: 30px; box-shadow: var(--shadow-lg); overflow: hidden; }
+        .card {
+            background: white;
+            border-radius: 30px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
         
         /* HEADER */
-        .card-header { background: var(--theme-gradient); padding: 40px 30px; text-align: center; color: white; }
-        .theme-emoji { font-size: 60px; margin-bottom: 15px; animation: float 4s ease infinite; }
-        .greeting { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
-        .recipient-name { font-size: 2rem; font-weight: 700; word-break: break-word; }
-        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .card-header {
+            background: var(--theme-gradient);
+            padding: 40px 30px 50px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .theme-emoji {
+            font-size: 70px;
+            margin-bottom: 15px;
+            animation: float 4s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .greeting {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .to-label {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        
+        .recipient-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            word-break: break-word;
+        }
         
         /* BODY */
-        .card-body { padding: 35px 30px; }
-        .message-container { background: var(--cream); border-radius: 20px; padding: 30px; border: 1px dashed var(--theme-secondary); margin-bottom: 30px; }
-        .message { font-size: 1.1rem; line-height: 1.8; text-align: center; font-style: italic; }
+        .card-body {
+            padding: 35px 30px;
+            background: white;
+        }
         
-        /* ===== MEDIA SECTION - FIXED AUTO PLAY ===== */
-        .media-section { margin-top: 20px; }
-        .media-header { display: flex; align-items: center; gap: 10px; color: var(--theme-primary); font-weight: 600; margin-bottom: 20px; }
+        .message-container {
+            background: var(--cream);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            margin-bottom: 30px;
+            border: 1px dashed var(--theme-secondary);
+        }
         
-        /* MAIN PREVIEW */
+        .message-quote {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--theme-gradient);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+        
+        .message {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--charcoal);
+            text-align: center;
+            font-style: italic;
+            white-space: pre-wrap;
+        }
+        
+        /* ===== MEDIA SECTION - FULL DISPLAY ===== */
+        .media-section {
+            margin-top: 20px;
+        }
+        
+        .media-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--theme-primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--theme-soft);
+        }
+        
+        /* MAIN PREVIEW - LAYAR PENUH */
         .main-preview {
             width: 100%;
             border-radius: 16px;
@@ -56,11 +160,12 @@
             background: #000;
             margin-bottom: 20px;
             box-shadow: var(--shadow-lg);
+            position: relative;
         }
         
         .preview-image {
             width: 100%;
-            max-height: 400px;
+            max-height: 450px;
             object-fit: contain;
             display: block;
             background: #f5f5f5;
@@ -68,33 +173,61 @@
         
         .preview-video {
             width: 100%;
-            max-height: 400px;
+            max-height: 450px;
             object-fit: contain;
             display: block;
             background: #000;
         }
         
-        /* THUMBNAILS */
+        /* PLAY/PAUSE OVERLAY */
+        .video-control {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: var(--transition);
+        }
+        
+        .video-control:hover {
+            background: var(--theme-primary);
+            transform: scale(1.1);
+        }
+        
+        /* THUMBNAIL GRID */
         .thumbnails {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 12px;
             margin-top: 15px;
         }
         
         .thumbnail {
             position: relative;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
-            border: 2px solid transparent;
+            border: 3px solid transparent;
             transition: var(--transition);
             aspect-ratio: 1;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         .thumbnail.active {
             border-color: var(--theme-primary);
             box-shadow: 0 0 0 2px var(--theme-secondary);
+        }
+        
+        .thumbnail:hover {
+            transform: scale(1.05);
         }
         
         .thumbnail-img {
@@ -108,14 +241,29 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
             color: white;
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.9rem;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .thumbnail-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
         
         /* CONTACT MINI */
@@ -128,6 +276,7 @@
             padding: 12px 20px;
             background: var(--cream);
             border-radius: 50px;
+            border: 1px solid rgba(212,175,55,0.2);
         }
         
         .contact-mini-item {
@@ -139,40 +288,192 @@
             font-size: 0.85rem;
             padding: 5px 12px;
             border-radius: 50px;
+            transition: var(--transition);
         }
         
-        .contact-mini-item:hover { background: var(--theme-primary); color: white; }
+        .contact-mini-item:hover {
+            background: var(--theme-primary);
+            color: white;
+        }
+        
         .contact-mini-item.whatsapp:hover { background: #25D366; }
         .contact-mini-item.instagram:hover { background: #E4405F; }
         
         /* FOOTER */
-        .card-footer { padding: 30px; text-align: center; background: var(--cream); }
-        .company-name { font-size: 1.3rem; font-weight: 700; color: var(--theme-primary); }
-        .action-btn {
-            display: inline-block; padding: 10px 20px; border: none; border-radius: 50px;
-            background: var(--theme-gradient); color: white; font-weight: 600; cursor: pointer;
-            text-decoration: none; margin: 5px;
+        .card-footer {
+            padding: 30px;
+            text-align: center;
+            background: var(--cream);
+            border-top: 1px solid rgba(212,175,55,0.1);
         }
         
-        .notification {
-            position: fixed; top: 20px; right: 20px; padding: 12px 20px;
-            background: white; border-radius: 50px; box-shadow: var(--shadow-lg);
-            display: none; border-left: 4px solid var(--gold);
+        .company-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--theme-primary);
+            margin-bottom: 5px;
         }
+        
+        .company-tagline {
+            color: var(--taupe);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            color: white;
+            background: var(--theme-gradient);
+            text-decoration: none;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .action-btn.share { background: #25D366; }
+        .action-btn.print { background: #6c757d; }
+        
+        /* MODAL ZOOM */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal.active { display: flex; }
+        
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .modal-image, .modal-video {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: black;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            background: var(--danger);
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        /* NOTIFICATION */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: white;
+            border-radius: 50px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            border-left: 4px solid var(--gold);
+        }
+        
         .notification.show { display: flex; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
         
+        /* MUSIC PLAYER */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .music-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--theme-primary);
+            transition: var(--transition);
+            border: 1px solid rgba(212,175,55,0.3);
+        }
+        
+        .music-btn:hover {
+            transform: scale(1.1);
+            color: var(--theme-secondary);
+        }
+        
+        /* RESPONSIVE */
         @media (max-width: 600px) {
-            .greeting { font-size: 1.8rem; }
-            .recipient-name { font-size: 1.5rem; }
-            .contact-mini { flex-direction: column; }
+            .greeting { font-size: 2rem; }
+            .recipient-name { font-size: 1.6rem; }
+            .theme-emoji { font-size: 55px; }
+            .card-body { padding: 25px 20px; }
+            .message-container { padding: 25px 20px; }
+            .message { font-size: 1rem; }
+            .thumbnails { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
+            .contact-mini { flex-direction: column; gap: 10px; border-radius: 20px; }
+            .action-buttons { flex-direction: column; }
+            .action-btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body class="theme-birthday">
     <!-- Music Player -->
-    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
-        <button id="musicBtn" style="width: 45px; height: 45px; border-radius: 50%; border: none; background: white; box-shadow: var(--shadow-lg); cursor: pointer;">
+    <div class="music-player">
+        <button id="musicBtn" class="music-btn" onclick="toggleMusic()">
             <i class="fas fa-music"></i>
         </button>
         <audio id="bgMusic" loop>
@@ -180,25 +481,41 @@
         </audio>
     </div>
 
+    <!-- Modal Zoom -->
+    <div id="mediaModal" class="modal">
+        <button class="modal-close" onclick="closeModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-content">
+            <img id="modalImage" class="modal-image" style="display: none;">
+            <video id="modalVideo" class="modal-video" controls style="display: none;"></video>
+        </div>
+    </div>
+
     <!-- Main Card -->
     <div class="card-wrapper">
         <div class="card">
+            <!-- Card Header -->
             <div class="card-header">
                 <div class="theme-emoji" id="themeEmoji">🎂</div>
                 <h1 class="greeting" id="greetingText">Happy Birthday</h1>
-                <div style="opacity: 0.8; font-size: 0.8rem; letter-spacing: 2px;">KEPADA YTH.</div>
+                <div class="to-label">KEPADA YTH.</div>
                 <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
             </div>
             
+            <!-- Card Body -->
             <div class="card-body">
                 <!-- Message -->
                 <div class="message-container">
+                    <div class="message-quote">
+                        <i class="fas fa-quote-right"></i>
+                    </div>
                     <div class="message" id="messageText">
-                        [Pesan ucapan akan muncul di sini.]
+                        [Pesan ucapan akan muncul di sini. Kartu ini dikirim dengan penuh kasih dari FIOR Florist.]
                     </div>
                 </div>
                 
-                <!-- ===== MEDIA SECTION - AUTO PLAY ===== -->
+                <!-- ===== MEDIA SECTION - LANGSUNG TAMPIL ===== -->
                 <div id="mediaSection" class="media-section" style="display: none;">
                     <div class="media-header">
                         <i class="fas fa-images"></i>
@@ -206,36 +523,45 @@
                         <span id="mediaCount" style="margin-left: auto; background: var(--theme-soft); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem;">0</span>
                     </div>
                     
-                    <!-- Main Preview - AUTO PLAY -->
+                    <!-- MAIN PREVIEW - FULL DISPLAY -->
                     <div id="mainPreview" class="main-preview" style="display: none;"></div>
                     
-                    <!-- Thumbnails -->
+                    <!-- THUMBNAIL GRID -->
                     <div id="thumbnails" class="thumbnails"></div>
                 </div>
 
                 <!-- Contact Admin Mini -->
                 <div class="contact-mini">
-                    <a href="https://wa.me/6285337777585" target="_blank" class="contact-mini-item whatsapp">
+                    <a href="https://wa.me/6285337777585?text=Halo%20admin%20FIOR%20Florist%2C%20saya%20ingin%20bertanya" target="_blank" class="contact-mini-item whatsapp">
                         <i class="fab fa-whatsapp"></i> +62 853-3777-7585
                     </a>
-                    <span style="width: 1px; height: 20px; background: #ddd;"></span>
+                    <span style="width: 1px; height: 20px; background: rgba(0,0,0,0.1);"></span>
                     <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="contact-mini-item instagram">
                         <i class="fab fa-instagram"></i> @tokobungafior
                     </a>
                 </div>
             </div>
             
+            <!-- Card Footer -->
             <div class="card-footer">
                 <div class="company-name">FIOR Florist</div>
-                <div style="color: var(--taupe); font-size: 0.75rem; margin: 10px 0;">JAYAPURA • SINCE 2020</div>
-                <div>
-                    <button class="action-btn" onclick="shareCard()"><i class="fas fa-share-alt"></i> Bagikan</button>
-                    <a href="#" class="action-btn" id="whatsappBtn"><i class="fab fa-whatsapp"></i> WA</a>
+                <div class="company-tagline">JAYAPURA • SINCE 2020</div>
+                <div class="action-buttons">
+                    <button class="action-btn share" onclick="shareCard()">
+                        <i class="fas fa-share-alt"></i> Bagikan
+                    </button>
+                    <a href="#" class="action-btn" id="whatsappBtn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <button class="action-btn print" onclick="printCard()">
+                        <i class="fas fa-print"></i> Cetak
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Notification -->
     <div id="notification" class="notification">
         <i class="fas fa-check-circle" style="color: var(--gold);"></i>
         <span id="notificationMessage"></span>
@@ -243,9 +569,10 @@
 
     <script>
         // ============================================
-        // CARD.HTML - FIXED: MEDIA MUNCUL + AUTO PLAY
+        // CARD.HTML - MEDIA LANGSUNG TAMPIL (BUKAN LINK)
         // ============================================
 
+        // ========== THEMES ==========
         const THEMES = {
             birthday: { emoji: '🎂', greeting: 'Happy Birthday', music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3' },
             valentine: { emoji: '❤️', greeting: 'Happy Valentine', music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3' },
@@ -264,7 +591,7 @@
             currentIndex: 0
         };
 
-        // ========== DOM ==========
+        // ========== DOM ELEMENTS ==========
         const el = {
             themeEmoji: document.getElementById('themeEmoji'),
             greetingText: document.getElementById('greetingText'),
@@ -279,7 +606,10 @@
             notificationMessage: document.getElementById('notificationMessage'),
             bgMusic: document.getElementById('bgMusic'),
             musicSource: document.getElementById('musicSource'),
-            musicBtn: document.getElementById('musicBtn')
+            musicBtn: document.getElementById('musicBtn'),
+            modal: document.getElementById('mediaModal'),
+            modalImage: document.getElementById('modalImage'),
+            modalVideo: document.getElementById('modalVideo')
         };
 
         // ========== GET URL PARAMETERS ==========
@@ -323,9 +653,9 @@
         function detectMediaType(url) {
             if (!url) return 'link';
             const u = url.toLowerCase();
-            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm')) return 'video';
+            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || u.includes('drive.google.com')) return 'video';
             if (u.includes('.jpg') || u.includes('.jpeg') || u.includes('.png') || u.includes('.gif') || u.includes('.webp')) return 'image';
-            return 'link';
+            return 'image'; // FORCE AS IMAGE - BUKAN LINK
         }
 
         // ========== INIT ==========
@@ -354,7 +684,7 @@
             setupMusic(state.params.theme);
         }
 
-        // ========== RENDER MEDIA - AUTO PLAY ==========
+        // ========== RENDER MEDIA - LANGSUNG TAMPIL ==========
         function renderMedia() {
             state.mediaList = state.params.mediaList || [];
             
@@ -385,17 +715,17 @@
             
             state.mediaList.forEach((media, index) => {
                 const isVideo = media.type === 'video';
-                const isImage = media.type === 'image';
                 
                 html += `
                     <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="playMedia(${index})">
-                        ${isImage ? 
-                            `<img src="${escapeHTML(media.url)}" class="thumbnail-img" onerror="this.src='https://via.placeholder.com/80?text=Error'">` :
-                            `<div style="width:100%; height:100%; background: linear-gradient(145deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
-                                <i class="fas ${isVideo ? 'fa-video' : 'fa-link'}" style="font-size: 1.5rem; color: var(--theme-primary); opacity: 0.5;"></i>
-                            </div>`
+                        ${isVideo ? 
+                            `<div style="width:100%; height:100%; background: linear-gradient(145deg, #000, #1a1a1a); display: flex; align-items: center; justify-content: center; position: relative;">
+                                <i class="fas fa-video" style="font-size: 2rem; color: white; opacity: 0.8;"></i>
+                                <div class="thumbnail-icon"><i class="fas fa-play"></i></div>
+                            </div>` :
+                            `<img src="${escapeHTML(media.url)}" class="thumbnail-img" onerror="this.src='https://via.placeholder.com/80x80?text=Image'">`
                         }
-                        ${isVideo ? '<div class="thumbnail-icon"><i class="fas fa-play"></i></div>' : ''}
+                        <span class="thumbnail-badge">${isVideo ? 'MP4' : 'IMG'}</span>
                     </div>
                 `;
             });
@@ -403,7 +733,7 @@
             el.thumbnails.innerHTML = html;
         }
 
-        // ========== PLAY MEDIA - AUTO PLAY ==========
+        // ========== PLAY MEDIA - LANGSUNG TAMPIL ==========
         window.playMedia = function(index) {
             if (!state.mediaList[index]) return;
             
@@ -416,33 +746,65 @@
                 else el.classList.remove('active');
             });
             
-            // Render main media
+            // Render main media - LANGSUNG TAMPIL, BUKAN LINK
             const isVideo = media.type === 'video';
-            const isImage = media.type === 'image';
             
             let mediaHtml = '';
             
             if (isVideo) {
-                // VIDEO - AUTO PLAY, MUTED, LOOP
-                mediaHtml = `<video src="${escapeHTML(media.url)}" controls autoplay muted loop playsinline class="preview-video"></video>`;
-            } else if (isImage) {
-                // IMAGE
-                mediaHtml = `<img src="${escapeHTML(media.url)}" class="preview-image" alt="Media">`;
-            } else {
-                // LINK
+                // VIDEO - AUTO PLAY, MUTED, LOOP, CONTROLS
                 mediaHtml = `
-                    <div style="width:100%; height:250px; background: var(--cream); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 15px;">
-                        <i class="fas fa-link" style="font-size: 3rem; color: var(--theme-primary); opacity: 0.3;"></i>
-                        <span>Link tidak dapat ditampilkan</span>
-                        <a href="${escapeHTML(media.url)}" target="_blank" style="padding: 8px 20px; background: var(--theme-gradient); color: white; border-radius: 50px; text-decoration: none;">
-                            Buka Link
-                        </a>
+                    <div style="position: relative;">
+                        <video id="mainVideo" src="${escapeHTML(media.url)}" controls autoplay muted loop playsinline class="preview-video"></video>
+                        <div class="video-control" onclick="toggleVideoPlay()">
+                            <i id="videoPlayIcon" class="fas fa-pause"></i>
+                        </div>
                     </div>
                 `;
+            } else {
+                // IMAGE - LANGSUNG TAMPIL, BISA DI-ZOOM
+                mediaHtml = `<img src="${escapeHTML(media.url)}" class="preview-image" alt="Media" onclick="openModal('${escapeHTML(media.url)}', false)" style="cursor: pointer;">`;
             }
             
             el.mainPreview.innerHTML = mediaHtml;
             el.mainPreview.style.display = 'block';
+        };
+
+        // ========== TOGGLE VIDEO PLAY ==========
+        window.toggleVideoPlay = function() {
+            const video = document.getElementById('mainVideo');
+            const icon = document.getElementById('videoPlayIcon');
+            
+            if (video.paused) {
+                video.play();
+                icon.className = 'fas fa-pause';
+            } else {
+                video.pause();
+                icon.className = 'fas fa-play';
+            }
+        };
+
+        // ========== MODAL ZOOM ==========
+        window.openModal = function(url, isVideo) {
+            if (isVideo) {
+                el.modalImage.style.display = 'none';
+                el.modalVideo.style.display = 'block';
+                el.modalVideo.src = url;
+                el.modalVideo.play();
+            } else {
+                el.modalImage.style.display = 'block';
+                el.modalVideo.style.display = 'none';
+                el.modalImage.src = url;
+            }
+            el.modal.classList.add('active');
+        };
+
+        window.closeModal = function() {
+            el.modal.classList.remove('active');
+            if (el.modalVideo) {
+                el.modalVideo.pause();
+                el.modalVideo.src = '';
+            }
         };
 
         // ========== MUSIC ==========
@@ -453,7 +815,10 @@
                 el.bgMusic.load();
                 setTimeout(() => {
                     el.bgMusic.play()
-                        .then(() => { state.isPlaying = true; el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>'; })
+                        .then(() => { 
+                            state.isPlaying = true; 
+                            el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>'; 
+                        })
                         .catch(() => {});
                 }, 1000);
             }
@@ -466,18 +831,26 @@
                 el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
             } else {
                 el.bgMusic.play()
-                    .then(() => { state.isPlaying = true; el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>'; })
+                    .then(() => { 
+                        state.isPlaying = true; 
+                        el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>'; 
+                    })
                     .catch(() => {});
             }
         };
 
-        // ========== SHARE ==========
+        // ========== SHARE CARD ==========
         window.shareCard = function() {
             const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${state.params.to}\n\n${window.location.href}`;
+            
             if (navigator.share) {
-                navigator.share({ title: 'Kartu Ucapan FIOR', text: shareText, url: window.location.href })
-                    .then(() => showNotification('Berhasil dibagikan!'))
-                    .catch(() => copyURL(window.location.href));
+                navigator.share({
+                    title: `Kartu Ucapan ${THEMES[state.theme].name} - FIOR Florist`,
+                    text: shareText,
+                    url: window.location.href
+                })
+                .then(() => showNotification('Berhasil dibagikan!'))
+                .catch(() => copyURL(window.location.href));
             } else {
                 copyURL(window.location.href);
             }
@@ -489,21 +862,37 @@
                 .catch(() => alert('Gagal menyalin link'));
         }
 
-        function showNotification(msg) {
-            el.notificationMessage.textContent = msg;
+        // ========== PRINT CARD ==========
+        window.printCard = function() {
+            if (state.isPlaying) {
+                el.bgMusic.pause();
+                state.isPlaying = false;
+                el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
+            }
+            showNotification('Menyiapkan untuk dicetak...');
+            setTimeout(() => window.print(), 500);
+        };
+
+        // ========== NOTIFICATION ==========
+        function showNotification(message) {
+            el.notificationMessage.textContent = message;
             el.notification.classList.add('show');
             setTimeout(() => el.notification.classList.remove('show'), 3000);
         }
 
+        // ========== ESCAPE HTML ==========
         function escapeHTML(str) {
             if (!str) return '';
-            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
         }
 
         // ========== START ==========
         document.addEventListener('DOMContentLoaded', init);
-        window.toggleMusic = toggleMusic;
-        window.playMedia = playMedia;
     </script>
 </body>
 </html>
