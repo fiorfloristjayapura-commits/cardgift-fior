@@ -624,6 +624,43 @@
             border: 1px solid var(--gray-200);
         }
 
+        /* ===== TABLES ===== */
+        .table-container {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            overflow: auto;
+            max-height: 500px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: linear-gradient(145deg, var(--gray-100), var(--white));
+            color: var(--navy);
+            font-weight: 600;
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 2px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .table tr:hover {
+            background: var(--gold-light);
+        }
+
         /* ===== LOADING ===== */
         .loading-overlay {
             position: fixed;
@@ -665,6 +702,79 @@
             color: var(--navy);
             font-weight: 600;
             font-size: 1.1rem;
+        }
+
+        /* ===== MODAL - DENGAN SCROLL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            max-width: 550px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--gray-200);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .modal-header h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+        }
+
+        .modal-header i {
+            color: var(--gold);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-600);
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding-right: 0.25rem;
         }
 
         /* ===== ALERTS ===== */
@@ -929,7 +1039,7 @@
                 </div>
             </div>
 
-            <!-- ===== CUSTOMERS PAGE ===== -->
+            <!-- ===== CUSTOMERS PAGE - DENGAN CATATAN, EMAIL, ALAMAT ===== -->
             <div id="customers" class="page">
                 <h1 class="page-title">
                     <i class="fas fa-users"></i>
@@ -952,12 +1062,14 @@
                                 <th>Nama</th>
                                 <th>No. WhatsApp</th>
                                 <th>Email</th>
+                                <th>Alamat</th>
+                                <th>Catatan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="customersTableBody">
                             <tr>
-                                <td colspan="4" style="text-align: center; padding: 2rem;">Memuat data...</td>
+                                <td colspan="6" style="text-align: center; padding: 2rem;">Memuat data...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1040,27 +1152,70 @@
         </main>
     </div>
 
-    <!-- Modal Tambah Customer -->
-    <div id="customerModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-        <div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
-            <h3 style="color: var(--navy); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-user-plus" style="color: var(--gold);"></i>
-                Tambah Customer
-            </h3>
-            
-            <div class="form-group">
-                <label class="form-label">Nama Lengkap *</label>
-                <input type="text" class="form-control" id="modalCustomerName" placeholder="Masukkan nama">
+    <!-- ===== MODAL TAMBAH CUSTOMER - DENGAN CATATAN, EMAIL, ALAMAT ===== -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-user-plus"></i>
+                    Tambah Customer
+                </h3>
+                <button class="modal-close" onclick="closeCustomerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             
-            <div class="form-group">
-                <label class="form-label">No. WhatsApp *</label>
-                <input type="tel" class="form-control" id="modalCustomerPhone" placeholder="081234567890">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" id="modalCustomerEmail" placeholder="email@example.com">
+            <div class="modal-body">
+                <!-- Nama Lengkap -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-user"></i>
+                        Nama Lengkap <span style="color: var(--danger);">*</span>
+                    </label>
+                    <input type="text" class="form-control" id="modalCustomerName" 
+                           placeholder="Masukkan nama lengkap">
+                </div>
+                
+                <!-- No. WhatsApp -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fab fa-whatsapp"></i>
+                        No. WhatsApp <span style="color: var(--danger);">*</span>
+                    </label>
+                    <input type="tel" class="form-control" id="modalCustomerPhone" 
+                           placeholder="081234567890">
+                    <small style="color: var(--gray-600);">Format: 08xx atau 628xx</small>
+                </div>
+                
+                <!-- EMAIL -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </label>
+                    <input type="email" class="form-control" id="modalCustomerEmail" 
+                           placeholder="customer@example.com">
+                </div>
+                
+                <!-- ALAMAT -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Alamat
+                    </label>
+                    <textarea class="form-control" id="modalCustomerAddress" 
+                              rows="2" placeholder="Jl. Contoh No. 123, Kota, Provinsi"></textarea>
+                </div>
+                
+                <!-- CATATAN -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-sticky-note"></i>
+                        Catatan
+                    </label>
+                    <textarea class="form-control" id="modalCustomerNotes" 
+                              rows="3" placeholder="Catatan khusus tentang customer..."></textarea>
+                </div>
             </div>
             
             <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
@@ -1076,7 +1231,7 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - FULL ELEGAN + LOGO FIOR
+        // FIOR CARD ADMIN - FULL CUSTOMER DATA
         // ============================================
 
         // ========== KONFIGURASI ==========
@@ -1135,7 +1290,8 @@
                 'whatsappResultBtn', 'previewResultBtn', 'qrcode',
                 'customersTableBody', 'historyTableBody',
                 'scriptUrl', 'cardBaseUrl',
-                'modalCustomerName', 'modalCustomerPhone', 'modalCustomerEmail'
+                'modalCustomerName', 'modalCustomerPhone', 
+                'modalCustomerEmail', 'modalCustomerAddress', 'modalCustomerNotes'
             ];
             
             ids.forEach(id => el[id] = document.getElementById(id));
@@ -1436,6 +1592,9 @@
                 renderCustomersTable();
             } catch (error) {
                 console.error('Load customers error:', error);
+                if (el.customersTableBody) {
+                    el.customersTableBody.innerHTML = '<tr><td colspan="6">Gagal memuat data</td></tr>';
+                }
             }
         }
 
@@ -1443,17 +1602,19 @@
             if (!el.customersTableBody) return;
             
             if (state.customers.length === 0) {
-                el.customersTableBody.innerHTML = '<tr><td colspan="4">Belum ada data customer</td></tr>';
+                el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Belum ada data customer</td></tr>';
                 return;
             }
             
             let html = '';
-            state.customers.slice(0, 10).forEach((c, i) => {
+            state.customers.slice(0, 20).forEach((c, i) => {
                 html += `
                     <tr>
-                        <td>${c.nama || ''}</td>
+                        <td><strong>${c.nama || ''}</strong></td>
                         <td>${c.no_hp || ''}</td>
-                        <td>${c.email || ''}</td>
+                        <td>${c.email || '-'}</td>
+                        <td>${c.alamat || '-'}</td>
+                        <td>${c.catatan || '-'}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" onclick="useCustomer('${c.nama}', '${c.no_hp}')">
                                 <i class="fas fa-gift"></i> Pilih
@@ -1481,6 +1642,9 @@
                 renderCardsTable();
             } catch (error) {
                 console.error('Load cards error:', error);
+                if (el.historyTableBody) {
+                    el.historyTableBody.innerHTML = '<tr><td colspan="5">Gagal memuat data</td></tr>';
+                }
             }
         }
 
@@ -1488,12 +1652,12 @@
             if (!el.historyTableBody) return;
             
             if (state.cards.length === 0) {
-                el.historyTableBody.innerHTML = '<tr><td colspan="5">Belum ada card</td></tr>';
+                el.historyTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">Belum ada card</td></tr>';
                 return;
             }
             
             let html = '';
-            state.cards.slice(0, 10).forEach(c => {
+            state.cards.slice(0, 20).forEach(c => {
                 html += `
                     <tr>
                         <td>${c.date || ''} ${c.time || ''}</td>
@@ -1511,14 +1675,17 @@
             el.historyTableBody.innerHTML = html;
         }
 
-        // ========== CUSTOMER MODAL ==========
+        // ========== CUSTOMER MODAL - SAVE DENGAN CATATAN, EMAIL, ALAMAT ==========
         window.showAddCustomerModal = function() {
-            document.getElementById('customerModal').style.display = 'flex';
+            document.getElementById('customerModal').classList.add('active');
         };
 
         window.closeCustomerModal = function() {
-            document.getElementById('customerModal').style.display = 'none';
-            ['modalCustomerName', 'modalCustomerPhone', 'modalCustomerEmail'].forEach(id => {
+            document.getElementById('customerModal').classList.remove('active');
+            
+            // Clear form
+            ['modalCustomerName', 'modalCustomerPhone', 'modalCustomerEmail', 
+             'modalCustomerAddress', 'modalCustomerNotes'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.value = '';
             });
@@ -1528,6 +1695,8 @@
             const name = el.modalCustomerName?.value.trim();
             const phone = el.modalCustomerPhone?.value.trim();
             const email = el.modalCustomerEmail?.value.trim();
+            const address = el.modalCustomerAddress?.value.trim();
+            const notes = el.modalCustomerNotes?.value.trim();
             
             if (!name || !phone) {
                 showAlert('Nama dan No. WA wajib diisi!', 'error');
@@ -1542,6 +1711,8 @@
                 formData.append('nama', name);
                 formData.append('no_hp', phone);
                 formData.append('email', email || '');
+                formData.append('alamat', address || '');
+                formData.append('catatan', notes || '');
                 
                 const response = await fetch(CONFIG.SCRIPT_URL, {
                     method: 'POST',
@@ -1560,6 +1731,7 @@
                 }
                 
             } catch (error) {
+                console.error('Save customer error:', error);
                 showAlert('Gagal: ' + error.message, 'error');
             } finally {
                 showLoading(false);
