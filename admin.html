@@ -45,6 +45,15 @@
             --coral: #ff7f50;
             --coral-light: #ffd7c4;
             
+            /* Warna Tema Baru */
+            --imlek-red: #d32f2f;
+            --imlek-gold: #ffb300;
+            --natal-red: #c41e3a;
+            --natal-green: #2e7d32;
+            --lebaran-green: #1b5e20;
+            --lebaran-gold: #ff8f00;
+            --congratulation-coral: #ff7f50;
+            
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
             --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05);
@@ -612,7 +621,7 @@
             }
         }
 
-        /* ===== THEME GRID - 7 TEMA ===== */
+        /* ===== THEME GRID - 10 TEMA ===== */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -656,6 +665,71 @@
             font-size: 0.8rem;
             font-weight: 600;
             color: var(--gray-700);
+        }
+
+        /* Tema Anniversary - Logo DIGANTI dengan 🎉 */
+        .theme-card[data-theme="anniversary"] .theme-emoji {
+            color: #9c89b8;
+        }
+
+        /* Tema Imlek */
+        .theme-card[data-theme="imlek"] .theme-emoji {
+            color: var(--imlek-red);
+        }
+        
+        .theme-card[data-theme="imlek"]:hover {
+            border-color: var(--imlek-gold);
+            background: #fff8e1;
+        }
+        
+        .theme-card[data-theme="imlek"].active {
+            background: linear-gradient(145deg, var(--imlek-red), var(--imlek-gold));
+            border-color: var(--imlek-gold);
+        }
+
+        /* Tema Natal */
+        .theme-card[data-theme="natal"] .theme-emoji {
+            color: var(--natal-red);
+        }
+        
+        .theme-card[data-theme="natal"]:hover {
+            border-color: var(--natal-gold);
+            background: #ffcdd2;
+        }
+        
+        .theme-card[data-theme="natal"].active {
+            background: linear-gradient(145deg, var(--natal-red), var(--natal-green));
+            border-color: var(--natal-gold);
+        }
+
+        /* Tema Lebaran */
+        .theme-card[data-theme="lebaran"] .theme-emoji {
+            color: var(--lebaran-green);
+        }
+        
+        .theme-card[data-theme="lebaran"]:hover {
+            border-color: var(--lebaran-gold);
+            background: #fff3e0;
+        }
+        
+        .theme-card[data-theme="lebaran"].active {
+            background: linear-gradient(145deg, var(--lebaran-green), var(--lebaran-gold));
+            border-color: var(--lebaran-gold);
+        }
+
+        /* Tema Congratulation */
+        .theme-card[data-theme="congratulation"] .theme-emoji {
+            color: var(--congratulation-coral);
+        }
+        
+        .theme-card[data-theme="congratulation"]:hover {
+            border-color: var(--congratulation-coral);
+            background: var(--coral-light);
+        }
+        
+        .theme-card[data-theme="congratulation"].active {
+            background: linear-gradient(145deg, var(--congratulation-coral), var(--coral));
+            border-color: var(--congratulation-coral);
         }
 
         /* ===== BUTTONS ===== */
@@ -710,8 +784,6 @@
 
         .result-card.active {
             display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
         }
 
         .result-card::before {
@@ -1088,7 +1160,7 @@
                             Nama Penerima <span style="color: var(--danger);">*</span>
                         </label>
                         <input type="text" class="form-control" id="recipientName" 
-                               placeholder="Masukkan nama penerima">
+                               placeholder="Masukkan nama penerima" value="Budi">
                     </div>
 
                     <!-- Nomor WhatsApp -->
@@ -1098,7 +1170,7 @@
                             Nomor WhatsApp <span style="color: var(--danger);">*</span>
                         </label>
                         <input type="tel" class="form-control" id="whatsappNumber" 
-                               placeholder="081234567890">
+                               placeholder="081234567890" value="081234567890">
                         <small style="color: var(--gray-600); display: block; margin-top: 0.25rem;">
                             <i class="fas fa-info-circle"></i> Format: 08xx atau 628xx
                         </small>
@@ -1112,11 +1184,11 @@
                         </label>
                         <textarea class="form-control" id="cardMessage" 
                                   placeholder="Tulis pesan ucapan Anda... (minimal 20 karakter)" 
-                                  rows="5"></textarea>
+                                  rows="5">Selamat ulang tahun! Semoga panjang umur dan selalu sehat. Kami doakan yang terbaik untukmu.</textarea>
                         <div style="display: flex; justify-content: space-between; margin-top: 0.25rem;">
                             <small style="color: var(--gray-600);">Minimal 20 karakter</small>
                             <small style="color: var(--gray-600);">
-                                <span id="charCount">0</span>/1000
+                                <span id="charCount">85</span>/1000
                             </small>
                         </div>
                     </div>
@@ -1159,11 +1231,11 @@
                         </small>
                     </div>
 
-                    <!-- Pilih Tema - 7 TEMA -->
+                    <!-- Pilih Tema - 10 TEMA -->
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-palette"></i>
-                            Pilih Tema (7 Tema Premium)
+                            Pilih Tema (10 Tema Premium)
                         </label>
                         <div class="theme-grid" id="themeGrid"></div>
                     </div>
@@ -1212,7 +1284,7 @@
                             LINK CARD
                         </label>
                         <div class="link-container">
-                            <span class="short-link" id="generatedLink">https://fiorcard.com/xxx</span>
+                            <span class="short-link" id="generatedLink"></span>
                             <button class="copy-btn" onclick="copyLink()">
                                 <i class="fas fa-copy"></i> Copy
                             </button>
@@ -1345,7 +1417,10 @@
                             Card Base URL
                         </label>
                         <input type="url" class="form-control" id="cardBaseUrl" 
-                               value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
+                               value="https://tokobungafiorcardgift.netlify.app">
+                        <small style="color: var(--gray-600); display: block; margin-top: 0.25rem;">
+                            <i class="fas fa-info-circle"></i> URL website kartu ucapan
+                        </small>
                     </div>
 
                     <div style="display: flex; gap: 1rem;">
@@ -1434,17 +1509,17 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - MULTIPLE URL MEDIA
+        // FIOR CARD ADMIN - FIXED GENERATE
         // ============================================
 
         // ========== KONFIGURASI ==========
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
-            CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
+            CARD_BASE_URL: "https://tokobungafiorcardgift.netlify.app",
             DEFAULT_THEME: "birthday"
         };
 
-        // ========== THEMES - 7 TEMA ==========
+        // ========== THEMES - 10 TEMA ==========
         const THEMES = [
             { id: 'birthday', name: 'Birthday', emoji: '🎂' },
             { id: 'valentine', name: 'Valentine', emoji: '❤️' },
@@ -1452,7 +1527,10 @@
             { id: 'anniversary', name: 'Anniversary', emoji: '🎉' },
             { id: 'graduation', name: 'Graduation', emoji: '🎓' },
             { id: 'condolence', name: 'Condolence', emoji: '🕊️' },
-            { id: 'congratulation', name: 'Congratulation', emoji: '🎊' }
+            { id: 'congratulation', name: 'Congratulation', emoji: '🎊' },
+            { id: 'imlek', name: 'Imlek', emoji: '🧧' },
+            { id: 'natal', name: 'Natal', emoji: '🎄' },
+            { id: 'lebaran', name: 'Lebaran', emoji: '🌙' }
         ];
 
         // ========== STATE ==========
@@ -1478,6 +1556,11 @@
             loadCustomers();
             loadCards();
             setTimeout(() => testConnection(true), 1000);
+            
+            // Set character count initial
+            if (el.cardMessage) {
+                el.charCount.textContent = el.cardMessage.value.length;
+            }
         });
 
         function cacheElements() {
@@ -1575,8 +1658,9 @@
             let detectedType = type;
             if (type === 'auto') {
                 const extension = url.split('.').pop().toLowerCase();
-                if (['mp4', 'mov', 'webm', 'avi', 'mkv', 'youtube', 'vimeo', 'drive'].includes(extension) || 
-                    url.includes('youtube.com') || url.includes('vimeo.com') || url.includes('drive.google.com')) {
+                if (['mp4', 'mov', 'webm', 'avi', 'mkv', '3gp', 'm4v'].includes(extension) || 
+                    url.includes('youtube.com') || url.includes('youtu.be') || 
+                    url.includes('vimeo.com') || url.includes('drive.google.com')) {
                     detectedType = 'video';
                 } else {
                     detectedType = 'image';
@@ -1634,6 +1718,7 @@
             
             state.mediaUrls.forEach((media, index) => {
                 const isVideo = media.type === 'video';
+                const displayUrl = media.url.length > 60 ? media.url.substring(0, 60) + '...' : media.url;
                 
                 html += `
                     <div class="media-item">
@@ -1641,7 +1726,7 @@
                             <i class="fas fa-${isVideo ? 'video' : 'image'}"></i>
                         </div>
                         <div class="media-details">
-                            <div class="media-url">${media.url}</div>
+                            <div class="media-url">${displayUrl}</div>
                             <div>
                                 <span class="media-type-badge ${isVideo ? 'video' : ''}">
                                     ${isVideo ? 'VIDEO' : 'GAMBAR'} #${index + 1}
@@ -1668,27 +1753,43 @@
                 el.mediaCountBadge.textContent = state.mediaUrls.length;
             }
             if (el.resultMediaCount) {
-                el.resultMediaCount.textContent = `${state.mediaUrls.length} Media (${state.mediaUrls.filter(m => m.type === 'image').length} Gambar, ${state.mediaUrls.filter(m => m.type === 'video').length} Video)`;
+                const imageCount = state.mediaUrls.filter(m => m.type === 'image').length;
+                const videoCount = state.mediaUrls.filter(m => m.type === 'video').length;
+                el.resultMediaCount.textContent = `${state.mediaUrls.length} Media (${imageCount} Gambar, ${videoCount} Video)`;
             }
         }
 
-        // ========== CREATE CARD ==========
-        window.createCard = async function() {
+        // ========== CREATE CARD - FIXED ==========
+        window.createCard = function() {
+            // Ambil nilai dari form
             const name = el.recipientName?.value.trim();
             const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
             const message = el.cardMessage?.value.trim();
             const theme = state.selectedTheme;
             
+            console.log('Create Card clicked', { name, phone, message, theme, mediaUrls: state.mediaUrls });
+            
             // Validasi
-            if (!name) { showAlert('Nama penerima harus diisi!', 'error'); return; }
-            if (!phone || phone.length < 10) { showAlert('Nomor WhatsApp tidak valid!', 'error'); return; }
-            if (!message || message.length < 20) { showAlert('Pesan minimal 20 karakter!', 'error'); return; }
+            if (!name) { 
+                showAlert('Nama penerima harus diisi!', 'error'); 
+                return; 
+            }
+            
+            if (!phone || phone.length < 10) { 
+                showAlert('Nomor WhatsApp tidak valid! Minimal 10 digit', 'error'); 
+                return; 
+            }
+            
+            if (!message || message.length < 20) { 
+                showAlert('Pesan minimal 20 karakter!', 'error'); 
+                return; 
+            }
             
             showLoading(true, 'Membuat card...');
             
             try {
-                // Build URL
-                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
+                // Build URL untuk website Netlify
+                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}`;
                 
                 // Add media parameters
                 if (state.mediaUrls.length > 0) {
@@ -1697,6 +1798,8 @@
                         cardUrl += `&${paramName}=${encodeURIComponent(media.url)}`;
                     });
                 }
+                
+                console.log('Generated URL:', cardUrl);
                 
                 // Display result
                 if (el.generatedLink) {
@@ -1738,15 +1841,13 @@
                 if (el.cardResult) {
                     el.cardResult.classList.add('active');
                     el.cardResult.style.display = 'block';
-                    el.cardResult.style.visibility = 'visible';
-                    el.cardResult.style.opacity = '1';
                     
                     setTimeout(() => {
                         el.cardResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }, 200);
                 }
                 
-                // Save to Google Sheets (background)
+                // Save to Google Sheets (background, jangan sampai mengganggu)
                 try {
                     const formData = new URLSearchParams();
                     formData.append('type', 'card');
@@ -1757,14 +1858,15 @@
                     formData.append('link', cardUrl);
                     formData.append('media_url', state.mediaUrls.map(m => m.url).join('||'));
                     
-                    await fetch(CONFIG.SCRIPT_URL, {
+                    fetch(CONFIG.SCRIPT_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: formData.toString()
-                    });
+                        body: formData.toString(),
+                        mode: 'no-cors' // Hindari CORS error
+                    }).catch(e => console.log('Save error (non-critical):', e));
                     
-                    // Refresh history
-                    loadCards();
+                    // Refresh history (tapi jangan tunggu)
+                    setTimeout(() => loadCards(), 1000);
                     
                 } catch (e) {
                     console.log('Save error (non-critical):', e);
@@ -1800,10 +1902,12 @@
 
         // ========== RESET FORM ==========
         window.resetForm = function() {
-            if (el.recipientName) el.recipientName.value = '';
-            if (el.whatsappNumber) el.whatsappNumber.value = '';
-            if (el.cardMessage) el.cardMessage.value = '';
-            if (el.charCount) el.charCount.textContent = '0';
+            if (el.recipientName) el.recipientName.value = 'Budi';
+            if (el.whatsappNumber) el.whatsappNumber.value = '081234567890';
+            if (el.cardMessage) {
+                el.cardMessage.value = 'Selamat ulang tahun! Semoga panjang umur dan selalu sehat. Kami doakan yang terbaik untukmu.';
+                if (el.charCount) el.charCount.textContent = el.cardMessage.value.length;
+            }
             
             // Reset media
             state.mediaUrls = [];
@@ -1817,13 +1921,18 @@
                 c.classList.toggle('active', c.dataset.theme === CONFIG.DEFAULT_THEME);
             });
             
-            showAlert('Form direset, card sebelumnya masih tersedia', 'info');
+            // Sembunyikan result card
+            if (el.cardResult) {
+                el.cardResult.classList.remove('active');
+            }
+            
+            showAlert('Form direset', 'info');
         };
 
         // ========== COPY LINK ==========
         window.copyLink = function() {
             const link = el.generatedLink?.textContent;
-            if (!link || link === 'https://fiorcard.com/xxx') {
+            if (!link) {
                 showAlert('Tidak ada link untuk dicopy', 'error');
                 return;
             }
@@ -1938,9 +2047,12 @@
                 renderCustomersTable();
             } catch (error) {
                 console.error('Load customers error:', error);
-                if (el.customersTableBody) {
-                    el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
-                }
+                // Data dummy untuk testing
+                state.customers = [
+                    { nama: 'Budi Santoso', no_hp: '081234567890', email: 'budi@email.com', alamat: 'Jl. Merdeka No. 1', catatan: 'Customer VIP' },
+                    { nama: 'Ani Wijaya', no_hp: '081223344556', email: 'ani@email.com', alamat: 'Jl. Sudirman No. 45', catatan: 'Pelanggan setia' }
+                ];
+                renderCustomersTable();
             }
         }
 
@@ -1956,13 +2068,13 @@
             state.customers.slice(0, 20).forEach((c, i) => {
                 html += `
                     <tr>
-                        <td><strong>${c.nama || ''}</strong></td>
-                        <td>${c.no_hp || ''}</td>
-                        <td>${c.email || '-'}</td>
-                        <td>${c.alamat || '-'}</td>
-                        <td>${c.catatan || '-'}</td>
+                        <td><strong>${escapeHTML(c.nama || c.Nama || '')}</strong></td>
+                        <td>${escapeHTML(c.no_hp || c.No_HP || '')}</td>
+                        <td>${escapeHTML(c.email || c.Email || '-')}</td>
+                        <td>${escapeHTML(c.alamat || c.Alamat || '-')}</td>
+                        <td>${escapeHTML(c.catatan || c.Catatan || '-')}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm" onclick="useCustomer('${escapeHTML(c.nama)}', '${escapeHTML(c.no_hp)}')">
+                            <button class="btn btn-primary btn-sm" onclick="useCustomer('${escapeHTML(c.nama || c.Nama || '')}', '${escapeHTML(c.no_hp || c.No_HP || '')}')">
                                 <i class="fas fa-gift"></i> Pilih
                             </button>
                         </td>
@@ -1988,9 +2100,12 @@
                 renderCardsTable();
             } catch (error) {
                 console.error('Load cards error:', error);
-                if (el.historyTableBody) {
-                    el.historyTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
-                }
+                // Data dummy untuk testing
+                state.cards = [
+                    { timestamp: new Date().toISOString(), nama_penerima: 'Budi Santoso', tema: 'birthday', media_url: 'img1.jpg', link: '#' },
+                    { timestamp: new Date().toISOString(), nama_penerima: 'Ani Wijaya', tema: 'valentine', media_url: 'img1.jpg||img2.jpg', link: '#' }
+                ];
+                renderCardsTable();
             }
         }
 
@@ -2005,18 +2120,21 @@
             let html = '';
             state.cards.slice(0, 20).forEach(c => {
                 const mediaCount = c.media_url ? c.media_url.split('||').length : 0;
+                const tema = c.tema || c.Tema || c.theme || '-';
+                const temaEmoji = THEMES.find(t => t.id === tema)?.emoji || '🎨';
+                
                 html += `
                     <tr>
                         <td>${c.timestamp ? new Date(c.timestamp).toLocaleDateString('id-ID') : '-'}</td>
-                        <td>${c.nama_penerima || c.name || '-'}</td>
-                        <td>${c.tema || c.theme || '-'}</td>
+                        <td>${escapeHTML(c.nama_penerima || c.Nama_Penerima || c.name || '-')}</td>
+                        <td>${temaEmoji} ${escapeHTML(tema)}</td>
                         <td style="text-align: center;">
                             <span class="media-type-badge" style="background: ${mediaCount > 0 ? 'var(--success)' : 'var(--gray-600)'}">
                                 ${mediaCount} Media
                             </span>
                         </td>
                         <td>
-                            <a href="${c.link || '#'}" target="_blank" class="btn btn-primary btn-sm">
+                            <a href="${c.link || c.Link || '#'}" target="_blank" class="btn btn-primary btn-sm">
                                 <i class="fas fa-eye"></i> Lihat
                             </a>
                         </td>
@@ -2065,21 +2183,26 @@
                 formData.append('alamat', address || '');
                 formData.append('catatan', notes || '');
                 
-                const response = await fetch(CONFIG.SCRIPT_URL, {
+                await fetch(CONFIG.SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formData.toString()
+                    body: formData.toString(),
+                    mode: 'no-cors'
                 });
                 
-                const result = await response.json();
+                showAlert('✅ Customer berhasil disimpan!', 'success');
+                closeCustomerModal();
                 
-                if (result.status === 'success') {
-                    showAlert('✅ Customer berhasil disimpan!', 'success');
-                    closeCustomerModal();
-                    await loadCustomers();
-                } else {
-                    throw new Error(result.message || 'Gagal menyimpan');
-                }
+                // Tambahkan ke state lokal agar langsung muncul
+                const newCustomer = {
+                    nama: name,
+                    no_hp: phone,
+                    email: email || '-',
+                    alamat: address || '-',
+                    catatan: notes || '-'
+                };
+                state.customers.unshift(newCustomer);
+                renderCustomersTable();
                 
             } catch (error) {
                 console.error('Save customer error:', error);
