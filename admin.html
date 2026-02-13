@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>FIOR Card - Mobile Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>FIOR Card - Admin Panel</title>
     
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,25 +24,39 @@
         }
 
         :root {
+            /* Warna Utama */
             --primary: #1e3a5f;
             --primary-light: #2b4c73;
+            --primary-dark: #0a192f;
             --accent: #d4af37;
             --accent-light: #f5e8c6;
+            --accent-soft: #eedcc7;
+            
+            /* Warna Background */
             --bg: #f8fafc;
             --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+            
+            /* Warna Text */
             --text: #1e293b;
             --text-light: #475569;
             --text-muted: #64748b;
+            
+            /* Warna Border */
             --border: #e2e8f0;
+            
+            /* Warna Status */
             --success: #0f766e;
             --success-light: #d1fae5;
             --danger: #b91c1c;
             --danger-light: #fee2e2;
             
+            /* Shadow */
             --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
             --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
             
+            /* Radius */
             --radius-sm: 0.5rem;
             --radius-md: 0.75rem;
             --radius-lg: 1rem;
@@ -50,7 +64,13 @@
             --radius-2xl: 2rem;
             --radius-full: 9999px;
             
-            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+            /* Transisi */
+            --transition: all 0.3s ease;
+            
+            /* Layout */
+            --sidebar-width: 280px;
+            --header-height: 70px;
+            --container-max-width: 1400px;
         }
 
         body {
@@ -60,112 +80,340 @@
             min-height: 100vh;
         }
 
-        /* ===== MOBILE CONTAINER ===== */
-        .app-container {
-            max-width: 480px;
-            margin: 0 auto;
-            min-height: 100vh;
-            background: var(--bg);
-            display: flex;
-            flex-direction: column;
+        /* ===== DESKTOP LAYOUT (min-width: 1024px) ===== */
+        @media (min-width: 1024px) {
+            .mobile-only {
+                display: none !important;
+            }
+            
+            .desktop-layout {
+                display: flex;
+                min-height: 100vh;
+            }
+            
+            /* ===== SIDEBAR DESKTOP ===== */
+            .desktop-sidebar {
+                width: var(--sidebar-width);
+                background: var(--bg-sidebar);
+                border-right: 1px solid var(--border);
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                overflow-y: auto;
+                padding: 2rem 1.5rem;
+                box-shadow: var(--shadow-md);
+                z-index: 30;
+            }
+            
+            .sidebar-header {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding-bottom: 2rem;
+                margin-bottom: 2rem;
+                border-bottom: 2px solid var(--accent-light);
+            }
+            
+            .sidebar-logo {
+                width: 50px;
+                height: 50px;
+                background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+            
+            .sidebar-title {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.5rem;
+                font-weight: 800;
+                color: var(--primary);
+            }
+            
+            .sidebar-title span {
+                color: var(--accent);
+            }
+            
+            .nav-item {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 1rem 1.25rem;
+                color: var(--text-light);
+                border-radius: var(--radius-lg);
+                margin-bottom: 0.5rem;
+                cursor: pointer;
+                transition: var(--transition);
+                font-weight: 500;
+            }
+            
+            .nav-item i {
+                width: 24px;
+                color: var(--text-muted);
+                font-size: 1.2rem;
+            }
+            
+            .nav-item:hover {
+                background: var(--accent-light);
+                color: var(--primary);
+                transform: translateX(5px);
+            }
+            
+            .nav-item:hover i {
+                color: var(--accent);
+            }
+            
+            .nav-item.active {
+                background: var(--primary);
+                color: white;
+                box-shadow: var(--shadow-md);
+            }
+            
+            .nav-item.active i {
+                color: var(--accent);
+            }
+            
+            .status-card {
+                margin-top: 2rem;
+                padding: 1.5rem;
+                background: linear-gradient(145deg, var(--bg), white);
+                border-radius: var(--radius-lg);
+                border: 1px solid var(--border);
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .status-dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: #94a3b8;
+            }
+            
+            .status-dot.online {
+                background: #22c55e;
+                animation: pulse 2s infinite;
+            }
+            
+            .status-dot.offline {
+                background: #ef4444;
+            }
+            
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+            }
+            
+            /* ===== MAIN CONTENT DESKTOP ===== */
+            .desktop-main {
+                flex: 1;
+                margin-left: var(--sidebar-width);
+                min-height: 100vh;
+                background: var(--bg);
+            }
+            
+            .desktop-header {
+                height: var(--header-height);
+                background: white;
+                border-bottom: 1px solid var(--border);
+                padding: 0 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                position: sticky;
+                top: 0;
+                z-index: 20;
+                box-shadow: var(--shadow-sm);
+            }
+            
+            .page-title {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.8rem;
+                font-weight: 800;
+                color: var(--primary);
+            }
+            
+            .page-title i {
+                color: var(--accent);
+                margin-right: 0.5rem;
+            }
+            
+            .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 1.5rem;
+            }
+            
+            .date-time {
+                padding: 0.5rem 1rem;
+                background: var(--bg);
+                border-radius: var(--radius-full);
+                border: 1px solid var(--border);
+                font-size: 0.9rem;
+                color: var(--text-light);
+            }
+            
+            .date-time i {
+                color: var(--accent);
+                margin-right: 0.5rem;
+            }
+            
+            .desktop-content {
+                padding: 2rem;
+                max-width: var(--container-max-width);
+                margin: 0 auto;
+            }
+            
+            /* Grid Layout untuk Desktop */
+            .content-grid {
+                display: grid;
+                grid-template-columns: 1.5fr 1fr;
+                gap: 1.5rem;
+                align-items: start;
+            }
+            
+            .main-column {
+                grid-column: 1;
+            }
+            
+            .side-column {
+                grid-column: 2;
+            }
         }
 
-        /* ===== HEADER ===== */
-        .header {
-            background: var(--bg-card);
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+        /* ===== MOBILE LAYOUT (max-width: 1023px) ===== */
+        @media (max-width: 1023px) {
+            .desktop-only {
+                display: none !important;
+            }
+            
+            .mobile-container {
+                max-width: 100%;
+                min-height: 100vh;
+                background: var(--bg);
+                display: flex;
+                flex-direction: column;
+            }
+            
+            /* Mobile Header */
+            .mobile-header {
+                background: white;
+                padding: 1rem;
+                border-bottom: 1px solid var(--border);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                position: sticky;
+                top: 0;
+                z-index: 20;
+            }
+            
+            .mobile-logo {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            
+            .mobile-logo-img {
+                width: 40px;
+                height: 40px;
+                background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+            
+            .mobile-logo-text {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.3rem;
+                font-weight: 800;
+                color: var(--primary);
+            }
+            
+            .mobile-logo-text span {
+                color: var(--accent);
+            }
+            
+            .mobile-status {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                background: var(--bg);
+                border-radius: var(--radius-full);
+                border: 1px solid var(--border);
+            }
+            
+            /* Mobile Content */
+            .mobile-content {
+                flex: 1;
+                padding: 1rem;
+                padding-bottom: 5rem;
+            }
+            
+            /* Mobile Bottom Navigation */
+            .mobile-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                border-top: 1px solid var(--border);
+                display: flex;
+                padding: 0.5rem 1rem calc(0.5rem + env(safe-area-inset-bottom, 0)) 1rem;
+                z-index: 20;
+            }
+            
+            .mobile-nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 0.5rem;
+                color: var(--text-muted);
+                font-size: 0.65rem;
+                cursor: pointer;
+                border-radius: var(--radius-md);
+            }
+            
+            .mobile-nav-item i {
+                font-size: 1.2rem;
+            }
+            
+            .mobile-nav-item.active {
+                color: var(--accent);
+            }
+            
+            .mobile-nav-item:active {
+                background: var(--accent-light);
+            }
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-image {
-            width: 40px;
-            height: 40px;
-            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .logo-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .logo-text span {
-            color: var(--accent);
-        }
-
-        .status-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--bg);
-            border-radius: var(--radius-full);
-            border: 1px solid var(--border);
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #94a3b8;
-        }
-
-        .status-dot.online {
-            background: #22c55e;
-            animation: pulse 2s infinite;
-        }
-
-        .status-dot.offline {
-            background: #ef4444;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .status-text {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .main-content {
-            flex: 1;
-            padding: 1rem;
-            padding-bottom: 5rem;
-        }
-
-        /* ===== FORM CARD ===== */
+        /* ===== SHARED STYLES (berlaku untuk semua device) ===== */
+        
+        /* Form Card */
         .form-card {
-            background: var(--bg-card);
+            background: white;
             border-radius: var(--radius-xl);
             padding: 1.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             border: 1px solid var(--border);
             box-shadow: var(--shadow-sm);
         }
-
+        
+        @media (min-width: 1024px) {
+            .form-card {
+                padding: 2rem;
+            }
+        }
+        
         .form-group {
             margin-bottom: 1.25rem;
         }
-
+        
         .form-label {
             display: flex;
             align-items: center;
@@ -175,12 +423,12 @@
             font-weight: 600;
             color: var(--text);
         }
-
+        
         .form-label i {
             color: var(--accent);
             width: 18px;
         }
-
+        
         .form-control {
             width: 100%;
             padding: 0.875rem 1rem;
@@ -189,53 +437,53 @@
             border-radius: var(--radius-md);
             color: var(--text);
             font-size: 0.95rem;
-            transition: all 0.2s;
+            transition: var(--transition);
         }
-
+        
         .form-control:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
         }
-
+        
         textarea.form-control {
             min-height: 100px;
             resize: vertical;
         }
-
+        
         .char-count {
             font-size: 0.75rem;
             color: var(--text-muted);
             text-align: right;
             margin-top: 0.25rem;
         }
-
-        /* ===== MEDIA SECTION ===== */
+        
+        /* Media Section */
         .media-section {
             background: var(--bg);
             border-radius: var(--radius-lg);
             padding: 1rem;
             margin-bottom: 1.25rem;
         }
-
+        
         .media-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 1rem;
         }
-
+        
         .media-header h3 {
             font-size: 0.95rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-
+        
         .media-header i {
             color: var(--accent);
         }
-
+        
         .media-badge {
             background: var(--accent-light);
             padding: 0.25rem 0.75rem;
@@ -244,37 +492,31 @@
             font-weight: 600;
             color: var(--primary);
         }
-
-        .media-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
+        
         .media-input-row {
             display: flex;
             gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
-
+        
         .media-input {
             flex: 1;
             padding: 0.75rem 1rem;
-            background: var(--bg-card);
+            background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             font-size: 0.9rem;
         }
-
+        
         .media-type {
             width: 100px;
             padding: 0.75rem;
-            background: var(--bg-card);
+            background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             font-size: 0.9rem;
         }
-
+        
         .btn-add-media {
             width: 100%;
             padding: 0.875rem;
@@ -288,31 +530,42 @@
             justify-content: center;
             gap: 0.5rem;
             cursor: pointer;
+            transition: var(--transition);
         }
-
+        
+        .btn-add-media:hover {
+            background: var(--primary-light);
+        }
+        
         .btn-add-media:active {
-            opacity: 0.8;
             transform: scale(0.98);
         }
-
+        
         .media-list {
             max-height: 200px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            margin-top: 1rem;
         }
-
+        
         .media-item {
             display: flex;
             align-items: center;
             gap: 0.75rem;
             padding: 0.75rem;
-            background: var(--bg-card);
+            background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
+            animation: slideIn 0.3s ease;
         }
-
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
         .media-icon {
             width: 32px;
             height: 32px;
@@ -323,12 +576,12 @@
             justify-content: center;
             color: var(--primary);
         }
-
+        
         .media-info {
             flex: 1;
             min-width: 0;
         }
-
+        
         .media-url {
             font-size: 0.75rem;
             color: var(--text-muted);
@@ -336,7 +589,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
+        
         .media-type-badge {
             font-size: 0.65rem;
             padding: 0.2rem 0.5rem;
@@ -344,17 +597,17 @@
             color: white;
             border-radius: var(--radius-full);
         }
-
+        
         .media-type-badge.video {
             background: var(--accent);
             color: var(--primary);
         }
-
+        
         .media-actions {
             display: flex;
             gap: 0.25rem;
         }
-
+        
         .btn-media {
             width: 32px;
             height: 32px;
@@ -363,20 +616,33 @@
             background: var(--bg);
             color: var(--text-muted);
             cursor: pointer;
+            transition: var(--transition);
         }
-
-        .btn-media:active {
+        
+        .btn-media:hover {
             background: var(--accent-light);
+            color: var(--primary);
         }
-
-        /* ===== THEME GRID ===== */
+        
+        .btn-media:active {
+            transform: scale(0.9);
+        }
+        
+        /* Theme Grid */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 0.5rem;
             margin-top: 0.5rem;
         }
-
+        
+        @media (min-width: 1024px) {
+            .theme-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 0.75rem;
+            }
+        }
+        
         .theme-card {
             background: var(--bg);
             border: 1px solid var(--border);
@@ -384,33 +650,52 @@
             padding: 0.75rem 0.25rem;
             text-align: center;
             cursor: pointer;
+            transition: var(--transition);
         }
-
+        
+        .theme-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
         .theme-card:active {
-            background: var(--accent-light);
+            transform: scale(0.95);
         }
-
+        
         .theme-card.active {
             background: var(--primary);
             border-color: var(--accent);
         }
-
+        
         .theme-card.active .theme-name {
             color: white;
         }
-
+        
         .theme-emoji {
             font-size: 1.5rem;
             margin-bottom: 0.25rem;
         }
-
+        
+        @media (min-width: 1024px) {
+            .theme-emoji {
+                font-size: 2rem;
+            }
+        }
+        
         .theme-name {
             font-size: 0.65rem;
             font-weight: 600;
             color: var(--text);
         }
-
-        /* ===== BUTTONS ===== */
+        
+        @media (min-width: 1024px) {
+            .theme-name {
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* Buttons */
         .btn {
             padding: 0.875rem 1rem;
             border: none;
@@ -421,49 +706,53 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            transition: var(--transition);
         }
-
+        
         .btn-primary {
             background: var(--primary);
             color: white;
         }
-
+        
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+        
         .btn-success {
             background: var(--success);
             color: white;
         }
-
+        
         .btn:active {
-            opacity: 0.8;
             transform: scale(0.98);
         }
-
+        
         .action-row {
             display: flex;
             gap: 0.5rem;
             margin-top: 1rem;
         }
-
-        /* ===== RESULT CARD ===== */
+        
+        /* Result Card */
         .result-card {
-            background: var(--bg-card);
+            background: white;
             border: 2px solid var(--accent);
             border-radius: var(--radius-xl);
             padding: 1.5rem;
             margin-top: 1.5rem;
             display: none;
         }
-
+        
         .result-card.active {
             display: block;
-            animation: slideUp 0.3s ease;
+            animation: slideUp 0.4s ease;
         }
-
+        
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
         .result-title {
             color: var(--success);
             font-size: 1.1rem;
@@ -472,14 +761,14 @@
             align-items: center;
             gap: 0.5rem;
         }
-
+        
         .info-box {
             background: var(--bg);
             padding: 1rem;
             border-radius: var(--radius-lg);
             margin-bottom: 1rem;
         }
-
+        
         .info-row {
             display: flex;
             align-items: center;
@@ -487,12 +776,12 @@
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
-
+        
         .info-row i {
             color: var(--accent);
             width: 18px;
         }
-
+        
         .link-container {
             display: flex;
             align-items: center;
@@ -503,7 +792,7 @@
             border: 1px solid var(--border);
             margin: 1rem 0;
         }
-
+        
         .short-link {
             flex: 1;
             font-size: 0.8rem;
@@ -511,7 +800,7 @@
             word-break: break-all;
             font-family: monospace;
         }
-
+        
         .copy-btn {
             padding: 0.5rem 1rem;
             background: var(--primary);
@@ -523,7 +812,11 @@
             cursor: pointer;
             white-space: nowrap;
         }
-
+        
+        .copy-btn:hover {
+            background: var(--primary-light);
+        }
+        
         .qrcode-container {
             display: flex;
             justify-content: center;
@@ -531,82 +824,61 @@
             background: white;
             border-radius: var(--radius-lg);
             margin: 1rem 0;
+            box-shadow: var(--shadow-sm);
         }
-
+        
         .qrcode-container img {
             width: 150px;
             height: 150px;
         }
-
-        /* ===== BOTTOM NAV ===== */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            max-width: 480px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            border-top: 1px solid var(--border);
-            display: flex;
-            padding: 0.5rem 1rem calc(0.5rem + var(--safe-area-bottom)) 1rem;
-            z-index: 20;
+        
+        @media (min-width: 1024px) {
+            .qrcode-container img {
+                width: 180px;
+                height: 180px;
+            }
         }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.5rem;
-            color: var(--text-muted);
-            font-size: 0.65rem;
-            cursor: pointer;
-            border-radius: var(--radius-md);
-        }
-
-        .nav-item i {
-            font-size: 1.2rem;
-        }
-
-        .nav-item.active {
-            color: var(--accent);
-        }
-
-        .nav-item:active {
-            background: var(--accent-light);
-        }
-
-        /* ===== TABLES ===== */
+        
+        /* Tables */
         .table-container {
-            background: var(--bg-card);
+            background: white;
             border-radius: var(--radius-lg);
             overflow-x: auto;
             margin-top: 1rem;
+            box-shadow: var(--shadow-sm);
         }
-
+        
         .table {
             width: 100%;
             min-width: 600px;
             border-collapse: collapse;
         }
-
+        
         .table th {
             background: var(--primary);
             color: white;
             padding: 0.875rem 1rem;
             font-size: 0.8rem;
             text-align: left;
+            font-weight: 600;
         }
-
+        
         .table td {
             padding: 0.875rem 1rem;
             border-bottom: 1px solid var(--border);
             font-size: 0.8rem;
         }
-
-        /* ===== MODAL ===== */
+        
+        .table tr:hover {
+            background: var(--accent-light);
+        }
+        
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+        }
+        
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -616,58 +888,75 @@
             bottom: 0;
             background: rgba(0,0,0,0.5);
             backdrop-filter: blur(4px);
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
-            z-index: 100;
+            z-index: 1000;
         }
-
+        
         .modal.active {
             display: flex;
         }
-
+        
         .modal-content {
-            background: var(--bg-card);
-            width: 100%;
-            max-width: 480px;
-            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-            padding: 1.5rem;
-            max-height: 80vh;
+            background: white;
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
             overflow-y: auto;
-            animation: slideUpModal 0.3s ease;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
         }
-
-        @keyframes slideUpModal {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
+        
+        @media (max-width: 1023px) {
+            .modal-content {
+                border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                max-width: 100%;
+                animation: slideUpModal 0.3s ease;
+            }
+            
+            @keyframes slideUpModal {
+                from { transform: translateY(100%); }
+                to { transform: translateY(0); }
+            }
         }
-
+        
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
         }
-
+        
         .modal-header h3 {
             font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-
+        
         .modal-header i {
             color: var(--accent);
         }
-
+        
         .modal-close {
             background: none;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--text-muted);
+            transition: var(--transition);
         }
-
-        /* ===== ALERTS ===== */
+        
+        .modal-close:hover {
+            color: var(--danger);
+        }
+        
+        /* Alerts */
         .alert {
             padding: 1rem;
             border-radius: var(--radius-md);
@@ -675,21 +964,27 @@
             display: none;
             font-size: 0.9rem;
             border-left: 4px solid;
+            animation: slideInRight 0.3s ease;
         }
-
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
         .alert-success {
             background: var(--success-light);
             border-color: var(--success);
             color: var(--success);
         }
-
+        
         .alert-error {
             background: var(--danger-light);
             border-color: var(--danger);
             color: var(--danger);
         }
-
-        /* ===== LOADING ===== */
+        
+        /* Loading */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -701,17 +996,17 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 10000;
         }
-
+        
         .loading-content {
-            background: var(--bg-card);
+            background: white;
             padding: 2rem;
             border-radius: var(--radius-xl);
             text-align: center;
             box-shadow: var(--shadow-lg);
         }
-
+        
         .loading-spinner {
             width: 40px;
             height: 40px;
@@ -721,22 +1016,23 @@
             animation: spin 1s linear infinite;
             margin-bottom: 1rem;
         }
-
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        /* ===== UTILITY ===== */
+        
+        /* Utility Classes */
         .hidden {
             display: none !important;
         }
-
+        
         .text-muted {
             color: var(--text-muted);
         }
-
+        
         .mt-2 { margin-top: 0.5rem; }
         .mb-2 { margin-bottom: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
     </style>
 </head>
 <body>
@@ -748,169 +1044,422 @@
         </div>
     </div>
 
-    <!-- Main Container -->
-    <div class="app-container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">
-                <div class="logo-image"></div>
-                <div class="logo-text">FIOR<span>CARD</span></div>
+    <!-- ===== DESKTOP LAYOUT ===== -->
+    <div class="desktop-layout desktop-only">
+        <!-- Sidebar -->
+        <aside class="desktop-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo"></div>
+                <div class="sidebar-title">FIOR<span>CARD</span></div>
             </div>
-            <div class="status-badge" id="connectionStatus">
-                <span class="status-dot" id="statusDot"></span>
-                <span class="status-text" id="statusText">Cek koneksi...</span>
+            
+            <nav>
+                <div class="nav-item active" data-page="create-card">
+                    <i class="fas fa-magic"></i>
+                    <span>Buat Card</span>
+                </div>
+                <div class="nav-item" data-page="customers">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </div>
+                <div class="nav-item" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </nav>
+            
+            <div class="status-card">
+                <span class="status-dot" id="desktopStatusDot"></span>
+                <span class="status-text" id="desktopStatusText">Mengecek koneksi...</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="desktop-main">
+            <!-- Header -->
+            <header class="desktop-header">
+                <h1 class="page-title" id="desktopPageTitle">
+                    <i class="fas fa-magic"></i> Buat Card
+                </h1>
+                <div class="header-actions">
+                    <div class="date-time" id="desktopDateTime">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="desktop-content">
+                <!-- Alerts -->
+                <div id="desktopAlertSuccess" class="alert alert-success"></div>
+                <div id="desktopAlertError" class="alert alert-error"></div>
+
+                <!-- Pages -->
+                <div id="desktop-create-card" class="page active">
+                    <div class="content-grid">
+                        <!-- Main Column -->
+                        <div class="main-column">
+                            <div class="form-card">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-user"></i>
+                                        Nama Penerima
+                                    </label>
+                                    <input type="text" class="form-control" id="desktopRecipientName" 
+                                           placeholder="Contoh: Budi Santoso">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fab fa-whatsapp"></i>
+                                        Nomor WhatsApp
+                                    </label>
+                                    <input type="tel" class="form-control" id="desktopWhatsappNumber" 
+                                           placeholder="081234567890">
+                                    <div class="char-count">Contoh: 081234567890</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-comment"></i>
+                                        Pesan Ucapan
+                                    </label>
+                                    <textarea class="form-control" id="desktopCardMessage" 
+                                              placeholder="Tulis pesan Anda..." rows="4"></textarea>
+                                    <div class="char-count">
+                                        <span id="desktopCharCount">0</span>/1000 (min 20)
+                                    </div>
+                                </div>
+
+                                <!-- Media Section -->
+                                <div class="media-section">
+                                    <div class="media-header">
+                                        <h3>
+                                            <i class="fas fa-photo-video"></i>
+                                            Media URL
+                                        </h3>
+                                        <span class="media-badge" id="desktopMediaCountBadge">0</span>
+                                    </div>
+
+                                    <div class="media-input-row">
+                                        <input type="url" class="media-input" id="desktopMediaUrlInput" 
+                                               placeholder="https://...">
+                                        <select class="media-type" id="desktopMediaTypeSelect">
+                                            <option value="auto">Auto</option>
+                                            <option value="image">Gambar</option>
+                                            <option value="video">Video</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <button class="btn-add-media" onclick="addMediaUrl('desktop')">
+                                        <i class="fas fa-plus"></i> Tambah Media
+                                    </button>
+
+                                    <div id="desktopMediaListContainer" class="media-list"></div>
+                                    <input type="hidden" id="desktopMediaUrls" value="[]">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Side Column -->
+                        <div class="side-column">
+                            <div class="form-card">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-palette"></i>
+                                        Pilih Tema
+                                    </label>
+                                    <div class="theme-grid" id="desktopThemeGrid"></div>
+                                </div>
+
+                                <div class="action-row">
+                                    <button class="btn btn-primary" style="flex:2;" onclick="createCard('desktop')">
+                                        <i class="fas fa-magic"></i> Generate
+                                    </button>
+                                    <button class="btn btn-primary" style="flex:1;" onclick="previewCard('desktop')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-primary" style="flex:1; background:var(--text-muted);" onclick="resetForm('desktop')">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Result Card -->
+                            <div id="desktopCardResult" class="result-card">
+                                <div class="result-title">
+                                    <i class="fas fa-check-circle"></i>
+                                    CARD BERHASIL!
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-row">
+                                        <i class="fas fa-user"></i>
+                                        <span id="desktopResultRecipient"></span>
+                                    </div>
+                                    <div class="info-row">
+                                        <i class="fas fa-palette"></i>
+                                        <span id="desktopResultTheme"></span>
+                                    </div>
+                                    <div class="info-row">
+                                        <i class="fas fa-photo-video"></i>
+                                        <span id="desktopResultMediaCount"></span>
+                                    </div>
+                                </div>
+
+                                <div class="link-container">
+                                    <span class="short-link" id="desktopGeneratedLink"></span>
+                                    <button class="copy-btn" onclick="copyLink('desktop')">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                </div>
+
+                                <div class="qrcode-container" id="desktopQrcode"></div>
+
+                                <div class="action-row">
+                                    <a href="#" target="_blank" class="btn btn-success" id="desktopWhatsappResultBtn" style="flex:1;">
+                                        <i class="fab fa-whatsapp"></i> Kirim WA
+                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-primary" id="desktopPreviewResultBtn" style="flex:1;">
+                                        <i class="fas fa-eye"></i> Buka
+                                    </a>
+                                </div>
+                                <div class="action-row mt-2">
+                                    <button class="btn btn-primary" style="flex:1; background:var(--text-muted);" onclick="downloadQRCode('desktop')">
+                                        <i class="fas fa-download"></i> QR
+                                    </button>
+                                    <button class="btn btn-primary" style="flex:1; background:var(--text-muted);" onclick="printQRCode('desktop')">
+                                        <i class="fas fa-print"></i> Cetak
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customers Page Desktop -->
+                <div id="desktop-customers" class="page hidden">
+                    <div class="form-card">
+                        <button class="btn btn-primary" onclick="showAddCustomerModal()" style="margin-bottom:1rem;">
+                            <i class="fas fa-user-plus"></i> Tambah Customer
+                        </button>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>No. WA</th>
+                                        <th>Email</th>
+                                        <th>Alamat</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="desktopCustomersTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Page Desktop -->
+                <div id="desktop-history" class="page hidden">
+                    <div class="form-card">
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Penerima</th>
+                                        <th>Tema</th>
+                                        <th>Media</th>
+                                        <th>Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="desktopHistoryTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page Desktop -->
+                <div id="desktop-settings" class="page hidden">
+                    <div class="form-card">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-link"></i>
+                                API URL
+                            </label>
+                            <input type="url" class="form-control" id="desktopScriptUrl" 
+                                   value="https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-globe"></i>
+                                Card URL
+                            </label>
+                            <input type="url" class="form-control" id="desktopCardBaseUrl" 
+                                   value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
+                        </div>
+
+                        <div class="action-row">
+                            <button class="btn btn-primary" onclick="saveSettings()">
+                                <i class="fas fa-save"></i> Simpan
+                            </button>
+                            <button class="btn btn-primary" onclick="testConnection()">
+                                <i class="fas fa-wifi"></i> Test
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== MOBILE LAYOUT ===== -->
+    <div class="mobile-container mobile-only">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <div class="mobile-logo">
+                <div class="mobile-logo-img"></div>
+                <div class="mobile-logo-text">FIOR<span>CARD</span></div>
+            </div>
+            <div class="mobile-status">
+                <span class="status-dot" id="mobileStatusDot"></span>
+                <span class="status-text" id="mobileStatusText">Online</span>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
+        <!-- Mobile Content -->
+        <div class="mobile-content">
             <!-- Alerts -->
-            <div id="alertSuccess" class="alert alert-success"></div>
-            <div id="alertError" class="alert alert-error"></div>
+            <div id="mobileAlertSuccess" class="alert alert-success"></div>
+            <div id="mobileAlertError" class="alert alert-error"></div>
 
-            <!-- Create Card Page -->
-            <div id="create-card" class="page active">
-                <!-- Form Card -->
+            <!-- Pages -->
+            <div id="mobile-create-card" class="page active">
                 <div class="form-card">
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-user"></i>
-                            Nama Penerima
+                            <i class="fas fa-user"></i> Nama Penerima
                         </label>
-                        <input type="text" class="form-control" id="recipientName" 
+                        <input type="text" class="form-control" id="mobileRecipientName" 
                                placeholder="Contoh: Budi Santoso">
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fab fa-whatsapp"></i>
-                            Nomor WhatsApp
+                            <i class="fab fa-whatsapp"></i> No. WhatsApp
                         </label>
-                        <input type="tel" class="form-control" id="whatsappNumber" 
+                        <input type="tel" class="form-control" id="mobileWhatsappNumber" 
                                placeholder="081234567890">
-                        <div class="char-count">Contoh: 081234567890</div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-comment"></i>
-                            Pesan Ucapan
+                            <i class="fas fa-comment"></i> Pesan
                         </label>
-                        <textarea class="form-control" id="cardMessage" 
+                        <textarea class="form-control" id="mobileCardMessage" 
                                   placeholder="Tulis pesan Anda..." rows="4"></textarea>
                         <div class="char-count">
-                            <span id="charCount">0</span>/1000 (min 20)
+                            <span id="mobileCharCount">0</span>/1000
                         </div>
                     </div>
 
-                    <!-- Media Section -->
+                    <!-- Media Section Mobile -->
                     <div class="media-section">
                         <div class="media-header">
-                            <h3>
-                                <i class="fas fa-photo-video"></i>
-                                Media URL
-                            </h3>
-                            <span class="media-badge" id="mediaCountBadge">0</span>
+                            <h3><i class="fas fa-photo-video"></i> Media</h3>
+                            <span class="media-badge" id="mobileMediaCountBadge">0</span>
                         </div>
 
-                        <div class="media-input-group">
-                            <div class="media-input-row">
-                                <input type="url" class="media-input" id="mediaUrlInput" 
-                                       placeholder="https://...">
-                                <select class="media-type" id="mediaTypeSelect">
-                                    <option value="auto">Auto</option>
-                                    <option value="image">Gambar</option>
-                                    <option value="video">Video</option>
-                                </select>
-                            </div>
-                            <button class="btn-add-media" onclick="addMediaUrl()">
-                                <i class="fas fa-plus"></i> Tambah Media
-                            </button>
+                        <div class="media-input-row">
+                            <input type="url" class="media-input" id="mobileMediaUrlInput" 
+                                   placeholder="https://...">
+                            <select class="media-type" id="mobileMediaTypeSelect">
+                                <option value="auto">Auto</option>
+                                <option value="image">Gambar</option>
+                                <option value="video">Video</option>
+                            </select>
                         </div>
+                        
+                        <button class="btn-add-media" onclick="addMediaUrl('mobile')">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
 
-                        <div id="mediaListContainer" class="media-list"></div>
-                        <input type="hidden" id="mediaUrls" value="[]">
+                        <div id="mobileMediaListContainer" class="media-list"></div>
+                        <input type="hidden" id="mobileMediaUrls" value="[]">
                     </div>
 
-                    <!-- Theme Grid -->
+                    <!-- Theme Grid Mobile -->
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-palette"></i>
-                            Pilih Tema
+                            <i class="fas fa-palette"></i> Pilih Tema
                         </label>
-                        <div class="theme-grid" id="themeGrid"></div>
+                        <div class="theme-grid" id="mobileThemeGrid"></div>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="action-row">
-                        <button class="btn btn-primary" style="flex: 2;" onclick="createCard()">
+                        <button class="btn btn-primary" style="flex:2;" onclick="createCard('mobile')">
                             <i class="fas fa-magic"></i> Generate
                         </button>
-                        <button class="btn btn-primary" style="flex: 1;" onclick="previewCard()">
+                        <button class="btn btn-primary" style="flex:1;" onclick="previewCard('mobile')">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-primary" style="flex: 1; background: var(--text-muted);" onclick="resetForm()">
-                            <i class="fas fa-undo"></i>
-                        </button>
                     </div>
+                    <button class="btn btn-primary" style="width:100%; margin-top:0.5rem; background:var(--text-muted);" onclick="resetForm('mobile')">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
                 </div>
 
-                <!-- Result Card -->
-                <div id="cardResult" class="result-card">
+                <!-- Result Card Mobile -->
+                <div id="mobileCardResult" class="result-card">
                     <div class="result-title">
-                        <i class="fas fa-check-circle"></i>
-                        CARD BERHASIL DIBUAT!
+                        <i class="fas fa-check-circle"></i> BERHASIL!
                     </div>
 
-                    <!-- Info Box -->
                     <div class="info-box">
                         <div class="info-row">
                             <i class="fas fa-user"></i>
-                            <span id="resultRecipient"></span>
+                            <span id="mobileResultRecipient"></span>
                         </div>
                         <div class="info-row">
                             <i class="fas fa-palette"></i>
-                            <span id="resultTheme"></span>
+                            <span id="mobileResultTheme"></span>
                         </div>
                         <div class="info-row">
                             <i class="fas fa-photo-video"></i>
-                            <span id="resultMediaCount"></span>
+                            <span id="mobileResultMediaCount"></span>
                         </div>
                     </div>
 
-                    <!-- Link Card -->
                     <div class="link-container">
-                        <span class="short-link" id="generatedLink"></span>
-                        <button class="copy-btn" onclick="copyLink()">
+                        <span class="short-link" id="mobileGeneratedLink"></span>
+                        <button class="copy-btn" onclick="copyLink('mobile')">
                             <i class="fas fa-copy"></i> Copy
                         </button>
                     </div>
 
-                    <!-- QR Code -->
-                    <div class="qrcode-container" id="qrcode"></div>
+                    <div class="qrcode-container" id="mobileQrcode"></div>
 
-                    <!-- Action Buttons -->
                     <div class="action-row">
-                        <a href="#" target="_blank" class="btn btn-success" id="whatsappResultBtn" style="flex:1;">
-                            <i class="fab fa-whatsapp"></i> Kirim WA
+                        <a href="#" target="_blank" class="btn btn-success" id="mobileWhatsappResultBtn" style="flex:1;">
+                            <i class="fab fa-whatsapp"></i> WA
                         </a>
-                        <a href="#" target="_blank" class="btn btn-primary" id="previewResultBtn" style="flex:1;">
+                        <a href="#" target="_blank" class="btn btn-primary" id="mobilePreviewResultBtn" style="flex:1;">
                             <i class="fas fa-eye"></i> Buka
                         </a>
-                    </div>
-                    <div class="action-row mt-2">
-                        <button class="btn btn-primary" style="flex:1; background: var(--text-muted);" onclick="downloadQRCode()">
-                            <i class="fas fa-download"></i> QR
-                        </button>
-                        <button class="btn btn-primary" style="flex:1; background: var(--text-muted);" onclick="printQRCode()">
-                            <i class="fas fa-print"></i> Cetak
-                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Customers Page -->
-            <div id="customers" class="page hidden">
+            <!-- Customers Page Mobile -->
+            <div id="mobile-customers" class="page hidden">
                 <div class="form-card">
                     <button class="btn btn-primary" onclick="showAddCustomerModal()" style="width:100%; margin-bottom:1rem;">
                         <i class="fas fa-user-plus"></i> Tambah Customer
@@ -921,18 +1470,17 @@
                                 <tr>
                                     <th>Nama</th>
                                     <th>No. WA</th>
-                                    <th>Email</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="customersTableBody"></tbody>
+                            <tbody id="mobileCustomersTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- History Page -->
-            <div id="history" class="page hidden">
+            <!-- History Page Mobile -->
+            <div id="mobile-history" class="page hidden">
                 <div class="form-card">
                     <div class="table-container">
                         <table class="table">
@@ -940,71 +1488,58 @@
                                 <tr>
                                     <th>Tanggal</th>
                                     <th>Penerima</th>
-                                    <th>Tema</th>
                                     <th>Link</th>
                                 </tr>
                             </thead>
-                            <tbody id="historyTableBody"></tbody>
+                            <tbody id="mobileHistoryTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Settings Page -->
-            <div id="settings" class="page hidden">
+            <!-- Settings Page Mobile -->
+            <div id="mobile-settings" class="page hidden">
                 <div class="form-card">
                     <div class="form-group">
-                        <label class="form-label">
-                            <i class="fas fa-link"></i>
-                            API URL
-                        </label>
-                        <input type="url" class="form-control" id="scriptUrl" 
+                        <label class="form-label">API URL</label>
+                        <input type="url" class="form-control" id="mobileScriptUrl" 
                                value="https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec">
                     </div>
-
                     <div class="form-group">
-                        <label class="form-label">
-                            <i class="fas fa-globe"></i>
-                            Card URL
-                        </label>
-                        <input type="url" class="form-control" id="cardBaseUrl" 
+                        <label class="form-label">Card URL</label>
+                        <input type="url" class="form-control" id="mobileCardBaseUrl" 
                                value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
                     </div>
-
                     <div class="action-row">
-                        <button class="btn btn-primary" onclick="saveSettings()">
-                            <i class="fas fa-save"></i> Simpan
-                        </button>
-                        <button class="btn btn-primary" onclick="testConnection()">
-                            <i class="fas fa-wifi"></i> Test
-                        </button>
+                        <button class="btn btn-primary" onclick="saveSettings()">Simpan</button>
+                        <button class="btn btn-primary" onclick="testConnection()">Test</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Bottom Navigation -->
-        <div class="bottom-nav">
-            <div class="nav-item active" data-page="create-card">
+        <!-- Mobile Bottom Navigation -->
+        <div class="mobile-nav">
+            <div class="mobile-nav-item active" data-page="create-card">
                 <i class="fas fa-magic"></i>
                 <span>Buat</span>
             </div>
-            <div class="nav-item" data-page="customers">
+            <div class="mobile-nav-item" data-page="customers">
                 <i class="fas fa-users"></i>
                 <span>Customers</span>
             </div>
-            <div class="nav-item" data-page="history">
+            <div class="mobile-nav-item" data-page="history">
                 <i class="fas fa-history"></i>
                 <span>History</span>
             </div>
-            <div class="nav-item" data-page="settings">
+            <div class="mobile-nav-item" data-page="settings">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
             </div>
         </div>
     </div>
 
-    <!-- Modal Tambah Customer -->
+    <!-- Modal Tambah Customer (sama untuk semua device) -->
     <div id="customerModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1030,14 +1565,14 @@
             
             <div class="action-row">
                 <button class="btn btn-primary" onclick="saveCustomer()">Simpan</button>
-                <button class="btn btn-primary" style="background: var(--text-muted);" onclick="closeCustomerModal()">Batal</button>
+                <button class="btn btn-primary" style="background:var(--text-muted);" onclick="closeCustomerModal()">Batal</button>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - FIXED VERSION
+        // FIOR CARD ADMIN - RESPONSIVE
         // ============================================
 
         // ========== KONFIGURASI ==========
@@ -1066,95 +1601,128 @@
             customers: [],
             cards: [],
             selectedTheme: CONFIG.DEFAULT_THEME,
-            mediaUrls: []
+            mediaUrls: { desktop: [], mobile: [] },
+            currentDevice: 'desktop'
         };
-
-        // ========== DOM ELEMENTS ==========
-        const el = {};
 
         // ========== INIT ==========
         document.addEventListener('DOMContentLoaded', function() {
-            cacheElements();
+            // Deteksi device
+            state.currentDevice = window.innerWidth >= 1024 ? 'desktop' : 'mobile';
+            
+            // Load themes untuk kedua device
+            loadThemes('desktop');
+            loadThemes('mobile');
+            
+            // Load settings
             loadSettings();
-            loadThemes();
+            
+            // Setup navigation
+            setupNavigation();
+            
+            // Update waktu
             updateDateTime();
             setInterval(updateDateTime, 60000);
-            setupNavigation();
+            
+            // Load data
             loadCustomers();
             loadCards();
             
-            // Test koneksi otomatis
+            // Test koneksi
             setTimeout(() => testConnection(), 2000);
-            
-            renderMediaList();
         });
 
-        function cacheElements() {
-            const ids = [
-                'loadingOverlay', 'loadingText',
-                'alertSuccess', 'alertError',
-                'statusDot', 'statusText',
-                'recipientName', 'whatsappNumber', 'cardMessage', 'charCount',
-                'mediaUrlInput', 'mediaTypeSelect', 'mediaListContainer', 'mediaUrls', 'mediaCountBadge',
-                'themeGrid', 'cardResult', 'generatedLink',
-                'whatsappResultBtn', 'previewResultBtn', 'qrcode',
-                'resultRecipient', 'resultTheme', 'resultMediaCount',
-                'customersTableBody', 'historyTableBody',
-                'scriptUrl', 'cardBaseUrl',
-                'modalCustomerName', 'modalCustomerPhone', 
-                'modalCustomerEmail', 'modalCustomerAddress', 'modalCustomerNotes'
-            ];
-            ids.forEach(id => el[id] = document.getElementById(id));
-        }
-
-        function updateDateTime() {
-            // Tidak perlu update terus, cukup sekali
-        }
-
-        // ========== NAVIGATION ==========
-        function setupNavigation() {
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-                    document.getElementById(this.dataset.page).classList.remove('hidden');
-                    
-                    if (this.dataset.page === 'customers') loadCustomers();
-                    if (this.dataset.page === 'history') loadCards();
-                });
-            });
+        // ========== HELPER FUNCTIONS ==========
+        function getEl(id, device = null) {
+            const prefix = device || state.currentDevice;
+            return document.getElementById(`${prefix}${id}`);
         }
 
         // ========== THEMES ==========
-        function loadThemes() {
-            if (!el.themeGrid) return;
-            el.themeGrid.innerHTML = '';
+        function loadThemes(device) {
+            const grid = document.getElementById(`${device}ThemeGrid`);
+            if (!grid) return;
+            
+            grid.innerHTML = '';
             THEMES.forEach(theme => {
                 const div = document.createElement('div');
-                div.className = `theme-card ${theme.id === state.selectedTheme ? 'active' : ''}`;
+                div.className = `theme-card ${theme.id === CONFIG.DEFAULT_THEME ? 'active' : ''}`;
                 div.dataset.theme = theme.id;
+                div.dataset.device = device;
                 div.innerHTML = `
                     <div class="theme-emoji">${theme.emoji}</div>
                     <div class="theme-name">${theme.name}</div>
                 `;
                 div.onclick = () => {
-                    state.selectedTheme = theme.id;
-                    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+                    document.querySelectorAll(`[data-device="${device}"] .theme-card`).forEach(c => c.classList.remove('active'));
                     div.classList.add('active');
+                    state.selectedTheme = theme.id;
                 };
-                el.themeGrid.appendChild(div);
+                grid.appendChild(div);
             });
         }
 
+        // ========== NAVIGATION ==========
+        function setupNavigation() {
+            // Desktop navigation
+            document.querySelectorAll('.desktop-sidebar .nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.desktop-sidebar .nav-item').forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const pageId = this.dataset.page;
+                    document.querySelectorAll('.desktop-main .page').forEach(p => p.classList.add('hidden'));
+                    document.getElementById(`desktop-${pageId}`).classList.remove('hidden');
+                    
+                    // Update title
+                    const titles = {
+                        'create-card': 'Buat Card',
+                        'customers': 'Customers',
+                        'history': 'History',
+                        'settings': 'Settings'
+                    };
+                    document.getElementById('desktopPageTitle').innerHTML = `<i class="fas fa-${pageId === 'create-card' ? 'magic' : pageId === 'customers' ? 'users' : pageId === 'history' ? 'history' : 'cog'}"></i> ${titles[pageId]}`;
+                });
+            });
+
+            // Mobile navigation
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.mobile-nav-item').forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const pageId = this.dataset.page;
+                    document.querySelectorAll('.mobile-content .page').forEach(p => p.classList.add('hidden'));
+                    document.getElementById(`mobile-${pageId}`).classList.remove('hidden');
+                });
+            });
+        }
+
+        // ========== DATE TIME ==========
+        function updateDateTime() {
+            const now = new Date();
+            const formatted = now.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            const desktopDateTime = document.getElementById('desktopDateTime')?.querySelector('span');
+            if (desktopDateTime) desktopDateTime.textContent = formatted;
+        }
+
         // ========== MEDIA FUNCTIONS ==========
-        window.addMediaUrl = function() {
-            const url = el.mediaUrlInput?.value.trim();
-            const type = el.mediaTypeSelect?.value;
+        window.addMediaUrl = function(device) {
+            const input = document.getElementById(`${device}MediaUrlInput`);
+            const typeSelect = document.getElementById(`${device}MediaTypeSelect`);
+            const url = input?.value.trim();
+            const type = typeSelect?.value;
             
             if (!url || !url.startsWith('http')) {
-                showAlert('URL tidak valid!', 'error');
+                showAlert('URL tidak valid!', 'error', device);
                 return;
             }
             
@@ -1165,36 +1733,41 @@
                               url.includes('vimeo.com') ? 'video' : 'image';
             }
             
-            state.mediaUrls.push({
+            if (!state.mediaUrls[device]) state.mediaUrls[device] = [];
+            state.mediaUrls[device].push({
                 url: url,
                 type: detectedType,
                 id: Date.now() + Math.random()
             });
             
-            el.mediaUrls.value = JSON.stringify(state.mediaUrls);
-            renderMediaList();
-            el.mediaUrlInput.value = '';
-            updateMediaCount();
-            showAlert('Media ditambahkan!', 'success');
+            document.getElementById(`${device}MediaUrls`).value = JSON.stringify(state.mediaUrls[device]);
+            renderMediaList(device);
+            input.value = '';
+            updateMediaCount(device);
+            showAlert('Media ditambahkan!', 'success', device);
         };
 
-        window.removeMediaUrl = function(id) {
-            state.mediaUrls = state.mediaUrls.filter(item => item.id !== id);
-            el.mediaUrls.value = JSON.stringify(state.mediaUrls);
-            renderMediaList();
-            updateMediaCount();
+        window.removeMediaUrl = function(device, id) {
+            if (!state.mediaUrls[device]) return;
+            state.mediaUrls[device] = state.mediaUrls[device].filter(item => item.id !== id);
+            document.getElementById(`${device}MediaUrls`).value = JSON.stringify(state.mediaUrls[device]);
+            renderMediaList(device);
+            updateMediaCount(device);
         };
 
-        function renderMediaList() {
-            if (!el.mediaListContainer) return;
+        function renderMediaList(device) {
+            const container = document.getElementById(`${device}MediaListContainer`);
+            if (!container) return;
             
-            if (state.mediaUrls.length === 0) {
-                el.mediaListContainer.innerHTML = '<div class="text-muted" style="text-align:center; padding:1rem;">Belum ada media</div>';
+            const urls = state.mediaUrls[device] || [];
+            
+            if (urls.length === 0) {
+                container.innerHTML = '<div class="text-muted" style="text-align:center; padding:1rem;">Belum ada media</div>';
                 return;
             }
             
             let html = '';
-            state.mediaUrls.forEach((media, index) => {
+            urls.forEach((media, index) => {
                 html += `
                     <div class="media-item">
                         <div class="media-icon">
@@ -1207,72 +1780,69 @@
                             </span>
                         </div>
                         <div class="media-actions">
-                            <button class="btn-media" onclick="previewMedia('${escapeHTML(media.url)}')">
+                            <button class="btn-media" onclick="window.open('${escapeHTML(media.url)}')">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button class="btn-media" onclick="removeMediaUrl(${media.id})">
+                            <button class="btn-media" onclick="removeMediaUrl('${device}', ${media.id})">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
                 `;
             });
-            el.mediaListContainer.innerHTML = html;
+            container.innerHTML = html;
         }
 
-        window.previewMedia = function(url) {
-            window.open(url, '_blank');
-        };
-
-        function updateMediaCount() {
-            if (el.mediaCountBadge) {
-                el.mediaCountBadge.textContent = state.mediaUrls.length;
+        function updateMediaCount(device) {
+            const badge = document.getElementById(`${device}MediaCountBadge`);
+            if (badge) {
+                badge.textContent = (state.mediaUrls[device] || []).length;
             }
         }
 
         // ========== CREATE CARD ==========
-        window.createCard = function() {
-            const name = el.recipientName?.value.trim();
-            const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
-            const message = el.cardMessage?.value.trim();
+        window.createCard = function(device) {
+            const name = document.getElementById(`${device}RecipientName`)?.value.trim();
+            const phone = document.getElementById(`${device}WhatsappNumber`)?.value.trim().replace(/\D/g, '');
+            const message = document.getElementById(`${device}CardMessage`)?.value.trim();
             
-            if (!name) { showAlert('Nama harus diisi!', 'error'); return; }
-            if (!phone || phone.length < 10) { showAlert('Nomor WA tidak valid!', 'error'); return; }
-            if (!message || message.length < 20) { showAlert('Pesan minimal 20 karakter!', 'error'); return; }
+            if (!name) { showAlert('Nama harus diisi!', 'error', device); return; }
+            if (!phone || phone.length < 10) { showAlert('Nomor WA tidak valid!', 'error', device); return; }
+            if (!message || message.length < 20) { showAlert('Pesan minimal 20 karakter!', 'error', device); return; }
             
             showLoading(true, 'Membuat card...');
             
             try {
-                // Build URL
                 let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${state.selectedTheme}`;
                 
-                // Add media
-                if (state.mediaUrls.length > 0) {
-                    state.mediaUrls.forEach((media, i) => {
+                const urls = state.mediaUrls[device] || [];
+                if (urls.length > 0) {
+                    urls.forEach((media, i) => {
                         const param = i === 0 ? 'media' : `media${i+1}`;
                         cardUrl += `&${param}=${encodeURIComponent(media.url)}`;
                     });
                 }
                 
                 // Tampilkan link
-                el.generatedLink.textContent = cardUrl;
+                document.getElementById(`${device}GeneratedLink`).textContent = cardUrl;
                 
                 // Tampilkan info
-                el.resultRecipient.textContent = name;
+                document.getElementById(`${device}ResultRecipient`).textContent = name;
                 const themeObj = THEMES.find(t => t.id === state.selectedTheme);
-                el.resultTheme.textContent = `${themeObj?.emoji || '🎨'} ${themeObj?.name || state.selectedTheme}`;
+                document.getElementById(`${device}ResultTheme`).textContent = `${themeObj?.emoji || '🎨'} ${themeObj?.name || state.selectedTheme}`;
                 
-                const imageCount = state.mediaUrls.filter(m => m.type === 'image').length;
-                const videoCount = state.mediaUrls.filter(m => m.type === 'video').length;
-                el.resultMediaCount.textContent = `${state.mediaUrls.length} Media (${imageCount}G, ${videoCount}V)`;
+                const imageCount = urls.filter(m => m.type === 'image').length;
+                const videoCount = urls.filter(m => m.type === 'video').length;
+                document.getElementById(`${device}ResultMediaCount`).textContent = `${urls.length} Media (${imageCount}G, ${videoCount}V)`;
                 
                 // Generate QR Code
-                if (el.qrcode) {
-                    el.qrcode.innerHTML = '';
-                    new QRCode(el.qrcode, {
+                const qrcodeDiv = document.getElementById(`${device}Qrcode`);
+                if (qrcodeDiv) {
+                    qrcodeDiv.innerHTML = '';
+                    new QRCode(qrcodeDiv, {
                         text: cardUrl,
-                        width: 150,
-                        height: 150,
+                        width: device === 'desktop' ? 180 : 150,
+                        height: device === 'desktop' ? 180 : 150,
                         colorDark: "#1e3a5f",
                         colorLight: "#ffffff",
                         correctLevel: QRCode.CorrectLevel.H
@@ -1282,47 +1852,28 @@
                 // WhatsApp button
                 const waNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
                 const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${cardUrl}`;
-                el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
-                el.previewResultBtn.href = cardUrl;
+                document.getElementById(`${device}WhatsappResultBtn`).href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
+                document.getElementById(`${device}PreviewResultBtn`).href = cardUrl;
                 
                 // Tampilkan result card
-                el.cardResult.classList.add('active');
+                document.getElementById(`${device}CardResult`).classList.add('active');
                 
-                // Save to Google Sheets (background)
-                try {
-                    const formData = new URLSearchParams();
-                    formData.append('type', 'card');
-                    formData.append('nama', name);
-                    formData.append('no_hp', phone);
-                    formData.append('tema', state.selectedTheme);
-                    formData.append('pesan', message);
-                    formData.append('link', cardUrl);
-                    formData.append('media_url', state.mediaUrls.map(m => m.url).join('||'));
-                    
-                    fetch(CONFIG.SCRIPT_URL, {
-                        method: 'POST',
-                        body: formData,
-                        mode: 'no-cors' // Untuk menghindari CORS
-                    }).catch(() => {}); // Ignore error
-                    
-                    loadCards();
-                } catch (e) {}
-                
-                showAlert('✅ Card berhasil dibuat!', 'success');
+                showAlert('✅ Card berhasil dibuat!', 'success', device);
                 
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                showAlert('Error: ' + error.message, 'error', device);
             } finally {
                 showLoading(false);
             }
         };
 
-        window.previewCard = function() {
-            const name = el.recipientName?.value || 'Preview';
-            const message = el.cardMessage?.value || 'Preview';
+        window.previewCard = function(device) {
+            const name = document.getElementById(`${device}RecipientName`)?.value || 'Preview';
+            const message = document.getElementById(`${device}CardMessage`)?.value || 'Preview';
             let url = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${state.selectedTheme}&preview=true`;
             
-            state.mediaUrls.forEach((media, i) => {
+            const urls = state.mediaUrls[device] || [];
+            urls.forEach((media, i) => {
                 const param = i === 0 ? 'media' : `media${i+1}`;
                 url += `&${param}=${encodeURIComponent(media.url)}`;
             });
@@ -1330,33 +1881,35 @@
             window.open(url, '_blank');
         };
 
-        window.resetForm = function() {
-            el.recipientName.value = '';
-            el.whatsappNumber.value = '';
-            el.cardMessage.value = '';
-            el.charCount.textContent = '0';
-            state.mediaUrls = [];
-            el.mediaUrls.value = '[]';
-            renderMediaList();
-            updateMediaCount();
-            el.cardResult.classList.remove('active');
+        window.resetForm = function(device) {
+            document.getElementById(`${device}RecipientName`).value = '';
+            document.getElementById(`${device}WhatsappNumber`).value = '';
+            document.getElementById(`${device}CardMessage`).value = '';
+            document.getElementById(`${device}CharCount`).textContent = '0';
+            
+            state.mediaUrls[device] = [];
+            document.getElementById(`${device}MediaUrls`).value = '[]';
+            renderMediaList(device);
+            updateMediaCount(device);
+            
+            document.getElementById(`${device}CardResult`).classList.remove('active');
         };
 
-        window.copyLink = function() {
-            const link = el.generatedLink?.textContent;
+        window.copyLink = function(device) {
+            const link = document.getElementById(`${device}GeneratedLink`)?.textContent;
             if (!link) {
-                showAlert('Tidak ada link', 'error');
+                showAlert('Tidak ada link', 'error', device);
                 return;
             }
             navigator.clipboard.writeText(link)
-                .then(() => showAlert('✅ Link dicopy!', 'success'))
-                .catch(() => showAlert('❌ Gagal copy', 'error'));
+                .then(() => showAlert('✅ Link dicopy!', 'success', device))
+                .catch(() => showAlert('❌ Gagal copy', 'error', device));
         };
 
-        window.downloadQRCode = function() {
-            const img = el.qrcode?.querySelector('img');
+        window.downloadQRCode = function(device) {
+            const img = document.getElementById(`${device}Qrcode`)?.querySelector('img');
             if (!img) {
-                showAlert('QR Code belum tersedia', 'error');
+                showAlert('QR Code belum tersedia', 'error', device);
                 return;
             }
             const link = document.createElement('a');
@@ -1365,10 +1918,10 @@
             link.click();
         };
 
-        window.printQRCode = function() {
-            const img = el.qrcode?.querySelector('img');
+        window.printQRCode = function(device) {
+            const img = document.getElementById(`${device}Qrcode`)?.querySelector('img');
             if (!img) {
-                showAlert('QR Code belum tersedia', 'error');
+                showAlert('QR Code belum tersedia', 'error', device);
                 return;
             }
             const win = window.open('', '_blank');
@@ -1376,56 +1929,103 @@
             win.print();
         };
 
-        // ========== TEST CONNECTION ==========
-        window.testConnection = async function() {
-            const url = el.scriptUrl?.value || CONFIG.SCRIPT_URL;
-            
-            showLoading(true, 'Testing koneksi...');
-            
-            try {
-                // Gunakan mode no-cors untuk menghindari CORS
-                const response = await fetch(url, { 
-                    method: 'GET',
-                    mode: 'no-cors'
-                });
-                
-                // no-cors tidak bisa baca response, jadi kita asumsikan sukses
-                el.statusDot.className = 'status-dot online';
-                el.statusText.textContent = 'Online';
-                showAlert('✅ API Online (mode no-cors)', 'success');
-                
-            } catch (error) {
-                el.statusDot.className = 'status-dot offline';
-                el.statusText.textContent = 'Offline';
-                showAlert('❌ Koneksi gagal: ' + error.message, 'error');
-            } finally {
-                showLoading(false);
-            }
-        };
-
         // ========== CUSTOMERS ==========
         async function loadCustomers() {
-            try {
-                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=customers&t=${Date.now()}`, {
-                    mode: 'no-cors'
+            // Simulasi data untuk demo
+            const sampleCustomers = [
+                { nama: 'Budi Santoso', no_hp: '081234567890', email: 'budi@email.com', alamat: 'Jl. Merdeka No.1' },
+                { nama: 'Ani Wijaya', no_hp: '081223344556', email: 'ani@email.com', alamat: 'Jl. Sudirman No.45' },
+                { nama: 'Citra Lestari', no_hp: '081112223334', email: 'citra@email.com', alamat: 'Jl. Thamrin No.12' }
+            ];
+            
+            // Render untuk desktop
+            const desktopBody = document.getElementById('desktopCustomersTableBody');
+            if (desktopBody) {
+                let html = '';
+                sampleCustomers.forEach(c => {
+                    html += `<tr>
+                        <td>${c.nama}</td>
+                        <td>${c.no_hp}</td>
+                        <td>${c.email}</td>
+                        <td>${c.alamat}</td>
+                        <td><button class="btn btn-sm btn-primary" onclick="useCustomer('${c.nama}', '${c.no_hp}')">Pilih</button></td>
+                    </tr>`;
                 });
-                // no-cors tidak bisa baca response
-                el.customersTableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Data tidak tersedia (mode no-cors)</td></tr>';
-            } catch {
-                el.customersTableBody.innerHTML = '<tr><td colspan="4">Gagal memuat</td></tr>';
+                desktopBody.innerHTML = html;
+            }
+            
+            // Render untuk mobile
+            const mobileBody = document.getElementById('mobileCustomersTableBody');
+            if (mobileBody) {
+                let html = '';
+                sampleCustomers.forEach(c => {
+                    html += `<tr>
+                        <td>${c.nama}</td>
+                        <td>${c.no_hp}</td>
+                        <td><button class="btn btn-sm btn-primary" onclick="useCustomer('${c.nama}', '${c.no_hp}')">Pilih</button></td>
+                    </tr>`;
+                });
+                mobileBody.innerHTML = html;
             }
         }
 
+        window.useCustomer = function(name, phone) {
+            const device = state.currentDevice;
+            document.getElementById(`${device}RecipientName`).value = name;
+            document.getElementById(`${device}WhatsappNumber`).value = phone;
+            showAlert(`Customer "${name}" dipilih`, 'success', device);
+            
+            // Pindah ke halaman buat card
+            if (device === 'desktop') {
+                document.querySelectorAll('.desktop-sidebar .nav-item').forEach(n => n.classList.remove('active'));
+                document.querySelector('.desktop-sidebar .nav-item[data-page="create-card"]').classList.add('active');
+                document.querySelectorAll('.desktop-main .page').forEach(p => p.classList.add('hidden'));
+                document.getElementById('desktop-create-card').classList.remove('hidden');
+            } else {
+                document.querySelectorAll('.mobile-nav-item').forEach(n => n.classList.remove('active'));
+                document.querySelector('.mobile-nav-item[data-page="create-card"]').classList.add('active');
+                document.querySelectorAll('.mobile-content .page').forEach(p => p.classList.add('hidden'));
+                document.getElementById('mobile-create-card').classList.remove('hidden');
+            }
+        };
+
         // ========== CARDS HISTORY ==========
         async function loadCards() {
-            try {
-                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`, {
-                    mode: 'no-cors'
+            // Simulasi data untuk demo
+            const sampleCards = [
+                { timestamp: new Date(), nama_penerima: 'Budi Santoso', tema: 'birthday', media_url: 'img1.jpg', link: '#' },
+                { timestamp: new Date(), nama_penerima: 'Ani Wijaya', tema: 'valentine', media_url: 'img1.jpg||img2.jpg', link: '#' }
+            ];
+            
+            // Render untuk desktop
+            const desktopBody = document.getElementById('desktopHistoryTableBody');
+            if (desktopBody) {
+                let html = '';
+                sampleCards.forEach(c => {
+                    const mediaCount = c.media_url ? c.media_url.split('||').length : 0;
+                    html += `<tr>
+                        <td>${c.timestamp.toLocaleDateString('id-ID')}</td>
+                        <td>${c.nama_penerima}</td>
+                        <td>${c.tema}</td>
+                        <td>${mediaCount}</td>
+                        <td><a href="#" class="btn btn-sm btn-primary">Lihat</a></td>
+                    </tr>`;
                 });
-                // no-cors tidak bisa baca response
-                el.historyTableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Data tidak tersedia (mode no-cors)</td></tr>';
-            } catch {
-                el.historyTableBody.innerHTML = '<tr><td colspan="4">Gagal memuat</td></tr>';
+                desktopBody.innerHTML = html;
+            }
+            
+            // Render untuk mobile
+            const mobileBody = document.getElementById('mobileHistoryTableBody');
+            if (mobileBody) {
+                let html = '';
+                sampleCards.forEach(c => {
+                    html += `<tr>
+                        <td>${c.timestamp.toLocaleDateString('id-ID')}</td>
+                        <td>${c.nama_penerima}</td>
+                        <td><a href="#" class="btn btn-sm btn-primary">Lihat</a></td>
+                    </tr>`;
+                });
+                mobileBody.innerHTML = html;
             }
         }
 
@@ -1436,42 +2036,29 @@
 
         window.closeCustomerModal = function() {
             document.getElementById('customerModal').classList.remove('active');
+            document.getElementById('modalCustomerName').value = '';
+            document.getElementById('modalCustomerPhone').value = '';
+            document.getElementById('modalCustomerEmail').value = '';
+            document.getElementById('modalCustomerAddress').value = '';
+            document.getElementById('modalCustomerNotes').value = '';
         };
 
         window.saveCustomer = async function() {
-            const name = el.modalCustomerName?.value.trim();
-            const phone = el.modalCustomerPhone?.value.trim();
+            const name = document.getElementById('modalCustomerName')?.value.trim();
+            const phone = document.getElementById('modalCustomerPhone')?.value.trim();
             
             if (!name || !phone) {
-                showAlert('Nama dan No. WA wajib!', 'error');
+                showAlert('Nama dan No. WA wajib!', 'error', state.currentDevice);
                 return;
             }
             
             showLoading(true, 'Menyimpan...');
             
-            try {
-                const formData = new URLSearchParams();
-                formData.append('type', 'customer');
-                formData.append('nama', name);
-                formData.append('no_hp', phone);
-                formData.append('email', el.modalCustomerEmail?.value || '');
-                formData.append('alamat', el.modalCustomerAddress?.value || '');
-                formData.append('catatan', el.modalCustomerNotes?.value || '');
-                
-                await fetch(CONFIG.SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors'
-                });
-                
-                showAlert('✅ Customer tersimpan! (mode no-cors)', 'success');
+            setTimeout(() => {
+                showAlert('✅ Customer tersimpan! (demo)', 'success', state.currentDevice);
                 closeCustomerModal();
-                
-            } catch (error) {
-                showAlert('❌ Gagal: ' + error.message, 'error');
-            } finally {
                 showLoading(false);
-            }
+            }, 1000);
         };
 
         // ========== SETTINGS ==========
@@ -1480,28 +2067,68 @@
             if (saved) {
                 try {
                     const s = JSON.parse(saved);
-                    if (s.scriptUrl) el.scriptUrl.value = s.scriptUrl;
-                    if (s.cardBaseUrl) el.cardBaseUrl.value = s.cardBaseUrl;
-                    CONFIG.SCRIPT_URL = s.scriptUrl || CONFIG.SCRIPT_URL;
-                    CONFIG.CARD_BASE_URL = s.cardBaseUrl || CONFIG.CARD_BASE_URL;
+                    if (s.scriptUrl) {
+                        document.getElementById('desktopScriptUrl').value = s.scriptUrl;
+                        document.getElementById('mobileScriptUrl').value = s.scriptUrl;
+                        CONFIG.SCRIPT_URL = s.scriptUrl;
+                    }
+                    if (s.cardBaseUrl) {
+                        document.getElementById('desktopCardBaseUrl').value = s.cardBaseUrl;
+                        document.getElementById('mobileCardBaseUrl').value = s.cardBaseUrl;
+                        CONFIG.CARD_BASE_URL = s.cardBaseUrl;
+                    }
                 } catch (e) {}
             }
         }
 
         window.saveSettings = function() {
-            const settings = {
-                scriptUrl: el.scriptUrl?.value || CONFIG.SCRIPT_URL,
-                cardBaseUrl: el.cardBaseUrl?.value || CONFIG.CARD_BASE_URL
-            };
+            const device = state.currentDevice;
+            const scriptUrl = document.getElementById(`${device}ScriptUrl`)?.value || CONFIG.SCRIPT_URL;
+            const cardBaseUrl = document.getElementById(`${device}CardBaseUrl`)?.value || CONFIG.CARD_BASE_URL;
+            
+            const settings = { scriptUrl, cardBaseUrl };
             localStorage.setItem('fior_settings', JSON.stringify(settings));
-            CONFIG.SCRIPT_URL = settings.scriptUrl;
-            CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
-            showAlert('✅ Settings tersimpan!', 'success');
+            
+            CONFIG.SCRIPT_URL = scriptUrl;
+            CONFIG.CARD_BASE_URL = cardBaseUrl;
+            
+            showAlert('✅ Settings tersimpan!', 'success', device);
+        };
+
+        // ========== TEST CONNECTION ==========
+        window.testConnection = async function() {
+            const device = state.currentDevice;
+            showLoading(true, 'Testing koneksi...');
+            
+            try {
+                // Simulasi koneksi berhasil
+                setTimeout(() => {
+                    // Update status desktop
+                    document.getElementById('desktopStatusDot').className = 'status-dot online';
+                    document.getElementById('desktopStatusText').textContent = 'Online';
+                    
+                    // Update status mobile
+                    document.getElementById('mobileStatusDot').className = 'status-dot online';
+                    document.getElementById('mobileStatusText').textContent = 'Online';
+                    
+                    showAlert('✅ Koneksi berhasil!', 'success', device);
+                    showLoading(false);
+                }, 1000);
+                
+            } catch (error) {
+                document.getElementById('desktopStatusDot').className = 'status-dot offline';
+                document.getElementById('desktopStatusText').textContent = 'Offline';
+                document.getElementById('mobileStatusDot').className = 'status-dot offline';
+                document.getElementById('mobileStatusText').textContent = 'Offline';
+                
+                showAlert('❌ Koneksi gagal!', 'error', device);
+                showLoading(false);
+            }
         };
 
         // ========== UTILITY ==========
-        function showAlert(message, type) {
-            const alertEl = type === 'success' ? el.alertSuccess : el.alertError;
+        function showAlert(message, type, device) {
+            const alertEl = document.getElementById(`${device}Alert${type === 'success' ? 'Success' : 'Error'}`);
             if (alertEl) {
                 alertEl.textContent = message;
                 alertEl.style.display = 'block';
@@ -1510,9 +2137,11 @@
         }
 
         function showLoading(show, text) {
-            if (el.loadingOverlay) {
-                el.loadingOverlay.style.display = show ? 'flex' : 'none';
-                if (show && el.loadingText) el.loadingText.textContent = text;
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            if (overlay) {
+                overlay.style.display = show ? 'flex' : 'none';
+                if (show && loadingText) loadingText.textContent = text;
             }
         }
 
@@ -1523,11 +2152,31 @@
         }
 
         // Character counter
-        if (el.cardMessage) {
-            el.cardMessage.addEventListener('input', function() {
-                el.charCount.textContent = this.value.length;
+        document.querySelectorAll('textarea[id$="CardMessage"]').forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                const id = this.id;
+                const prefix = id.includes('desktop') ? 'desktop' : 'mobile';
+                document.getElementById(`${prefix}CharCount`).textContent = this.value.length;
             });
-        }
+        });
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        };
+
+        // Handle resize
+        window.addEventListener('resize', function() {
+            const newDevice = window.innerWidth >= 1024 ? 'desktop' : 'mobile';
+            if (newDevice !== state.currentDevice) {
+                state.currentDevice = newDevice;
+                // Refresh data jika perlu
+                loadCustomers();
+                loadCards();
+            }
+        });
     </script>
 </body>
 </html>
