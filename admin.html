@@ -621,7 +621,7 @@
             }
         }
 
-        /* ===== THEME GRID - 10 TEMA (termasuk Imlek, Natal, Lebaran, Congratulation) ===== */
+        /* ===== THEME GRID - 10 TEMA (termasuk Imlek, Natal, Lebaran) ===== */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -670,14 +670,6 @@
         /* Tema Anniversary - Logo DIGANTI dengan 🎉 (dari sebelumnya 💑) */
         .theme-card[data-theme="anniversary"] .theme-emoji {
             color: #9c89b8;
-        }
-        
-        .theme-card[data-theme="anniversary"] .theme-emoji {
-            content: '🎉'; /* Anniversary logo diganti jadi 🎉 */
-        }
-        
-        .theme-card[data-theme="anniversary"].active .theme-emoji {
-            color: white;
         }
 
         /* Tema Imlek */
@@ -1294,7 +1286,7 @@
                             LINK CARD
                         </label>
                         <div class="link-container">
-                            <span class="short-link" id="generatedLink">https://fiorcard.com/xxx</span>
+                            <span class="short-link" id="generatedLink">https://tokobungafiorcardgift.netlify.app?to=...&msg=...&theme=...</span>
                             <button class="copy-btn" onclick="copyLink()">
                                 <i class="fas fa-copy"></i> Copy
                             </button>
@@ -1427,7 +1419,10 @@
                             Card Base URL
                         </label>
                         <input type="url" class="form-control" id="cardBaseUrl" 
-                               value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
+                               value="https://tokobungafiorcardgift.netlify.app">
+                        <small style="color: var(--gray-600); display: block; margin-top: 0.25rem;">
+                            <i class="fas fa-info-circle"></i> URL website kartu ucapan
+                        </small>
                     </div>
 
                     <div style="display: flex; gap: 1rem;">
@@ -1516,17 +1511,17 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - DENGAN 10 TEMA
+        // FIOR CARD ADMIN - 10 TEMA + CARD URL FIX
         // ============================================
 
         // ========== KONFIGURASI ==========
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
-            CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
+            CARD_BASE_URL: "https://tokobungafiorcardgift.netlify.app",
             DEFAULT_THEME: "birthday"
         };
 
-        // ========== THEMES - 10 TEMA (Birthday, Valentine, Wedding, Anniversary, Graduation, Condolence, Congratulation, Imlek, Natal, Lebaran) ==========
+        // ========== THEMES - 10 TEMA ==========
         const THEMES = [
             { id: 'birthday', name: 'Birthday', emoji: '🎂' },
             { id: 'valentine', name: 'Valentine', emoji: '❤️' },
@@ -1660,8 +1655,9 @@
             let detectedType = type;
             if (type === 'auto') {
                 const extension = url.split('.').pop().toLowerCase();
-                if (['mp4', 'mov', 'webm', 'avi', 'mkv', 'youtube', 'vimeo', 'drive'].includes(extension) || 
-                    url.includes('youtube.com') || url.includes('vimeo.com') || url.includes('drive.google.com')) {
+                if (['mp4', 'mov', 'webm', 'avi', 'mkv', '3gp', 'm4v'].includes(extension) || 
+                    url.includes('youtube.com') || url.includes('youtu.be') || 
+                    url.includes('vimeo.com') || url.includes('drive.google.com')) {
                     detectedType = 'video';
                 } else {
                     detectedType = 'image';
@@ -1726,7 +1722,7 @@
                             <i class="fas fa-${isVideo ? 'video' : 'image'}"></i>
                         </div>
                         <div class="media-details">
-                            <div class="media-url">${media.url}</div>
+                            <div class="media-url">${media.url.substring(0, 60)}${media.url.length > 60 ? '...' : ''}</div>
                             <div>
                                 <span class="media-type-badge ${isVideo ? 'video' : ''}">
                                     ${isVideo ? 'VIDEO' : 'GAMBAR'} #${index + 1}
@@ -1753,7 +1749,9 @@
                 el.mediaCountBadge.textContent = state.mediaUrls.length;
             }
             if (el.resultMediaCount) {
-                el.resultMediaCount.textContent = `${state.mediaUrls.length} Media (${state.mediaUrls.filter(m => m.type === 'image').length} Gambar, ${state.mediaUrls.filter(m => m.type === 'video').length} Video)`;
+                const imageCount = state.mediaUrls.filter(m => m.type === 'image').length;
+                const videoCount = state.mediaUrls.filter(m => m.type === 'video').length;
+                el.resultMediaCount.textContent = `${state.mediaUrls.length} Media (${imageCount} Gambar, ${videoCount} Video)`;
             }
         }
 
@@ -1772,8 +1770,8 @@
             showLoading(true, 'Membuat card...');
             
             try {
-                // Build URL
-                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
+                // Build URL untuk website Netlify
+                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}`;
                 
                 // Add media parameters
                 if (state.mediaUrls.length > 0) {
@@ -1908,7 +1906,7 @@
         // ========== COPY LINK ==========
         window.copyLink = function() {
             const link = el.generatedLink?.textContent;
-            if (!link || link === 'https://fiorcard.com/xxx') {
+            if (!link || link === 'https://tokobungafiorcardgift.netlify.app?to=...&msg=...&theme=...') {
                 showAlert('Tidak ada link untuk dicopy', 'error');
                 return;
             }
@@ -2041,11 +2039,11 @@
             state.customers.slice(0, 20).forEach((c, i) => {
                 html += `
                     <tr>
-                        <td><strong>${c.nama || ''}</strong></td>
-                        <td>${c.no_hp || ''}</td>
-                        <td>${c.email || '-'}</td>
-                        <td>${c.alamat || '-'}</td>
-                        <td>${c.catatan || '-'}</td>
+                        <td><strong>${escapeHTML(c.nama || '')}</strong></td>
+                        <td>${escapeHTML(c.no_hp || '')}</td>
+                        <td>${escapeHTML(c.email || '-')}</td>
+                        <td>${escapeHTML(c.alamat || '-')}</td>
+                        <td>${escapeHTML(c.catatan || '-')}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" onclick="useCustomer('${escapeHTML(c.nama)}', '${escapeHTML(c.no_hp)}')">
                                 <i class="fas fa-gift"></i> Pilih
@@ -2090,11 +2088,14 @@
             let html = '';
             state.cards.slice(0, 20).forEach(c => {
                 const mediaCount = c.media_url ? c.media_url.split('||').length : 0;
+                const tema = c.tema || c.theme || '-';
+                const temaEmoji = THEMES.find(t => t.id === tema)?.emoji || '🎨';
+                
                 html += `
                     <tr>
                         <td>${c.timestamp ? new Date(c.timestamp).toLocaleDateString('id-ID') : '-'}</td>
-                        <td>${c.nama_penerima || c.name || '-'}</td>
-                        <td>${c.tema || c.theme || '-'}</td>
+                        <td>${escapeHTML(c.nama_penerima || c.name || '-')}</td>
+                        <td>${temaEmoji} ${escapeHTML(tema)}</td>
                         <td style="text-align: center;">
                             <span class="media-type-badge" style="background: ${mediaCount > 0 ? 'var(--success)' : 'var(--gray-600)'}">
                                 ${mediaCount} Media
