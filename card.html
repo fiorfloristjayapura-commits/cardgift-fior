@@ -9,340 +9,143 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts Premium -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <!-- Swiper CSS -->
+    <!-- Swiper CSS untuk carousel -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
     <style>
-        /* ========== RESET & VARIABLES ========== */
+        /* ===== RESET & VARIABLES ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        :root {
-            /* Warna Dasar */
-            --cream: #fef9f4;
-            --ivory: #fffff0;
-            --champagne: #fae5d7;
-            --rose-gold: #e6b0aa;
-            --charcoal: #2c3e50;
-            --taupe: #8b7d7b;
-            --sage: #c1c0aa;
-            
-            /* Shadow */
-            --shadow-sm: 0 5px 20px rgba(0,0,0,0.02);
-            --shadow-md: 0 10px 30px rgba(0,0,0,0.05);
-            --shadow-lg: 0 20px 40px rgba(0,0,0,0.08);
-            --shadow-xl: 0 30px 60px rgba(0,0,0,0.12);
-            --shadow-inner: inset 0 2px 10px rgba(0,0,0,0.02);
-            
-            /* Radius */
-            --radius-sm: 0.75rem;
-            --radius-md: 1.25rem;
-            --radius-lg: 1.75rem;
-            --radius-xl: 2.25rem;
-            --radius-full: 9999px;
-            
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        /* ===== THEMES - 10 TEMA ===== */
+        /* ===== THEMES ===== */
         .theme-birthday {
-            --theme-primary: #1e3a5f;
-            --theme-secondary: #d4af37;
-            --theme-gradient: linear-gradient(145deg, #1e3a5f, #2b4c73);
-            --theme-soft: linear-gradient(145deg, #f0f7ff, #e6f0fa);
-            --theme-bg: linear-gradient(145deg, #fffcf9, #fff9f5);
-            --theme-accent: #ffd700;
-            --theme-emoji: '🎂';
-            --theme-greeting: 'Happy Birthday';
-            --theme-particles: #ffd700;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3';
-            --theme-music-name: 'Happy Birthday';
+            --primary: #1e3a5f;
+            --primary-light: #2b4c73;
+            --accent: #d4af37;
+            --accent-light: #f5e8c6;
+            --gradient: linear-gradient(145deg, #1e3a5f, #2b4c73);
+            --bg: #fff9f0;
         }
         
         .theme-valentine {
-            --theme-primary: #b76e79;
-            --theme-secondary: #e8c1c7;
-            --theme-gradient: linear-gradient(145deg, #b76e79, #c98b95);
-            --theme-soft: linear-gradient(145deg, #fff1f3, #ffe9ed);
-            --theme-bg: linear-gradient(145deg, #fffafc, #fff5f8);
-            --theme-accent: #ffb6c1;
-            --theme-emoji: '❤️';
-            --theme-greeting: 'Happy Valentine';
-            --theme-particles: #ffb6c1;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3';
-            --theme-music-name: 'Romantic Sunset';
+            --primary: #b76e79;
+            --primary-light: #c98b95;
+            --accent: #ffb6c1;
+            --accent-light: #ffe9ed;
+            --gradient: linear-gradient(145deg, #b76e79, #c98b95);
+            --bg: #fff5f8;
         }
         
         .theme-wedding {
-            --theme-primary: #b2ac88;
-            --theme-secondary: #e6d5b8;
-            --theme-gradient: linear-gradient(145deg, #b2ac88, #c5bf9c);
-            --theme-soft: linear-gradient(145deg, #fbfaf5, #f7f5ed);
-            --theme-bg: linear-gradient(145deg, #fffefc, #fffcf9);
-            --theme-accent: #d4c4a8;
-            --theme-emoji: '💍';
-            --theme-greeting: 'Congratulations';
-            --theme-particles: #e6d5b8;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3';
-            --theme-music-name: 'Wedding Processional';
+            --primary: #b2ac88;
+            --primary-light: #c5bf9c;
+            --accent: #e6d5b8;
+            --accent-light: #f7f5ed;
+            --gradient: linear-gradient(145deg, #b2ac88, #c5bf9c);
+            --bg: #fffcf9;
         }
         
         .theme-anniversary {
-            --theme-primary: #9c89b8;
-            --theme-secondary: #e0b0b5;
-            --theme-gradient: linear-gradient(145deg, #9c89b8, #b39bc0);
-            --theme-soft: linear-gradient(145deg, #f9f2fd, #f5ebf9);
-            --theme-bg: linear-gradient(145deg, #fefaff, #fbf5ff);
-            --theme-accent: #d4af37;
-            --theme-emoji: '🎉';
-            --theme-greeting: 'Happy Anniversary';
-            --theme-particles: #e0b0b5;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3';
-            --theme-music-name: 'Romantic Sunset';
+            --primary: #9c89b8;
+            --primary-light: #b39bc0;
+            --accent: #e0b0b5;
+            --accent-light: #f5ebf9;
+            --gradient: linear-gradient(145deg, #9c89b8, #b39bc0);
+            --bg: #fbf5ff;
         }
         
         .theme-graduation {
-            --theme-primary: #6b8c5e;
-            --theme-secondary: #c5b783;
-            --theme-gradient: linear-gradient(145deg, #6b8c5e, #86a075);
-            --theme-soft: linear-gradient(145deg, #f4f9f1, #edf3e8);
-            --theme-bg: linear-gradient(145deg, #fbfef9, #f7fcf5);
-            --theme-accent: #c5b783;
-            --theme-emoji: '🎓';
-            --theme-greeting: 'Congratulations!';
-            --theme-particles: #c5b783;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3';
-            --theme-music-name: 'Achievement Bell';
+            --primary: #6b8c5e;
+            --primary-light: #86a075;
+            --accent: #c5b783;
+            --accent-light: #edf3e8;
+            --gradient: linear-gradient(145deg, #6b8c5e, #86a075);
+            --bg: #f7fcf5;
         }
         
         .theme-condolence {
-            --theme-primary: #6b705c;
-            --theme-secondary: #b7b7a4;
-            --theme-gradient: linear-gradient(145deg, #6b705c, #848875);
-            --theme-soft: linear-gradient(145deg, #f7f6f2, #f0efea);
-            --theme-bg: linear-gradient(145deg, #fefdfc, #fbfaf8);
-            --theme-accent: #a5a58d;
-            --theme-emoji: '🕊️';
-            --theme-greeting: 'Deepest Condolences';
-            --theme-particles: #d4d4c4;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3';
-            --theme-music-name: 'Sad Moment';
+            --primary: #6b705c;
+            --primary-light: #848875;
+            --accent: #b7b7a4;
+            --accent-light: #f0efea;
+            --gradient: linear-gradient(145deg, #6b705c, #848875);
+            --bg: #fbfaf8;
         }
-
+        
         .theme-congratulation {
-            --theme-primary: #ff7f50;
-            --theme-secondary: #ffb347;
-            --theme-gradient: linear-gradient(145deg, #ff7f50, #ff9f4b);
-            --theme-soft: linear-gradient(145deg, #fff0e6, #ffe6d5);
-            --theme-bg: linear-gradient(145deg, #fffaf5, #fff5ed);
-            --theme-accent: #ffd700;
-            --theme-emoji: '🎊';
-            --theme-greeting: 'Congratulations!';
-            --theme-particles: #ffb347;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3';
-            --theme-music-name: 'Achievement Bell';
+            --primary: #ff7f50;
+            --primary-light: #ff9f4b;
+            --accent: #ffb347;
+            --accent-light: #ffe6d5;
+            --gradient: linear-gradient(145deg, #ff7f50, #ff9f4b);
+            --bg: #fff5ed;
         }
-
-        /* ===== TEMA IMLEK ===== */
+        
         .theme-imlek {
-            --theme-primary: #d32f2f;
-            --theme-secondary: #ffb300;
-            --theme-gradient: linear-gradient(145deg, #d32f2f, #b71c1c);
-            --theme-soft: linear-gradient(145deg, #ffebee, #ffcdd2);
-            --theme-bg: linear-gradient(145deg, #fff8e1, #ffecb3);
-            --theme-accent: #ffd700;
-            --theme-emoji: '🧧';
-            --theme-greeting: 'Gong Xi Fa Cai';
-            --theme-particles: #ffb300;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-chinese-new-year-464.mp3';
-            --theme-music-name: 'Chinese New Year';
+            --primary: #d32f2f;
+            --primary-light: #b71c1c;
+            --accent: #ffb300;
+            --accent-light: #ffecb3;
+            --gradient: linear-gradient(145deg, #d32f2f, #b71c1c);
+            --bg: #fff8e1;
         }
-
-        /* ===== TEMA NATAL ===== */
+        
         .theme-natal {
-            --theme-primary: #c41e3a;
-            --theme-secondary: #2e7d32;
-            --theme-gradient: linear-gradient(145deg, #c41e3a, #a51d36);
-            --theme-soft: linear-gradient(145deg, #ffebee, #ffcdd2);
-            --theme-bg: linear-gradient(145deg, #e8f5e9, #c8e6c9);
-            --theme-accent: #ffd700;
-            --theme-emoji: '🎄';
-            --theme-greeting: 'Merry Christmas';
-            --theme-particles: #ffd700;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-christmas-carol-492.mp3';
-            --theme-music-name: 'Christmas Carol';
+            --primary: #c41e3a;
+            --primary-light: #a51d36;
+            --accent: #2e7d32;
+            --accent-light: #c8e6c9;
+            --gradient: linear-gradient(145deg, #c41e3a, #a51d36);
+            --bg: #e8f5e9;
         }
-
-        /* ===== TEMA LEBARAN ===== */
+        
         .theme-lebaran {
-            --theme-primary: #1b5e20;
-            --theme-secondary: #ff8f00;
-            --theme-gradient: linear-gradient(145deg, #1b5e20, #2e7d32);
-            --theme-soft: linear-gradient(145deg, #e8f5e9, #c8e6c9);
-            --theme-bg: linear-gradient(145deg, #fff3e0, #ffe0b2);
-            --theme-accent: #ffb300;
-            --theme-emoji: '🌙';
-            --theme-greeting: 'Selamat Lebaran';
-            --theme-particles: #ff8f00;
-            --theme-music: 'https://assets.mixkit.co/music/preview/mixkit-spiritual-536.mp3';
-            --theme-music-name: 'Spiritual';
+            --primary: #1b5e20;
+            --primary-light: #2e7d32;
+            --accent: #ff8f00;
+            --accent-light: #ffe0b2;
+            --gradient: linear-gradient(145deg, #1b5e20, #2e7d32);
+            --bg: #fff3e0;
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background: var(--theme-bg);
-            color: var(--charcoal);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: #2d3e4f;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 25px;
-            position: relative;
-            overflow-x: hidden;
-            transition: var(--transition);
+            padding: 16px;
+            transition: background 0.3s ease;
         }
 
-        /* ===== BACKGROUND ORNAMENT ===== */
-        .ornament-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* ===== MOBILE CONTAINER ===== */
+        .mobile-container {
+            max-width: 450px;
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.15;
+            margin: 0 auto;
         }
 
-        .ornament-particle {
-            position: absolute;
-            font-size: 2rem;
-            animation: float 20s infinite ease-in-out;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-30px) rotate(5deg); }
-            75% { transform: translateY(30px) rotate(-5deg); }
-        }
-
-        /* ===== MUSIC PLAYER ===== */
-        .music-player {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 100;
-            animation: slideIn 0.8s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .music-btn {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: white;
-            border: none;
-            box-shadow: var(--shadow-lg);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: var(--theme-primary);
-            position: relative;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            background: rgba(255,255,255,0.95);
-            border: 1px solid rgba(212,175,55,0.2);
-        }
-
-        .music-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px var(--theme-secondary);
-        }
-
-        .music-btn::before {
-            content: '';
-            position: absolute;
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            border: 1px solid var(--theme-secondary);
-            opacity: 0.5;
-            animation: pulseRing 2s infinite;
-        }
-
-        @keyframes pulseRing {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(1.3); opacity: 0; }
-        }
-
-        .music-info {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(10px);
-            padding: 8px 18px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--theme-primary);
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--theme-secondary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* ===== CARD CONTAINER ===== */
-        .card-wrapper {
-            max-width: 750px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
-            animation: cardEntrance 1s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        @keyframes cardEntrance {
-            0% {
-                opacity: 0;
-                transform: translateY(50px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
+        /* ===== MAIN CARD ===== */
         .card {
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(20px);
-            border-radius: 40px;
-            box-shadow: var(--shadow-xl);
+            background: white;
+            border-radius: 32px;
             overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             position: relative;
-            border: 1px solid rgba(255,255,255,0.5);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .card::before {
@@ -352,189 +155,173 @@
             left: 0;
             right: 0;
             height: 6px;
-            background: var(--theme-gradient);
+            background: var(--gradient);
             z-index: 2;
         }
 
         /* ===== CARD HEADER ===== */
         .card-header {
-            background: var(--theme-gradient);
-            padding: 50px 40px 60px;
+            background: var(--gradient);
+            padding: 40px 20px 48px;
             text-align: center;
             position: relative;
-            overflow: hidden;
         }
 
         .card-header::after {
             content: '';
             position: absolute;
-            bottom: -30px;
+            bottom: -24px;
             left: 0;
             right: 0;
-            height: 60px;
+            height: 48px;
             background: white;
             border-radius: 50% 50% 0 0;
-            opacity: 0.08;
+            opacity: 0.1;
         }
 
-        .ornament-top {
-            position: absolute;
-            top: 20px;
-            left: 30px;
-            right: 30px;
-            display: flex;
-            justify-content: space-between;
-            color: rgba(255,255,255,0.2);
-            font-size: 1.2rem;
-        }
-
-        .ornament-top i {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .ornament-top i:nth-child(2) { animation-delay: 0.5s; }
-        .ornament-top i:nth-child(3) { animation-delay: 1s; }
-        .ornament-top i:nth-child(4) { animation-delay: 1.5s; }
-
-        .theme-emoji-large {
-            font-size: 85px;
-            margin-bottom: 20px;
-            animation: float 4s ease-in-out infinite;
+        .theme-emoji {
+            font-size: 64px;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
             display: inline-block;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         .greeting {
             font-family: 'Playfair Display', serif;
-            font-size: 3rem;
+            font-size: 2rem;
             font-weight: 800;
             color: white;
-            margin-bottom: 15px;
-            text-shadow: 2px 4px 12px rgba(0,0,0,0.2);
-            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .to-label {
-            color: rgba(255,255,255,0.9);
-            font-size: 0.8rem;
-            letter-spacing: 8px;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 8px;
             text-transform: uppercase;
-            margin-bottom: 12px;
-            font-weight: 300;
         }
 
         .recipient-name {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: white;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
             word-break: break-word;
-            line-height: 1.2;
-            max-width: 90%;
-            margin: 0 auto;
+            line-height: 1.3;
+            padding: 0 16px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         /* ===== CARD BODY ===== */
         .card-body {
-            padding: 50px 45px;
-            background: white;
+            padding: 32px 20px;
         }
 
+        /* ===== PESAN ===== */
         .message-container {
-            background: linear-gradient(145deg, #fffcf9, #fff);
-            border-radius: 30px;
-            padding: 40px 35px;
+            background: linear-gradient(145deg, #fff9f0, white);
+            border-radius: 24px;
+            padding: 24px 20px;
             position: relative;
-            margin-bottom: 40px;
-            box-shadow: var(--shadow-inner), var(--shadow-sm);
-            border: 1px solid rgba(212,175,55,0.1);
+            margin-bottom: 24px;
+            border: 1px solid var(--accent-light);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         .message-quote {
             position: absolute;
-            top: -22px;
+            top: -16px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--theme-gradient);
-            color: white;
-            width: 55px;
-            height: 55px;
+            background: var(--accent);
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
-            box-shadow: var(--shadow-lg);
+            color: white;
+            font-size: 1.2rem;
             border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .message {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            line-height: 1.9;
-            color: var(--charcoal);
+            font-size: 1rem;
+            line-height: 1.7;
             text-align: center;
+            color: #2d3e4f;
             font-style: italic;
-            white-space: pre-wrap;
             font-weight: 500;
         }
 
-        .message::before,
-        .message::after {
-            content: '"';
-            font-size: 2.2rem;
-            color: var(--theme-secondary);
-            opacity: 0.4;
-            font-family: 'Playfair Display', serif;
+        /* ===== CAROUSEL SLIDER ===== */
+        .media-section {
+            margin-bottom: 24px;
+            display: none;
         }
 
-        /* ===== CAROUSEL MEDIA ===== */
-        .media-section {
-            margin-top: 30px;
-            display: none;
-            padding: 0 0 20px 0;
+        .media-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .media-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            color: var(--theme-primary);
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+
+        .media-header h3 {
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(212,175,55,0.15);
-            font-size: 1.1rem;
-            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
         }
 
         .media-header i {
-            font-size: 1.3rem;
-            color: var(--theme-secondary);
+            color: var(--accent);
         }
 
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            border-radius: 24px;
-            overflow: hidden;
-            margin-bottom: 15px;
-            box-shadow: var(--shadow-xl);
+        .media-count {
+            background: var(--accent-light);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
         }
 
+        /* Swiper Carousel */
         .swiper {
             width: 100%;
-            height: 400px;
+            height: 300px;
             border-radius: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .swiper-slide {
-            text-align: center;
-            background: #f8f8f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: #1a1a1a;
+            border-radius: 24px;
+            overflow: hidden;
             position: relative;
         }
 
@@ -542,150 +329,174 @@
         .swiper-slide video {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            background: #0a0a0a;
-            display: block;
+            object-fit: cover;
         }
 
         .swiper-slide video {
             object-fit: contain;
+            background: #000;
         }
 
-        .swiper-pagination-bullet {
-            width: 10px;
-            height: 10px;
-            background: white;
-            opacity: 0.7;
-        }
-
-        .swiper-pagination-bullet-active {
-            background: var(--theme-primary);
-            opacity: 1;
-        }
-
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: white;
-            background: rgba(0,0,0,0.5);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            backdrop-filter: blur(5px);
-            transition: var(--transition);
-        }
-
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-            background: var(--theme-primary);
-            transform: scale(1.1);
-        }
-
+        /* Media Type Badge */
         .media-type-badge {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
             color: white;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
-            gap: 8px;
-            border: 1px solid rgba(255,255,255,0.3);
+            gap: 6px;
+            border: 1px solid rgba(255,255,255,0.2);
             z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
+        .media-type-badge i {
+            font-size: 0.8rem;
+        }
+
+        /* Video Control */
         .video-control {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-            color: white;
-            width: 45px;
-            height: 45px;
+            bottom: 16px;
+            left: 16px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.3);
-            transition: var(--transition);
+            transition: all 0.2s ease;
             z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        .video-control:hover {
-            background: var(--theme-primary);
-            transform: scale(1.1);
+        .video-control:active {
+            transform: scale(0.9);
+            background: var(--accent);
         }
 
-        .carousel-counter {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
+        .video-control i {
+            font-size: 1.1rem;
+        }
+
+        /* Swiper Navigation */
+        .swiper-button-next,
+        .swiper-button-prev {
             color: white;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.9rem;
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s ease;
+        }
+
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background: var(--accent);
+        }
+
+        .swiper-pagination-bullet {
+            background: white;
+            opacity: 0.7;
+            width: 8px;
+            height: 8px;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--accent);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
             font-weight: 600;
             z-index: 10;
             border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
+        .slide-counter i {
+            margin-right: 6px;
+            color: var(--accent);
+        }
+
+        /* Thumbnails */
         .thumbnails {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             overflow-x: auto;
-            padding: 15px 5px;
-            margin-top: 15px;
-            scrollbar-width: thin;
+            padding: 8px 4px;
+            margin-top: 8px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
 
         .thumbnails::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .thumbnails::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.05);
-            border-radius: 10px;
-        }
-
-        .thumbnails::-webkit-scrollbar-thumb {
-            background: var(--theme-primary);
-            border-radius: 10px;
+            display: none;
         }
 
         .thumbnail {
-            flex: 0 0 90px;
-            height: 90px;
+            flex: 0 0 70px;
+            height: 70px;
             border-radius: 16px;
             overflow: hidden;
-            cursor: pointer;
             border: 3px solid transparent;
-            transition: var(--transition);
-            box-shadow: var(--shadow-md);
+            transition: all 0.2s ease;
             position: relative;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .thumbnail.active {
-            border-color: var(--theme-primary);
-            box-shadow: 0 0 0 3px var(--theme-secondary);
+            border-color: var(--accent);
             transform: scale(1.05);
         }
 
-        .thumbnail:hover {
-            transform: translateY(-5px) scale(1.05);
-        }
-
-        .thumbnail-img {
+        .thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .thumbnail.video-thumb {
+            background: linear-gradient(145deg, #333, #000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thumbnail.video-thumb i {
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.8;
         }
 
         .thumbnail-icon {
@@ -693,180 +504,139 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.7);
             color: white;
-            width: 35px;
-            height: 35px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        .thumbnail-badge {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 50px;
-            font-size: 0.6rem;
-            font-weight: 600;
-        }
-
-        /* ===== CONTACT SECTION ===== */
-        .contact-elegant {
+        /* ===== CONTACT ===== */
+        .contact-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            margin: 35px 0 20px;
-            padding: 15px 25px;
-            background: linear-gradient(145deg, #fef9f4, #fff);
-            border-radius: 100px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(212,175,55,0.15);
+            gap: 16px;
+            margin: 24px 0;
+            padding: 12px 16px;
+            background: linear-gradient(145deg, #f8f9fa, white);
+            border-radius: 50px;
+            border: 1px solid var(--accent-light);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .contact-elegant-item {
+        .contact-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--charcoal);
+            gap: 8px;
+            color: var(--primary);
             text-decoration: none;
-            font-size: 0.9rem;
-            padding: 8px 18px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
             border-radius: 50px;
-            transition: var(--transition);
-            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
-        .contact-elegant-item:hover {
-            background: var(--theme-gradient);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
+        .contact-item:active {
+            background: var(--accent-light);
+            transform: scale(0.95);
         }
 
-        .contact-elegant-item i {
+        .contact-item i {
+            color: var(--accent);
             font-size: 1.1rem;
-        }
-
-        .contact-elegant-item.whatsapp:hover {
-            background: linear-gradient(145deg, #25D366, #128C7E);
-        }
-
-        .contact-elegant-item.instagram:hover {
-            background: linear-gradient(145deg, #E4405F, #C13584);
         }
 
         .contact-divider {
             width: 1px;
-            height: 25px;
-            background: rgba(0,0,0,0.1);
+            height: 24px;
+            background: var(--accent-light);
         }
 
-        /* ===== CARD FOOTER ===== */
+        /* ===== FOOTER ===== */
         .card-footer {
-            padding: 40px 45px;
+            padding: 24px 20px 32px;
             text-align: center;
-            background: linear-gradient(145deg, #fffcf9, #fff);
-            border-top: 1px solid rgba(212,175,55,0.1);
-        }
-
-        .company {
-            margin-bottom: 25px;
+            border-top: 1px solid var(--accent-light);
         }
 
         .company-logo {
             width: 60px;
             height: 60px;
-            margin: 0 auto 15px;
+            margin: 0 auto 12px;
             background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            animation: gentleFloat 5s ease-in-out infinite;
-            filter: drop-shadow(0 5px 10px rgba(212,175,55,0.2));
+            filter: drop-shadow(0 4px 8px rgba(212,175,55,0.2));
+            animation: gentleFloat 3s ease-in-out infinite;
         }
 
         @keyframes gentleFloat {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-4px); }
         }
 
         .company-name {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 800;
-            color: var(--theme-primary);
-            margin-bottom: 8px;
-            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 4px;
         }
 
         .company-tagline {
-            color: var(--taupe);
-            font-size: 0.8rem;
-            letter-spacing: 4px;
+            font-size: 0.7rem;
+            color: #718096;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            font-weight: 400;
         }
 
+        /* ===== ACTION BUTTONS ===== */
         .action-buttons {
             display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
         }
 
         .action-btn {
-            padding: 14px 28px;
+            flex: 1;
+            padding: 14px 0;
             border: none;
             border-radius: 50px;
             font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 12px;
-            transition: var(--transition);
+            justify-content: center;
+            gap: 8px;
+            background: var(--gradient);
             color: white;
-            background: var(--theme-gradient);
             text-decoration: none;
-            box-shadow: var(--shadow-md);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
         }
 
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: 0.6s;
-        }
-
-        .action-btn:hover::before {
-            left: 100%;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
+        .action-btn:active {
+            transform: scale(0.95);
         }
 
         .action-btn.share {
-            background: linear-gradient(145deg, #25D366, #128C7E);
+            background: #25D366;
+        }
+
+        .action-btn.whatsapp {
+            background: var(--gradient);
         }
 
         .action-btn.print {
-            background: linear-gradient(145deg, #6c757d, #495057);
+            background: #64748b;
         }
 
         /* ===== MODAL ZOOM ===== */
@@ -877,12 +647,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.98);
+            background: rgba(0,0,0,0.95);
             backdrop-filter: blur(10px);
             z-index: 2000;
-            justify-content: center;
             align-items: center;
-            padding: 30px;
+            justify-content: center;
+            padding: 20px;
         }
 
         .modal.active {
@@ -890,158 +660,162 @@
             animation: fadeIn 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .modal-content {
             position: relative;
             max-width: 90%;
-            max-height: 90vh;
+            max-height: 80vh;
         }
 
-        .modal-image, .modal-video {
+        .modal-image,
+        .modal-video {
             max-width: 100%;
             max-height: 80vh;
-            border-radius: 20px;
-            box-shadow: var(--shadow-xl);
+            border-radius: 24px;
             border: 3px solid white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         .modal-close {
             position: absolute;
             top: -50px;
-            right: -50px;
-            background: white;
-            color: black;
-            width: 50px;
-            height: 50px;
+            right: 0;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
+            background: white;
             border: none;
             font-size: 1.3rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
-            box-shadow: var(--shadow-lg);
+            color: black;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
         }
 
-        .modal-close:hover {
-            background: var(--theme-primary);
+        .modal-close:active {
+            transform: scale(0.9);
+            background: var(--accent);
             color: white;
-            transform: rotate(90deg);
         }
 
         /* ===== NOTIFICATION ===== */
         .notification {
             position: fixed;
-            top: 30px;
-            right: 30px;
-            padding: 16px 28px;
-            border-radius: 100px;
+            top: 20px;
+            left: 16px;
+            right: 16px;
+            max-width: 400px;
+            margin: 0 auto;
             background: white;
-            box-shadow: var(--shadow-xl);
-            display: flex;
+            backdrop-filter: blur(10px);
+            padding: 14px 20px;
+            border-radius: 50px;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: none;
             align-items: center;
             gap: 12px;
-            z-index: 2000;
-            animation: slideInRight 0.4s ease;
-            border-left: 5px solid var(--theme-primary);
-            display: none;
+            z-index: 2100;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .notification.show {
             display: flex;
         }
 
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .notification i {
+            color: var(--accent);
+            font-size: 1.2rem;
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 600px) {
-            .card-header { padding: 40px 25px 50px; }
-            .greeting { font-size: 2.2rem; }
-            .recipient-name { font-size: 1.8rem; }
-            .theme-emoji-large { font-size: 65px; }
-            .card-body { padding: 35px 25px; }
-            .message-container { padding: 35px 25px; }
-            .message { font-size: 1.1rem; }
-            
-            .swiper {
-                height: 300px;
+        /* ===== LOADING ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 24px;
+            border-radius: 32px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--accent-light);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 380px) {
+            .greeting {
+                font-size: 1.8rem;
             }
             
-            .thumbnails {
-                gap: 8px;
+            .recipient-name {
+                font-size: 1.5rem;
+            }
+            
+            .swiper {
+                height: 250px;
             }
             
             .thumbnail {
-                flex: 0 0 70px;
-                height: 70px;
-            }
-            
-            .contact-elegant {
-                flex-direction: column;
-                gap: 10px;
-                border-radius: 30px;
-                padding: 20px;
-            }
-            
-            .contact-divider {
-                display: none;
-            }
-            
-            .contact-elegant-item {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .action-btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .modal-close {
-                top: -40px;
-                right: 0;
+                flex: 0 0 60px;
+                height: 60px;
             }
         }
     </style>
 </head>
 <body class="theme-birthday">
-    <!-- Background Ornament -->
-    <div id="ornamentBg" class="ornament-bg"></div>
-
-    <!-- Music Player -->
-    <div class="music-player">
-        <div class="music-info" id="musicInfo">
-            <i class="fas fa-music"></i>
-            <span id="musicName">Happy Birthday</span>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div id="loadingText">Memuat kartu...</div>
         </div>
-        <button id="musicBtn" class="music-btn" onclick="toggleMusic()">
-            <i class="fas fa-music"></i>
-        </button>
-        <audio id="bgMusic" loop preload="auto">
-            <source id="musicSource" src="" type="audio/mpeg">
-        </audio>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
     </div>
 
     <!-- Modal Zoom -->
-    <div id="mediaModal" class="modal">
+    <div class="modal" id="mediaModal">
         <button class="modal-close" onclick="closeModal()">
             <i class="fas fa-times"></i>
         </button>
@@ -1051,29 +825,22 @@
         </div>
     </div>
 
-    <!-- Main Card -->
-    <div class="card-wrapper">
+    <!-- Mobile Container -->
+    <div class="mobile-container">
+        <!-- Main Card -->
         <div class="card">
             <!-- Card Header -->
             <div class="card-header">
-                <div class="ornament-top">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                
-                <div class="theme-emoji-large" id="themeEmoji">🎂</div>
-                <h1 class="greeting" id="greetingText">Happy Birthday</h1>
+                <div class="theme-emoji" id="themeEmoji">🎂</div>
+                <div class="greeting" id="greetingText">Happy Birthday</div>
                 <div class="to-label">KEPADA YTH.</div>
                 <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
             </div>
-            
+
             <!-- Card Body -->
             <div class="card-body">
                 <!-- Message -->
-                <div class="message-container" data-aos="fade-up">
+                <div class="message-container">
                     <div class="message-quote">
                         <i class="fas fa-quote-right"></i>
                     </div>
@@ -1081,184 +848,118 @@
                         [Pesan ucapan akan muncul di sini. Kartu ini dikirim dengan penuh kasih dari FIOR Florist.]
                     </div>
                 </div>
-                
-                <!-- Media Carousel Section -->
-                <div id="mediaSection" class="media-section">
-                    <div class="media-header" data-aos="fade-up">
-                        <i class="fas fa-camera-retro"></i>
-                        <span>Galeri Spesial</span>
-                        <span id="mediaCount" style="margin-left: auto; background: var(--theme-soft); padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 600;">0 Media</span>
+
+                <!-- Media Carousel -->
+                <div class="media-section" id="mediaSection">
+                    <div class="media-header">
+                        <h3>
+                            <i class="fas fa-images"></i>
+                            Galeri Spesial
+                        </h3>
+                        <span class="media-count" id="mediaCount">0 Media</span>
                     </div>
-                    
+
                     <!-- Swiper Carousel -->
-                    <div class="carousel-container" data-aos="fade-up">
-                        <div class="swiper" id="mediaSwiper">
-                            <div class="swiper-wrapper" id="carouselWrapper">
-                                <!-- Slides akan diisi oleh JavaScript -->
-                            </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="carousel-counter" id="carouselCounter">
-                                <i class="fas fa-images"></i>
-                                <span id="currentSlide">1</span> / <span id="totalSlides">0</span>
-                            </div>
+                    <div class="swiper" id="mediaSwiper">
+                        <div class="swiper-wrapper" id="carouselWrapper"></div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="slide-counter" id="slideCounter">
+                            <i class="fas fa-images"></i>
+                            <span id="currentSlide">1</span> / <span id="totalSlides">0</span>
                         </div>
                     </div>
-                    
+
                     <!-- Thumbnails -->
-                    <div id="thumbnails" class="thumbnails"></div>
+                    <div class="thumbnails" id="thumbnails"></div>
                 </div>
 
-                <!-- Contact Admin -->
-                <div class="contact-elegant" data-aos="fade-up" data-aos-delay="100">
-                    <a href="https://wa.me/6285337777585?text=Halo%20admin%20FIOR%20Florist%2C%20saya%20ingin%20bertanya%20tentang%20pemesanan%20kartu%20ucapan" 
-                       target="_blank" 
-                       class="contact-elegant-item whatsapp">
+                <!-- Contact Row -->
+                <div class="contact-row">
+                    <a href="https://wa.me/6285337777585" target="_blank" class="contact-item">
                         <i class="fab fa-whatsapp"></i>
-                        <span>Hubungi Admin</span>
+                        Admin
                     </a>
                     <span class="contact-divider"></span>
-                    <a href="https://www.instagram.com/tokobungafior.jayapura" 
-                       target="_blank" 
-                       class="contact-elegant-item instagram">
+                    <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="contact-item">
                         <i class="fab fa-instagram"></i>
-                        <span>@tokobungafior</span>
+                        @tokobungafior
                     </a>
                 </div>
             </div>
-            
+
             <!-- Card Footer -->
             <div class="card-footer">
-                <div class="company">
-                    <div class="company-logo"></div>
-                    <div class="company-name">FIOR Florist</div>
-                    <div class="company-tagline">JAYAPURA • EST. 2020</div>
-                </div>
-                
+                <div class="company-logo"></div>
+                <div class="company-name">FIOR Florist</div>
+                <div class="company-tagline">JAYAPURA • EST. 2020</div>
+
+                <!-- Action Buttons -->
                 <div class="action-buttons">
                     <button class="action-btn share" onclick="shareCard()">
-                        <i class="fas fa-share-alt"></i> Bagikan
+                        <i class="fas fa-share-alt"></i>
                     </button>
-                    <a href="#" class="action-btn" id="whatsappBtn" target="_blank">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    <a href="#" class="action-btn whatsapp" id="whatsappBtn" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
                     </a>
                     <button class="action-btn print" onclick="printCard()">
-                        <i class="fas fa-print"></i> Cetak
+                        <i class="fas fa-print"></i>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Notification -->
-    <div id="notification" class="notification">
-        <i class="fas fa-check-circle" style="color: var(--theme-primary);"></i>
-        <span id="notificationMessage"></span>
-    </div>
-
-    <!-- AOS Script -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
     <script>
         // ============================================
-        // FIOR CARD - 10 TEMA + CAROUSEL
+        // FIOR CARD - CAROUSEL SLIDER
         // ============================================
 
-        // ========== THEMES - 10 TEMA ==========
+        // ========== THEMES ==========
         const THEMES = {
             birthday: { 
                 emoji: '🎂', 
-                emojiLarge: '🎂',
-                name: 'Birthday', 
-                greeting: 'Happy Birthday',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-493.mp3',
-                musicName: 'Happy Birthday',
-                particles: ['🎂', '🎈', '🎁', '✨', '🌟']
+                greeting: 'Happy Birthday'
             },
             valentine: { 
                 emoji: '❤️', 
-                emojiLarge: '❤️',
-                name: 'Valentine', 
-                greeting: 'Happy Valentine',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3',
-                musicName: 'Romantic Sunset',
-                particles: ['❤️', '💕', '💖', '💘', '🌹']
+                greeting: 'Happy Valentine'
             },
             wedding: { 
                 emoji: '💍', 
-                emojiLarge: '💍',
-                name: 'Wedding', 
-                greeting: 'Congratulations',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-wedding-processional-493.mp3',
-                musicName: 'Wedding Processional',
-                particles: ['💍', '💒', '🥂', '💐', '👰']
+                greeting: 'Congratulations'
             },
             anniversary: { 
                 emoji: '🎉',
-                emojiLarge: '🎉',
-                name: 'Anniversary', 
-                greeting: 'Happy Anniversary',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-486.mp3',
-                musicName: 'Romantic Sunset',
-                particles: ['🎉', '🎊', '💑', '💕', '✨']
+                greeting: 'Happy Anniversary'
             },
             graduation: { 
                 emoji: '🎓', 
-                emojiLarge: '🎓',
-                name: 'Graduation', 
-                greeting: 'Congratulations!',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3',
-                musicName: 'Achievement Bell',
-                particles: ['🎓', '📚', '🎉', '🏆', '✨']
+                greeting: 'Congratulations!'
             },
             condolence: { 
                 emoji: '🕊️', 
-                emojiLarge: '🕊️',
-                name: 'Condolence', 
-                greeting: 'Deepest Condolences',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-sad-moment-491.mp3',
-                musicName: 'Sad Moment',
-                particles: ['🕊️', '🌸', '🕯️', '🌿', '🙏']
+                greeting: 'Deepest Condolences'
             },
             congratulation: { 
                 emoji: '🎊', 
-                emojiLarge: '🎊',
-                name: 'Congratulation', 
-                greeting: 'Congratulations!',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-achievement-bell-600.mp3',
-                musicName: 'Achievement Bell',
-                particles: ['🎊', '🎉', '✨', '🌟', '🏆']
+                greeting: 'Congratulations!'
             },
             imlek: { 
                 emoji: '🧧', 
-                emojiLarge: '🧧',
-                name: 'Imlek', 
-                greeting: 'Gong Xi Fa Cai',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-chinese-new-year-464.mp3',
-                musicName: 'Chinese New Year',
-                particles: ['🧧', '🏮', '🐉', '✨', '🎆']
+                greeting: 'Gong Xi Fa Cai'
             },
             natal: { 
                 emoji: '🎄', 
-                emojiLarge: '🎄',
-                name: 'Natal', 
-                greeting: 'Merry Christmas',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-christmas-carol-492.mp3',
-                musicName: 'Christmas Carol',
-                particles: ['🎄', '🎅', '⛄', '🦌', '🎁']
+                greeting: 'Merry Christmas'
             },
             lebaran: { 
                 emoji: '🌙', 
-                emojiLarge: '🌙',
-                name: 'Lebaran', 
-                greeting: 'Selamat Lebaran',
-                music: 'https://assets.mixkit.co/music/preview/mixkit-spiritual-536.mp3',
-                musicName: 'Spiritual',
-                particles: ['🌙', '⭐', '🕌', '🍬', '🥘']
+                greeting: 'Selamat Lebaran'
             }
         };
 
@@ -1266,11 +967,7 @@
         let state = {
             params: {},
             mediaList: [],
-            currentIndex: 0,
-            isPlaying: false,
-            theme: 'birthday',
-            swiper: null,
-            isAudioInitialized: false
+            swiper: null
         };
 
         // ========== DOM ELEMENTS ==========
@@ -1279,46 +976,20 @@
         // ========== CACHE DOM ==========
         function cacheElements() {
             const ids = [
-                'ornamentBg', 'themeEmoji', 'greetingText', 'recipientName', 'messageText',
+                'loadingOverlay', 'loadingText',
+                'notification', 'notificationMessage',
+                'themeEmoji', 'greetingText', 'recipientName', 'messageText',
                 'whatsappBtn', 'mediaSection', 'mediaCount',
                 'carouselWrapper', 'thumbnails',
-                'modal', 'modalImage', 'modalVideo',
-                'notification', 'notificationMessage',
-                'bgMusic', 'musicSource', 'musicBtn', 'musicInfo', 'musicName',
+                'mediaModal', 'modalImage', 'modalVideo',
                 'currentSlide', 'totalSlides'
             ];
-            
             ids.forEach(id => el[id] = document.getElementById(id));
-        }
-
-        // ========== CREATE BACKGROUND ORNAMENT ==========
-        function createOrnament() {
-            if (!el.ornamentBg) return;
-            
-            el.ornamentBg.innerHTML = '';
-            const themeData = THEMES[state.theme] || THEMES.birthday;
-            const particles = themeData.particles || ['✨', '🌟', '⭐'];
-            
-            for (let i = 0; i < 25; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'ornament-particle';
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.fontSize = `${Math.random() * 30 + 20}px`;
-                particle.style.animationDuration = `${Math.random() * 20 + 15}s`;
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                particle.textContent = particles[Math.floor(Math.random() * particles.length)];
-                el.ornamentBg.appendChild(particle);
-            }
         }
 
         // ========== GET URL PARAMETERS ==========
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
-            
-            console.log('='.repeat(50));
-            console.log('🚀 CARD INITIALIZATION');
-            console.log('='.repeat(50));
             
             const result = {
                 to: params.get('to') || 'Sahabat',
@@ -1326,108 +997,67 @@
                 theme: params.get('theme') || 'birthday'
             };
 
-            // ===== KOLEKSI MEDIA =====
+            // Get media (support up to 10 media)
             result.mediaList = [];
-
-            // Single media
+            
+            // Check for single media
             if (params.get('media')) {
-                const url = params.get('media');
                 result.mediaList.push({
-                    url: url,
-                    type: detectMediaType(url),
-                    index: 0
+                    url: params.get('media'),
+                    type: detectMediaType(params.get('media'))
                 });
             }
-
-            // Multiple media
+            
+            // Check for multiple media (media1, media2, media3, ...)
             let i = 1;
             while (params.get(`media${i}`)) {
-                const url = params.get(`media${i}`);
                 result.mediaList.push({
-                    url: url,
-                    type: detectMediaType(url),
-                    index: i
+                    url: params.get(`media${i}`),
+                    type: detectMediaType(params.get(`media${i}`))
                 });
                 i++;
+                if (i > 10) break; // Max 10 media
             }
-
+            
             // Remove duplicates
             result.mediaList = result.mediaList.filter((v,i,a)=>a.findIndex(t=>t.url===v.url)===i);
             
+            console.log('📸 Media loaded:', result.mediaList.length, 'items');
             return result;
         }
 
-        // ========== DETECT MEDIA TYPE ==========
         function detectMediaType(url) {
             if (!url) return 'image';
-            
             const u = url.toLowerCase();
             
+            // Video extensions
             if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || 
-                u.includes('drive.google.com') || u.includes('youtube') || u.includes('vimeo')) {
+                u.includes('.avi') || u.includes('.mkv') || u.includes('.3gp') ||
+                u.includes('youtube.com') || u.includes('youtu.be') || 
+                u.includes('vimeo.com') || u.includes('drive.google.com')) {
                 return 'video';
             }
             
-            return 'image';
-        }
-
-        // ========== MUSIC FUNCTIONS ==========
-        function setupMusic(theme) {
-            const themeData = THEMES[theme] || THEMES.birthday;
-            
-            if (el.musicName) {
-                el.musicName.textContent = themeData.musicName;
+            // Image extensions
+            if (u.includes('.jpg') || u.includes('.jpeg') || u.includes('.png') || 
+                u.includes('.gif') || u.includes('.webp') || u.includes('.bmp') ||
+                u.includes('unsplash.com') || u.includes('pexels.com') || u.includes('pixabay.com')) {
+                return 'image';
             }
             
-            if (themeData.music) {
-                el.musicSource.src = themeData.music;
-                el.bgMusic.load();
-                
-                setTimeout(() => {
-                    const playPromise = el.bgMusic.play();
-                    
-                    if (playPromise !== undefined) {
-                        playPromise
-                            .then(() => {
-                                state.isPlaying = true;
-                                el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                            })
-                            .catch(() => {
-                                state.isPlaying = false;
-                                el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-                            });
-                    }
-                }, 1000);
-            }
+            return 'image'; // Default
         }
-
-        window.toggleMusic = function() {
-            if (state.isPlaying) {
-                el.bgMusic.pause();
-                state.isPlaying = false;
-                el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-            } else {
-                el.bgMusic.play()
-                    .then(() => {
-                        state.isPlaying = true;
-                        el.musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                    })
-                    .catch(() => {
-                        showNotification('Klik tombol musik untuk memutar');
-                    });
-            }
-        };
 
         // ========== RENDER CAROUSEL ==========
         function renderCarousel() {
             if (!el.carouselWrapper) return;
             
             if (state.mediaList.length === 0) {
-                el.mediaSection.style.display = 'none';
+                el.mediaSection.classList.remove('active');
                 return;
             }
             
-            el.mediaSection.style.display = 'block';
+            el.mediaSection.classList.add('active');
             el.mediaCount.textContent = `${state.mediaList.length} Media`;
             
             if (el.totalSlides) {
@@ -1436,17 +1066,13 @@
             
             // Build slides
             let slidesHTML = '';
-            
             state.mediaList.forEach((media, index) => {
                 const isVideo = media.type === 'video';
                 
                 if (isVideo) {
                     slidesHTML += `
                         <div class="swiper-slide">
-                            <video id="video-${index}" src="${escapeHTML(media.url)}" 
-                                   loop playsinline muted
-                                   onerror="this.outerHTML='<div style=\'width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#1a1a1a; color:white;\'><i class=\'fas fa-exclamation-triangle\' style=\'font-size:2rem; color:#ff6b6b;\'></i><p style=\'margin-top:15px;\'>Video tidak dapat dimuat</p><a href=\'${escapeHTML(media.url)}\' target=\'_blank\' style=\'margin-top:15px; padding:10px 20px; background:var(--theme-primary); color:white; border-radius:50px; text-decoration:none;\'>Buka Link</a></div>';">
-                            </video>
+                            <video id="video-${index}" src="${escapeHTML(media.url)}" loop playsinline muted preload="metadata"></video>
                             <div class="media-type-badge">
                                 <i class="fas fa-film"></i> VIDEO
                             </div>
@@ -1458,9 +1084,7 @@
                 } else {
                     slidesHTML += `
                         <div class="swiper-slide" onclick="openModal('${escapeHTML(media.url)}', false)">
-                            <img src="${escapeHTML(media.url)}" 
-                                 alt="Media ${index + 1}"
-                                 onerror="this.outerHTML='<div style=\'width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#1a1a1a; color:white;\'><i class=\'fas fa-exclamation-triangle\' style=\'font-size:2rem; color:#ff6b6b;\'></i><p style=\'margin-top:15px;\'>Gambar tidak dapat dimuat</p><a href=\'${escapeHTML(media.url)}\' target=\'_blank\' style=\'margin-top:15px; padding:10px 20px; background:var(--theme-primary); color:white; border-radius:50px; text-decoration:none;\'>Buka Link</a></div>';">
+                            <img src="${escapeHTML(media.url)}" alt="Media ${index + 1}" loading="lazy">
                             <div class="media-type-badge">
                                 <i class="fas fa-image"></i> FOTO
                             </div>
@@ -1471,25 +1095,40 @@
             
             el.carouselWrapper.innerHTML = slidesHTML;
             
-            // Initialize Swiper
+            // Initialize Swiper with full options
             state.swiper = new Swiper('.swiper', {
                 loop: state.mediaList.length > 1,
-                autoplay: false,
+                autoplay: state.mediaList.length > 1 ? {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                } : false,
+                speed: 600,
+                effect: 'slide',
+                spaceBetween: 0,
+                slidesPerView: 1,
+                
                 pagination: {
                     el: '.swiper-pagination',
                     clickable: true,
+                    dynamicBullets: true,
                 },
+                
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
+                
                 on: {
                     slideChange: function() {
                         const activeIndex = this.realIndex;
-                        state.currentIndex = activeIndex;
                         updateActiveThumbnail(activeIndex);
                         if (el.currentSlide) {
                             el.currentSlide.textContent = activeIndex + 1;
+                        }
+                    },
+                    init: function() {
+                        if (el.currentSlide) {
+                            el.currentSlide.textContent = 1;
                         }
                     }
                 }
@@ -1497,37 +1136,53 @@
             
             // Render thumbnails
             renderThumbnails();
+            
+            // Autoplay first video if exists
+            setTimeout(() => {
+                if (state.mediaList.length > 0 && state.mediaList[0].type === 'video') {
+                    const firstVideo = document.getElementById('video-0');
+                    if (firstVideo) {
+                        firstVideo.play().catch(() => {});
+                    }
+                }
+            }, 500);
         }
 
-        // ========== RENDER THUMBNAILS ==========
         function renderThumbnails() {
             if (!el.thumbnails) return;
             
             let html = '';
-            
             state.mediaList.forEach((media, index) => {
-                const isVideo = media.type === 'video';
-                
-                html += `
-                    <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
-                        ${isVideo ? `
-                            <div style="width:100%; height:100%; background: linear-gradient(145deg, #000, #1a1a1a); display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-film" style="font-size: 2rem; color: white; opacity: 0.7;"></i>
-                                <div class="thumbnail-icon"><i class="fas fa-play"></i></div>
-                            </div>
-                        ` : `
-                            <img src="${escapeHTML(media.url)}" class="thumbnail-img" 
-                                 onerror="this.src='https://via.placeholder.com/100x100?text=Image'; this.onerror=null;">
-                        `}
-                        <span class="thumbnail-badge">${isVideo ? 'VIDEO' : 'FOTO'}</span>
-                    </div>
-                `;
+                if (media.type === 'video') {
+                    html += `
+                        <div class="thumbnail video-thumb ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
+                            <i class="fas fa-film" style="color:white; font-size:1.5rem;"></i>
+                            <div class="thumbnail-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
+                            <img src="${escapeHTML(media.url)}" loading="lazy">
+                        </div>
+                    `;
+                }
             });
-            
             el.thumbnails.innerHTML = html;
         }
 
-        // ========== TOGGLE VIDEO PLAY ==========
+        function updateActiveThumbnail(index) {
+            document.querySelectorAll('.thumbnail').forEach((el, i) => {
+                el.classList.toggle('active', i === index);
+            });
+        }
+
+        window.jumpToSlide = function(index) {
+            if (state.swiper) {
+                state.swiper.slideToLoop(index);
+            }
+        };
+
         window.toggleVideoPlay = function(index) {
             const video = document.getElementById(`video-${index}`);
             const icon = document.getElementById(`playIcon-${index}`);
@@ -1543,22 +1198,6 @@
             }
         };
 
-        // ========== JUMP TO SLIDE ==========
-        window.jumpToSlide = function(index) {
-            if (state.swiper) {
-                state.swiper.slideToLoop(index);
-                updateActiveThumbnail(index);
-            }
-        };
-
-        // ========== UPDATE ACTIVE THUMBNAIL ==========
-        function updateActiveThumbnail(index) {
-            document.querySelectorAll('.thumbnail').forEach((el, i) => {
-                if (i === index) el.classList.add('active');
-                else el.classList.remove('active');
-            });
-        }
-
         // ========== MODAL ZOOM ==========
         window.openModal = function(url, isVideo) {
             if (isVideo) {
@@ -1571,118 +1210,100 @@
                 el.modalVideo.style.display = 'none';
                 el.modalImage.src = url;
             }
-            el.modal.classList.add('active');
+            el.mediaModal.classList.add('active');
         };
 
         window.closeModal = function() {
-            el.modal.classList.remove('active');
+            el.mediaModal.classList.remove('active');
             if (el.modalVideo) {
                 el.modalVideo.pause();
                 el.modalVideo.src = '';
             }
         };
 
-        // ========== SHARE CARD ==========
+        // ========== SHARE FUNCTIONS ==========
         window.shareCard = function() {
-            const shareText = `Kartu ucapan digital dari FIOR Florist untuk ${state.params.to}\n\n${window.location.href}`;
-            
+            const shareText = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
             if (navigator.share) {
                 navigator.share({
-                    title: `Kartu Ucapan ${THEMES[state.theme].name} - FIOR Florist`,
+                    title: `Kartu ${THEMES[state.theme].greeting}`,
                     text: shareText,
                     url: window.location.href
-                })
-                .then(() => showNotification('Berhasil dibagikan!'))
-                .catch(() => copyURL(window.location.href));
+                }).catch(() => copyURL());
             } else {
-                copyURL(window.location.href);
+                copyURL();
             }
         };
 
-        function copyURL(url) {
-            navigator.clipboard.writeText(url)
+        function copyURL() {
+            navigator.clipboard.writeText(window.location.href)
                 .then(() => showNotification('Link disalin!'))
-                .catch(() => {});
+                .catch(() => showNotification('Gagal menyalin link'));
         }
 
-        // ========== PRINT CARD ==========
         window.printCard = function() {
-            if (state.isPlaying) {
-                el.bgMusic.pause();
-                state.isPlaying = false;
-                el.musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-            }
-            showNotification('Menyiapkan untuk dicetak...');
-            setTimeout(() => window.print(), 500);
+            window.print();
         };
 
         // ========== NOTIFICATION ==========
         function showNotification(message) {
             el.notificationMessage.textContent = message;
             el.notification.classList.add('show');
-            setTimeout(() => el.notification.classList.remove('show'), 3000);
+            setTimeout(() => el.notification.classList.remove('show'), 2000);
+        }
+
+        // ========== LOADING ==========
+        function showLoading(show, text = 'Loading...') {
+            if (el.loadingOverlay) {
+                el.loadingOverlay.style.display = show ? 'flex' : 'none';
+                if (show && el.loadingText) el.loadingText.textContent = text;
+            }
         }
 
         // ========== ESCAPE HTML ==========
         function escapeHTML(str) {
-            if (!str) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+            return String(str||'').replace(/[&<>"]/g, function(m) {
+                return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[m];
+            });
         }
 
         // ========== INIT ==========
         function init() {
             cacheElements();
             
-            // Initialize AOS
-            AOS.init({
-                duration: 800,
-                once: true,
-                mirror: false,
-                offset: 50
-            });
+            // Show loading
+            showLoading(true, 'Memuat kartu...');
             
             // Get params
             state.params = getUrlParams();
             state.mediaList = state.params.mediaList || [];
             state.theme = state.params.theme;
             
-            // Check if theme exists
-            if (!THEMES[state.theme]) {
-                state.theme = 'birthday';
-            }
+            // Validate theme
+            if (!THEMES[state.theme]) state.theme = 'birthday';
             
-            // Set basic info
+            // Set content
             el.recipientName.textContent = state.params.to;
             el.messageText.textContent = state.params.msg;
             
             // Set theme
             const themeData = THEMES[state.theme];
             document.body.className = `theme-${state.theme}`;
-            el.themeEmoji.textContent = themeData.emojiLarge;
+            el.themeEmoji.textContent = themeData.emoji;
             el.greetingText.textContent = themeData.greeting;
             
-            // Set WhatsApp button
-            const waText = `Halo ${state.params.to}, ini kartu ucapan digital dari FIOR Florist:\n\n${window.location.href}`;
+            // WhatsApp button
+            const waText = `Kartu untuk ${state.params.to}: ${window.location.href}`;
             el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
-            
-            // Create ornament background
-            createOrnament();
             
             // Render carousel
             renderCarousel();
             
-            // Setup music
-            setupMusic(state.theme);
-            
-            console.log('✅ INIT COMPLETE - Theme:', state.theme);
+            // Hide loading after a moment
+            setTimeout(() => showLoading(false), 800);
         }
 
-        // ========== START ==========
+        // Start
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
