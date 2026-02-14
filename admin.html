@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIOR Card - Admin Panel (Short Links)</title>
+    <title>FIOR Card - Admin Panel (With Expiry Settings)</title>
     
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -44,6 +44,8 @@
             --warning-light: #ffedd5;
             --coral: #ff7f50;
             --coral-light: #ffd7c4;
+            --info: #0284c7;
+            --info-light: #e0f2fe;
             
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
@@ -376,7 +378,7 @@
             resize: vertical;
         }
 
-        /* ===== URL MEDIA SECTION - MULTIPLE URL ===== */
+        /* ===== URL MEDIA SECTION ===== */
         .url-media-section {
             background: linear-gradient(145deg, var(--soft-white), var(--white));
             border-radius: var(--radius-lg);
@@ -612,7 +614,7 @@
             }
         }
 
-        /* ===== THEME GRID - 11 TEMA ===== */
+        /* ===== THEME GRID ===== */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -686,6 +688,11 @@
 
         .btn-success {
             background: linear-gradient(145deg, var(--success), #0a5c4c);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(145deg, var(--info), #0369a1);
             color: white;
         }
 
@@ -783,6 +790,22 @@
         .qrcode-container img {
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-md);
+        }
+
+        /* ===== EXPIRY BADGE ===== */
+        .expiry-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--info-light);
+            color: var(--info);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .expiry-badge i {
+            margin-right: 0.5rem;
         }
 
         /* ===== TABLES ===== */
@@ -957,6 +980,12 @@
             color: var(--danger);
         }
 
+        .alert-info {
+            background: var(--info-light);
+            border-color: var(--info);
+            color: var(--info);
+        }
+
         @keyframes slideInRight {
             from {
                 opacity: 0;
@@ -966,6 +995,35 @@
                 opacity: 1;
                 transform: translateX(0);
             }
+        }
+
+        /* ===== EXPIRY SETTINGS ===== */
+        .stats-card {
+            background: linear-gradient(145deg, var(--white), var(--soft-white));
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* ===== RESPONSIVE ===== */
@@ -1008,6 +1066,7 @@
             .page-title { font-size: 1.8rem; }
             .form-card { padding: 1.5rem; }
             .theme-grid { grid-template-columns: repeat(3, 1fr); }
+            .stats-card { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -1069,6 +1128,7 @@
             <!-- Alerts -->
             <div id="alertSuccess" class="alert alert-success"></div>
             <div id="alertError" class="alert alert-error"></div>
+            <div id="alertInfo" class="alert alert-info"></div>
 
             <!-- ===== CREATE CARD PAGE ===== -->
             <div id="create-card" class="page active">
@@ -1203,6 +1263,10 @@
                             <i class="fas fa-photo-video" style="color: var(--gold);"></i>
                             <span id="resultMediaCount"></span>
                         </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+                            <i class="fas fa-clock" style="color: var(--info);"></i>
+                            <span id="resultExpiry">Masa berlaku: 90 hari</span>
+                        </div>
                     </div>
                     
                     <!-- Link Card -->
@@ -1325,7 +1389,7 @@
                     Settings
                 </h1>
                 <div class="page-subtitle">
-                    Konfigurasi API dan sistem
+                    Konfigurasi API, sistem, dan masa berlaku pesan
                 </div>
 
                 <div class="form-card">
@@ -1354,12 +1418,48 @@
                         </small>
                     </div>
 
-                    <div style="display: flex; gap: 1rem;">
+                    <!-- ===== EXPIRY SETTINGS ===== -->
+                    <div class="form-group" style="border-top: 1px solid var(--gray-200); padding-top: 1.5rem;">
+                        <h3 style="color: var(--navy); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-clock" style="color: var(--gold);"></i>
+                            Pengaturan Masa Berlaku Pesan
+                        </h3>
+
+                        <div class="stats-card">
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalMessages">0</div>
+                                <div class="stat-label">Total Pesan</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="expiredMessages">0</div>
+                                <div class="stat-label">Kadaluarsa</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin: 1.5rem 0;">
+                            <input type="number" class="form-control" id="expiryDays" 
+                                   min="1" max="365" value="90"
+                                   style="flex: 2;">
+                            <button class="btn btn-primary" onclick="updateExpiryDays()" style="flex: 1;">
+                                <i class="fas fa-save"></i> Update
+                            </button>
+                        </div>
+                        <small style="color: var(--gray-600); display: block;">
+                            <i class="fas fa-info-circle"></i> 
+                            Pesan akan otomatis kadaluarsa setelah <span id="currentExpiryDisplay">90</span> hari. 
+                            Link tetap bisa dibuka tapi pesan tidak tampil. Card baru akan menggunakan pengaturan ini.
+                        </small>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                         <button class="btn btn-primary" onclick="saveSettings()">
                             <i class="fas fa-save"></i> Simpan Settings
                         </button>
-                        <button class="btn btn-primary" onclick="testConnection()">
+                        <button class="btn btn-info" onclick="testConnection()">
                             <i class="fas fa-wifi"></i> Test Connection
+                        </button>
+                        <button class="btn btn-primary" style="background: var(--danger);" onclick="runCleanup()">
+                            <i class="fas fa-broom"></i> Cleanup Expired
                         </button>
                     </div>
                 </div>
@@ -1440,7 +1540,7 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - SHORT LINK VERSION
+        // FIOR CARD ADMIN - WITH EXPIRY SETTINGS
         // ============================================
 
         // ========== KONFIGURASI ==========
@@ -1472,7 +1572,8 @@
             cards: [],
             selectedTheme: CONFIG.DEFAULT_THEME,
             mediaUrls: [],
-            keepResultCard: true
+            keepResultCard: true,
+            expiryDays: 90
         };
 
         // ========== DOM ELEMENTS ==========
@@ -1488,23 +1589,25 @@
             setupNavigation();
             loadCustomers();
             loadCards();
+            loadExpirySettings();
             setTimeout(() => testConnection(true), 1000);
         });
 
         function cacheElements() {
             const ids = [
                 'loadingOverlay', 'loadingText',
-                'alertSuccess', 'alertError',
+                'alertSuccess', 'alertError', 'alertInfo',
                 'currentDateTime', 'connectionStatus', 'statusText', 'statusDot',
                 'recipientName', 'whatsappNumber', 'cardMessage', 'charCount',
                 'mediaUrlInput', 'mediaTypeSelect', 'mediaListContainer', 'mediaUrls', 'mediaCountBadge',
                 'themeGrid', 'cardResult', 'generatedLink',
                 'whatsappResultBtn', 'previewResultBtn', 'qrcode',
-                'resultRecipient', 'resultTheme', 'resultMediaCount',
+                'resultRecipient', 'resultTheme', 'resultMediaCount', 'resultExpiry',
                 'customersTableBody', 'historyTableBody',
                 'scriptUrl', 'cardBaseUrl',
                 'modalCustomerName', 'modalCustomerPhone', 
-                'modalCustomerEmail', 'modalCustomerAddress', 'modalCustomerNotes'
+                'modalCustomerEmail', 'modalCustomerAddress', 'modalCustomerNotes',
+                'expiryDays', 'currentExpiryDisplay', 'totalMessages', 'expiredMessages'
             ];
             
             ids.forEach(id => {
@@ -1539,6 +1642,7 @@
                     
                     if (pageId === 'customers') loadCustomers();
                     if (pageId === 'history') loadCards();
+                    if (pageId === 'settings') loadExpirySettings();
                 });
             });
         }
@@ -1693,7 +1797,7 @@
             }
         }
 
-        // ========== CREATE CARD (SHORT LINK VERSION) ==========
+        // ========== CREATE CARD (SHORT LINK VERSION WITH EXPIRY) ==========
         window.createCard = async function() {
             const name = el.recipientName?.value.trim();
             const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
@@ -1727,8 +1831,8 @@
                     });
                     
                     const saveResult = await saveResponse.json();
-                    if (saveResult.status !== 'success') {
-                        console.warn('Warning: Message save returned non-success');
+                    if (saveResult.status === 'success') {
+                        console.log('✅ Message saved, expires:', saveResult.expires);
                     }
                 } catch (e) {
                     console.warn('Warning: Could not save message to server, but continuing:', e);
@@ -1755,6 +1859,9 @@
                 if (el.resultTheme) {
                     const themeObj = THEMES.find(t => t.id === theme);
                     el.resultTheme.textContent = `${themeObj?.emoji || '🎨'} ${themeObj?.name || theme}`;
+                }
+                if (el.resultExpiry) {
+                    el.resultExpiry.innerHTML = `<i class="fas fa-clock"></i> Masa berlaku: ${state.expiryDays} hari`;
                 }
                 updateMediaCount();
                 
@@ -2169,9 +2276,109 @@
             showAlert('✅ Settings tersimpan!', 'success');
         };
 
+        // ========== EXPIRY SETTINGS ==========
+        async function loadExpirySettings() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=get_config&t=${Date.now()}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    state.expiryDays = data.expiry_days || 90;
+                    
+                    if (el.expiryDays) el.expiryDays.value = state.expiryDays;
+                    if (el.currentExpiryDisplay) el.currentExpiryDisplay.textContent = state.expiryDays;
+                    if (el.totalMessages) el.totalMessages.textContent = data.total_messages || 0;
+                    if (el.expiredMessages) el.expiredMessages.textContent = data.expired_messages || 0;
+                    if (el.resultExpiry) {
+                        el.resultExpiry.innerHTML = `<i class="fas fa-clock"></i> Masa berlaku: ${state.expiryDays} hari`;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading expiry settings:', error);
+            }
+        }
+
+        window.updateExpiryDays = async function() {
+            const days = document.getElementById('expiryDays').value;
+            
+            if (!days || days < 1 || days > 365) {
+                showAlert('Masukkan nilai antara 1-365 hari!', 'error');
+                return;
+            }
+            
+            showLoading(true, 'Menyimpan pengaturan...');
+            
+            try {
+                const formData = new URLSearchParams();
+                formData.append('type', 'update_config');
+                formData.append('key', 'expiry_days');
+                formData.append('value', days);
+                
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    state.expiryDays = parseInt(days);
+                    showAlert(`✅ Masa berlaku diubah menjadi ${days} hari!`, 'success');
+                    if (el.currentExpiryDisplay) el.currentExpiryDisplay.textContent = days;
+                    if (el.resultExpiry) {
+                        el.resultExpiry.innerHTML = `<i class="fas fa-clock"></i> Masa berlaku: ${days} hari`;
+                    }
+                    await loadExpirySettings();
+                } else {
+                    throw new Error(result.message);
+                }
+                
+            } catch (error) {
+                showAlert('❌ Gagal: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        };
+
+        window.runCleanup = async function() {
+            if (!confirm('Yakin ingin membersihkan semua pesan yang sudah kadaluarsa?')) return;
+            
+            showLoading(true, 'Membersihkan pesan expired...');
+            
+            try {
+                const formData = new URLSearchParams();
+                formData.append('type', 'cleanup');
+                
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showAlert(`✅ Berhasil membersihkan ${result.cleaned} pesan expired!`, 'success');
+                    await loadExpirySettings();
+                } else {
+                    throw new Error(result.message);
+                }
+                
+            } catch (error) {
+                showAlert('❌ Gagal: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        };
+
         // ========== UTILITY FUNCTIONS ==========
         function showAlert(message, type = 'success') {
-            const alertEl = type === 'success' ? el.alertSuccess : el.alertError;
+            let alertEl;
+            if (type === 'success') alertEl = el.alertSuccess;
+            else if (type === 'error') alertEl = el.alertError;
+            else alertEl = el.alertInfo;
+            
             if (alertEl) {
                 alertEl.textContent = message;
                 alertEl.style.display = 'block';
