@@ -612,11 +612,11 @@
             }
         }
 
-        /* ===== THEME GRID - 7 TEMA ===== */
+        /* ===== THEME GRID - 11 TEMA ===== */
         .theme-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.75rem;
             margin-top: 0.5rem;
         }
 
@@ -998,7 +998,7 @@
             
             .link-container { flex-direction: column; }
             .copy-btn { width: 100%; }
-            .theme-grid { grid-template-columns: repeat(3, 1fr); }
+            .theme-grid { grid-template-columns: repeat(4, 1fr); }
             .media-item { flex-direction: column; align-items: flex-start; }
             .media-actions { width: 100%; justify-content: flex-end; }
         }
@@ -1007,7 +1007,7 @@
             .main-content { padding: 1.5rem; }
             .page-title { font-size: 1.8rem; }
             .form-card { padding: 1.5rem; }
-            .theme-grid { grid-template-columns: repeat(2, 1fr); }
+            .theme-grid { grid-template-columns: repeat(3, 1fr); }
         }
     </style>
 </head>
@@ -1159,11 +1159,11 @@
                         </small>
                     </div>
 
-                    <!-- Pilih Tema - 7 TEMA -->
+                    <!-- Pilih Tema - 11 TEMA PREMIUM -->
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-palette"></i>
-                            Pilih Tema (7 Tema Premium)
+                            Pilih Tema (11 Tema Premium)
                         </label>
                         <div class="theme-grid" id="themeGrid"></div>
                     </div>
@@ -1444,7 +1444,7 @@
             DEFAULT_THEME: "birthday"
         };
 
-        // ========== THEMES - 7 TEMA ==========
+        // ========== THEMES - 11 TEMA ==========
         const THEMES = [
             { id: 'birthday', name: 'Birthday', emoji: '🎂' },
             { id: 'valentine', name: 'Valentine', emoji: '❤️' },
@@ -1452,7 +1452,11 @@
             { id: 'anniversary', name: 'Anniversary', emoji: '🎉' },
             { id: 'graduation', name: 'Graduation', emoji: '🎓' },
             { id: 'condolence', name: 'Condolence', emoji: '🕊️' },
-            { id: 'congratulation', name: 'Congratulation', emoji: '🎊' }
+            { id: 'congratulation', name: 'Congratulations', emoji: '🎊' },
+            { id: 'imlek', name: 'Imlek', emoji: '🧧' },
+            { id: 'lebaran', name: 'Lebaran', emoji: '🌙' },
+            { id: 'natal', name: 'Natal', emoji: '🎄' },
+            { id: 'newyear', name: 'New Year', emoji: '🎆' }
         ];
 
         // ========== STATE ==========
