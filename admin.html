@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIOR Card - Admin Panel</title>
+    <title>FIOR Card - Admin Panel (Short Links)</title>
     
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1077,7 +1077,7 @@
                     Buat Card Baru
                 </h1>
                 <div class="page-subtitle">
-                    Generate kartu ucapan digital dengan multiple URL media (gambar/video)
+                    Generate kartu ucapan digital dengan short link (tanpa parameter pesan)
                 </div>
 
                 <div class="form-card">
@@ -1171,7 +1171,7 @@
                     <!-- Action Buttons -->
                     <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                         <button class="btn btn-primary" style="flex: 2;" onclick="createCard()">
-                            <i class="fas fa-magic"></i> GENERATE CARD
+                            <i class="fas fa-magic"></i> GENERATE CARD (SHORT LINK)
                         </button>
                         <button class="btn btn-primary" style="flex: 1; background: var(--success);" onclick="previewCard()">
                             <i class="fas fa-eye"></i> Preview
@@ -1209,7 +1209,7 @@
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-link"></i>
-                            LINK CARD
+                            SHORT LINK CARD
                         </label>
                         <div class="link-container">
                             <span class="short-link" id="generatedLink">https://fiorcard.com/xxx</span>
@@ -1217,6 +1217,9 @@
                                 <i class="fas fa-copy"></i> Copy
                             </button>
                         </div>
+                        <small style="color: var(--success); display: block; margin-top: 0.25rem;">
+                            <i class="fas fa-check-circle"></i> Link sudah pendek! (tanpa parameter pesan)
+                        </small>
                     </div>
 
                     <!-- QR Code -->
@@ -1292,7 +1295,7 @@
                     History Cards
                 </h1>
                 <div class="page-subtitle">
-                    Riwayat semua card yang telah dibuat
+                    Riwayat semua card yang telah dibuat (dengan short link)
                 </div>
 
                 <div class="table-container">
@@ -1335,7 +1338,7 @@
                                placeholder="https://script.google.com/macros/s/.../exec"
                                value="https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec">
                         <small style="color: var(--gray-600); display: block; margin-top: 0.25rem;">
-                            <i class="fas fa-info-circle"></i> URL setelah deploy web app
+                            <i class="fas fa-info-circle"></i> URL setelah deploy web app (pastikan sudah update dengan fitur short link)
                         </small>
                     </div>
 
@@ -1346,6 +1349,9 @@
                         </label>
                         <input type="url" class="form-control" id="cardBaseUrl" 
                                value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
+                        <small style="color: var(--success); display: block; margin-top: 0.25rem;">
+                            <i class="fas fa-check-circle"></i> Gunakan dengan parameter &v=ID untuk short link
+                        </small>
                     </div>
 
                     <div style="display: flex; gap: 1rem;">
@@ -1434,14 +1440,15 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - MULTIPLE URL MEDIA
+        // FIOR CARD ADMIN - SHORT LINK VERSION
         // ============================================
 
         // ========== KONFIGURASI ==========
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
             CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
-            DEFAULT_THEME: "birthday"
+            DEFAULT_THEME: "birthday",
+            USE_SHORT_LINKS: true
         };
 
         // ========== THEMES - 11 TEMA ==========
@@ -1560,6 +1567,16 @@
             });
         }
 
+        // ========== GENERATE SHORT ID ==========
+        function generateShortId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let id = '';
+            for (let i = 0; i < 8; i++) {
+                id += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return id;
+        }
+
         // ========== MULTIPLE URL MEDIA MANAGEMENT ==========
         window.addMediaUrl = function() {
             const url = el.mediaUrlInput?.value.trim();
@@ -1579,7 +1596,7 @@
             let detectedType = type;
             if (type === 'auto') {
                 const extension = url.split('.').pop().toLowerCase();
-                if (['mp4', 'mov', 'webm', 'avi', 'mkv', 'youtube', 'vimeo', 'drive'].includes(extension) || 
+                if (['mp4', 'mov', 'webm', 'avi', 'mkv'].includes(extension) || 
                     url.includes('youtube.com') || url.includes('vimeo.com') || url.includes('drive.google.com')) {
                     detectedType = 'video';
                 } else {
@@ -1676,7 +1693,7 @@
             }
         }
 
-        // ========== CREATE CARD ==========
+        // ========== CREATE CARD (SHORT LINK VERSION) ==========
         window.createCard = async function() {
             const name = el.recipientName?.value.trim();
             const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
@@ -1688,13 +1705,39 @@
             if (!phone || phone.length < 10) { showAlert('Nomor WhatsApp tidak valid!', 'error'); return; }
             if (!message || message.length < 20) { showAlert('Pesan minimal 20 karakter!', 'error'); return; }
             
-            showLoading(true, 'Membuat card...');
+            showLoading(true, 'Membuat short link...');
             
             try {
-                // Build URL
-                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&t=${Date.now()}`;
+                // 🔥 GENERATE SHORT LINK
+                const messageId = generateShortId();
                 
-                // Add media parameters
+                // Simpan pesan ke Google Sheets
+                try {
+                    const saveFormData = new URLSearchParams();
+                    saveFormData.append('type', 'save_message');
+                    saveFormData.append('id', messageId);
+                    saveFormData.append('message', message);
+                    saveFormData.append('nama', name);
+                    saveFormData.append('no_hp', phone);
+                    
+                    const saveResponse = await fetch(CONFIG.SCRIPT_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: saveFormData.toString()
+                    });
+                    
+                    const saveResult = await saveResponse.json();
+                    if (saveResult.status !== 'success') {
+                        console.warn('Warning: Message save returned non-success');
+                    }
+                } catch (e) {
+                    console.warn('Warning: Could not save message to server, but continuing:', e);
+                }
+                
+                // Buat URL pendek (tanpa parameter msg)
+                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}`;
+                
+                // Tambahkan media URLs
                 if (state.mediaUrls.length > 0) {
                     state.mediaUrls.forEach((media, index) => {
                         const paramName = index === 0 ? 'media' : `media${index + 1}`;
@@ -1730,7 +1773,7 @@
                 
                 // Set WhatsApp button
                 const waNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
-                const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${cardUrl}`;
+                const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist (short link):\n\n${cardUrl}`;
                 if (el.whatsappResultBtn) {
                     el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
                 }
@@ -1750,7 +1793,7 @@
                     }, 200);
                 }
                 
-                // Save to Google Sheets (background)
+                // Save to Google Sheets (card history)
                 try {
                     const formData = new URLSearchParams();
                     formData.append('type', 'card');
@@ -1760,6 +1803,7 @@
                     formData.append('pesan', message);
                     formData.append('link', cardUrl);
                     formData.append('media_url', state.mediaUrls.map(m => m.url).join('||'));
+                    formData.append('message_id', messageId);
                     
                     await fetch(CONFIG.SCRIPT_URL, {
                         method: 'POST',
@@ -1774,7 +1818,7 @@
                     console.log('Save error (non-critical):', e);
                 }
                 
-                showAlert('✅ CARD BERHASIL DIBUAT!', 'success');
+                showAlert('✅ CARD BERHASIL DIBUAT! (Short Link)', 'success');
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -1790,7 +1834,10 @@
             const message = el.cardMessage?.value.trim() || 'Preview message';
             const theme = state.selectedTheme;
             
-            let url = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&preview=true`;
+            // Untuk preview, kita tetap buat short link
+            const messageId = 'preview_' + generateShortId();
+            
+            let url = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}&preview=true`;
             
             if (state.mediaUrls.length > 0) {
                 state.mediaUrls.forEach((media, index) => {
@@ -1882,7 +1929,7 @@
                     </head>
                     <body>
                         <img src="${qrcodeEl.src}" />
-                        <p>QR Code - Kartu Ucapan Digital FIOR Florist</p>
+                        <p>QR Code - Kartu Ucapan Digital FIOR Florist (Short Link)</p>
                         <p style="font-size: 12px; color: #666;">Scan untuk membuka kartu</p>
                     </body>
                 </html>
@@ -1897,7 +1944,7 @@
             if (!silent) showLoading(true, 'Testing koneksi...');
             
             try {
-                const response = await fetch(CONFIG.SCRIPT_URL, {
+                const response = await fetch(CONFIG.SCRIPT_URL + '?type=test&t=' + Date.now(), {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                 });
