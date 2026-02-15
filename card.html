@@ -1,51 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FIOR Card - DEBUG</title>
+    <title>FIOR Card - DEBUG FIXED</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+        .success { color: green; font-weight: bold; }
+        .param-item { background: white; padding: 8px; margin: 4px 0; border-left: 4px solid #4CAF50; }
+        .media-item { background: #e3f2fd; padding: 8px; margin: 4px 0; border-left: 4px solid #2196F3; }
+    </style>
 </head>
 <body>
-    <h1>🔍 DEBUG: Multiple Media Test</h1>
-    <div id="output" style="background: #f0f0f0; padding: 20px; font-family: monospace; white-space: pre-wrap;"></div>
+    <h1>🔍 DEBUG: Multiple Media Test (FIXED)</h1>
+    <div id="output" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
 
     <script>
         // Tangkap semua parameter URL
         const params = new URLSearchParams(window.location.search);
         const output = document.getElementById('output');
         
-        let text = '📌 SEMUA PARAMETER URL:\n';
+        let html = '<h2>📌 SEMUA PARAMETER URL:</h2>';
         
         // Tampilkan semua parameter yang ada
         for (let [key, value] of params.entries()) {
-            text += `   ${key} = ${value}\n`;
+            html += `<div class="param-item">🔹 <strong>${key}</strong> = ${value}</div>`;
         }
         
-        text += '\n📌 MEDIA YANG DITEMUKAN:\n';
+        html += '<h2 style="margin-top:30px;">📌 MEDIA YANG DITEMUKAN (dengan loop):</h2>';
         
-        // Cek media tunggal
+        // Cara 1: Loop traditional
         const mediaList = [];
+        let i = 1;
+        
+        // Cek media (parameter pertama)
         if (params.get('media')) {
             mediaList.push(params.get('media'));
-            text += `   media = ${params.get('media')}\n`;
+            html += `<div class="media-item">✅ <strong>media</strong> = ${params.get('media')}</div>`;
         }
         
-        // Cek media1, media2, media3, dst.
-        let i = 1;
+        // Loop untuk media1, media2, media3, dst.
         while (params.get(`media${i}`)) {
-            mediaList.push(params.get(`media${i}`));
-            text += `   media${i} = ${params.get(`media${i}`)}\n`;
+            const url = params.get(`media${i}`);
+            mediaList.push(url);
+            html += `<div class="media-item">✅ <strong>media${i}</strong> = ${url}</div>`;
             i++;
         }
         
-        text += `\n📊 TOTAL MEDIA: ${mediaList.length}\n`;
-        text += `\n📋 DAFTAR MEDIA:\n`;
+        html += `<h2 style="margin-top:30px;">📊 TOTAL MEDIA: <span class="success">${mediaList.length}</span></h2>`;
+        
+        html += '<h2>📋 DAFTAR MEDIA (array):</h2>';
         mediaList.forEach((url, idx) => {
-            text += `   ${idx + 1}. ${url}\n`;
+            html += `<div class="media-item">📌 ${idx + 1}. ${url}</div>`;
         });
         
-        text += `\n🔗 LINK YANG DIGUNAKAN:\n`;
-        text += `   ${window.location.href}\n`;
+        html += `<h2 style="margin-top:30px;">🔗 LINK YANG DIGUNAKAN:</h2>`;
+        html += `<div style="background: #eee; padding: 10px; word-break: break-all;">${window.location.href}</div>`;
         
-        output.textContent = text;
+        // Test dengan URL yang diberikan
+        html += `<h2 style="margin-top:30px;">🧪 TEST MANUAL:</h2>`;
+        html += `<div>params.get('media') = ${params.get('media')}</div>`;
+        html += `<div>params.get('media2') = ${params.get('media2')}</div>`;
+        html += `<div>params.get('media3') = ${params.get('media3')}</div>`;
+        
+        output.innerHTML = html;
+        
+        // Log ke console juga
+        console.log('📊 MEDIA LIST:', mediaList);
+        console.log('📌 ALL PARAMS:', Object.fromEntries(params));
     </script>
 </body>
 </html>
