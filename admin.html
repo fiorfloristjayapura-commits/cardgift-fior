@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIOR Card - Admin Panel (Max 10 Media)</title>
+    <title>FIOR Card - Admin Panel</title>
     
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -775,6 +775,11 @@
             border: 1px solid var(--gray-200);
         }
 
+        .qrcode-container img {
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -1075,7 +1080,7 @@
                     Buat Card Baru
                 </h1>
                 <div class="page-subtitle">
-                    Generate kartu ucapan digital dengan short link dan pilih masa berlaku (maksimal 10 media)
+                    Generate kartu ucapan digital dengan short link dan pilih masa berlaku
                 </div>
 
                 <div class="form-card">
@@ -1447,13 +1452,13 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - COMPLETE WITH 10 MEDIA LIMIT
+        // FIOR CARD ADMIN - COMPLETE SYSTEM
         // ============================================
 
         // Konfigurasi
         const CONFIG = {
-            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
-            CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
+            SCRIPT_URL: document.getElementById('scriptUrl')?.value || "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
+            CARD_BASE_URL: document.getElementById('cardBaseUrl')?.value || "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
             DEFAULT_THEME: "birthday",
             DEFAULT_EXPIRY: "90"
         };
@@ -1517,6 +1522,10 @@
                 'expiry30', 'expiry90', 'expiryNever', 'selectedExpiry'
             ];
             ids.forEach(id => el[id] = document.getElementById(id));
+            
+            // Update CONFIG dengan nilai dari input
+            if (el.scriptUrl) CONFIG.SCRIPT_URL = el.scriptUrl.value;
+            if (el.cardBaseUrl) CONFIG.CARD_BASE_URL = el.cardBaseUrl.value;
         }
 
         function updateDateTime() {
@@ -1583,12 +1592,11 @@
             return id;
         }
 
-        // Media Management dengan batas 10
+        // Media Management
         window.addMediaUrl = function() {
             const url = el.mediaUrlInput?.value.trim();
             const type = el.mediaTypeSelect?.value || 'auto';
             
-            // Cek batas maksimal 10
             if (state.mediaUrls.length >= 10) {
                 showAlert('Maksimal 10 media! Hapus beberapa untuk menambah.', 'error');
                 return;
@@ -1604,7 +1612,6 @@
                 return;
             }
             
-            // Detect media type
             let detectedType = type;
             if (type === 'auto') {
                 const extension = url.split('.').pop().toLowerCase();
@@ -1641,7 +1648,7 @@
         function renderMediaList() {
             if (!el.mediaListContainer) return;
             if (state.mediaUrls.length === 0) {
-                el.mediaListContainer.innerHTML = '<div style="text-align: center; padding: 2rem;">Belum ada media</div>';
+                el.mediaListContainer.innerHTML = '<div style="text-align: center; padding: 2rem; background: var(--soft-white); border-radius: var(--radius-lg);">Belum ada media</div>';
                 return;
             }
             
@@ -1679,15 +1686,9 @@
                 el.resultMediaCount.textContent = `${state.mediaUrls.length} Media (${state.mediaUrls.filter(m => m.type === 'image').length} Gambar, ${state.mediaUrls.filter(m => m.type === 'video').length} Video)`;
             }
             
-            // Enable/disable tombol berdasarkan batas
             if (el.addMediaBtn) {
-                if (state.mediaUrls.length >= 10) {
-                    el.addMediaBtn.disabled = true;
-                    el.addMediaBtn.style.opacity = '0.5';
-                } else {
-                    el.addMediaBtn.disabled = false;
-                    el.addMediaBtn.style.opacity = '1';
-                }
+                el.addMediaBtn.disabled = state.mediaUrls.length >= 10;
+                el.addMediaBtn.style.opacity = state.mediaUrls.length >= 10 ? '0.5' : '1';
             }
         }
 
@@ -1708,7 +1709,7 @@
             try {
                 const messageId = generateShortId();
                 
-                // Format media URLs untuk disimpan di database (dipisah dengan ||)
+                // Format media URLs untuk disimpan di database
                 const mediaUrlsString = state.mediaUrls.map(m => m.url).join('||');
                 const totalMedia = state.mediaUrls.length;
                 
@@ -1738,7 +1739,7 @@
                     throw new Error(saveResult.message || 'Gagal menyimpan pesan');
                 }
                 
-                // Build URL dengan parameter media1, media2, media3, dst.
+                // Build URL
                 let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}`;
                 
                 if (state.mediaUrls.length > 0) {
@@ -1943,7 +1944,7 @@
             } catch (error) {
                 console.error('Load customers error:', error);
                 if (el.customersTableBody) {
-                    el.customersTableBody.innerHTML = '<tr><td colspan="6" style="color: var(--danger);">Gagal memuat data</td></tr>';
+                    el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
                 }
             }
         }
@@ -1951,7 +1952,7 @@
         function renderCustomersTable() {
             if (!el.customersTableBody) return;
             if (state.customers.length === 0) {
-                el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Belum ada data</td></tr>';
+                el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Belum ada data customer</td></tr>';
                 return;
             }
             let html = '';
@@ -1991,7 +1992,7 @@
             } catch (error) {
                 console.error('Load cards error:', error);
                 if (el.historyTableBody) {
-                    el.historyTableBody.innerHTML = '<tr><td colspan="6" style="color: var(--danger);">Gagal memuat data</td></tr>';
+                    el.historyTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
                 }
             }
         }
