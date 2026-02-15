@@ -11,19 +11,16 @@
     <!-- Google Fonts Premium -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Swiper CSS untuk carousel -->
+    <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
     <style>
-        /* ===== RESET & VARIABLES ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        /* ===== THEMES ===== */
         .theme-birthday {
             --primary: #1e3a5f;
             --primary-light: #2b4c73;
@@ -31,12 +28,6 @@
             --accent-light: #f5e8c6;
             --gradient: linear-gradient(145deg, #1e3a5f, #2b4c73);
             --bg: #fff9f0;
-            --bubble-1: #d4af37;
-            --bubble-2: #f5e8c6;
-            --bubble-3: #ffd700;
-            --confetti-1: #d4af37;
-            --confetti-2: #1e3a5f;
-            --confetti-3: #ff6b6b;
         }
         
         .theme-valentine {
@@ -46,12 +37,6 @@
             --accent-light: #ffe9ed;
             --gradient: linear-gradient(145deg, #b76e79, #c98b95);
             --bg: #fff5f8;
-            --bubble-1: #ffb6c1;
-            --bubble-2: #ffc0cb;
-            --bubble-3: #ff69b4;
-            --confetti-1: #ffb6c1;
-            --confetti-2: #ff69b4;
-            --confetti-3: #ff1493;
         }
         
         .theme-wedding {
@@ -61,12 +46,6 @@
             --accent-light: #f7f5ed;
             --gradient: linear-gradient(145deg, #b2ac88, #c5bf9c);
             --bg: #fffcf9;
-            --bubble-1: #e6d5b8;
-            --bubble-2: #d4c4a8;
-            --bubble-3: #f0e0c0;
-            --confetti-1: #e6d5b8;
-            --confetti-2: #d4c4a8;
-            --confetti-3: #f0e0c0;
         }
         
         .theme-anniversary {
@@ -76,12 +55,6 @@
             --accent-light: #f5ebf9;
             --gradient: linear-gradient(145deg, #9c89b8, #b39bc0);
             --bg: #fbf5ff;
-            --bubble-1: #e0b0b5;
-            --bubble-2: #c1a0c5;
-            --bubble-3: #d8bfd8;
-            --confetti-1: #e0b0b5;
-            --confetti-2: #c1a0c5;
-            --confetti-3: #d8bfd8;
         }
         
         .theme-graduation {
@@ -91,12 +64,6 @@
             --accent-light: #edf3e8;
             --gradient: linear-gradient(145deg, #6b8c5e, #86a075);
             --bg: #f7fcf5;
-            --bubble-1: #c5b783;
-            --bubble-2: #a8c3a0;
-            --bubble-3: #98b88b;
-            --confetti-1: #c5b783;
-            --confetti-2: #86a075;
-            --confetti-3: #6b8c5e;
         }
         
         .theme-condolence {
@@ -106,12 +73,6 @@
             --accent-light: #f0efea;
             --gradient: linear-gradient(145deg, #6b705c, #848875);
             --bg: #fbfaf8;
-            --bubble-1: #b7b7a4;
-            --bubble-2: #a5a58d;
-            --bubble-3: #cbccb5;
-            --confetti-1: #b7b7a4;
-            --confetti-2: #a5a58d;
-            --confetti-3: #cbccb5;
         }
         
         .theme-congratulation {
@@ -121,12 +82,6 @@
             --accent-light: #ffe6d5;
             --gradient: linear-gradient(145deg, #ff7f50, #ff9f4b);
             --bg: #fff5ed;
-            --bubble-1: #ffb347;
-            --bubble-2: #ff9f4b;
-            --bubble-3: #ffa07a;
-            --confetti-1: #ffb347;
-            --confetti-2: #ff7f50;
-            --confetti-3: #ffa07a;
         }
         
         .theme-imlek {
@@ -136,12 +91,6 @@
             --accent-light: #ffecb3;
             --gradient: linear-gradient(145deg, #d32f2f, #b71c1c);
             --bg: #fff8e1;
-            --bubble-1: #ffb300;
-            --bubble-2: #ff6f61;
-            --bubble-3: #ffaa00;
-            --confetti-1: #ffb300;
-            --confetti-2: #d32f2f;
-            --confetti-3: #ffaa00;
         }
         
         .theme-natal {
@@ -151,12 +100,6 @@
             --accent-light: #c8e6c9;
             --gradient: linear-gradient(145deg, #c41e3a, #a51d36);
             --bg: #e8f5e9;
-            --bubble-1: #2e7d32;
-            --bubble-2: #c41e3a;
-            --bubble-3: #ffd700;
-            --confetti-1: #ffd700;
-            --confetti-2: #c41e3a;
-            --confetti-3: #2e7d32;
         }
         
         .theme-lebaran {
@@ -166,12 +109,6 @@
             --accent-light: #ffe0b2;
             --gradient: linear-gradient(145deg, #1b5e20, #2e7d32);
             --bg: #fff3e0;
-            --bubble-1: #ff8f00;
-            --bubble-2: #66bb6a;
-            --bubble-3: #ffb74d;
-            --confetti-1: #ff8f00;
-            --confetti-2: #1b5e20;
-            --confetti-3: #66bb6a;
         }
 
         body {
@@ -184,11 +121,8 @@
             align-items: center;
             padding: 16px;
             transition: background 0.3s ease;
-            position: relative;
-            overflow-x: hidden;
         }
 
-        /* ===== ANIMASI BACKGROUND LUCU & ELEGAN ===== */
         .background-animation {
             position: fixed;
             top: 0;
@@ -200,93 +134,24 @@
             pointer-events: none;
         }
 
-        /* Bubbles / Balon-balon */
         .bubble {
             position: absolute;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255,255,255,0.6);
             backdrop-filter: blur(2px);
             border-radius: 50%;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             animation: floatBubble 20s infinite ease-in-out;
-            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .bubble-1 {
-            width: 150px;
-            height: 150px;
-            top: 10%;
-            left: 5%;
-            background: radial-gradient(circle at 30% 30%, var(--bubble-1), transparent 70%);
-            animation-delay: 0s;
-            opacity: 0.2;
-        }
-
-        .bubble-2 {
-            width: 200px;
-            height: 200px;
-            bottom: 20%;
-            right: 5%;
-            background: radial-gradient(circle at 70% 70%, var(--bubble-2), transparent 70%);
-            animation-delay: 2s;
-            opacity: 0.15;
-        }
-
-        .bubble-3 {
-            width: 100px;
-            height: 100px;
-            top: 40%;
-            right: 15%;
-            background: radial-gradient(circle at 50% 50%, var(--bubble-3), transparent 70%);
-            animation-delay: 1s;
-            opacity: 0.25;
-        }
-
-        .bubble-4 {
-            width: 80px;
-            height: 80px;
-            bottom: 10%;
-            left: 15%;
-            background: radial-gradient(circle at 60% 40%, var(--bubble-1), transparent 70%);
-            animation-delay: 3s;
-            opacity: 0.2;
-        }
-
-        .bubble-5 {
-            width: 60px;
-            height: 60px;
-            top: 70%;
-            left: 30%;
-            background: radial-gradient(circle at 40% 60%, var(--bubble-2), transparent 70%);
-            animation-delay: 1.5s;
-            opacity: 0.3;
-        }
-
-        .bubble-6 {
-            width: 120px;
-            height: 120px;
-            top: 15%;
-            right: 25%;
-            background: radial-gradient(circle at 30% 70%, var(--bubble-3), transparent 70%);
-            animation-delay: 2.5s;
-            opacity: 0.2;
-        }
+        .bubble-1 { width: 150px; height: 150px; top: 10%; left: 5%; background: radial-gradient(circle at 30% 30%, var(--accent), transparent 70%); opacity: 0.2; }
+        .bubble-2 { width: 200px; height: 200px; bottom: 20%; right: 5%; background: radial-gradient(circle at 70% 70%, var(--primary), transparent 70%); opacity: 0.15; }
+        .bubble-3 { width: 100px; height: 100px; top: 40%; right: 15%; background: radial-gradient(circle at 50% 50%, var(--accent-light), transparent 70%); opacity: 0.25; }
 
         @keyframes floatBubble {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg) scale(1);
-            }
-            25% {
-                transform: translateY(-30px) rotate(5deg) scale(1.05);
-            }
-            50% {
-                transform: translateY(20px) rotate(-5deg) scale(0.95);
-            }
-            75% {
-                transform: translateY(-15px) rotate(3deg) scale(1.02);
-            }
+            0%,100% { transform: translateY(0) rotate(0deg) scale(1); }
+            25% { transform: translateY(-30px) rotate(5deg) scale(1.05); }
+            50% { transform: translateY(20px) rotate(-5deg) scale(0.95); }
         }
 
-        /* Confetti / Kertas warna-warni */
         .confetti {
             position: absolute;
             width: 10px;
@@ -294,77 +159,17 @@
             opacity: 0.3;
             animation: confettiFall 15s infinite linear;
             border-radius: 2px;
-            transform-origin: center;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
 
-        .confetti-1 {
-            left: 10%;
-            top: -10%;
-            width: 12px;
-            height: 12px;
-            background: var(--confetti-1);
-            animation-duration: 18s;
-            animation-delay: 0s;
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-        }
-
-        .confetti-2 {
-            left: 30%;
-            top: -10%;
-            width: 15px;
-            height: 15px;
-            background: var(--confetti-2);
-            animation-duration: 15s;
-            animation-delay: 2s;
-            border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
-        }
-
-        .confetti-3 {
-            left: 50%;
-            top: -10%;
-            width: 8px;
-            height: 8px;
-            background: var(--confetti-3);
-            animation-duration: 20s;
-            animation-delay: 1s;
-            border-radius: 20% 80% 80% 20% / 80% 20% 80% 20%;
-        }
-
-        .confetti-4 {
-            left: 70%;
-            top: -10%;
-            width: 18px;
-            height: 18px;
-            background: var(--confetti-1);
-            animation-duration: 22s;
-            animation-delay: 3s;
-            border-radius: 80% 20% 20% 80% / 40% 60% 40% 60%;
-        }
-
-        .confetti-5 {
-            left: 90%;
-            top: -10%;
-            width: 10px;
-            height: 10px;
-            background: var(--confetti-2);
-            animation-duration: 17s;
-            animation-delay: 4s;
-            border-radius: 60% 40% 40% 60% / 30% 70% 30% 70%;
-        }
+        .confetti-1 { left: 10%; top: -10%; width: 12px; height: 12px; background: var(--accent); animation-duration: 18s; }
+        .confetti-2 { left: 30%; top: -10%; width: 15px; height: 15px; background: var(--primary); animation-duration: 15s; }
+        .confetti-3 { left: 50%; top: -10%; width: 8px; height: 8px; background: var(--accent-light); animation-duration: 20s; }
 
         @keyframes confettiFall {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0.3; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Sparkles / Kilauan */
         .sparkle {
             position: absolute;
             width: 4px;
@@ -376,185 +181,15 @@
             opacity: 0.4;
         }
 
-        .sparkle-1 { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle-1 { top: 20%; left: 20%; }
         .sparkle-2 { top: 80%; left: 80%; animation-delay: 1s; }
         .sparkle-3 { top: 30%; left: 90%; animation-delay: 2s; }
-        .sparkle-4 { top: 70%; left: 10%; animation-delay: 0.5s; }
-        .sparkle-5 { top: 40%; left: 40%; animation-delay: 1.5s; }
-        .sparkle-6 { top: 60%; left: 60%; animation-delay: 2.5s; }
-        .sparkle-7 { top: 85%; left: 25%; animation-delay: 0.8s; }
-        .sparkle-8 { top: 15%; left: 75%; animation-delay: 1.8s; }
-        .sparkle-9 { top: 45%; left: 15%; animation-delay: 0.3s; }
-        .sparkle-10 { top: 55%; left: 85%; animation-delay: 2.2s; }
-        .sparkle-11 { top: 25%; left: 45%; animation-delay: 1.2s; }
-        .sparkle-12 { top: 75%; left: 55%; animation-delay: 0.7s; }
 
         @keyframes sparkleTwinkle {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.2;
-                box-shadow: 0 0 5px 1px var(--accent);
-            }
-            50% {
-                transform: scale(2.5);
-                opacity: 0.8;
-                box-shadow: 0 0 20px 6px var(--accent);
-            }
+            0%,100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(2.5); opacity: 0.8; }
         }
 
-        /* Floating hearts / love (khusus Valentine) */
-        .heart {
-            position: absolute;
-            color: var(--bubble-1);
-            font-size: 24px;
-            opacity: 0.2;
-            animation: heartFloat 12s infinite linear;
-            pointer-events: none;
-            filter: drop-shadow(0 0 5px var(--accent));
-        }
-
-        .heart-1 { top: 10%; left: 10%; animation-delay: 0s; font-size: 20px; }
-        .heart-2 { top: 40%; left: 85%; animation-delay: 3s; font-size: 28px; }
-        .heart-3 { top: 70%; left: 20%; animation-delay: 6s; font-size: 24px; }
-        .heart-4 { top: 85%; left: 70%; animation-delay: 2s; font-size: 22px; }
-        .heart-5 { top: 25%; left: 50%; animation-delay: 4s; font-size: 18px; }
-        .heart-6 { top: 60%; left: 40%; animation-delay: 5s; font-size: 26px; }
-
-        @keyframes heartFloat {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0.1;
-            }
-            50% {
-                transform: translateY(-40px) rotate(15deg);
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(40px) rotate(-15deg);
-                opacity: 0.1;
-            }
-        }
-
-        /* Wave / Gelombang */
-        .wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(180deg, transparent, rgba(255,255,255,0.2));
-            border-radius: 100% 100% 0 0;
-            animation: waveMove 8s infinite ease-in-out;
-            opacity: 0.2;
-        }
-
-        .wave-1 {
-            bottom: 0;
-            background: linear-gradient(180deg, transparent, var(--bubble-1));
-            opacity: 0.1;
-            height: 120px;
-            animation: waveMove 12s infinite;
-        }
-
-        .wave-2 {
-            bottom: 20px;
-            background: linear-gradient(180deg, transparent, var(--bubble-2));
-            opacity: 0.1;
-            height: 80px;
-            animation: waveMove 8s infinite reverse;
-        }
-
-        @keyframes waveMove {
-            0%, 100% {
-                transform: scaleY(1) translateX(0);
-            }
-            25% {
-                transform: scaleY(1.1) translateX(-10px);
-            }
-            50% {
-                transform: scaleY(1.2) translateX(0);
-            }
-            75% {
-                transform: scaleY(1.1) translateX(10px);
-            }
-        }
-
-        /* Floating stars (khusus Natal) */
-        .star {
-            position: absolute;
-            color: #ffd700;
-            font-size: 20px;
-            opacity: 0.2;
-            animation: starTwinkle 4s infinite ease-in-out;
-            filter: drop-shadow(0 0 5px gold);
-        }
-
-        .star-1 { top: 15%; left: 15%; animation-delay: 0s; }
-        .star-2 { top: 30%; left: 80%; animation-delay: 1s; }
-        .star-3 { top: 70%; left: 25%; animation-delay: 2s; }
-        .star-4 { top: 85%; left: 75%; animation-delay: 3s; }
-        .star-5 { top: 45%; left: 45%; animation-delay: 1.5s; }
-
-        @keyframes starTwinkle {
-            0%, 100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 0.1;
-            }
-            50% {
-                transform: scale(1.5) rotate(15deg);
-                opacity: 0.4;
-            }
-        }
-
-        /* Moon (khusus Lebaran) */
-        .moon {
-            position: absolute;
-            top: 10%;
-            right: 10%;
-            font-size: 40px;
-            opacity: 0.2;
-            animation: moonGlow 6s infinite ease-in-out;
-            filter: drop-shadow(0 0 10px var(--accent));
-        }
-
-        @keyframes moonGlow {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.2;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 0.4;
-            }
-        }
-
-        /* Lantern (khusus Imlek) */
-        .lantern {
-            position: absolute;
-            color: #ffb300;
-            font-size: 30px;
-            opacity: 0.2;
-            animation: lanternSwing 5s infinite ease-in-out;
-            transform-origin: top center;
-            filter: drop-shadow(0 0 5px #ff8f00);
-        }
-
-        .lantern-1 { top: 20%; left: 10%; animation-delay: 0s; }
-        .lantern-2 { top: 70%; right: 10%; animation-delay: 2s; }
-
-        @keyframes lanternSwing {
-            0%, 100% {
-                transform: rotate(0deg);
-            }
-            25% {
-                transform: rotate(5deg);
-            }
-            75% {
-                transform: rotate(-5deg);
-            }
-        }
-
-        /* ===== MOBILE CONTAINER ===== */
         .mobile-container {
             max-width: 450px;
             width: 100%;
@@ -563,16 +198,15 @@
             z-index: 10;
         }
 
-        /* ===== MAIN CARD ===== */
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             border-radius: 32px;
             overflow: hidden;
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             position: relative;
             animation: slideUp 0.5s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         @keyframes slideUp {
@@ -591,7 +225,6 @@
             z-index: 2;
         }
 
-        /* ===== EXPIRY BADGE ===== */
         .expiry-badge-container {
             display: flex;
             justify-content: flex-end;
@@ -606,59 +239,37 @@
             border-radius: 50px;
             font-size: 0.75rem;
             font-weight: 600;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255,255,255,0.9);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(0,0,0,0.1);
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             color: var(--primary);
         }
 
-        .expiry-badge i {
-            font-size: 0.7rem;
-            color: var(--accent);
-        }
-
         .expiry-badge.permanent {
-            background: rgba(124, 58, 237, 0.1);
+            background: rgba(124,58,237,0.1);
             color: #7c3aed;
             border-color: #7c3aed;
         }
 
-        .expiry-badge.permanent i {
-            color: #7c3aed;
-        }
-
         .expiry-badge.warning {
-            background: rgba(245, 158, 11, 0.1);
+            background: rgba(245,158,11,0.1);
             color: #b45309;
             border-color: #f59e0b;
         }
 
-        .expiry-badge.warning i {
-            color: #b45309;
-        }
-
         .expiry-badge.danger {
-            background: rgba(220, 38, 38, 0.1);
+            background: rgba(220,38,38,0.1);
             color: #b91c1c;
             border-color: #dc2626;
         }
 
-        .expiry-badge.danger i {
-            color: #b91c1c;
-        }
-
         .expiry-badge.success {
-            background: rgba(15, 118, 110, 0.1);
+            background: rgba(15,118,110,0.1);
             color: #0f766e;
             border-color: #0f766e;
         }
 
-        .expiry-badge.success i {
-            color: #0f766e;
-        }
-
-        /* ===== CARD HEADER ===== */
         .card-header {
             background: var(--gradient);
             padding: 40px 20px 48px;
@@ -679,48 +290,16 @@
             opacity: 0.1;
         }
 
-        /* Snow effect untuk Natal */
-        .snow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .snowflake {
-            position: absolute;
-            color: white;
-            font-size: 20px;
-            opacity: 0.3;
-            animation: snowFall 10s infinite linear;
-            filter: drop-shadow(0 0 5px white);
-        }
-
-        @keyframes snowFall {
-            0% {
-                transform: translateY(-50px) rotate(0deg);
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(300px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
         .theme-emoji {
             font-size: 64px;
             margin-bottom: 8px;
             animation: float 3s ease-in-out infinite;
             display: inline-block;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-            position: relative;
-            z-index: 5;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
+            0%,100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
 
@@ -731,8 +310,6 @@
             color: white;
             margin-bottom: 8px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 5;
         }
 
         .to-label {
@@ -741,8 +318,6 @@
             color: rgba(255,255,255,0.8);
             margin-bottom: 8px;
             text-transform: uppercase;
-            position: relative;
-            z-index: 5;
         }
 
         .recipient-name {
@@ -754,16 +329,12 @@
             line-height: 1.3;
             padding: 0 16px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 5;
         }
 
-        /* ===== CARD BODY ===== */
         .card-body {
             padding: 32px 20px;
         }
 
-        /* ===== PESAN ===== */
         .message-container {
             background: linear-gradient(145deg, #fff9f0, white);
             border-radius: 24px;
@@ -801,7 +372,6 @@
             font-weight: 500;
         }
 
-        /* ===== CAROUSEL SLIDER ===== */
         .media-section {
             margin-bottom: 24px;
             display: none;
@@ -834,10 +404,6 @@
             color: var(--primary);
         }
 
-        .media-header i {
-            color: var(--accent);
-        }
-
         .media-count {
             background: var(--accent-light);
             padding: 4px 12px;
@@ -847,7 +413,6 @@
             color: var(--primary);
         }
 
-        /* Swiper Carousel */
         .swiper {
             width: 100%;
             height: 300px;
@@ -870,12 +435,6 @@
             object-fit: cover;
         }
 
-        .swiper-slide video {
-            object-fit: contain;
-            background: #000;
-        }
-
-        /* Media Type Badge */
         .media-type-badge {
             position: absolute;
             bottom: 16px;
@@ -889,16 +448,9 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            border: 1px solid rgba(255,255,255,0.2);
             z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        .media-type-badge i {
-            font-size: 0.8rem;
-        }
-
-        /* Video Control */
         .video-control {
             position: absolute;
             bottom: 16px;
@@ -914,21 +466,9 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
             z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        .video-control:active {
-            transform: scale(0.9);
-            background: var(--accent);
-        }
-
-        .video-control i {
-            font-size: 1.1rem;
-        }
-
-        /* Swiper Navigation */
         .swiper-button-next,
         .swiper-button-prev {
             color: white;
@@ -936,35 +476,18 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            backdrop-filter: blur(4px);
-            transition: all 0.2s ease;
-        }
-
-        .swiper-button-next:after,
-        .swiper-button-prev:after {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-            background: var(--accent);
         }
 
         .swiper-pagination-bullet {
             background: white;
             opacity: 0.7;
-            width: 8px;
-            height: 8px;
         }
 
         .swiper-pagination-bullet-active {
             background: var(--accent);
             opacity: 1;
-            transform: scale(1.2);
         }
 
-        /* Slide Counter */
         .slide-counter {
             position: absolute;
             top: 16px;
@@ -977,28 +500,14 @@
             font-size: 0.8rem;
             font-weight: 600;
             z-index: 10;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        .slide-counter i {
-            margin-right: 6px;
-            color: var(--accent);
-        }
-
-        /* Thumbnails */
         .thumbnails {
             display: flex;
             gap: 8px;
             overflow-x: auto;
             padding: 8px 4px;
             margin-top: 8px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .thumbnails::-webkit-scrollbar {
-            display: none;
         }
 
         .thumbnail {
@@ -1008,9 +517,7 @@
             overflow: hidden;
             border: 3px solid transparent;
             transition: all 0.2s ease;
-            position: relative;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .thumbnail.active {
@@ -1031,30 +538,6 @@
             justify-content: center;
         }
 
-        .thumbnail.video-thumb i {
-            color: white;
-            font-size: 1.5rem;
-            opacity: 0.8;
-        }
-
-        .thumbnail-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.7);
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        /* ===== CONTACT ===== */
         .contact-row {
             display: flex;
             align-items: center;
@@ -1065,7 +548,6 @@
             background: linear-gradient(145deg, #f8f9fa, white);
             border-radius: 50px;
             border: 1px solid var(--accent-light);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .contact-item {
@@ -1077,26 +559,8 @@
             font-size: 0.85rem;
             padding: 6px 12px;
             border-radius: 50px;
-            transition: all 0.2s ease;
         }
 
-        .contact-item:active {
-            background: var(--accent-light);
-            transform: scale(0.95);
-        }
-
-        .contact-item i {
-            color: var(--accent);
-            font-size: 1.1rem;
-        }
-
-        .contact-divider {
-            width: 1px;
-            height: 24px;
-            background: var(--accent-light);
-        }
-
-        /* ===== FOOTER ===== */
         .card-footer {
             padding: 24px 20px 32px;
             text-align: center;
@@ -1116,7 +580,7 @@
         }
 
         @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0); }
+            0%,100% { transform: translateY(0); }
             50% { transform: translateY(-4px); }
         }
 
@@ -1135,7 +599,6 @@
             text-transform: uppercase;
         }
 
-        /* ===== ACTION BUTTONS ===== */
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -1157,27 +620,17 @@
             color: white;
             text-decoration: none;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             cursor: pointer;
-        }
-
-        .action-btn:active {
-            transform: scale(0.95);
         }
 
         .action-btn.share {
             background: #25D366;
         }
 
-        .action-btn.whatsapp {
-            background: var(--gradient);
-        }
-
         .action-btn.print {
             background: #64748b;
         }
 
-        /* ===== MODAL ZOOM ===== */
         .modal {
             display: none;
             position: fixed;
@@ -1195,7 +648,6 @@
 
         .modal.active {
             display: flex;
-            animation: fadeIn 0.3s ease;
         }
 
         .modal-content {
@@ -1210,7 +662,6 @@
             max-height: 80vh;
             border-radius: 24px;
             border: 3px solid white;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         .modal-close {
@@ -1224,21 +675,8 @@
             border: none;
             font-size: 1.3rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: black;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: all 0.2s ease;
         }
 
-        .modal-close:active {
-            transform: scale(0.9);
-            background: var(--accent);
-            color: white;
-        }
-
-        /* ===== NOTIFICATION ===== */
         .notification {
             position: fixed;
             top: 20px;
@@ -1251,35 +689,16 @@
             padding: 14px 20px;
             border-radius: 50px;
             border-left: 4px solid var(--accent);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             display: none;
             align-items: center;
             gap: 12px;
             z-index: 2100;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .notification.show {
             display: flex;
         }
 
-        .notification i {
-            color: var(--accent);
-            font-size: 1.2rem;
-        }
-
-        /* ===== LOADING ===== */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -1299,7 +718,6 @@
             padding: 24px;
             border-radius: 32px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         .loading-spinner {
@@ -1316,87 +734,27 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Responsive adjustments */
         @media (max-width: 380px) {
-            .greeting {
-                font-size: 1.8rem;
-            }
-            
-            .recipient-name {
-                font-size: 1.5rem;
-            }
-            
-            .swiper {
-                height: 250px;
-            }
-            
-            .thumbnail {
-                flex: 0 0 60px;
-                height: 60px;
-            }
+            .greeting { font-size: 1.8rem; }
+            .recipient-name { font-size: 1.5rem; }
+            .swiper { height: 250px; }
+            .thumbnail { flex: 0 0 60px; height: 60px; }
         }
     </style>
 </head>
 <body class="theme-birthday">
-    <!-- ===== ANIMASI BACKGROUND LUCU & ELEGAN ===== -->
     <div class="background-animation">
-        <!-- Bubbles / Balon-balon -->
         <div class="bubble bubble-1"></div>
         <div class="bubble bubble-2"></div>
         <div class="bubble bubble-3"></div>
-        <div class="bubble bubble-4"></div>
-        <div class="bubble bubble-5"></div>
-        <div class="bubble bubble-6"></div>
-        
-        <!-- Confetti / Kertas warna -->
         <div class="confetti confetti-1"></div>
         <div class="confetti confetti-2"></div>
         <div class="confetti confetti-3"></div>
-        <div class="confetti confetti-4"></div>
-        <div class="confetti confetti-5"></div>
-        
-        <!-- Sparkles / Kilauan -->
         <div class="sparkle sparkle-1"></div>
         <div class="sparkle sparkle-2"></div>
         <div class="sparkle sparkle-3"></div>
-        <div class="sparkle sparkle-4"></div>
-        <div class="sparkle sparkle-5"></div>
-        <div class="sparkle sparkle-6"></div>
-        <div class="sparkle sparkle-7"></div>
-        <div class="sparkle sparkle-8"></div>
-        <div class="sparkle sparkle-9"></div>
-        <div class="sparkle sparkle-10"></div>
-        <div class="sparkle sparkle-11"></div>
-        <div class="sparkle sparkle-12"></div>
-        
-        <!-- Floating Hearts (akan diatur via JS) -->
-        <div class="heart heart-1">❤️</div>
-        <div class="heart heart-2">❤️</div>
-        <div class="heart heart-3">❤️</div>
-        <div class="heart heart-4">❤️</div>
-        <div class="heart heart-5">❤️</div>
-        <div class="heart heart-6">❤️</div>
-        
-        <!-- Floating Stars (khusus Natal) -->
-        <div class="star star-1">⭐</div>
-        <div class="star star-2">⭐</div>
-        <div class="star star-3">⭐</div>
-        <div class="star star-4">⭐</div>
-        <div class="star star-5">⭐</div>
-        
-        <!-- Moon (khusus Lebaran) -->
-        <div class="moon">🌙</div>
-        
-        <!-- Lantern (khusus Imlek) -->
-        <div class="lantern lantern-1">🏮</div>
-        <div class="lantern lantern-2">🏮</div>
-        
-        <!-- Waves / Gelombang -->
-        <div class="wave wave-1"></div>
-        <div class="wave wave-2"></div>
     </div>
 
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="loading-spinner"></div>
@@ -1404,13 +762,11 @@
         </div>
     </div>
 
-    <!-- Notification -->
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
         <span id="notificationMessage"></span>
     </div>
 
-    <!-- Modal Zoom -->
     <div class="modal" id="mediaModal">
         <button class="modal-close" onclick="closeModal()">
             <i class="fas fa-times"></i>
@@ -1421,22 +777,16 @@
         </div>
     </div>
 
-    <!-- Mobile Container -->
     <div class="mobile-container">
-        <!-- Main Card -->
         <div class="card">
-            <!-- Card Header -->
             <div class="card-header">
-                <div class="snow" id="snowEffect"></div>
                 <div class="theme-emoji" id="themeEmoji">🎂</div>
                 <div class="greeting" id="greetingText">Happy Birthday</div>
                 <div class="to-label">KEPADA YTH.</div>
                 <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
             </div>
 
-            <!-- Card Body -->
             <div class="card-body">
-                <!-- Expiry Badge -->
                 <div class="expiry-badge-container">
                     <div class="expiry-badge" id="expiryBadge">
                         <i class="fas fa-clock"></i>
@@ -1444,27 +794,21 @@
                     </div>
                 </div>
 
-                <!-- Message -->
                 <div class="message-container">
                     <div class="message-quote">
                         <i class="fas fa-quote-right"></i>
                     </div>
                     <div class="message" id="messageText">
-                        [Pesan ucapan akan muncul di sini. Kartu ini dikirim dengan penuh kasih dari FIOR Florist.]
+                        [Pesan ucapan akan muncul di sini.]
                     </div>
                 </div>
 
-                <!-- Media Carousel -->
                 <div class="media-section" id="mediaSection">
                     <div class="media-header">
-                        <h3>
-                            <i class="fas fa-images"></i>
-                            Galeri Spesial
-                        </h3>
+                        <h3><i class="fas fa-images"></i> Galeri Spesial</h3>
                         <span class="media-count" id="mediaCount">0 Media</span>
                     </div>
 
-                    <!-- Swiper Carousel -->
                     <div class="swiper" id="mediaSwiper">
                         <div class="swiper-wrapper" id="carouselWrapper"></div>
                         <div class="swiper-pagination"></div>
@@ -1476,31 +820,25 @@
                         </div>
                     </div>
 
-                    <!-- Thumbnails -->
                     <div class="thumbnails" id="thumbnails"></div>
                 </div>
 
-                <!-- Contact Row -->
                 <div class="contact-row">
                     <a href="https://wa.me/6285337777585" target="_blank" class="contact-item">
-                        <i class="fab fa-whatsapp"></i>
-                        Admin
+                        <i class="fab fa-whatsapp"></i> Admin
                     </a>
                     <span class="contact-divider"></span>
                     <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="contact-item">
-                        <i class="fab fa-instagram"></i>
-                        @tokobungafior
+                        <i class="fab fa-instagram"></i> @tokobungafior
                     </a>
                 </div>
             </div>
 
-            <!-- Card Footer -->
             <div class="card-footer">
                 <div class="company-logo"></div>
                 <div class="company-name">FIOR Florist</div>
                 <div class="company-tagline">JAYAPURA • EST. 2020</div>
 
-                <!-- Action Buttons -->
                 <div class="action-buttons">
                     <button class="action-btn share" onclick="shareCard()">
                         <i class="fas fa-share-alt"></i>
@@ -1516,98 +854,52 @@
         </div>
     </div>
 
-    <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
     <script>
-        // ============================================
-        // FIOR CARD - WITH PER-CARD EXPIRY BADGE (FIXED)
-        // ============================================
-
-        // ========== KONFIGURASI ==========
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec"
         };
 
-        // ========== THEMES ==========
         const THEMES = {
-            birthday: { 
-                emoji: '🎂', 
-                greeting: 'Happy Birthday'
-            },
-            valentine: { 
-                emoji: '❤️', 
-                greeting: 'Happy Valentine'
-            },
-            wedding: { 
-                emoji: '💍', 
-                greeting: 'Congratulations'
-            },
-            anniversary: { 
-                emoji: '🎉',
-                greeting: 'Happy Anniversary'
-            },
-            graduation: { 
-                emoji: '🎓', 
-                greeting: 'Congratulations!'
-            },
-            condolence: { 
-                emoji: '🕊️', 
-                greeting: 'Deepest Condolences'
-            },
-            congratulation: { 
-                emoji: '🎊', 
-                greeting: 'Congratulations!'
-            },
-            imlek: { 
-                emoji: '🧧', 
-                greeting: 'Gong Xi Fa Cai'
-            },
-            natal: { 
-                emoji: '🎄', 
-                greeting: 'Merry Christmas'
-            },
-            lebaran: { 
-                emoji: '🌙', 
-                greeting: 'Selamat Lebaran'
-            }
+            birthday: { emoji: '🎂', greeting: 'Happy Birthday' },
+            valentine: { emoji: '❤️', greeting: 'Happy Valentine' },
+            wedding: { emoji: '💍', greeting: 'Congratulations' },
+            anniversary: { emoji: '🎉', greeting: 'Happy Anniversary' },
+            graduation: { emoji: '🎓', greeting: 'Congratulations!' },
+            condolence: { emoji: '🕊️', greeting: 'Deepest Condolences' },
+            congratulation: { emoji: '🎊', greeting: 'Congratulations!' },
+            imlek: { emoji: '🧧', greeting: 'Gong Xi Fa Cai' },
+            natal: { emoji: '🎄', greeting: 'Merry Christmas' },
+            lebaran: { emoji: '🌙', greeting: 'Selamat Lebaran' }
         };
 
-        // ========== STATE ==========
         let state = {
             params: {},
             mediaList: [],
             swiper: null,
             messageId: null,
-            messageLoaded: false,
             expirySetting: '90',
             daysRemaining: null,
             isExpired: false,
             theme: 'birthday'
         };
 
-        // ========== DOM ELEMENTS ==========
         const el = {};
 
-        // ========== CACHE DOM ==========
         function cacheElements() {
             const ids = [
-                'loadingOverlay', 'loadingText',
-                'notification', 'notificationMessage',
+                'loadingOverlay', 'loadingText', 'notification', 'notificationMessage',
                 'themeEmoji', 'greetingText', 'recipientName', 'messageText',
-                'whatsappBtn', 'mediaSection', 'mediaCount',
-                'carouselWrapper', 'thumbnails',
-                'mediaModal', 'modalImage', 'modalVideo',
-                'currentSlide', 'totalSlides', 'snowEffect',
+                'whatsappBtn', 'mediaSection', 'mediaCount', 'carouselWrapper', 'thumbnails',
+                'mediaModal', 'modalImage', 'modalVideo', 'currentSlide', 'totalSlides',
                 'expiryBadge', 'expiryBadgeText'
             ];
             ids.forEach(id => el[id] = document.getElementById(id));
         }
 
-        // ========== GET URL PARAMETERS ==========
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
-            
             const result = {
                 to: params.get('to') || 'Sahabat',
                 msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
@@ -1616,103 +908,56 @@
                 preview: params.get('preview') === 'true'
             };
 
-            // Get media (support up to 10 media)
             result.mediaList = [];
-            
-            // Check for single media
             if (params.get('media')) {
-                result.mediaList.push({
-                    url: params.get('media'),
-                    type: detectMediaType(params.get('media'))
-                });
+                result.mediaList.push({ url: params.get('media'), type: detectMediaType(params.get('media')) });
             }
-            
-            // Check for multiple media (media1, media2, media3, ...)
             let i = 1;
             while (params.get(`media${i}`)) {
-                result.mediaList.push({
-                    url: params.get(`media${i}`),
-                    type: detectMediaType(params.get(`media${i}`))
-                });
+                result.mediaList.push({ url: params.get(`media${i}`), type: detectMediaType(params.get(`media${i}`)) });
                 i++;
-                if (i > 10) break; // Max 10 media
+                if (i > 10) break;
             }
-            
-            // Remove duplicates
-            result.mediaList = result.mediaList.filter((v,i,a)=>a.findIndex(t=>t.url===v.url)===i);
-            
-            console.log('📸 URL Params:', result);
-            console.log('📸 Media List:', result.mediaList);
             return result;
         }
 
         function detectMediaType(url) {
-            if (!url) return 'image';
             const u = url.toLowerCase();
-            
-            // Video extensions
             if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || 
-                u.includes('.avi') || u.includes('.mkv') || u.includes('.3gp') ||
-                u.includes('youtube.com') || u.includes('youtu.be') || 
-                u.includes('vimeo.com') || u.includes('drive.google.com')) {
+                u.includes('.avi') || u.includes('.mkv') || u.includes('youtube.com')) {
                 return 'video';
             }
-            
-            // Image extensions
-            if (u.includes('.jpg') || u.includes('.jpeg') || u.includes('.png') || 
-                u.includes('.gif') || u.includes('.webp') || u.includes('.bmp') ||
-                u.includes('unsplash.com') || u.includes('pexels.com') || u.includes('pixabay.com')) {
-                return 'image';
-            }
-            
-            return 'image'; // Default
+            return 'image';
         }
 
-        // ========== FETCH MESSAGE FROM SERVER ==========
         async function fetchMessageFromServer(messageId) {
-            if (!messageId) return null;
-            
             try {
-                console.log('📡 Fetching message for ID:', messageId);
-                
-                const url = `${CONFIG.SCRIPT_URL}?type=get_message&id=${encodeURIComponent(messageId)}&t=${Date.now()}`;
+                const url = `${CONFIG.SCRIPT_URL}?type=get_message&id=${messageId}&t=${Date.now()}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 
-                console.log('📡 Server response:', data);
-                
-                if (data.status === 'success' && data.message) {
-                    state.daysRemaining = data.days_remaining;
-                    state.expirySetting = data.expiry_setting || '90';
-                    state.isExpired = data.is_expired || false;
-                    
+                if (data.status === 'success') {
                     return {
                         message: data.message,
                         nama: data.nama,
-                        no_hp: data.no_hp,
                         days_remaining: data.days_remaining,
                         is_expired: data.is_expired,
-                        expires: data.expires,
                         expiry_setting: data.expiry_setting
                     };
-                } else {
-                    return null;
                 }
+                return null;
             } catch (error) {
-                console.error('Error fetching message:', error);
+                console.error('Error:', error);
                 return null;
             }
         }
 
-        // ========== UPDATE EXPIRY BADGE ==========
         function updateExpiryBadge(daysRemaining, expirySetting, isExpired) {
             if (!el.expiryBadge || !el.expiryBadgeText) return;
             
             let icon = 'fa-clock';
             let text = '';
             let badgeClass = '';
-            
-            console.log('Updating badge with:', { daysRemaining, expirySetting, isExpired });
             
             if (expirySetting === 'never') {
                 icon = 'fa-infinity';
@@ -1722,10 +967,6 @@
                 icon = 'fa-exclamation-triangle';
                 text = 'Expired';
                 badgeClass = 'danger';
-            } else if (daysRemaining === null || daysRemaining === undefined) {
-                icon = 'fa-clock';
-                text = 'Memuat...';
-                badgeClass = '';
             } else if (daysRemaining === 0) {
                 icon = 'fa-hourglass-end';
                 text = 'Hari Terakhir';
@@ -1740,47 +981,27 @@
                 badgeClass = 'success';
             }
             
-            // Update badge
-            el.expiryBadge.innerHTML = `
-                <i class="fas ${icon}"></i>
-                <span>${text}</span>
-            `;
-            
-            // Remove existing classes and add new one
-            el.expiryBadge.classList.remove('permanent', 'warning', 'danger', 'success');
-            if (badgeClass) {
-                el.expiryBadge.classList.add(badgeClass);
-            }
+            el.expiryBadge.innerHTML = `<i class="fas ${icon}"></i><span>${text}</span>`;
+            el.expiryBadge.className = `expiry-badge ${badgeClass}`;
         }
 
-        // ========== RENDER CAROUSEL ==========
         function renderCarousel() {
-            if (!el.carouselWrapper) return;
-            
-            if (state.mediaList.length === 0) {
-                el.mediaSection.classList.remove('active');
+            if (!el.carouselWrapper || state.mediaList.length === 0) {
+                if (el.mediaSection) el.mediaSection.classList.remove('active');
                 return;
             }
             
             el.mediaSection.classList.add('active');
             el.mediaCount.textContent = `${state.mediaList.length} Media`;
+            if (el.totalSlides) el.totalSlides.textContent = state.mediaList.length;
             
-            if (el.totalSlides) {
-                el.totalSlides.textContent = state.mediaList.length;
-            }
-            
-            // Build slides
             let slidesHTML = '';
             state.mediaList.forEach((media, index) => {
-                const isVideo = media.type === 'video';
-                
-                if (isVideo) {
+                if (media.type === 'video') {
                     slidesHTML += `
                         <div class="swiper-slide">
                             <video id="video-${index}" src="${escapeHTML(media.url)}" loop playsinline muted preload="metadata"></video>
-                            <div class="media-type-badge">
-                                <i class="fas fa-film"></i> VIDEO
-                            </div>
+                            <div class="media-type-badge"><i class="fas fa-film"></i> VIDEO</div>
                             <div class="video-control" onclick="toggleVideoPlay(${index})">
                                 <i id="playIcon-${index}" class="fas fa-play"></i>
                             </div>
@@ -1789,10 +1010,8 @@
                 } else {
                     slidesHTML += `
                         <div class="swiper-slide" onclick="openModal('${escapeHTML(media.url)}', false)">
-                            <img src="${escapeHTML(media.url)}" alt="Media ${index + 1}" loading="lazy">
-                            <div class="media-type-badge">
-                                <i class="fas fa-image"></i> FOTO
-                            </div>
+                            <img src="${escapeHTML(media.url)}" loading="lazy">
+                            <div class="media-type-badge"><i class="fas fa-image"></i> FOTO</div>
                         </div>
                     `;
                 }
@@ -1800,116 +1019,60 @@
             
             el.carouselWrapper.innerHTML = slidesHTML;
             
-            // Initialize Swiper after slides are added
             setTimeout(() => {
-                if (state.swiper) {
-                    state.swiper.destroy(true, true);
-                }
-                
+                if (state.swiper) state.swiper.destroy(true, true);
                 state.swiper = new Swiper('.swiper', {
                     loop: state.mediaList.length > 1,
-                    autoplay: state.mediaList.length > 1 ? {
-                        delay: 3000,
-                        disableOnInteraction: false,
-                    } : false,
-                    speed: 600,
-                    effect: 'slide',
-                    spaceBetween: 0,
-                    slidesPerView: 1,
-                    
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true,
-                        dynamicBullets: true,
-                    },
-                    
-                    navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev',
-                    },
-                    
+                    autoplay: state.mediaList.length > 1 ? { delay: 3000, disableOnInteraction: false } : false,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                     on: {
                         slideChange: function() {
-                            const activeIndex = this.realIndex;
-                            updateActiveThumbnail(activeIndex);
-                            if (el.currentSlide) {
-                                el.currentSlide.textContent = activeIndex + 1;
-                            }
-                        },
-                        init: function() {
-                            if (el.currentSlide) {
-                                el.currentSlide.textContent = 1;
-                            }
+                            const idx = this.realIndex;
+                            document.querySelectorAll('.thumbnail').forEach((el, i) => {
+                                el.classList.toggle('active', i === idx);
+                            });
+                            if (el.currentSlide) el.currentSlide.textContent = idx + 1;
                         }
                     }
                 });
-                
-                // Render thumbnails
                 renderThumbnails();
-                
-                // Autoplay first video if exists
-                setTimeout(() => {
-                    if (state.mediaList.length > 0 && state.mediaList[0].type === 'video') {
-                        const firstVideo = document.getElementById('video-0');
-                        if (firstVideo) {
-                            firstVideo.play().catch(() => {});
-                        }
-                    }
-                }, 500);
             }, 100);
         }
 
         function renderThumbnails() {
             if (!el.thumbnails) return;
-            
             let html = '';
             state.mediaList.forEach((media, index) => {
                 if (media.type === 'video') {
-                    html += `
-                        <div class="thumbnail video-thumb ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
-                            <i class="fas fa-film" style="color:white; font-size:1.5rem;"></i>
-                            <div class="thumbnail-icon"><i class="fas fa-play"></i></div>
-                        </div>
-                    `;
+                    html += `<div class="thumbnail video-thumb ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
+                        <i class="fas fa-film"></i><div class="thumbnail-icon"><i class="fas fa-play"></i></div>
+                    </div>`;
                 } else {
-                    html += `
-                        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
-                            <img src="${escapeHTML(media.url)}" loading="lazy">
-                        </div>
-                    `;
+                    html += `<div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
+                        <img src="${escapeHTML(media.url)}" loading="lazy">
+                    </div>`;
                 }
             });
             el.thumbnails.innerHTML = html;
         }
 
-        function updateActiveThumbnail(index) {
-            document.querySelectorAll('.thumbnail').forEach((el, i) => {
-                el.classList.toggle('active', i === index);
-            });
-        }
-
         window.jumpToSlide = function(index) {
-            if (state.swiper) {
-                state.swiper.slideToLoop(index);
-            }
+            if (state.swiper) state.swiper.slideToLoop(index);
         };
 
         window.toggleVideoPlay = function(index) {
             const video = document.getElementById(`video-${index}`);
             const icon = document.getElementById(`playIcon-${index}`);
-            
-            if (video) {
-                if (video.paused) {
-                    video.play();
-                    icon.className = 'fas fa-pause';
-                } else {
-                    video.pause();
-                    icon.className = 'fas fa-play';
-                }
+            if (video.paused) {
+                video.play();
+                icon.className = 'fas fa-pause';
+            } else {
+                video.pause();
+                icon.className = 'fas fa-play';
             }
         };
 
-        // ========== MODAL ZOOM ==========
         window.openModal = function(url, isVideo) {
             if (isVideo) {
                 el.modalImage.style.display = 'none';
@@ -1932,15 +1095,11 @@
             }
         };
 
-        // ========== SHARE FUNCTIONS ==========
         window.shareCard = function() {
-            const shareText = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
+            const text = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
             if (navigator.share) {
-                navigator.share({
-                    title: `Kartu ${THEMES[state.theme]?.greeting || 'Ucapan'}`,
-                    text: shareText,
-                    url: window.location.href
-                }).catch(() => copyURL());
+                navigator.share({ title: 'FIOR Card', text, url: window.location.href })
+                    .catch(() => copyURL());
             } else {
                 copyURL();
             }
@@ -1952,18 +1111,14 @@
                 .catch(() => showNotification('Gagal menyalin link'));
         }
 
-        window.printCard = function() {
-            window.print();
-        };
+        window.printCard = function() { window.print(); };
 
-        // ========== NOTIFICATION ==========
         function showNotification(message) {
             el.notificationMessage.textContent = message;
             el.notification.classList.add('show');
             setTimeout(() => el.notification.classList.remove('show'), 2000);
         }
 
-        // ========== LOADING ==========
         function showLoading(show, text = 'Loading...') {
             if (el.loadingOverlay) {
                 el.loadingOverlay.style.display = show ? 'flex' : 'none';
@@ -1971,73 +1126,12 @@
             }
         }
 
-        // ========== ESCAPE HTML ==========
         function escapeHTML(str) {
-            return String(str||'').replace(/[&<>"]/g, function(m) {
-                return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[m];
-            });
+            return String(str||'').replace(/[&<>"]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[m]));
         }
 
-        // ========== SET MESSAGE ==========
-        function setMessage(message) {
-            if (message) {
-                el.messageText.textContent = message;
-            }
-        }
-
-        // ========== CREATE SNOW EFFECT ==========
-        function createSnowEffect() {
-            if (!el.snowEffect || state.theme !== 'natal') return;
-            
-            for (let i = 0; i < 20; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.innerHTML = '❄️';
-                snowflake.style.left = Math.random() * 100 + '%';
-                snowflake.style.animationDelay = Math.random() * 10 + 's';
-                snowflake.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                snowflake.style.opacity = Math.random() * 0.3 + 0.1;
-                el.snowEffect.appendChild(snowflake);
-            }
-        }
-
-        // ========== SETUP THEME ANIMATIONS ==========
-        function setupThemeAnimations() {
-            // Hide hearts if not Valentine
-            const hearts = document.querySelectorAll('.heart');
-            if (state.theme !== 'valentine') {
-                hearts.forEach(h => h.style.display = 'none');
-            } else {
-                hearts.forEach(h => h.style.display = 'block');
-            }
-            
-            // Hide stars if not Natal
-            const stars = document.querySelectorAll('.star');
-            if (state.theme !== 'natal') {
-                stars.forEach(s => s.style.display = 'none');
-            } else {
-                stars.forEach(s => s.style.display = 'block');
-            }
-            
-            // Hide moon if not Lebaran
-            const moon = document.querySelector('.moon');
-            if (moon) {
-                moon.style.display = state.theme === 'lebaran' ? 'block' : 'none';
-            }
-            
-            // Hide lanterns if not Imlek
-            const lanterns = document.querySelectorAll('.lantern');
-            if (state.theme !== 'imlek') {
-                lanterns.forEach(l => l.style.display = 'none');
-            } else {
-                lanterns.forEach(l => l.style.display = 'block');
-            }
-        }
-
-        // ========== INIT ==========
         async function init() {
             cacheElements();
-            
             showLoading(true, 'Memuat kartu...');
             
             state.params = getUrlParams();
@@ -2045,17 +1139,15 @@
             state.theme = state.params.theme;
             state.messageId = state.params.messageId;
             
-            console.log('Media list length:', state.mediaList.length);
-            
             if (!THEMES[state.theme]) state.theme = 'birthday';
             
             el.recipientName.textContent = state.params.to;
             
             if (state.params.msg) {
-                setMessage(state.params.msg);
-                updateExpiryBadge(null, 'never', false); // Old style, permanent
+                el.messageText.textContent = state.params.msg;
+                updateExpiryBadge(null, 'never', false);
             } else {
-                setMessage('Memuat pesan...');
+                el.messageText.textContent = 'Memuat pesan...';
             }
             
             const themeData = THEMES[state.theme];
@@ -2063,20 +1155,13 @@
             el.themeEmoji.textContent = themeData.emoji;
             el.greetingText.textContent = themeData.greeting;
             
-            createSnowEffect();
-            setupThemeAnimations();
-            
             if (state.messageId && !state.params.msg) {
                 const messageData = await fetchMessageFromServer(state.messageId);
                 if (messageData) {
-                    setMessage(messageData.message);
+                    el.messageText.textContent = messageData.message;
                     updateExpiryBadge(messageData.days_remaining, messageData.expiry_setting, messageData.is_expired);
-                    
-                    if (messageData.nama && messageData.nama !== state.params.to) {
-                        console.log('Note: Server has different name:', messageData.nama);
-                    }
                 } else {
-                    setMessage('Pesan tidak ditemukan atau telah kadaluarsa.');
+                    el.messageText.textContent = 'Pesan tidak ditemukan';
                     updateExpiryBadge(-1, '90', true);
                 }
             }
@@ -2084,9 +1169,7 @@
             const waText = `Kartu untuk ${state.params.to}: ${window.location.href}`;
             el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
             
-            // Render carousel
             renderCarousel();
-            
             setTimeout(() => showLoading(false), 800);
         }
 
