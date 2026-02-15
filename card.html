@@ -34,6 +34,9 @@
             --bubble-1: #d4af37;
             --bubble-2: #f5e8c6;
             --bubble-3: #ffd700;
+            --confetti-1: #d4af37;
+            --confetti-2: #1e3a5f;
+            --confetti-3: #ff6b6b;
         }
         
         .theme-valentine {
@@ -46,6 +49,9 @@
             --bubble-1: #ffb6c1;
             --bubble-2: #ffc0cb;
             --bubble-3: #ff69b4;
+            --confetti-1: #ffb6c1;
+            --confetti-2: #ff69b4;
+            --confetti-3: #ff1493;
         }
         
         .theme-wedding {
@@ -58,6 +64,9 @@
             --bubble-1: #e6d5b8;
             --bubble-2: #d4c4a8;
             --bubble-3: #f0e0c0;
+            --confetti-1: #e6d5b8;
+            --confetti-2: #d4c4a8;
+            --confetti-3: #f0e0c0;
         }
         
         .theme-anniversary {
@@ -70,6 +79,9 @@
             --bubble-1: #e0b0b5;
             --bubble-2: #c1a0c5;
             --bubble-3: #d8bfd8;
+            --confetti-1: #e0b0b5;
+            --confetti-2: #c1a0c5;
+            --confetti-3: #d8bfd8;
         }
         
         .theme-graduation {
@@ -82,6 +94,9 @@
             --bubble-1: #c5b783;
             --bubble-2: #a8c3a0;
             --bubble-3: #98b88b;
+            --confetti-1: #c5b783;
+            --confetti-2: #86a075;
+            --confetti-3: #6b8c5e;
         }
         
         .theme-condolence {
@@ -94,6 +109,9 @@
             --bubble-1: #b7b7a4;
             --bubble-2: #a5a58d;
             --bubble-3: #cbccb5;
+            --confetti-1: #b7b7a4;
+            --confetti-2: #a5a58d;
+            --confetti-3: #cbccb5;
         }
         
         .theme-congratulation {
@@ -106,6 +124,9 @@
             --bubble-1: #ffb347;
             --bubble-2: #ff9f4b;
             --bubble-3: #ffa07a;
+            --confetti-1: #ffb347;
+            --confetti-2: #ff7f50;
+            --confetti-3: #ffa07a;
         }
         
         .theme-imlek {
@@ -118,6 +139,9 @@
             --bubble-1: #ffb300;
             --bubble-2: #ff6f61;
             --bubble-3: #ffaa00;
+            --confetti-1: #ffb300;
+            --confetti-2: #d32f2f;
+            --confetti-3: #ffaa00;
         }
         
         .theme-natal {
@@ -130,6 +154,9 @@
             --bubble-1: #2e7d32;
             --bubble-2: #c41e3a;
             --bubble-3: #ffd700;
+            --confetti-1: #ffd700;
+            --confetti-2: #c41e3a;
+            --confetti-3: #2e7d32;
         }
         
         .theme-lebaran {
@@ -142,6 +169,9 @@
             --bubble-1: #ff8f00;
             --bubble-2: #66bb6a;
             --bubble-3: #ffb74d;
+            --confetti-1: #ff8f00;
+            --confetti-2: #1b5e20;
+            --confetti-3: #66bb6a;
         }
 
         body {
@@ -186,7 +216,7 @@
             height: 150px;
             top: 10%;
             left: 5%;
-            background: linear-gradient(135deg, var(--bubble-1), rgba(255,255,255,0.8));
+            background: radial-gradient(circle at 30% 30%, var(--bubble-1), transparent 70%);
             animation-delay: 0s;
             opacity: 0.2;
         }
@@ -196,7 +226,7 @@
             height: 200px;
             bottom: 20%;
             right: 5%;
-            background: linear-gradient(135deg, var(--bubble-2), rgba(255,255,255,0.8));
+            background: radial-gradient(circle at 70% 70%, var(--bubble-2), transparent 70%);
             animation-delay: 2s;
             opacity: 0.15;
         }
@@ -206,7 +236,7 @@
             height: 100px;
             top: 40%;
             right: 15%;
-            background: linear-gradient(135deg, var(--bubble-3), rgba(255,255,255,0.8));
+            background: radial-gradient(circle at 50% 50%, var(--bubble-3), transparent 70%);
             animation-delay: 1s;
             opacity: 0.25;
         }
@@ -216,7 +246,7 @@
             height: 80px;
             bottom: 10%;
             left: 15%;
-            background: linear-gradient(135deg, var(--bubble-1), rgba(255,255,255,0.8));
+            background: radial-gradient(circle at 60% 40%, var(--bubble-1), transparent 70%);
             animation-delay: 3s;
             opacity: 0.2;
         }
@@ -226,7 +256,7 @@
             height: 60px;
             top: 70%;
             left: 30%;
-            background: linear-gradient(135deg, var(--bubble-2), rgba(255,255,255,0.8));
+            background: radial-gradient(circle at 40% 60%, var(--bubble-2), transparent 70%);
             animation-delay: 1.5s;
             opacity: 0.3;
         }
@@ -236,7 +266,7 @@
             height: 120px;
             top: 15%;
             right: 25%;
-            background: linear-gradient(135deg, var(--bubble-3), rgba(255,255,255,0.8));
+            background: radial-gradient(circle at 30% 70%, var(--bubble-3), transparent 70%);
             animation-delay: 2.5s;
             opacity: 0.2;
         }
@@ -261,11 +291,11 @@
             position: absolute;
             width: 10px;
             height: 10px;
-            background: var(--accent);
-            opacity: 0.2;
+            opacity: 0.3;
             animation: confettiFall 15s infinite linear;
             border-radius: 2px;
             transform-origin: center;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
 
         .confetti-1 {
@@ -273,7 +303,7 @@
             top: -10%;
             width: 12px;
             height: 12px;
-            background: var(--bubble-1);
+            background: var(--confetti-1);
             animation-duration: 18s;
             animation-delay: 0s;
             border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
@@ -284,7 +314,7 @@
             top: -10%;
             width: 15px;
             height: 15px;
-            background: var(--bubble-2);
+            background: var(--confetti-2);
             animation-duration: 15s;
             animation-delay: 2s;
             border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
@@ -295,7 +325,7 @@
             top: -10%;
             width: 8px;
             height: 8px;
-            background: var(--bubble-3);
+            background: var(--confetti-3);
             animation-duration: 20s;
             animation-delay: 1s;
             border-radius: 20% 80% 80% 20% / 80% 20% 80% 20%;
@@ -306,7 +336,7 @@
             top: -10%;
             width: 18px;
             height: 18px;
-            background: var(--bubble-1);
+            background: var(--confetti-1);
             animation-duration: 22s;
             animation-delay: 3s;
             border-radius: 80% 20% 20% 80% / 40% 60% 40% 60%;
@@ -317,7 +347,7 @@
             top: -10%;
             width: 10px;
             height: 10px;
-            background: var(--bubble-2);
+            background: var(--confetti-2);
             animation-duration: 17s;
             animation-delay: 4s;
             border-radius: 60% 40% 40% 60% / 30% 70% 30% 70%;
@@ -326,7 +356,7 @@
         @keyframes confettiFall {
             0% {
                 transform: translateY(-100px) rotate(0deg);
-                opacity: 0.2;
+                opacity: 0.3;
             }
             100% {
                 transform: translateY(100vh) rotate(720deg);
@@ -343,7 +373,7 @@
             border-radius: 50%;
             box-shadow: 0 0 10px 2px var(--accent);
             animation: sparkleTwinkle 3s infinite ease-in-out;
-            opacity: 0.3;
+            opacity: 0.4;
         }
 
         .sparkle-1 { top: 20%; left: 20%; animation-delay: 0s; }
@@ -354,6 +384,10 @@
         .sparkle-6 { top: 60%; left: 60%; animation-delay: 2.5s; }
         .sparkle-7 { top: 85%; left: 25%; animation-delay: 0.8s; }
         .sparkle-8 { top: 15%; left: 75%; animation-delay: 1.8s; }
+        .sparkle-9 { top: 45%; left: 15%; animation-delay: 0.3s; }
+        .sparkle-10 { top: 55%; left: 85%; animation-delay: 2.2s; }
+        .sparkle-11 { top: 25%; left: 45%; animation-delay: 1.2s; }
+        .sparkle-12 { top: 75%; left: 55%; animation-delay: 0.7s; }
 
         @keyframes sparkleTwinkle {
             0%, 100% {
@@ -362,9 +396,9 @@
                 box-shadow: 0 0 5px 1px var(--accent);
             }
             50% {
-                transform: scale(2);
-                opacity: 0.6;
-                box-shadow: 0 0 15px 4px var(--accent);
+                transform: scale(2.5);
+                opacity: 0.8;
+                box-shadow: 0 0 20px 6px var(--accent);
             }
         }
 
@@ -372,16 +406,19 @@
         .heart {
             position: absolute;
             color: var(--bubble-1);
-            font-size: 20px;
-            opacity: 0.15;
-            animation: heartFloat 10s infinite linear;
+            font-size: 24px;
+            opacity: 0.2;
+            animation: heartFloat 12s infinite linear;
             pointer-events: none;
+            filter: drop-shadow(0 0 5px var(--accent));
         }
 
-        .heart-1 { top: 10%; left: 10%; animation-delay: 0s; }
-        .heart-2 { top: 40%; left: 85%; animation-delay: 3s; }
-        .heart-3 { top: 70%; left: 20%; animation-delay: 6s; }
-        .heart-4 { top: 85%; left: 70%; animation-delay: 2s; }
+        .heart-1 { top: 10%; left: 10%; animation-delay: 0s; font-size: 20px; }
+        .heart-2 { top: 40%; left: 85%; animation-delay: 3s; font-size: 28px; }
+        .heart-3 { top: 70%; left: 20%; animation-delay: 6s; font-size: 24px; }
+        .heart-4 { top: 85%; left: 70%; animation-delay: 2s; font-size: 22px; }
+        .heart-5 { top: 25%; left: 50%; animation-delay: 4s; font-size: 18px; }
+        .heart-6 { top: 60%; left: 40%; animation-delay: 5s; font-size: 26px; }
 
         @keyframes heartFloat {
             0% {
@@ -389,11 +426,11 @@
                 opacity: 0.1;
             }
             50% {
-                transform: translateY(-30px) rotate(10deg);
-                opacity: 0.2;
+                transform: translateY(-40px) rotate(15deg);
+                opacity: 0.3;
             }
             100% {
-                transform: translateY(30px) rotate(-10deg);
+                transform: translateY(40px) rotate(-15deg);
                 opacity: 0.1;
             }
         }
@@ -405,10 +442,10 @@
             left: 0;
             width: 100%;
             height: 100px;
-            background: linear-gradient(180deg, transparent, rgba(255,255,255,0.1));
+            background: linear-gradient(180deg, transparent, rgba(255,255,255,0.2));
             border-radius: 100% 100% 0 0;
-            animation: waveMove 10s infinite ease-in-out;
-            opacity: 0.3;
+            animation: waveMove 8s infinite ease-in-out;
+            opacity: 0.2;
         }
 
         .wave-1 {
@@ -429,10 +466,91 @@
 
         @keyframes waveMove {
             0%, 100% {
-                transform: scaleY(1);
+                transform: scaleY(1) translateX(0);
+            }
+            25% {
+                transform: scaleY(1.1) translateX(-10px);
             }
             50% {
-                transform: scaleY(1.2);
+                transform: scaleY(1.2) translateX(0);
+            }
+            75% {
+                transform: scaleY(1.1) translateX(10px);
+            }
+        }
+
+        /* Floating stars (khusus Natal) */
+        .star {
+            position: absolute;
+            color: #ffd700;
+            font-size: 20px;
+            opacity: 0.2;
+            animation: starTwinkle 4s infinite ease-in-out;
+            filter: drop-shadow(0 0 5px gold);
+        }
+
+        .star-1 { top: 15%; left: 15%; animation-delay: 0s; }
+        .star-2 { top: 30%; left: 80%; animation-delay: 1s; }
+        .star-3 { top: 70%; left: 25%; animation-delay: 2s; }
+        .star-4 { top: 85%; left: 75%; animation-delay: 3s; }
+        .star-5 { top: 45%; left: 45%; animation-delay: 1.5s; }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.1;
+            }
+            50% {
+                transform: scale(1.5) rotate(15deg);
+                opacity: 0.4;
+            }
+        }
+
+        /* Moon (khusus Lebaran) */
+        .moon {
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            font-size: 40px;
+            opacity: 0.2;
+            animation: moonGlow 6s infinite ease-in-out;
+            filter: drop-shadow(0 0 10px var(--accent));
+        }
+
+        @keyframes moonGlow {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.2;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.4;
+            }
+        }
+
+        /* Lantern (khusus Imlek) */
+        .lantern {
+            position: absolute;
+            color: #ffb300;
+            font-size: 30px;
+            opacity: 0.2;
+            animation: lanternSwing 5s infinite ease-in-out;
+            transform-origin: top center;
+            filter: drop-shadow(0 0 5px #ff8f00);
+        }
+
+        .lantern-1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .lantern-2 { top: 70%; right: 10%; animation-delay: 2s; }
+
+        @keyframes lanternSwing {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(5deg);
+            }
+            75% {
+                transform: rotate(-5deg);
             }
         }
 
@@ -473,6 +591,74 @@
             z-index: 2;
         }
 
+        /* ===== EXPIRY BADGE (KECIL) ===== */
+        .expiry-badge-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+
+        .expiry-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            color: var(--primary);
+        }
+
+        .expiry-badge i {
+            font-size: 0.65rem;
+            color: var(--accent);
+        }
+
+        .expiry-badge.warning {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffc107;
+        }
+
+        .expiry-badge.warning i {
+            color: #856404;
+        }
+
+        .expiry-badge.danger {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #dc3545;
+        }
+
+        .expiry-badge.danger i {
+            color: #721c24;
+        }
+
+        .expiry-badge.success {
+            background: #d4edda;
+            color: #155724;
+            border-color: #28a745;
+        }
+
+        .expiry-badge.success i {
+            color: #155724;
+        }
+
+        .expiry-badge.permanent {
+            background: #e2e3e5;
+            color: #383d41;
+            border-color: #6c757d;
+        }
+
+        .expiry-badge.permanent i {
+            color: #383d41;
+        }
+
         /* ===== CARD HEADER ===== */
         .card-header {
             background: var(--gradient);
@@ -507,9 +693,10 @@
         .snowflake {
             position: absolute;
             color: white;
-            font-size: 24px;
+            font-size: 20px;
             opacity: 0.3;
             animation: snowFall 10s infinite linear;
+            filter: drop-shadow(0 0 5px white);
         }
 
         @keyframes snowFall {
@@ -1178,12 +1365,32 @@
         <div class="sparkle sparkle-6"></div>
         <div class="sparkle sparkle-7"></div>
         <div class="sparkle sparkle-8"></div>
+        <div class="sparkle sparkle-9"></div>
+        <div class="sparkle sparkle-10"></div>
+        <div class="sparkle sparkle-11"></div>
+        <div class="sparkle sparkle-12"></div>
         
-        <!-- Floating Hearts (khusus Valentine, akan muncul via JS) -->
+        <!-- Floating Hearts (akan diatur via JS) -->
         <div class="heart heart-1">❤️</div>
         <div class="heart heart-2">❤️</div>
         <div class="heart heart-3">❤️</div>
         <div class="heart heart-4">❤️</div>
+        <div class="heart heart-5">❤️</div>
+        <div class="heart heart-6">❤️</div>
+        
+        <!-- Floating Stars (khusus Natal) -->
+        <div class="star star-1">⭐</div>
+        <div class="star star-2">⭐</div>
+        <div class="star star-3">⭐</div>
+        <div class="star star-4">⭐</div>
+        <div class="star star-5">⭐</div>
+        
+        <!-- Moon (khusus Lebaran) -->
+        <div class="moon">🌙</div>
+        
+        <!-- Lantern (khusus Imlek) -->
+        <div class="lantern lantern-1">🏮</div>
+        <div class="lantern lantern-2">🏮</div>
         
         <!-- Waves / Gelombang -->
         <div class="wave wave-1"></div>
@@ -1230,6 +1437,14 @@
 
             <!-- Card Body -->
             <div class="card-body">
+                <!-- Expiry Badge Kecil (ditaruh di atas) -->
+                <div class="expiry-badge-container">
+                    <div class="expiry-badge" id="expiryBadge">
+                        <i class="fas fa-clock"></i>
+                        <span id="expiryBadgeText">Memuat...</span>
+                    </div>
+                </div>
+
                 <!-- Message -->
                 <div class="message-container">
                     <div class="message-quote">
@@ -1307,7 +1522,7 @@
     
     <script>
         // ============================================
-        // FIOR CARD - CAROUSEL SLIDER WITH SHORT LINK SUPPORT
+        // FIOR CARD - CAROUSEL SLIDER WITH EXPIRY BADGE
         // ============================================
 
         // ========== KONFIGURASI ==========
@@ -1365,7 +1580,10 @@
             mediaList: [],
             swiper: null,
             messageId: null,
-            messageLoaded: false
+            messageLoaded: false,
+            expiryDays: 90,
+            daysRemaining: null,
+            theme: 'birthday'
         };
 
         // ========== DOM ELEMENTS ==========
@@ -1380,7 +1598,8 @@
                 'whatsappBtn', 'mediaSection', 'mediaCount',
                 'carouselWrapper', 'thumbnails',
                 'mediaModal', 'modalImage', 'modalVideo',
-                'currentSlide', 'totalSlides', 'snowEffect'
+                'currentSlide', 'totalSlides', 'snowEffect',
+                'expiryBadge', 'expiryBadgeText'
             ];
             ids.forEach(id => el[id] = document.getElementById(id));
         }
@@ -1393,14 +1612,13 @@
                 to: params.get('to') || 'Sahabat',
                 msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
                 theme: params.get('theme') || 'birthday',
-                messageId: params.get('v') || null, // 🔥 Short link ID
+                messageId: params.get('v') || null,
                 preview: params.get('preview') === 'true'
             };
 
             // Get media (support up to 10 media)
             result.mediaList = [];
             
-            // Check for single media
             if (params.get('media')) {
                 result.mediaList.push({
                     url: params.get('media'),
@@ -1408,7 +1626,6 @@
                 });
             }
             
-            // Check for multiple media (media1, media2, media3, ...)
             let i = 1;
             while (params.get(`media${i}`)) {
                 result.mediaList.push({
@@ -1416,10 +1633,9 @@
                     type: detectMediaType(params.get(`media${i}`))
                 });
                 i++;
-                if (i > 10) break; // Max 10 media
+                if (i > 10) break;
             }
             
-            // Remove duplicates
             result.mediaList = result.mediaList.filter((v,i,a)=>a.findIndex(t=>t.url===v.url)===i);
             
             console.log('📸 URL Params:', result);
@@ -1430,7 +1646,6 @@
             if (!url) return 'image';
             const u = url.toLowerCase();
             
-            // Video extensions
             if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || 
                 u.includes('.avi') || u.includes('.mkv') || u.includes('.3gp') ||
                 u.includes('youtube.com') || u.includes('youtu.be') || 
@@ -1438,17 +1653,10 @@
                 return 'video';
             }
             
-            // Image extensions
-            if (u.includes('.jpg') || u.includes('.jpeg') || u.includes('.png') || 
-                u.includes('.gif') || u.includes('.webp') || u.includes('.bmp') ||
-                u.includes('unsplash.com') || u.includes('pexels.com') || u.includes('pixabay.com')) {
-                return 'image';
-            }
-            
-            return 'image'; // Default
+            return 'image';
         }
 
-        // ========== 🔥 FETCH MESSAGE FROM SERVER (SHORT LINK) ==========
+        // ========== FETCH MESSAGE FROM SERVER ==========
         async function fetchMessageFromServer(messageId) {
             if (!messageId) return null;
             
@@ -1462,18 +1670,66 @@
                 console.log('📡 Server response:', data);
                 
                 if (data.status === 'success' && data.message) {
+                    state.daysRemaining = data.days_remaining;
+                    state.expiryDays = data.expiry_days || 90;
+                    
                     return {
                         message: data.message,
                         nama: data.nama,
-                        no_hp: data.no_hp
+                        no_hp: data.no_hp,
+                        days_remaining: data.days_remaining,
+                        expires: data.expires
                     };
                 } else {
-                    console.warn('Message not found or expired:', data.message);
                     return null;
                 }
             } catch (error) {
                 console.error('Error fetching message:', error);
                 return null;
+            }
+        }
+
+        // ========== UPDATE EXPIRY BADGE ==========
+        function updateExpiryBadge(daysRemaining) {
+            if (!el.expiryBadge || !el.expiryBadgeText) return;
+            
+            let icon = 'fa-clock';
+            let text = '';
+            let badgeClass = '';
+            
+            if (daysRemaining === null) {
+                // Permanent (old style with msg parameter)
+                icon = 'fa-infinity';
+                text = 'Permanen';
+                badgeClass = 'permanent';
+            } else if (daysRemaining < 0) {
+                icon = 'fa-exclamation-triangle';
+                text = 'Expired';
+                badgeClass = 'danger';
+            } else if (daysRemaining === 0) {
+                icon = 'fa-hourglass-end';
+                text = 'Hari Terakhir';
+                badgeClass = 'warning';
+            } else if (daysRemaining <= 7) {
+                icon = 'fa-hourglass-half';
+                text = `${daysRemaining} hari lagi`;
+                badgeClass = 'warning';
+            } else {
+                icon = 'fa-hourglass-start';
+                text = `${daysRemaining} hari`;
+                badgeClass = 'success';
+            }
+            
+            // Update badge
+            el.expiryBadge.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <span>${text}</span>
+            `;
+            
+            // Remove existing classes and add new one
+            el.expiryBadge.classList.remove('warning', 'danger', 'success', 'permanent');
+            if (badgeClass) {
+                el.expiryBadge.classList.add(badgeClass);
             }
         }
 
@@ -1493,7 +1749,6 @@
                 el.totalSlides.textContent = state.mediaList.length;
             }
             
-            // Build slides
             let slidesHTML = '';
             state.mediaList.forEach((media, index) => {
                 const isVideo = media.type === 'video';
@@ -1524,7 +1779,6 @@
             
             el.carouselWrapper.innerHTML = slidesHTML;
             
-            // Initialize Swiper with full options
             state.swiper = new Swiper('.swiper', {
                 loop: state.mediaList.length > 1,
                 autoplay: state.mediaList.length > 1 ? {
@@ -1563,10 +1817,8 @@
                 }
             });
             
-            // Render thumbnails
             renderThumbnails();
             
-            // Autoplay first video if exists
             setTimeout(() => {
                 if (state.mediaList.length > 0 && state.mediaList[0].type === 'video') {
                     const firstVideo = document.getElementById('video-0');
@@ -1696,14 +1948,14 @@
             });
         }
 
-        // ========== 🔥 SET MESSAGE ==========
+        // ========== SET MESSAGE ==========
         function setMessage(message) {
             if (message) {
                 el.messageText.textContent = message;
             }
         }
 
-        // ========== CREATE SNOW EFFECT (khusus Natal) ==========
+        // ========== CREATE SNOW EFFECT ==========
         function createSnowEffect() {
             if (!el.snowEffect || state.theme !== 'natal') return;
             
@@ -1719,75 +1971,94 @@
             }
         }
 
+        // ========== SETUP THEME ANIMATIONS ==========
+        function setupThemeAnimations() {
+            // Hide hearts if not Valentine
+            const hearts = document.querySelectorAll('.heart');
+            if (state.theme !== 'valentine') {
+                hearts.forEach(h => h.style.display = 'none');
+            } else {
+                hearts.forEach(h => h.style.display = 'block');
+            }
+            
+            // Hide stars if not Natal
+            const stars = document.querySelectorAll('.star');
+            if (state.theme !== 'natal') {
+                stars.forEach(s => s.style.display = 'none');
+            } else {
+                stars.forEach(s => s.style.display = 'block');
+            }
+            
+            // Hide moon if not Lebaran
+            const moon = document.querySelector('.moon');
+            if (moon) {
+                moon.style.display = state.theme === 'lebaran' ? 'block' : 'none';
+            }
+            
+            // Hide lanterns if not Imlek
+            const lanterns = document.querySelectorAll('.lantern');
+            if (state.theme !== 'imlek') {
+                lanterns.forEach(l => l.style.display = 'none');
+            } else {
+                lanterns.forEach(l => l.style.display = 'block');
+            }
+        }
+
         // ========== INIT ==========
         async function init() {
             cacheElements();
             
-            // Show loading
             showLoading(true, 'Memuat kartu...');
             
-            // Get params
             state.params = getUrlParams();
             state.mediaList = state.params.mediaList || [];
             state.theme = state.params.theme;
             state.messageId = state.params.messageId;
             
-            // Validate theme
             if (!THEMES[state.theme]) state.theme = 'birthday';
             
-            // Set recipient name
             el.recipientName.textContent = state.params.to;
             
-            // Set default message first
             if (state.params.msg) {
-                // If msg parameter exists (old style), use it
                 setMessage(state.params.msg);
             } else {
-                // Set placeholder while fetching
                 setMessage('Memuat pesan...');
             }
             
-            // Set theme
             const themeData = THEMES[state.theme];
             document.body.className = `theme-${state.theme}`;
             el.themeEmoji.textContent = themeData.emoji;
             el.greetingText.textContent = themeData.greeting;
             
-            // Create special effects based on theme
             createSnowEffect();
+            setupThemeAnimations();
             
-            // Hide hearts if not Valentine
-            if (state.theme !== 'valentine') {
-                document.querySelectorAll('.heart').forEach(h => h.style.display = 'none');
-            }
-            
-            // 🔥 If messageId exists (short link), fetch message from server
             if (state.messageId && !state.params.msg) {
                 const messageData = await fetchMessageFromServer(state.messageId);
                 if (messageData) {
                     setMessage(messageData.message);
+                    updateExpiryBadge(messageData.days_remaining);
                     
-                    // Optionally update recipient name if different
                     if (messageData.nama && messageData.nama !== state.params.to) {
                         console.log('Note: Server has different name:', messageData.nama);
                     }
                 } else {
                     setMessage('Pesan tidak ditemukan atau telah kadaluarsa.');
+                    updateExpiryBadge(-1);
                 }
+            } else {
+                // If using direct msg parameter, show permanent badge
+                updateExpiryBadge(null);
             }
             
-            // WhatsApp button
             const waText = `Kartu untuk ${state.params.to}: ${window.location.href}`;
             el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
             
-            // Render carousel
             renderCarousel();
             
-            // Hide loading after a moment
             setTimeout(() => showLoading(false), 800);
         }
 
-        // Start
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
