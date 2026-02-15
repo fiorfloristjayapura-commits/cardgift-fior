@@ -1,71 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FIOR Card - DEBUG FIXED</title>
+    <title>FIOR Card - FINAL FIX</title>
     <style>
-        body { font-family: monospace; padding: 20px; background: #f5f5f5; }
-        .success { color: green; font-weight: bold; }
-        .param-item { background: white; padding: 8px; margin: 4px 0; border-left: 4px solid #4CAF50; }
-        .media-item { background: #e3f2fd; padding: 8px; margin: 4px 0; border-left: 4px solid #2196F3; }
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .success { color: #4CAF50; font-weight: bold; }
+        .param { background: #e3f2fd; padding: 10px; margin: 5px 0; border-left: 4px solid #2196F3; }
+        .media { background: #fff3e0; padding: 10px; margin: 5px 0; border-left: 4px solid #FF9800; }
+        code { background: #f5f5f5; padding: 2px 5px; border-radius: 3px; }
     </style>
 </head>
 <body>
-    <h1>🔍 DEBUG: Multiple Media Test (FIXED)</h1>
-    <div id="output" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+    <div class="container">
+        <h1>🎯 FIOR CARD - FINAL FIX</h1>
+        
+        <div id="result"></div>
+        
+        <hr>
+        
+        <h3>🔍 Live Debug Info:</h3>
+        <div id="debug" style="background: #1e1e1e; color: #00ff00; padding: 20px; border-radius: 5px; font-family: monospace; white-space: pre-wrap;"></div>
+    </div>
 
     <script>
-        // Tangkap semua parameter URL
-        const params = new URLSearchParams(window.location.search);
-        const output = document.getElementById('output');
-        
-        let html = '<h2>📌 SEMUA PARAMETER URL:</h2>';
-        
-        // Tampilkan semua parameter yang ada
-        for (let [key, value] of params.entries()) {
-            html += `<div class="param-item">🔹 <strong>${key}</strong> = ${value}</div>`;
-        }
-        
-        html += '<h2 style="margin-top:30px;">📌 MEDIA YANG DITEMUKAN (dengan loop):</h2>';
-        
-        // Cara 1: Loop traditional
-        const mediaList = [];
-        let i = 1;
-        
-        // Cek media (parameter pertama)
-        if (params.get('media')) {
-            mediaList.push(params.get('media'));
-            html += `<div class="media-item">✅ <strong>media</strong> = ${params.get('media')}</div>`;
-        }
-        
-        // Loop untuk media1, media2, media3, dst.
-        while (params.get(`media${i}`)) {
-            const url = params.get(`media${i}`);
-            mediaList.push(url);
-            html += `<div class="media-item">✅ <strong>media${i}</strong> = ${url}</div>`;
-            i++;
-        }
-        
-        html += `<h2 style="margin-top:30px;">📊 TOTAL MEDIA: <span class="success">${mediaList.length}</span></h2>`;
-        
-        html += '<h2>📋 DAFTAR MEDIA (array):</h2>';
-        mediaList.forEach((url, idx) => {
-            html += `<div class="media-item">📌 ${idx + 1}. ${url}</div>`;
-        });
-        
-        html += `<h2 style="margin-top:30px;">🔗 LINK YANG DIGUNAKAN:</h2>`;
-        html += `<div style="background: #eee; padding: 10px; word-break: break-all;">${window.location.href}</div>`;
-        
-        // Test dengan URL yang diberikan
-        html += `<h2 style="margin-top:30px;">🧪 TEST MANUAL:</h2>`;
-        html += `<div>params.get('media') = ${params.get('media')}</div>`;
-        html += `<div>params.get('media2') = ${params.get('media2')}</div>`;
-        html += `<div>params.get('media3') = ${params.get('media3')}</div>`;
-        
-        output.innerHTML = html;
-        
-        // Log ke console juga
-        console.log('📊 MEDIA LIST:', mediaList);
-        console.log('📌 ALL PARAMS:', Object.fromEntries(params));
+        (function() {
+            const debug = document.getElementById('debug');
+            const result = document.getElementById('result');
+            const params = new URLSearchParams(window.location.search);
+            
+            let log = '📌 URL: ' + window.location.href + '\n\n';
+            log += '📌 RAW PARAMETERS:\n';
+            
+            // Tampilkan semua parameter
+            const allParams = {};
+            for (let [key, value] of params.entries()) {
+                allParams[key] = value;
+                log += `   ${key} = ${value}\n`;
+            }
+            
+            log += '\n📌 EXTRACTING MEDIA:\n';
+            
+            // ===== METODE 1: Langsung baca satu per satu =====
+            const mediaList = [];
+            
+            // Baca media (parameter pertama)
+            if (params.get('media')) {
+                mediaList.push(params.get('media'));
+                log += `   ✅ media = ${params.get('media')}\n`;
+            }
+            
+            // Baca media2
+            if (params.get('media2')) {
+                mediaList.push(params.get('media2'));
+                log += `   ✅ media2 = ${params.get('media2')}\n`;
+            }
+            
+            // Baca media3
+            if (params.get('media3')) {
+                mediaList.push(params.get('media3'));
+                log += `   ✅ media3 = ${params.get('media3')}\n`;
+            }
+            
+            // Baca media4 - media10 (untuk jaga-jaga)
+            for (let i = 4; i <= 10; i++) {
+                if (params.get(`media${i}`)) {
+                    mediaList.push(params.get(`media${i}`));
+                    log += `   ✅ media${i} = ${params.get(`media${i}`)}\n`;
+                }
+            }
+            
+            log += `\n📊 TOTAL MEDIA: ${mediaList.length}\n\n`;
+            log += '📋 MEDIA LIST:\n';
+            mediaList.forEach((url, index) => {
+                log += `   ${index + 1}. ${url}\n`;
+            });
+            
+            // Tampilkan di halaman
+            debug.textContent = log;
+            
+            // Tampilkan hasil di atas
+            result.innerHTML = `
+                <h2 class="success">✅ HASIL DETEKSI:</h2>
+                <p><strong>Total Media:</strong> ${mediaList.length}</p>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
+                    ${mediaList.map((url, i) => `
+                        <div class="media">
+                            <strong>Media ${i+1}:</strong><br>
+                            <code>${url}</code><br>
+                            <a href="${url}" target="_blank">🔗 Buka</a>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            // Log ke console
+            console.log('📊 FINAL MEDIA LIST:', mediaList);
+            console.log('📌 ALL PARAMS:', allParams);
+        })();
     </script>
 </body>
 </html>
