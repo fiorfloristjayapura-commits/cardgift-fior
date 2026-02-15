@@ -138,7 +138,6 @@
             z-index: 10;
         }
 
-        /* ===== VIDEO CONTROLS DENGAN SUARA ===== */
         .video-controls {
             position: absolute;
             bottom: 16px;
@@ -169,10 +168,6 @@
 
         .video-btn i {
             font-size: 1.1rem;
-        }
-
-        .volume-btn {
-            background: rgba(0,0,0,0.7);
         }
 
         .volume-btn.muted {
@@ -356,7 +351,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        const CONFIG = { SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec" };
+        const CONFIG = {
+            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec"
+        };
 
         const THEMES = {
             birthday: { emoji: '🎂', greeting: 'Happy Birthday' },
@@ -374,8 +371,7 @@
         let state = { 
             params: {}, 
             mediaList: [], 
-            swiper: null,
-            videoStates: {} // Untuk menyimpan status video (play/pause, mute/unmute)
+            swiper: null
         };
 
         const el = {};
@@ -455,7 +451,6 @@
             el.expiryBadge.className = `expiry-badge ${className}`;
         }
 
-        // ===== FUNGSI VIDEO DENGAN SUARA =====
         window.toggleVideoPlay = function(index) {
             const video = document.getElementById(`video-${index}`);
             const playIcon = document.getElementById(`playIcon-${index}`);
@@ -542,17 +537,6 @@
                     }
                 });
                 renderThumbnails();
-                
-                // Set video awal tidak mute (bersuara)
-                state.mediaList.forEach((media, index) => {
-                    if (media.type === 'video') {
-                        const video = document.getElementById(`video-${index}`);
-                        if (video) {
-                            video.muted = false; // Video tidak dimute
-                            video.play().catch(() => {}); // Coba play otomatis
-                        }
-                    }
-                });
             }, 100);
         }
 
@@ -582,7 +566,7 @@
                 el.modalImage.style.display = 'none';
                 el.modalVideo.style.display = 'block';
                 el.modalVideo.src = url;
-                el.modalVideo.muted = false; // Modal video bersuara
+                el.modalVideo.muted = false;
                 el.modalVideo.play();
             } else {
                 el.modalImage.style.display = 'block';
@@ -644,7 +628,7 @@
                     el.messageText.textContent = messageData.message;
                     updateExpiryBadge(messageData);
                 } else {
-                    el.messageText.textContent = 'Pesan tidak ditemukan';
+                    el.messageText.textContent = 'Pesan tidak ditemukan atau telah kadaluarsa.';
                     updateExpiryBadge({ is_expired: true });
                 }
             }
