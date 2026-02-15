@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIOR Card - Admin Panel (Per-Card Expiry)</title>
+    <title>FIOR Card - Admin Panel (Max 10 Media)</title>
     
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,7 +15,6 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
-        /* ===== RESET & VARIABLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -28,7 +27,6 @@
             --navy-deep: #0a192f;
             --gold: #d4af37;
             --gold-light: #f5e8c6;
-            --gold-soft: #eedcc7;
             --white: #ffffff;
             --soft-white: #f8fafc;
             --gray-100: #f1f5f9;
@@ -43,7 +41,6 @@
             --warning: #b45309;
             --warning-light: #ffedd5;
             --coral: #ff7f50;
-            --coral-light: #ffd7c4;
             --info: #0284c7;
             --info-light: #e0f2fe;
             --purple: #7c3aed;
@@ -52,25 +49,21 @@
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
             --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.05);
             
             --radius-md: 0.5rem;
             --radius-lg: 0.75rem;
             --radius-xl: 1rem;
-            --radius-2xl: 1.5rem;
             --radius-full: 9999px;
             
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.3s ease;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background: var(--soft-white);
             color: var(--gray-800);
-            min-height: 100vh;
         }
 
-        /* ===== HEADER DENGAN LOGO FIOR ===== */
         .header {
             background: var(--white);
             border-bottom: 1px solid var(--gray-200);
@@ -111,24 +104,10 @@
             font-size: 1.8rem;
             font-weight: 800;
             color: var(--navy-deep);
-            letter-spacing: -0.02em;
         }
 
         .logo-text span {
             color: var(--gold);
-            position: relative;
-            display: inline-block;
-        }
-
-        .logo-text span::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--gold), transparent);
-            border-radius: var(--radius-full);
         }
 
         .datetime {
@@ -145,17 +124,11 @@
             gap: 0.5rem;
         }
 
-        .datetime i {
-            color: var(--gold);
-        }
-
-        /* ===== CONTAINER ===== */
         .container {
             display: flex;
             min-height: calc(100vh - 82px);
         }
 
-        /* ===== SIDEBAR ===== */
         .sidebar {
             width: 280px;
             background: var(--white);
@@ -208,7 +181,6 @@
         .nav-item i {
             width: 24px;
             color: var(--gray-400);
-            transition: var(--transition);
         }
 
         .nav-item:hover {
@@ -223,7 +195,6 @@
         .nav-item.active {
             background: linear-gradient(145deg, var(--navy), var(--navy-light));
             color: white;
-            box-shadow: var(--shadow-md);
         }
 
         .nav-item.active i {
@@ -247,7 +218,6 @@
             background: var(--success);
             border-radius: 50%;
             animation: pulse 2s infinite;
-            box-shadow: 0 0 0 3px rgba(15,118,110,0.1);
         }
 
         .status-dot.offline {
@@ -268,12 +238,10 @@
             color: var(--danger);
         }
 
-        /* ===== MAIN CONTENT ===== */
         .main-content {
             flex: 1;
             padding: 2.5rem;
             overflow-y: auto;
-            background: var(--soft-white);
         }
 
         .page {
@@ -314,7 +282,6 @@
             border-left: 3px solid var(--gold);
         }
 
-        /* ===== FORM CARD ===== */
         .form-card {
             background: var(--white);
             border: 1px solid var(--gray-200);
@@ -380,7 +347,6 @@
             resize: vertical;
         }
 
-        /* ===== EXPIRY GRID ===== */
         .expiry-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -396,7 +362,6 @@
             text-align: center;
             cursor: pointer;
             transition: var(--transition);
-            position: relative;
         }
 
         .expiry-card:hover {
@@ -463,12 +428,6 @@
             color: var(--purple);
         }
 
-        .expiry-card.selected .expiry-badge.permanent {
-            background: var(--purple);
-            color: white;
-        }
-
-        /* ===== URL MEDIA SECTION ===== */
         .url-media-section {
             background: linear-gradient(145deg, var(--soft-white), var(--white));
             border-radius: var(--radius-lg);
@@ -541,11 +500,6 @@
             color: var(--gray-600);
             font-size: 0.95rem;
             cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .url-media-type:hover {
-            border-color: var(--gold);
         }
 
         .btn-add-media {
@@ -564,10 +518,15 @@
             white-space: nowrap;
         }
 
-        .btn-add-media:hover {
+        .btn-add-media:hover:not(:disabled) {
             background: var(--navy-light);
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+        }
+
+        .btn-add-media:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .media-list {
@@ -632,7 +591,6 @@
             font-size: 0.65rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .media-type-badge.video {
@@ -651,16 +609,10 @@
             border: none;
             border-radius: var(--radius-md);
             cursor: pointer;
-            transition: var(--transition);
             font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-
-        .btn-media-remove:hover {
-            background: var(--danger);
-            color: white;
         }
 
         .btn-media-preview {
@@ -670,41 +622,12 @@
             border: none;
             border-radius: var(--radius-md);
             cursor: pointer;
-            transition: var(--transition);
             font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .btn-media-preview:hover {
-            background: var(--gold);
-            color: var(--navy);
-        }
-
-        .media-count {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: var(--gold);
-            color: var(--navy);
-            border-radius: var(--radius-full);
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-left: 1rem;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        /* ===== THEME GRID ===== */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -750,7 +673,6 @@
             color: var(--gray-700);
         }
 
-        /* ===== BUTTONS ===== */
         .btn {
             padding: 0.875rem 1.75rem;
             border: none;
@@ -796,7 +718,6 @@
             font-size: 0.85rem;
         }
 
-        /* ===== RESULT CARD ===== */
         .result-card {
             background: var(--white);
             border: 1px solid var(--success);
@@ -812,29 +733,6 @@
 
         .result-card.active {
             display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
-        .result-card::before {
-            content: '✅';
-            position: absolute;
-            bottom: -20px;
-            right: -20px;
-            font-size: 120px;
-            opacity: 0.05;
-            transform: rotate(-15deg);
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .link-container {
@@ -867,11 +765,6 @@
             font-weight: 500;
         }
 
-        .copy-btn:hover {
-            background: var(--navy-light);
-            transform: scale(1.05);
-        }
-
         .qrcode-container {
             display: flex;
             justify-content: center;
@@ -882,12 +775,6 @@
             border: 1px solid var(--gray-200);
         }
 
-        .qrcode-container img {
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* ===== STATS CARDS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -928,10 +815,8 @@
             font-size: 0.8rem;
             color: var(--gray-600);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        /* ===== TABLES ===== */
         .table-container {
             background: var(--white);
             border: 1px solid var(--gray-200);
@@ -964,10 +849,6 @@
             color: var(--gray-700);
         }
 
-        .table tr:hover {
-            background: var(--gold-light);
-        }
-
         .expiry-status {
             display: inline-block;
             padding: 0.25rem 0.75rem;
@@ -981,17 +862,11 @@
             color: var(--success);
         }
 
-        .expiry-status.warning {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-
         .expiry-status.permanent {
             background: var(--purple-light);
             color: var(--purple);
         }
 
-        /* ===== LOADING ===== */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -1028,13 +903,34 @@
             to { transform: rotate(360deg); }
         }
 
-        .loading-text {
-            color: var(--navy);
-            font-weight: 600;
-            font-size: 1.1rem;
+        .alert {
+            padding: 1rem 1.75rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1.5rem;
+            display: none;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid;
+            font-weight: 500;
         }
 
-        /* ===== MODAL ===== */
+        .alert-success {
+            background: var(--success-light);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert-error {
+            background: var(--danger-light);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .alert-info {
+            background: var(--info-light);
+            border-color: var(--info);
+            color: var(--info);
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -1085,107 +981,28 @@
             font-size: 1.5rem;
         }
 
-        .modal-header i {
-            color: var(--gold);
-        }
-
         .modal-close {
             background: none;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--gray-600);
-            transition: var(--transition);
-        }
-
-        .modal-close:hover {
-            color: var(--danger);
-            transform: rotate(90deg);
-        }
-
-        /* ===== ALERTS ===== */
-        .alert {
-            padding: 1rem 1.75rem;
-            border-radius: var(--radius-lg);
-            margin-bottom: 1.5rem;
-            display: none;
-            animation: slideInRight 0.3s ease;
-            border-left: 4px solid;
-            font-weight: 500;
-        }
-
-        .alert-success {
-            background: var(--success-light);
-            border-color: var(--success);
-            color: var(--success);
-        }
-
-        .alert-error {
-            background: var(--danger-light);
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
-        .alert-info {
-            background: var(--info-light);
-            border-color: var(--info);
-            color: var(--info);
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .container { flex-direction: column; }
-            .sidebar { 
-                width: 100%; 
-                position: relative;
-                top: 0;
-                height: auto;
-                padding: 1.5rem;
-            }
-            .sidebar-header { display: none; }
         }
 
         @media (max-width: 768px) {
-            .header { flex-direction: column; gap: 1rem; }
-            .logo { justify-content: center; }
-            .datetime { width: 100%; justify-content: center; }
-            
-            .url-media-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .url-media-input-group {
-                flex-direction: column;
-            }
-            
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; top: 0; height: auto; }
+            .expiry-grid { grid-template-columns: 1fr; }
+            .url-media-grid { grid-template-columns: 1fr; }
+            .url-media-input-group { flex-direction: column; }
             .btn-add-media { width: 100%; }
-            
             .link-container { flex-direction: column; }
             .copy-btn { width: 100%; }
             .theme-grid { grid-template-columns: repeat(4, 1fr); }
-            .expiry-grid { grid-template-columns: 1fr; }
-            .media-item { flex-direction: column; align-items: flex-start; }
-            .media-actions { width: 100%; justify-content: flex-end; }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 480px) {
             .main-content { padding: 1.5rem; }
-            .page-title { font-size: 1.8rem; }
             .form-card { padding: 1.5rem; }
             .theme-grid { grid-template-columns: repeat(3, 1fr); }
         }
@@ -1200,7 +1017,7 @@
         </div>
     </div>
 
-    <!-- Header dengan Logo FIOR -->
+    <!-- Header -->
     <header class="header">
         <div class="logo">
             <div class="logo-image"></div>
@@ -1251,14 +1068,14 @@
             <div id="alertError" class="alert alert-error"></div>
             <div id="alertInfo" class="alert alert-info"></div>
 
-            <!-- ===== CREATE CARD PAGE ===== -->
+            <!-- Create Card Page -->
             <div id="create-card" class="page active">
                 <h1 class="page-title">
                     <i class="fas fa-magic"></i>
                     Buat Card Baru
                 </h1>
                 <div class="page-subtitle">
-                    Generate kartu ucapan digital dengan short link dan pilih masa berlaku per card
+                    Generate kartu ucapan digital dengan short link dan pilih masa berlaku (maksimal 10 media)
                 </div>
 
                 <div class="form-card">
@@ -1302,7 +1119,7 @@
                         </div>
                     </div>
 
-                    <!-- ===== PILIH MASA BERLAKU ===== -->
+                    <!-- Pilih Masa Berlaku -->
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-clock"></i>
@@ -1339,22 +1156,17 @@
                                 <span class="expiry-badge permanent">Selamanya</span>
                             </div>
                         </div>
-                        <small style="color: var(--gray-600); display: block; margin-top: 0.5rem;">
-                            <i class="fas fa-info-circle"></i> Pilih masa berlaku untuk card ini
-                        </small>
-                        <!-- Hidden input untuk menyimpan pilihan expiry -->
                         <input type="hidden" id="selectedExpiry" value="90">
                     </div>
 
-                    <!-- ===== MULTIPLE URL MEDIA SECTION ===== -->
+                    <!-- Multiple URL Media dengan batas 10 -->
                     <div class="url-media-section">
                         <div class="url-media-header">
                             <i class="fas fa-photo-video"></i>
-                            <span>Multiple URL Media</span>
-                            <span class="url-media-badge" id="mediaCountBadge">0</span>
+                            <span>Multiple URL Media (Maksimal 10)</span>
+                            <span class="url-media-badge" id="mediaCountBadge">0/10</span>
                         </div>
                         
-                        <!-- Input Form -->
                         <div class="url-media-grid">
                             <div class="url-media-input-group">
                                 <input type="url" class="url-media-input" id="mediaUrlInput" 
@@ -1365,26 +1177,21 @@
                                     <option value="video">Video</option>
                                 </select>
                             </div>
-                            <button type="button" class="btn-add-media" onclick="addMediaUrl()">
+                            <button type="button" class="btn-add-media" id="addMediaBtn" onclick="addMediaUrl()">
                                 <i class="fas fa-plus-circle"></i> Tambah Media
                             </button>
                         </div>
                         
-                        <!-- Media List -->
-                        <div id="mediaListContainer" class="media-list">
-                            <!-- Media items akan diisi JavaScript -->
-                        </div>
-                        
-                        <!-- Hidden Input untuk menyimpan JSON -->
+                        <div id="mediaListContainer" class="media-list"></div>
                         <input type="hidden" id="mediaUrls" value="[]">
                         
                         <small style="color: var(--gray-600); display: block; margin-top: 1rem;">
                             <i class="fas fa-info-circle"></i> 
-                            Bisa tambah banyak URL gambar/video. Akan tampil sebagai carousel di card.
+                            Maksimal <strong>10 media</strong> (gambar/video). Akan tampil sebagai carousel di card.
                         </small>
                     </div>
 
-                    <!-- Pilih Tema - 11 TEMA PREMIUM -->
+                    <!-- Pilih Tema -->
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-palette"></i>
@@ -1407,14 +1214,12 @@
                     </div>
                 </div>
 
-                <!-- ===== RESULT CARD ===== -->
+                <!-- Result Card -->
                 <div id="cardResult" class="result-card">
-                    <h3 style="color: var(--success); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <i class="fas fa-check-circle"></i>
-                        CARD BERHASIL DIBUAT!
+                    <h3 style="color: var(--success); margin-bottom: 1.5rem;">
+                        <i class="fas fa-check-circle"></i> CARD BERHASIL DIBUAT!
                     </h3>
                     
-                    <!-- Info Card -->
                     <div style="background: var(--soft-white); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
                         <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
                             <i class="fas fa-user" style="color: var(--gold);"></i>
@@ -1434,11 +1239,9 @@
                         </div>
                     </div>
                     
-                    <!-- Link Card -->
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-link"></i>
-                            SHORT LINK CARD
+                            <i class="fas fa-link"></i> SHORT LINK CARD
                         </label>
                         <div class="link-container">
                             <span class="short-link" id="generatedLink">https://fiorcard.com/xxx</span>
@@ -1446,30 +1249,16 @@
                                 <i class="fas fa-copy"></i> Copy
                             </button>
                         </div>
-                        <small style="color: var(--success); display: block; margin-top: 0.25rem;">
-                            <i class="fas fa-check-circle"></i> Link sudah pendek! (tanpa parameter pesan)
-                        </small>
                     </div>
 
-                    <!-- QR Code -->
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-qrcode"></i>
-                            QR CODE
+                            <i class="fas fa-qrcode"></i> QR CODE
                         </label>
                         <div class="qrcode-container" id="qrcode"></div>
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                            <button class="btn btn-sm btn-primary" onclick="downloadQRCode()" style="flex: 1;">
-                                <i class="fas fa-download"></i> Download QR
-                            </button>
-                            <button class="btn btn-sm btn-primary" onclick="printQRCode()" style="flex: 1;">
-                                <i class="fas fa-print"></i> Cetak QR
-                            </button>
-                        </div>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <div style="display: flex; gap: 1rem;">
                         <a href="#" target="_blank" class="btn btn-success" id="whatsappResultBtn" style="flex: 1;">
                             <i class="fab fa-whatsapp"></i> Kirim WA
                         </a>
@@ -1480,11 +1269,10 @@
                 </div>
             </div>
 
-            <!-- ===== CUSTOMERS PAGE ===== -->
+            <!-- Customers Page -->
             <div id="customers" class="page">
                 <h1 class="page-title">
-                    <i class="fas fa-users"></i>
-                    Data Customers
+                    <i class="fas fa-users"></i> Data Customers
                 </h1>
                 <div class="page-subtitle">
                     Kelola database customer FIOR Florist
@@ -1509,19 +1297,16 @@
                             </tr>
                         </thead>
                         <tbody id="customersTableBody">
-                            <tr>
-                                <td colspan="6" style="text-align: center; padding: 2rem;">Memuat data...</td>
-                            </tr>
+                            <tr><td colspan="6" style="text-align: center; padding: 2rem;">Memuat data...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- ===== HISTORY PAGE ===== -->
+            <!-- History Page -->
             <div id="history" class="page">
                 <h1 class="page-title">
-                    <i class="fas fa-history"></i>
-                    History Cards
+                    <i class="fas fa-history"></i> History Cards
                 </h1>
                 <div class="page-subtitle">
                     Riwayat semua card yang telah dibuat
@@ -1540,78 +1325,58 @@
                             </tr>
                         </thead>
                         <tbody id="historyTableBody">
-                            <tr>
-                                <td colspan="6" style="text-align: center; padding: 2rem;">Memuat data...</td>
-                            </tr>
+                            <tr><td colspan="6" style="text-align: center; padding: 2rem;">Memuat data...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- ===== SETTINGS PAGE ===== -->
+            <!-- Settings Page -->
             <div id="settings" class="page">
                 <h1 class="page-title">
-                    <i class="fas fa-cog"></i>
-                    Settings
+                    <i class="fas fa-cog"></i> Settings
                 </h1>
                 <div class="page-subtitle">
                     Konfigurasi API dan sistem
                 </div>
 
                 <div class="form-card">
-                    <!-- API Settings -->
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-link"></i>
-                            Google Apps Script URL
+                            <i class="fas fa-link"></i> Google Apps Script URL
                         </label>
                         <input type="url" class="form-control" id="scriptUrl" 
                                placeholder="https://script.google.com/macros/s/.../exec"
                                value="https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec">
-                        <small style="color: var(--gray-600); display: block; margin-top: 0.25rem;">
-                            <i class="fas fa-info-circle"></i> URL setelah deploy web app
-                        </small>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-globe"></i>
-                            Card Base URL
+                            <i class="fas fa-globe"></i> Card Base URL
                         </label>
                         <input type="url" class="form-control" id="cardBaseUrl" 
                                value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
-                        <small style="color: var(--success); display: block; margin-top: 0.25rem;">
-                            <i class="fas fa-check-circle"></i> Gunakan dengan parameter &v=ID untuk short link
-                        </small>
                     </div>
 
-                    <!-- Statistics -->
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
+                            <div class="stat-icon"><i class="fas fa-envelope"></i></div>
                             <div class="stat-value" id="totalMessages">0</div>
                             <div class="stat-label">Total Pesan</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
+                            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
                             <div class="stat-value" id="activeMessages">0</div>
                             <div class="stat-label">Pesan Aktif</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-hourglass-end"></i>
-                            </div>
+                            <div class="stat-icon"><i class="fas fa-hourglass-end"></i></div>
                             <div class="stat-value" id="expiredMessages">0</div>
                             <div class="stat-label">Kadaluarsa</div>
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <div style="display: flex; gap: 1rem;">
                         <button class="btn btn-primary" onclick="saveSettings()">
                             <i class="fas fa-save"></i> Simpan Settings
                         </button>
@@ -1627,14 +1392,11 @@
         </main>
     </div>
 
-    <!-- ===== MODAL TAMBAH CUSTOMER ===== -->
+    <!-- Modal Tambah Customer -->
     <div id="customerModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>
-                    <i class="fas fa-user-plus"></i>
-                    Tambah Customer
-                </h3>
+                <h3><i class="fas fa-user-plus"></i> Tambah Customer</h3>
                 <button class="modal-close" onclick="closeCustomerModal()">
                     <i class="fas fa-times"></i>
                 </button>
@@ -1642,46 +1404,31 @@
             
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-user"></i>
-                        Nama Lengkap <span style="color: var(--danger);">*</span>
-                    </label>
+                    <label class="form-label">Nama Lengkap *</label>
                     <input type="text" class="form-control" id="modalCustomerName" 
                            placeholder="Masukkan nama lengkap">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">
-                        <i class="fab fa-whatsapp"></i>
-                        No. WhatsApp <span style="color: var(--danger);">*</span>
-                    </label>
+                    <label class="form-label">No. WhatsApp *</label>
                     <input type="tel" class="form-control" id="modalCustomerPhone" 
                            placeholder="081234567890">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-envelope"></i>
-                        Email
-                    </label>
+                    <label class="form-label">Email</label>
                     <input type="email" class="form-control" id="modalCustomerEmail" 
                            placeholder="customer@example.com">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-map-marker-alt"></i>
-                        Alamat
-                    </label>
+                    <label class="form-label">Alamat</label>
                     <textarea class="form-control" id="modalCustomerAddress" 
                               rows="2" placeholder="Jl. Contoh No. 123, Kota, Provinsi"></textarea>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-sticky-note"></i>
-                        Catatan
-                    </label>
+                    <label class="form-label">Catatan</label>
                     <textarea class="form-control" id="modalCustomerNotes" 
                               rows="3" placeholder="Catatan khusus tentang customer..."></textarea>
                 </div>
@@ -1700,10 +1447,10 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - PER-CARD EXPIRY
+        // FIOR CARD ADMIN - COMPLETE WITH 10 MEDIA LIMIT
         // ============================================
 
-        // ========== KONFIGURASI ==========
+        // Konfigurasi
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec",
             CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
@@ -1711,7 +1458,7 @@
             DEFAULT_EXPIRY: "90"
         };
 
-        // ========== THEMES - 11 TEMA ==========
+        // Themes
         const THEMES = [
             { id: 'birthday', name: 'Birthday', emoji: '🎂' },
             { id: 'valentine', name: 'Valentine', emoji: '❤️' },
@@ -1726,20 +1473,19 @@
             { id: 'newyear', name: 'New Year', emoji: '🎆' }
         ];
 
-        // ========== STATE ==========
+        // State
         let state = {
             customers: [],
             cards: [],
             selectedTheme: CONFIG.DEFAULT_THEME,
             mediaUrls: [],
-            keepResultCard: true,
             selectedExpiry: CONFIG.DEFAULT_EXPIRY
         };
 
-        // ========== DOM ELEMENTS ==========
+        // DOM Elements
         const el = {};
 
-        // ========== INITIALIZATION ==========
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             cacheElements();
             loadSettings();
@@ -1759,7 +1505,7 @@
                 'alertSuccess', 'alertError', 'alertInfo',
                 'currentDateTime', 'connectionStatus', 'statusText', 'statusDot',
                 'recipientName', 'whatsappNumber', 'cardMessage', 'charCount',
-                'mediaUrlInput', 'mediaTypeSelect', 'mediaListContainer', 'mediaUrls', 'mediaCountBadge',
+                'mediaUrlInput', 'mediaTypeSelect', 'mediaListContainer', 'mediaUrls', 'mediaCountBadge', 'addMediaBtn',
                 'themeGrid', 'cardResult', 'generatedLink',
                 'whatsappResultBtn', 'previewResultBtn', 'qrcode',
                 'resultRecipient', 'resultTheme', 'resultMediaCount', 'resultExpiry',
@@ -1770,23 +1516,15 @@
                 'totalMessages', 'activeMessages', 'expiredMessages',
                 'expiry30', 'expiry90', 'expiryNever', 'selectedExpiry'
             ];
-            
-            ids.forEach(id => {
-                el[id] = document.getElementById(id);
-            });
+            ids.forEach(id => el[id] = document.getElementById(id));
         }
 
         function updateDateTime() {
             if (el.currentDateTime) {
                 const now = new Date();
                 el.currentDateTime.innerHTML = now.toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
                 });
             }
         }
@@ -1808,20 +1546,14 @@
             });
         }
 
-        // ========== THEMES ==========
         function loadThemes() {
             if (!el.themeGrid) return;
-            
             el.themeGrid.innerHTML = '';
-            
             THEMES.forEach(theme => {
                 const div = document.createElement('div');
                 div.className = `theme-card ${theme.id === state.selectedTheme ? 'active' : ''}`;
                 div.dataset.theme = theme.id;
-                div.innerHTML = `
-                    <div class="theme-emoji">${theme.emoji}</div>
-                    <div class="theme-name">${theme.name}</div>
-                `;
+                div.innerHTML = `<div class="theme-emoji">${theme.emoji}</div><div class="theme-name">${theme.name}</div>`;
                 div.onclick = () => {
                     state.selectedTheme = theme.id;
                     document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
@@ -1832,51 +1564,35 @@
             });
         }
 
-        // ========== EXPIRY SELECTION ==========
+        // Expiry Selection
         window.selectExpiry = function(value) {
-            // Remove selected class from all expiry cards
-            document.querySelectorAll('.expiry-card').forEach(card => {
-                card.classList.remove('selected');
-            });
+            document.querySelectorAll('.expiry-card').forEach(card => card.classList.remove('selected'));
+            if (value === '30') document.getElementById('expiry30').classList.add('selected');
+            else if (value === '90') document.getElementById('expiry90').classList.add('selected');
+            else if (value === 'never') document.getElementById('expiryNever').classList.add('selected');
             
-            // Add selected class to chosen card
-            if (value === '30') {
-                document.getElementById('expiry30').classList.add('selected');
-            } else if (value === '90') {
-                document.getElementById('expiry90').classList.add('selected');
-            } else if (value === 'never') {
-                document.getElementById('expiryNever').classList.add('selected');
-            }
-            
-            // Update state and hidden input
             state.selectedExpiry = value;
-            if (el.selectedExpiry) {
-                el.selectedExpiry.value = value;
-            }
-            
-            // Show feedback
-            let message = '';
-            if (value === '30') message = 'Masa berlaku: 30 hari';
-            else if (value === '90') message = 'Masa berlaku: 90 hari';
-            else message = 'Masa berlaku: Tidak pernah expired (permanen)';
-            
-            showAlert(message, 'info');
+            if (el.selectedExpiry) el.selectedExpiry.value = value;
         };
 
-        // ========== GENERATE SHORT ID ==========
+        // Generate Short ID
         function generateShortId() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let id = '';
-            for (let i = 0; i < 8; i++) {
-                id += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
+            for (let i = 0; i < 8; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
             return id;
         }
 
-        // ========== MULTIPLE URL MEDIA MANAGEMENT ==========
+        // Media Management dengan batas 10
         window.addMediaUrl = function() {
             const url = el.mediaUrlInput?.value.trim();
             const type = el.mediaTypeSelect?.value || 'auto';
+            
+            // Cek batas maksimal 10
+            if (state.mediaUrls.length >= 10) {
+                showAlert('Maksimal 10 media! Hapus beberapa untuk menambah.', 'error');
+                return;
+            }
             
             if (!url) {
                 showAlert('Masukkan URL terlebih dahulu!', 'error');
@@ -1900,31 +1616,19 @@
                 }
             }
             
-            // Add to state
-            state.mediaUrls.push({
-                url: url,
-                type: detectedType,
-                id: Date.now() + Math.random()
-            });
-            
-            // Update hidden input
-            if (el.mediaUrls) {
-                el.mediaUrls.value = JSON.stringify(state.mediaUrls);
-            }
+            state.mediaUrls.push({ url, type: detectedType, id: Date.now() + Math.random() });
+            if (el.mediaUrls) el.mediaUrls.value = JSON.stringify(state.mediaUrls);
             
             renderMediaList();
             el.mediaUrlInput.value = '';
             el.mediaTypeSelect.value = 'auto';
-            
             updateMediaCount();
             showAlert('URL media ditambahkan!', 'success');
         };
 
         window.removeMediaUrl = function(id) {
             state.mediaUrls = state.mediaUrls.filter(item => item.id !== id);
-            if (el.mediaUrls) {
-                el.mediaUrls.value = JSON.stringify(state.mediaUrls);
-            }
+            if (el.mediaUrls) el.mediaUrls.value = JSON.stringify(state.mediaUrls);
             renderMediaList();
             updateMediaCount();
             showAlert('Media dihapus', 'info');
@@ -1936,60 +1640,58 @@
 
         function renderMediaList() {
             if (!el.mediaListContainer) return;
-            
             if (state.mediaUrls.length === 0) {
-                el.mediaListContainer.innerHTML = `
-                    <div style="text-align: center; padding: 2rem; background: var(--soft-white); border-radius: var(--radius-lg); color: var(--gray-600);">
-                        <i class="fas fa-photo-video" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                        <p>Belum ada media. Tambahkan URL gambar/video di atas.</p>
-                    </div>
-                `;
+                el.mediaListContainer.innerHTML = '<div style="text-align: center; padding: 2rem;">Belum ada media</div>';
                 return;
             }
             
             let html = '';
-            
             state.mediaUrls.forEach((media, index) => {
                 const isVideo = media.type === 'video';
-                
                 html += `
                     <div class="media-item">
-                        <div class="media-icon">
-                            <i class="fas fa-${isVideo ? 'video' : 'image'}"></i>
-                        </div>
+                        <div class="media-icon"><i class="fas fa-${isVideo ? 'video' : 'image'}"></i></div>
                         <div class="media-details">
                             <div class="media-url">${media.url}</div>
-                            <div>
-                                <span class="media-type-badge ${isVideo ? 'video' : ''}">
-                                    ${isVideo ? 'VIDEO' : 'GAMBAR'} #${index + 1}
-                                </span>
-                            </div>
+                            <span class="media-type-badge ${isVideo ? 'video' : ''}">
+                                ${isVideo ? 'VIDEO' : 'GAMBAR'} #${index + 1}
+                            </span>
                         </div>
                         <div class="media-actions">
                             <button class="btn-media-preview" onclick="previewMedia('${escapeHTML(media.url)}')">
-                                <i class="fas fa-eye"></i> Preview
+                                <i class="fas fa-eye"></i>
                             </button>
                             <button class="btn-media-remove" onclick="removeMediaUrl(${media.id})">
-                                <i class="fas fa-trash"></i> Hapus
+                                <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
                 `;
             });
-            
             el.mediaListContainer.innerHTML = html;
         }
 
         function updateMediaCount() {
             if (el.mediaCountBadge) {
-                el.mediaCountBadge.textContent = state.mediaUrls.length;
+                el.mediaCountBadge.textContent = `${state.mediaUrls.length}/10`;
             }
             if (el.resultMediaCount) {
                 el.resultMediaCount.textContent = `${state.mediaUrls.length} Media (${state.mediaUrls.filter(m => m.type === 'image').length} Gambar, ${state.mediaUrls.filter(m => m.type === 'video').length} Video)`;
             }
+            
+            // Enable/disable tombol berdasarkan batas
+            if (el.addMediaBtn) {
+                if (state.mediaUrls.length >= 10) {
+                    el.addMediaBtn.disabled = true;
+                    el.addMediaBtn.style.opacity = '0.5';
+                } else {
+                    el.addMediaBtn.disabled = false;
+                    el.addMediaBtn.style.opacity = '1';
+                }
+            }
         }
 
-        // ========== CREATE CARD WITH PER-CARD EXPIRY ==========
+        // Create Card
         window.createCard = async function() {
             const name = el.recipientName?.value.trim();
             const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
@@ -2006,26 +1708,37 @@
             try {
                 const messageId = generateShortId();
                 
-                // Save message to server
-                try {
-                    const saveFormData = new URLSearchParams();
-                    saveFormData.append('type', 'save_message');
-                    saveFormData.append('id', messageId);
-                    saveFormData.append('message', message);
-                    saveFormData.append('nama', name);
-                    saveFormData.append('no_hp', phone);
-                    saveFormData.append('expiry_setting', expirySetting);
-                    
-                    await fetch(CONFIG.SCRIPT_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: saveFormData.toString()
-                    });
-                } catch (e) {
-                    console.warn('Warning: Could not save message to server:', e);
+                // Format media URLs untuk disimpan di database (dipisah dengan ||)
+                const mediaUrlsString = state.mediaUrls.map(m => m.url).join('||');
+                const totalMedia = state.mediaUrls.length;
+                
+                // Save to server
+                const saveFormData = new URLSearchParams();
+                saveFormData.append('type', 'save_message');
+                saveFormData.append('id', messageId);
+                saveFormData.append('message', message);
+                saveFormData.append('nama', name);
+                saveFormData.append('no_hp', phone);
+                saveFormData.append('expiry_setting', expirySetting);
+                saveFormData.append('media_urls', mediaUrlsString);
+                saveFormData.append('total_media', totalMedia.toString());
+                
+                console.log('Sending to server:', Object.fromEntries(saveFormData));
+                
+                const saveResponse = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: saveFormData.toString()
+                });
+                
+                const saveResult = await saveResponse.json();
+                console.log('Server response:', saveResult);
+                
+                if (saveResult.status !== 'success') {
+                    throw new Error(saveResult.message || 'Gagal menyimpan pesan');
                 }
                 
-                // Build short URL
+                // Build URL dengan parameter media1, media2, media3, dst.
                 let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}`;
                 
                 if (state.mediaUrls.length > 0) {
@@ -2036,11 +1749,7 @@
                 }
                 
                 // Display result
-                if (el.generatedLink) {
-                    el.generatedLink.textContent = cardUrl;
-                }
-                
-                // Update result info
+                if (el.generatedLink) el.generatedLink.textContent = cardUrl;
                 if (el.resultRecipient) el.resultRecipient.textContent = name;
                 if (el.resultTheme) {
                     const themeObj = THEMES.find(t => t.id === theme);
@@ -2050,15 +1759,13 @@
                 let expiryText = '';
                 if (expirySetting === '30') expiryText = 'Masa berlaku: 30 hari';
                 else if (expirySetting === '90') expiryText = 'Masa berlaku: 90 hari';
-                else expiryText = 'Masa berlaku: Permanen (tidak pernah expired)';
+                else expiryText = 'Masa berlaku: Permanen';
                 
-                if (el.resultExpiry) {
-                    el.resultExpiry.innerHTML = `<i class="fas fa-clock"></i> ${expiryText}`;
-                }
+                if (el.resultExpiry) el.resultExpiry.innerHTML = `<i class="fas fa-clock"></i> ${expiryText}`;
                 
                 updateMediaCount();
                 
-                // Generate QR Code
+                // QR Code
                 if (el.qrcode) {
                     el.qrcode.innerHTML = '';
                     new QRCode(el.qrcode, {
@@ -2071,24 +1778,17 @@
                     });
                 }
                 
-                // Set WhatsApp button
+                // WhatsApp button
                 const waNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
                 const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${cardUrl}`;
-                if (el.whatsappResultBtn) {
-                    el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
-                }
-                if (el.previewResultBtn) {
-                    el.previewResultBtn.href = cardUrl;
-                }
+                if (el.whatsappResultBtn) el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
+                if (el.previewResultBtn) el.previewResultBtn.href = cardUrl;
                 
-                // Show result card
+                // Show result
                 if (el.cardResult) {
                     el.cardResult.classList.add('active');
                     el.cardResult.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        el.cardResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 200);
+                    setTimeout(() => el.cardResult.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
                 }
                 
                 // Save to history
@@ -2100,9 +1800,10 @@
                     formData.append('tema', theme);
                     formData.append('pesan', message);
                     formData.append('link', cardUrl);
-                    formData.append('media_url', state.mediaUrls.map(m => m.url).join('||'));
+                    formData.append('media_urls', mediaUrlsString);
                     formData.append('message_id', messageId);
                     formData.append('expiry_setting', expirySetting);
+                    formData.append('total_media', totalMedia.toString());
                     
                     await fetch(CONFIG.SCRIPT_URL, {
                         method: 'POST',
@@ -2112,9 +1813,8 @@
                     
                     loadCards();
                     loadStats();
-                    
                 } catch (e) {
-                    console.log('Save error:', e);
+                    console.log('Save to history error:', e);
                 }
                 
                 showAlert('✅ CARD BERHASIL DIBUAT!', 'success');
@@ -2127,12 +1827,11 @@
             }
         };
 
-        // ========== PREVIEW CARD ==========
+        // Preview Card
         window.previewCard = function() {
             const name = el.recipientName?.value.trim() || 'Preview';
             const message = el.cardMessage?.value.trim() || 'Preview message';
             const theme = state.selectedTheme;
-            
             const messageId = 'preview_' + generateShortId();
             
             let url = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}&preview=true`;
@@ -2147,7 +1846,7 @@
             window.open(url, '_blank');
         };
 
-        // ========== RESET FORM ==========
+        // Reset Form
         window.resetForm = function() {
             if (el.recipientName) el.recipientName.value = '';
             if (el.whatsappNumber) el.whatsappNumber.value = '';
@@ -2165,28 +1864,25 @@
             });
             
             selectExpiry(CONFIG.DEFAULT_EXPIRY);
-            
             showAlert('Form direset', 'info');
         };
 
-        // ========== COPY LINK ==========
+        // Copy Link
         window.copyLink = function() {
             const link = el.generatedLink?.textContent;
             if (!link || link === 'https://fiorcard.com/xxx') {
                 showAlert('Tidak ada link untuk dicopy', 'error');
                 return;
             }
-            
             navigator.clipboard.writeText(link)
                 .then(() => showAlert('✅ Link berhasil dicopy!', 'success'))
                 .catch(() => showAlert('❌ Gagal copy link', 'error'));
         };
 
-        // ========== QR CODE FUNCTIONS ==========
+        // QR Code Functions
         window.downloadQRCode = function() {
             const qrcodeEl = el.qrcode?.querySelector('img');
             if (!qrcodeEl) { showAlert('QR Code belum tersedia', 'error'); return; }
-            
             const link = document.createElement('a');
             link.download = `fior-card-${Date.now()}.png`;
             link.href = qrcodeEl.src;
@@ -2197,66 +1893,47 @@
         window.printQRCode = function() {
             const qrcodeEl = el.qrcode?.querySelector('img');
             if (!qrcodeEl) { showAlert('QR Code belum tersedia', 'error'); return; }
-            
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
-                <html>
-                    <head>
-                        <title>QR Code - FIOR Card</title>
-                        <style>
-                            body { display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: Arial; background: white; }
-                            img { max-width: 300px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-                            p { margin-top: 20px; color: #1e3a5f; font-size: 14px; }
-                        </style>
-                    </head>
-                    <body>
-                        <img src="${qrcodeEl.src}" />
-                        <p>QR Code - Kartu Ucapan Digital FIOR Florist</p>
-                    </body>
-                </html>
+                <html><head><title>QR Code - FIOR Card</title>
+                <style>body{display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;}</style>
+                </head><body><img src="${qrcodeEl.src}" /><p>QR Code - Kartu Ucapan Digital FIOR Florist</p></body></html>
             `);
             printWindow.document.close();
             printWindow.print();
         };
 
-        // ========== API CONNECTION ==========
+        // Test Connection
         window.testConnection = async function(silent = false) {
             if (!silent) showLoading(true, 'Testing koneksi...');
-            
             try {
                 const response = await fetch(CONFIG.SCRIPT_URL + '?type=test&t=' + Date.now());
                 const result = await response.json();
-                
                 if (result.status === 'success') {
                     if (!silent) showAlert('✅ Koneksi berhasil!', 'success');
                     if (el.statusText) {
                         el.statusText.textContent = 'Terhubung';
                         el.statusText.classList.remove('offline');
                     }
-                    if (el.statusDot) {
-                        el.statusDot.classList.remove('offline');
-                    }
+                    if (el.statusDot) el.statusDot.classList.remove('offline');
                     return true;
                 } else {
                     throw new Error('Invalid response');
                 }
-                
             } catch (error) {
                 if (!silent) showAlert('❌ Koneksi gagal!', 'error');
                 if (el.statusText) {
                     el.statusText.textContent = 'Gagal konek';
                     el.statusText.classList.add('offline');
                 }
-                if (el.statusDot) {
-                    el.statusDot.classList.add('offline');
-                }
+                if (el.statusDot) el.statusDot.classList.add('offline');
                 return false;
             } finally {
                 if (!silent) showLoading(false);
             }
         };
 
-        // ========== CUSTOMERS ==========
+        // Load Customers
         async function loadCustomers() {
             try {
                 const response = await fetch(`${CONFIG.SCRIPT_URL}?type=customers&t=${Date.now()}`);
@@ -2266,19 +1943,17 @@
             } catch (error) {
                 console.error('Load customers error:', error);
                 if (el.customersTableBody) {
-                    el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
+                    el.customersTableBody.innerHTML = '<tr><td colspan="6" style="color: var(--danger);">Gagal memuat data</td></tr>';
                 }
             }
         }
 
         function renderCustomersTable() {
             if (!el.customersTableBody) return;
-            
             if (state.customers.length === 0) {
-                el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Belum ada data customer</td></tr>';
+                el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Belum ada data</td></tr>';
                 return;
             }
-            
             let html = '';
             state.customers.slice(0, 20).forEach(c => {
                 html += `
@@ -2306,7 +1981,7 @@
             document.querySelector('.nav-item[data-page="create-card"]').click();
         };
 
-        // ========== CARDS HISTORY ==========
+        // Load Cards
         async function loadCards() {
             try {
                 const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
@@ -2316,24 +1991,21 @@
             } catch (error) {
                 console.error('Load cards error:', error);
                 if (el.historyTableBody) {
-                    el.historyTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
+                    el.historyTableBody.innerHTML = '<tr><td colspan="6" style="color: var(--danger);">Gagal memuat data</td></tr>';
                 }
             }
         }
 
         function renderCardsTable() {
             if (!el.historyTableBody) return;
-            
             if (state.cards.length === 0) {
                 el.historyTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Belum ada card</td></tr>';
                 return;
             }
-            
             let html = '';
             state.cards.slice(0, 20).forEach(c => {
-                const mediaCount = c.media_url ? c.media_url.split('||').length : 0;
-                let expiryText = '';
-                let statusClass = '';
+                const mediaCount = c.total_media || '0';
+                let expiryText = '', statusClass = '';
                 
                 if (c.expiry_setting === 'never') {
                     expiryText = 'Permanen';
@@ -2353,31 +2025,20 @@
                         <td>${c.timestamp ? new Date(c.timestamp).toLocaleDateString('id-ID') : '-'}</td>
                         <td>${c.nama_penerima || c.name || '-'}</td>
                         <td>${c.tema || c.theme || '-'}</td>
-                        <td style="text-align: center;">
-                            <span class="media-type-badge" style="background: ${mediaCount > 0 ? 'var(--success)' : 'var(--gray-600)'}">
-                                ${mediaCount} Media
-                            </span>
-                        </td>
-                        <td>
-                            <a href="${c.link || '#'}" target="_blank" class="btn btn-primary btn-sm">
-                                <i class="fas fa-eye"></i> Lihat
-                            </a>
-                        </td>
-                        <td>
-                            <span class="expiry-status ${statusClass}">${expiryText}</span>
-                        </td>
+                        <td style="text-align: center;">${mediaCount} Media</td>
+                        <td><a href="${c.link || '#'}" target="_blank" class="btn btn-primary btn-sm">Lihat</a></td>
+                        <td><span class="expiry-status ${statusClass}">${expiryText}</span></td>
                     </tr>
                 `;
             });
             el.historyTableBody.innerHTML = html;
         }
 
-        // ========== LOAD STATS ==========
+        // Load Stats
         async function loadStats() {
             try {
                 const response = await fetch(`${CONFIG.SCRIPT_URL}?type=get_stats&t=${Date.now()}`);
                 const data = await response.json();
-                
                 if (data.status === 'success') {
                     if (el.totalMessages) el.totalMessages.textContent = data.total_messages || 0;
                     if (el.activeMessages) el.activeMessages.textContent = data.active_messages || 0;
@@ -2388,14 +2049,13 @@
             }
         }
 
-        // ========== CUSTOMER MODAL ==========
+        // Customer Modal
         window.showAddCustomerModal = function() {
             document.getElementById('customerModal').classList.add('active');
         };
 
         window.closeCustomerModal = function() {
             document.getElementById('customerModal').classList.remove('active');
-            
             ['modalCustomerName', 'modalCustomerPhone', 'modalCustomerEmail', 
              'modalCustomerAddress', 'modalCustomerNotes'].forEach(id => {
                 const elm = document.getElementById(id);
@@ -2450,7 +2110,7 @@
             }
         };
 
-        // ========== SETTINGS ==========
+        // Settings
         function loadSettings() {
             const saved = localStorage.getItem('fior_settings');
             if (saved) {
@@ -2479,24 +2139,19 @@
             showAlert('✅ Settings tersimpan!', 'success');
         };
 
-        // ========== CLEANUP ==========
+        // Cleanup
         window.runCleanup = async function() {
-            if (!confirm('Yakin ingin membersihkan semua pesan yang sudah kadaluarsa? (Pesan permanen tidak akan dihapus)')) return;
-            
+            if (!confirm('Yakin ingin membersihkan semua pesan yang sudah kadaluarsa?')) return;
             showLoading(true, 'Membersihkan pesan expired...');
-            
             try {
                 const formData = new URLSearchParams();
                 formData.append('type', 'cleanup');
-                
                 const response = await fetch(CONFIG.SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: formData.toString()
                 });
-                
                 const result = await response.json();
-                
                 if (result.status === 'success') {
                     showAlert(`✅ Berhasil membersihkan ${result.cleaned} pesan expired!`, 'success');
                     await loadStats();
@@ -2504,7 +2159,6 @@
                 } else {
                     throw new Error(result.message);
                 }
-                
             } catch (error) {
                 showAlert('❌ Gagal: ' + error.message, 'error');
             } finally {
@@ -2512,7 +2166,7 @@
             }
         };
 
-        // ========== UTILITY FUNCTIONS ==========
+        // Utilities
         function showAlert(message, type = 'success') {
             let alertEl;
             if (type === 'success') alertEl = el.alertSuccess;
@@ -2539,19 +2193,15 @@
 
         function escapeHTML(str) {
             if (!str) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+            return String(str).replace(/[&<>"]/g, function(m) {
+                return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[m];
+            });
         }
 
         // Character counter
         if (el.cardMessage) {
             el.cardMessage.addEventListener('input', function() {
-                const len = this.value.length;
-                if (el.charCount) el.charCount.textContent = len;
+                if (el.charCount) el.charCount.textContent = this.value.length;
             });
         }
 
