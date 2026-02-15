@@ -591,72 +591,71 @@
             z-index: 2;
         }
 
-        /* ===== EXPIRY BADGE (KECIL) ===== */
+        /* ===== EXPIRY BADGE ===== */
         .expiry-badge-container {
             display: flex;
             justify-content: flex-end;
-            margin-top: 8px;
-            margin-bottom: 4px;
+            margin-bottom: 12px;
         }
 
         .expiry-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 4px 12px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(5px);
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 600;
             border: 1px solid rgba(0,0,0,0.1);
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             color: var(--primary);
         }
 
         .expiry-badge i {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: var(--accent);
         }
 
-        .expiry-badge.warning {
-            background: #fff3cd;
-            color: #856404;
-            border-color: #ffc107;
-        }
-
-        .expiry-badge.warning i {
-            color: #856404;
-        }
-
-        .expiry-badge.danger {
-            background: #f8d7da;
-            color: #721c24;
-            border-color: #dc3545;
-        }
-
-        .expiry-badge.danger i {
-            color: #721c24;
-        }
-
-        .expiry-badge.success {
-            background: #d4edda;
-            color: #155724;
-            border-color: #28a745;
-        }
-
-        .expiry-badge.success i {
-            color: #155724;
-        }
-
         .expiry-badge.permanent {
-            background: #e2e3e5;
-            color: #383d41;
-            border-color: #6c757d;
+            background: rgba(124, 58, 237, 0.1);
+            color: #7c3aed;
+            border-color: #7c3aed;
         }
 
         .expiry-badge.permanent i {
-            color: #383d41;
+            color: #7c3aed;
+        }
+
+        .expiry-badge.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #b45309;
+            border-color: #f59e0b;
+        }
+
+        .expiry-badge.warning i {
+            color: #b45309;
+        }
+
+        .expiry-badge.danger {
+            background: rgba(220, 38, 38, 0.1);
+            color: #b91c1c;
+            border-color: #dc2626;
+        }
+
+        .expiry-badge.danger i {
+            color: #b91c1c;
+        }
+
+        .expiry-badge.success {
+            background: rgba(15, 118, 110, 0.1);
+            color: #0f766e;
+            border-color: #0f766e;
+        }
+
+        .expiry-badge.success i {
+            color: #0f766e;
         }
 
         /* ===== CARD HEADER ===== */
@@ -1437,7 +1436,7 @@
 
             <!-- Card Body -->
             <div class="card-body">
-                <!-- Expiry Badge Kecil (ditaruh di atas) -->
+                <!-- Expiry Badge -->
                 <div class="expiry-badge-container">
                     <div class="expiry-badge" id="expiryBadge">
                         <i class="fas fa-clock"></i>
@@ -1522,7 +1521,7 @@
     
     <script>
         // ============================================
-        // FIOR CARD - CAROUSEL SLIDER WITH EXPIRY BADGE
+        // FIOR CARD - WITH PER-CARD EXPIRY BADGE
         // ============================================
 
         // ========== KONFIGURASI ==========
@@ -1581,7 +1580,7 @@
             swiper: null,
             messageId: null,
             messageLoaded: false,
-            expiryDays: 90,
+            expirySetting: '90',
             daysRemaining: null,
             theme: 'birthday'
         };
@@ -1671,14 +1670,15 @@
                 
                 if (data.status === 'success' && data.message) {
                     state.daysRemaining = data.days_remaining;
-                    state.expiryDays = data.expiry_days || 90;
+                    state.expirySetting = data.expiry_setting || '90';
                     
                     return {
                         message: data.message,
                         nama: data.nama,
                         no_hp: data.no_hp,
                         days_remaining: data.days_remaining,
-                        expires: data.expires
+                        expires: data.expires,
+                        expiry_setting: data.expiry_setting
                     };
                 } else {
                     return null;
@@ -1690,18 +1690,21 @@
         }
 
         // ========== UPDATE EXPIRY BADGE ==========
-        function updateExpiryBadge(daysRemaining) {
+        function updateExpiryBadge(daysRemaining, expirySetting) {
             if (!el.expiryBadge || !el.expiryBadgeText) return;
             
             let icon = 'fa-clock';
             let text = '';
             let badgeClass = '';
             
-            if (daysRemaining === null) {
-                // Permanent (old style with msg parameter)
+            if (expirySetting === 'never') {
                 icon = 'fa-infinity';
                 text = 'Permanen';
                 badgeClass = 'permanent';
+            } else if (daysRemaining === null || daysRemaining === undefined) {
+                icon = 'fa-clock';
+                text = 'Memuat...';
+                badgeClass = '';
             } else if (daysRemaining < 0) {
                 icon = 'fa-exclamation-triangle';
                 text = 'Expired';
@@ -1727,7 +1730,7 @@
             `;
             
             // Remove existing classes and add new one
-            el.expiryBadge.classList.remove('warning', 'danger', 'success', 'permanent');
+            el.expiryBadge.classList.remove('permanent', 'warning', 'danger', 'success');
             if (badgeClass) {
                 el.expiryBadge.classList.add(badgeClass);
             }
@@ -2021,6 +2024,7 @@
             
             if (state.params.msg) {
                 setMessage(state.params.msg);
+                updateExpiryBadge(null, 'never'); // Old style, permanent
             } else {
                 setMessage('Memuat pesan...');
             }
@@ -2037,18 +2041,15 @@
                 const messageData = await fetchMessageFromServer(state.messageId);
                 if (messageData) {
                     setMessage(messageData.message);
-                    updateExpiryBadge(messageData.days_remaining);
+                    updateExpiryBadge(messageData.days_remaining, messageData.expiry_setting);
                     
                     if (messageData.nama && messageData.nama !== state.params.to) {
                         console.log('Note: Server has different name:', messageData.nama);
                     }
                 } else {
                     setMessage('Pesan tidak ditemukan atau telah kadaluarsa.');
-                    updateExpiryBadge(-1);
+                    updateExpiryBadge(-1, '90');
                 }
-            } else {
-                // If using direct msg parameter, show permanent badge
-                updateExpiryBadge(null);
             }
             
             const waText = `Kartu untuk ${state.params.to}: ${window.location.href}`;
