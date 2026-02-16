@@ -351,6 +351,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        // ============================================
+        // FIOR CARD - FINAL VERSION (SESUAI DENGAN SCRIPT)
+        // ============================================
+
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec"
         };
@@ -375,6 +379,7 @@
         };
 
         const el = {};
+        
         function cacheElements() {
             const ids = ['loadingOverlay','notification','notificationMessage','themeEmoji','greetingText','recipientName','messageText','whatsappBtn','mediaSection','mediaCount','carouselWrapper','thumbnails','mediaModal','modalImage','modalVideo','currentSlide','totalSlides','expiryBadge','expiryBadgeText'];
             ids.forEach(id => el[id] = document.getElementById(id));
@@ -417,34 +422,63 @@
             return 'image';
         }
 
+        // ========== FETCH MESSAGE - SESUAI DENGAN SCRIPT (cmd=get) ==========
         async function fetchMessageFromServer(messageId) {
             if (!messageId) return null;
             try {
-                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=get_message&id=${messageId}&t=${Date.now()}`);
+                const url = `${CONFIG.SCRIPT_URL}?cmd=get&id=${messageId}&t=${Date.now()}`;
+                console.log('📤 Fetching:', url);
+                
+                const response = await fetch(url);
                 const data = await response.json();
-                if (data.status === 'success') return data;
-                return null;
+                console.log('📥 Response:', data);
+                
+                return data;
             } catch (error) {
-                console.error('Error:', error);
+                console.error('❌ Fetch error:', error);
                 return null;
             }
         }
 
+        // ========== PARSE MEDIA DARI DATABASE ==========
+        function parseMediaFromString(mediaString) {
+            if (!mediaString) return [];
+            return mediaString.split('||').map(url => ({
+                url: url,
+                type: detectMediaType(url)
+            }));
+        }
+
+        // ========== UPDATE EXPIRY BADGE ==========
         function updateExpiryBadge(data) {
             if (!el.expiryBadge || !el.expiryBadgeText) return;
             
             let icon, text, className;
             
-            if (!data) {
-                icon = 'fa-clock'; text = 'Gagal memuat'; className = '';
+            if (!data || data.status === 'error') {
+                icon = 'fa-exclamation-triangle';
+                text = 'Tidak ditemukan';
+                className = 'danger';
             } else if (data.expiry_setting === 'never') {
-                icon = 'fa-infinity'; text = 'Permanen'; className = 'permanent';
+                icon = 'fa-infinity';
+                text = 'Permanen';
+                className = 'permanent';
             } else if (data.is_expired) {
-                icon = 'fa-exclamation-triangle'; text = 'Expired'; className = 'danger';
+                icon = 'fa-exclamation-triangle';
+                text = 'Expired';
+                className = 'danger';
+            } else if (data.days_remaining === 0) {
+                icon = 'fa-hourglass-end';
+                text = 'Hari Terakhir';
+                className = 'warning';
             } else if (data.days_remaining <= 7) {
-                icon = 'fa-hourglass-half'; text = `${data.days_remaining} hari lagi`; className = 'warning';
+                icon = 'fa-hourglass-half';
+                text = `${data.days_remaining} hari lagi`;
+                className = 'warning';
             } else {
-                icon = 'fa-hourglass-start'; text = `${data.days_remaining} hari`; className = 'success';
+                icon = 'fa-hourglass-start';
+                text = `${data.days_remaining} hari`;
+                className = 'success';
             }
             
             el.expiryBadge.innerHTML = `<i class="fas ${icon}"></i><span>${text}</span>`;
@@ -605,6 +639,7 @@
             setTimeout(() => el.notification.classList.remove('show'), 2000);
         }
 
+        // ========== INIT - SESUAI DENGAN SCRIPT ==========
         async function init() {
             cacheElements();
             
@@ -624,9 +659,14 @@
                 updateExpiryBadge({ expiry_setting: 'never' });
             } else if (state.params.messageId) {
                 const messageData = await fetchMessageFromServer(state.params.messageId);
-                if (messageData) {
+                if (messageData && messageData.status === 'success') {
                     el.messageText.textContent = messageData.message;
                     updateExpiryBadge(messageData);
+                    
+                    if (messageData.media) {
+                        state.mediaList = parseMediaFromString(messageData.media);
+                        console.log('📸 Media dari database:', state.mediaList.length);
+                    }
                 } else {
                     el.messageText.textContent = 'Pesan tidak ditemukan atau telah kadaluarsa.';
                     updateExpiryBadge({ is_expired: true });
