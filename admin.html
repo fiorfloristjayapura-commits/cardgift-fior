@@ -630,13 +630,12 @@
         </div>
     </div>
 
-    <!-- HANYA BAGIAN SCRIPT YANG DIUBAH -->
-    <!-- SELURUH HTML & CSS DI ATAS TETAP SAMA SEPERTI PUNYA MAS -->
     <script>
-        /* ============================================
-           FIOR CARD ADMIN - CLEAN VERSION
-        ============================================ */
+        // ============================================
+        // FIOR CARD ADMIN - FINAL VERSION
+        // ============================================
 
+        // Konfigurasi - GUNAKAN URL SCRIPT ANDA
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzTPgv-D6VNNlh0QHERaizfzN4tWCs42Xdr3sZLdpIzs3oHQAuz5D-6tqfO5U7E2QHmEw/exec",
             CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
@@ -644,138 +643,133 @@
             DEFAULT_EXPIRY: "90"
         };
 
+        // Themes
+        const THEMES = [
+            { id: 'birthday', name: 'Birthday', emoji: '🎂' },
+            { id: 'valentine', name: 'Valentine', emoji: '❤️' },
+            { id: 'wedding', name: 'Wedding', emoji: '💍' },
+            { id: 'anniversary', name: 'Anniversary', emoji: '🎉' },
+            { id: 'graduation', name: 'Graduation', emoji: '🎓' },
+            { id: 'condolence', name: 'Condolence', emoji: '🕊️' },
+            { id: 'congratulation', name: 'Congratulations', emoji: '🎊' },
+            { id: 'imlek', name: 'Imlek', emoji: '🧧' },
+            { id: 'lebaran', name: 'Lebaran', emoji: '🌙' },
+            { id: 'natal', name: 'Natal', emoji: '🎄' },
+            { id: 'newyear', name: 'New Year', emoji: '🎆' }
+        ];
+
+        // State
         let state = {
+            customers: [],
+            cards: [],
             selectedTheme: CONFIG.DEFAULT_THEME,
             mediaUrls: [],
             selectedExpiry: CONFIG.DEFAULT_EXPIRY
         };
 
-        function generateShortId() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let id = '';
-            for (let i = 0; i < 8; i++) {
-                id += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return id;
+        // DOM Elements
+        const el = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            cacheElements();
+            loadSettings();
+            loadThemes();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            setupNavigation();
+            loadCustomers();
+            loadCards();
+            loadStats();
+            setTimeout(() => testConnection(true), 1000);
+        });
+
+        function cacheElements() {
+            const ids = [
+                'loadingOverlay', 'loadingText',
+                'alertSuccess', 'alertError', 'alertInfo',
+                'currentDateTime', 'connectionStatus', 'statusText', 'statusDot',
+                'recipientName', 'whatsappNumber', 'cardMessage', 'charCount',
+                'mediaUrlInput', 'mediaTypeSelect', 'mediaListContainer', 'mediaUrls', 'mediaCountBadge', 'addMediaBtn',
+                'themeGrid', 'cardResult', 'generatedLink',
+                'whatsappResultBtn', 'previewResultBtn', 'qrcode',
+                'resultRecipient', 'resultTheme', 'resultMediaCount', 'resultExpiry',
+                'customersTableBody', 'historyTableBody',
+                'scriptUrl', 'cardBaseUrl',
+                'modalCustomerName', 'modalCustomerPhone', 
+                'modalCustomerEmail', 'modalCustomerAddress', 'modalCustomerNotes',
+                'totalMessages', 'activeMessages', 'expiredMessages',
+                'expiry30', 'expiry90', 'expiryNever', 'selectedExpiry'
+            ];
+            ids.forEach(id => el[id] = document.getElementById(id));
         }
 
-        function showAlert(msg, type="success"){
-            // Cari elemen alert yang sesuai
-            let alertEl;
-            if (type === "success") alertEl = document.getElementById('alertSuccess');
-            else if (type === "error") alertEl = document.getElementById('alertError');
-            else alertEl = document.getElementById('alertInfo');
-            
-            if (alertEl) {
-                alertEl.textContent = msg;
-                alertEl.style.display = 'block';
-                setTimeout(() => alertEl.style.display = 'none', 3000);
-            } else {
-                alert(msg);
-            }
-        }
-
-        function showLoading(show){
-            const overlay = document.getElementById('loadingOverlay');
-            if (overlay) {
-                overlay.style.display = show ? 'flex' : 'none';
-            }
-        }
-
-        /* ============================================
-           CREATE CARD (VERSI LINK PENDEK)
-        ============================================ */
-        async function createCard() {
-            const name = document.getElementById('recipientName').value.trim();
-            const phone = document.getElementById('whatsappNumber').value.trim().replace(/\D/g, '');
-            const message = document.getElementById('cardMessage').value.trim();
-            const theme = state.selectedTheme;
-            const expirySetting = state.selectedExpiry;
-
-            if (!name) return showAlert("Nama wajib diisi", "error");
-            if (!phone) return showAlert("No WA wajib diisi", "error");
-            if (!message) return showAlert("Pesan wajib diisi", "error");
-
-            showLoading(true);
-
-            try {
-                const messageId = generateShortId();
-                const mediaUrlsString = state.mediaUrls.map(m => m.url).join('||');
-
-                const url =
-                    `${CONFIG.SCRIPT_URL}?cmd=save` +
-                    `&id=${messageId}` +
-                    `&msg=${encodeURIComponent(message)}` +
-                    `&nama=${encodeURIComponent(name)}` +
-                    `&phone=${phone}` +
-                    `&theme=${theme}` +
-                    `&expiry=${expirySetting}` +
-                    `&media=${encodeURIComponent(mediaUrlsString)}`;
-
-                const response = await fetch(url);
-                const result = await response.json();
-
-                if (result.status !== "success") {
-                    throw new Error(result.message);
-                }
-
-                // LINK PENDEK TANPA MEDIA
-                const cardUrl =
-                    `${CONFIG.CARD_BASE_URL}` +
-                    `?to=${encodeURIComponent(name)}` +
-                    `&theme=${theme}` +
-                    `&v=${messageId}`;
-
-                document.getElementById('generatedLink').textContent = cardUrl;
-
-                // QR
-                const qr = document.getElementById('qrcode');
-                qr.innerHTML = "";
-                new QRCode(qr, {
-                    text: cardUrl,
-                    width: 200,
-                    height: 200
+        function updateDateTime() {
+            if (el.currentDateTime) {
+                const now = new Date();
+                el.currentDateTime.innerHTML = now.toLocaleDateString('id-ID', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
                 });
-
-                // WA button
-                const waNum = phone.startsWith('0')
-                    ? '62' + phone.substring(1)
-                    : phone;
-
-                const waMsg =
-                    `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${cardUrl}`;
-
-                document.getElementById('whatsappResultBtn').href =
-                    `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
-
-                document.getElementById('previewResultBtn').href = cardUrl;
-                document.getElementById('cardResult').style.display = "block";
-
-                showAlert("Card berhasil dibuat!");
-
-            } catch (err) {
-                showAlert("Error: " + err.message, "error");
             }
-
-            showLoading(false);
         }
 
-        // Fungsi tambahan yang diperlukan
+        function setupNavigation() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    document.getElementById(this.dataset.page).classList.add('active');
+                    
+                    if (this.dataset.page === 'customers') loadCustomers();
+                    if (this.dataset.page === 'history') loadCards();
+                    if (this.dataset.page === 'settings') loadStats();
+                });
+            });
+        }
+
+        function loadThemes() {
+            if (!el.themeGrid) return;
+            el.themeGrid.innerHTML = '';
+            THEMES.forEach(theme => {
+                const div = document.createElement('div');
+                div.className = `theme-card ${theme.id === state.selectedTheme ? 'active' : ''}`;
+                div.dataset.theme = theme.id;
+                div.innerHTML = `<div class="theme-emoji">${theme.emoji}</div><div class="theme-name">${theme.name}</div>`;
+                div.onclick = () => {
+                    state.selectedTheme = theme.id;
+                    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+                    div.classList.add('active');
+                    showAlert(`Tema: ${theme.name}`, 'success');
+                };
+                el.themeGrid.appendChild(div);
+            });
+        }
+
         window.selectExpiry = function(value) {
             document.querySelectorAll('.expiry-card').forEach(card => card.classList.remove('selected'));
             if (value === '30') document.getElementById('expiry30').classList.add('selected');
             else if (value === '90') document.getElementById('expiry90').classList.add('selected');
             else if (value === 'never') document.getElementById('expiryNever').classList.add('selected');
             state.selectedExpiry = value;
-            document.getElementById('selectedExpiry').value = value;
+            if (el.selectedExpiry) el.selectedExpiry.value = value;
         };
 
+        function generateShortId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let id = '';
+            for (let i = 0; i < 8; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
+            return id;
+        }
+
         window.addMediaUrl = function() {
-            const url = document.getElementById('mediaUrlInput').value.trim();
-            const type = document.getElementById('mediaTypeSelect').value;
+            const url = el.mediaUrlInput?.value.trim();
+            const type = el.mediaTypeSelect?.value || 'auto';
             
             if (state.mediaUrls.length >= 10) {
-                showAlert('Maksimal 10 media!', 'error');
+                showAlert('Maksimal 10 media! Hapus beberapa untuk menambah.', 'error');
                 return;
             }
             if (!url) { showAlert('Masukkan URL terlebih dahulu!', 'error'); return; }
@@ -788,7 +782,7 @@
             if (type === 'auto') {
                 const extension = url.split('.').pop().toLowerCase();
                 if (['mp4', 'mov', 'webm', 'avi', 'mkv'].includes(extension) || 
-                    url.includes('youtube.com') || url.includes('vimeo.com')) {
+                    url.includes('youtube.com') || url.includes('vimeo.com') || url.includes('drive.google.com')) {
                     detectedType = 'video';
                 } else {
                     detectedType = 'image';
@@ -796,32 +790,30 @@
             }
             
             state.mediaUrls.push({ url, type: detectedType, id: Date.now() + Math.random() });
-            document.getElementById('mediaUrls').value = JSON.stringify(state.mediaUrls);
+            if (el.mediaUrls) el.mediaUrls.value = JSON.stringify(state.mediaUrls);
             renderMediaList();
-            document.getElementById('mediaUrlInput').value = '';
-            document.getElementById('mediaTypeSelect').value = 'auto';
+            el.mediaUrlInput.value = '';
+            el.mediaTypeSelect.value = 'auto';
             updateMediaCount();
-            showAlert('URL media ditambahkan!');
+            showAlert('URL media ditambahkan!', 'success');
         };
 
         window.removeMediaUrl = function(id) {
             state.mediaUrls = state.mediaUrls.filter(item => item.id !== id);
-            document.getElementById('mediaUrls').value = JSON.stringify(state.mediaUrls);
+            if (el.mediaUrls) el.mediaUrls.value = JSON.stringify(state.mediaUrls);
             renderMediaList();
             updateMediaCount();
+            showAlert('Media dihapus', 'info');
         };
 
         window.previewMedia = function(url) { window.open(url, '_blank'); };
 
         function renderMediaList() {
-            const container = document.getElementById('mediaListContainer');
-            if (!container) return;
-            
+            if (!el.mediaListContainer) return;
             if (state.mediaUrls.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 2rem; background: var(--soft-white); border-radius: var(--radius-lg);">Belum ada media</div>';
+                el.mediaListContainer.innerHTML = '<div style="text-align: center; padding: 2rem; background: var(--soft-white); border-radius: var(--radius-lg);">Belum ada media</div>';
                 return;
             }
-            
             let html = '';
             state.mediaUrls.forEach((media, index) => {
                 const isVideo = media.type === 'video';
@@ -833,32 +825,125 @@
                             <span class="media-type-badge ${isVideo ? 'video' : ''}">${isVideo ? 'VIDEO' : 'GAMBAR'} #${index + 1}</span>
                         </div>
                         <div class="media-actions">
-                            <button class="btn-media-preview" onclick="previewMedia('${media.url.replace(/'/g, "\\'")}')"><i class="fas fa-eye"></i></button>
+                            <button class="btn-media-preview" onclick="previewMedia('${escapeHTML(media.url)}')"><i class="fas fa-eye"></i></button>
                             <button class="btn-media-remove" onclick="removeMediaUrl(${media.id})"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                 `;
             });
-            container.innerHTML = html;
+            el.mediaListContainer.innerHTML = html;
         }
 
         function updateMediaCount() {
-            const badge = document.getElementById('mediaCountBadge');
-            if (badge) badge.textContent = `${state.mediaUrls.length}/10`;
-            
-            const addBtn = document.getElementById('addMediaBtn');
-            if (addBtn) {
-                addBtn.disabled = state.mediaUrls.length >= 10;
-                addBtn.style.opacity = state.mediaUrls.length >= 10 ? '0.5' : '1';
+            if (el.mediaCountBadge) el.mediaCountBadge.textContent = `${state.mediaUrls.length}/10`;
+            if (el.resultMediaCount) {
+                el.resultMediaCount.textContent = `${state.mediaUrls.length} Media (${state.mediaUrls.filter(m => m.type === 'image').length} Gambar, ${state.mediaUrls.filter(m => m.type === 'video').length} Video)`;
+            }
+            if (el.addMediaBtn) {
+                el.addMediaBtn.disabled = state.mediaUrls.length >= 10;
+                el.addMediaBtn.style.opacity = state.mediaUrls.length >= 10 ? '0.5' : '1';
             }
         }
 
+        // ========== CREATE CARD ==========
+        window.createCard = async function() {
+            const name = el.recipientName?.value.trim();
+            const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
+            const message = el.cardMessage?.value.trim();
+            const theme = state.selectedTheme;
+            const expirySetting = state.selectedExpiry;
+            
+            if (!name) { showAlert('Nama penerima harus diisi!', 'error'); return; }
+            if (!phone || phone.length < 10) { showAlert('Nomor WhatsApp tidak valid!', 'error'); return; }
+            if (!message || message.length < 20) { showAlert('Pesan minimal 20 karakter!', 'error'); return; }
+            
+            showLoading(true, 'Menyimpan data...');
+            
+            try {
+                const messageId = generateShortId();
+                const mediaUrlsString = state.mediaUrls.map(m => m.url).join('||');
+                
+                // Parameter HARUS SESUAI dengan yang diharapkan script
+                const url = `${CONFIG.SCRIPT_URL}?cmd=save&id=${messageId}&msg=${encodeURIComponent(message)}&nama=${encodeURIComponent(name)}&phone=${phone}&theme=${theme}&expiry=${expirySetting}&media=${encodeURIComponent(mediaUrlsString)}`;
+                
+                console.log('📤 Mengirim ke:', url);
+                
+                const response = await fetch(url);
+                const result = await response.json();
+                
+                console.log('📥 Response:', result);
+                
+                if (result.status === 'success') {
+                    // Buat URL card
+                    let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}`;
+                    
+                    if (state.mediaUrls.length > 0) {
+                        state.mediaUrls.forEach((media, index) => {
+                            const paramName = index === 0 ? 'media' : `media${index + 1}`;
+                            cardUrl += `&${paramName}=${encodeURIComponent(media.url)}`;
+                        });
+                    }
+                    
+                    // Tampilkan hasil
+                    if (el.generatedLink) el.generatedLink.textContent = cardUrl;
+                    if (el.resultRecipient) el.resultRecipient.textContent = name;
+                    if (el.resultTheme) {
+                        const themeObj = THEMES.find(t => t.id === theme);
+                        el.resultTheme.textContent = `${themeObj?.emoji || '🎨'} ${themeObj?.name || theme}`;
+                    }
+                    updateMediaCount();
+                    
+                    let expiryText = '';
+                    if (expirySetting === '30') expiryText = '30 hari';
+                    else if (expirySetting === '90') expiryText = '90 hari';
+                    else expiryText = 'Permanen';
+                    if (el.resultExpiry) el.resultExpiry.innerHTML = `<i class="fas fa-clock"></i> Masa berlaku: ${expiryText}`;
+                    
+                    // QR Code
+                    if (el.qrcode) {
+                        el.qrcode.innerHTML = '';
+                        new QRCode(el.qrcode, {
+                            text: cardUrl,
+                            width: 200,
+                            height: 200,
+                            colorDark: "#1e3a5f",
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                    }
+                    
+                    // WhatsApp button
+                    const waNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
+                    const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${cardUrl}`;
+                    if (el.whatsappResultBtn) el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
+                    if (el.previewResultBtn) el.previewResultBtn.href = cardUrl;
+                    
+                    if (el.cardResult) {
+                        el.cardResult.classList.add('active');
+                        el.cardResult.style.display = 'block';
+                        setTimeout(() => el.cardResult.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+                    }
+                    
+                    showAlert('✅ CARD BERHASIL DIBUAT!', 'success');
+                    
+                } else {
+                    throw new Error(result.message || 'Gagal');
+                }
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                showAlert('Error: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        };
+
         window.previewCard = function() {
-            const name = document.getElementById('recipientName').value.trim() || 'Preview';
+            const name = el.recipientName?.value.trim() || 'Preview';
+            const message = el.cardMessage?.value.trim() || 'Preview message';
             const theme = state.selectedTheme;
             const messageId = 'preview_' + generateShortId();
             let url = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}&preview=true`;
-            
             if (state.mediaUrls.length > 0) {
                 state.mediaUrls.forEach((media, index) => {
                     const paramName = index === 0 ? 'media' : `media${index + 1}`;
@@ -869,12 +954,12 @@
         };
 
         window.resetForm = function() {
-            document.getElementById('recipientName').value = '';
-            document.getElementById('whatsappNumber').value = '';
-            document.getElementById('cardMessage').value = '';
-            document.getElementById('charCount').textContent = '0';
+            if (el.recipientName) el.recipientName.value = '';
+            if (el.whatsappNumber) el.whatsappNumber.value = '';
+            if (el.cardMessage) el.cardMessage.value = '';
+            if (el.charCount) el.charCount.textContent = '0';
             state.mediaUrls = [];
-            document.getElementById('mediaUrls').value = '[]';
+            if (el.mediaUrls) el.mediaUrls.value = '[]';
             renderMediaList();
             updateMediaCount();
             state.selectedTheme = CONFIG.DEFAULT_THEME;
@@ -886,78 +971,159 @@
         };
 
         window.copyLink = function() {
-            const link = document.getElementById('generatedLink').textContent;
+            const link = el.generatedLink?.textContent;
             if (!link || link === 'https://fiorcard.com/xxx') {
                 showAlert('Tidak ada link untuk dicopy', 'error');
                 return;
             }
             navigator.clipboard.writeText(link)
-                .then(() => showAlert('Link berhasil dicopy!'))
-                .catch(() => showAlert('Gagal copy link', 'error'));
+                .then(() => showAlert('✅ Link berhasil dicopy!', 'success'))
+                .catch(() => showAlert('❌ Gagal copy link', 'error'));
         };
 
-        window.testConnection = async function() {
-            showLoading(true);
+        window.testConnection = async function(silent = false) {
+            if (!silent) showLoading(true, 'Testing koneksi...');
             try {
                 const url = `${CONFIG.SCRIPT_URL}?cmd=test&t=${Date.now()}`;
+                console.log('📤 Testing connection:', url);
+                
                 const response = await fetch(url);
                 const result = await response.json();
+                console.log('📥 Response:', result);
                 
                 if (result.status === 'success') {
-                    showAlert('Koneksi berhasil!', 'success');
-                    document.getElementById('statusText').textContent = 'Terhubung';
-                    document.getElementById('statusDot').classList.remove('offline');
+                    if (!silent) showAlert('✅ Koneksi berhasil!', 'success');
+                    if (el.statusText) {
+                        el.statusText.textContent = 'Terhubung';
+                        el.statusText.classList.remove('offline');
+                    }
+                    if (el.statusDot) el.statusDot.classList.remove('offline');
+                    return true;
                 } else {
                     throw new Error('Invalid response');
                 }
             } catch (error) {
-                showAlert('Koneksi gagal! Periksa URL Script', 'error');
-                document.getElementById('statusText').textContent = 'Gagal konek';
-                document.getElementById('statusDot').classList.add('offline');
+                console.error('❌ Connection error:', error);
+                if (!silent) showAlert('❌ Koneksi gagal! Periksa URL Script', 'error');
+                if (el.statusText) {
+                    el.statusText.textContent = 'Gagal konek';
+                    el.statusText.classList.add('offline');
+                }
+                if (el.statusDot) el.statusDot.classList.add('offline');
+                return false;
             } finally {
-                showLoading(false);
+                if (!silent) showLoading(false);
             }
         };
 
-        window.saveSettings = function() {
-            const settings = {
-                scriptUrl: document.getElementById('scriptUrl').value,
-                cardBaseUrl: document.getElementById('cardBaseUrl').value
-            };
-            localStorage.setItem('fior_settings', JSON.stringify(settings));
-            CONFIG.SCRIPT_URL = settings.scriptUrl;
-            CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
-            showAlert('Settings tersimpan!');
+        async function loadCustomers() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=customers&t=${Date.now()}`);
+                const data = await response.json();
+                state.customers = Array.isArray(data) ? data : [];
+                renderCustomersTable();
+            } catch (error) {
+                console.error('Load customers error:', error);
+                if (el.customersTableBody) {
+                    el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
+                }
+            }
+        }
+
+        function renderCustomersTable() {
+            if (!el.customersTableBody) return;
+            if (state.customers.length === 0) {
+                el.customersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Belum ada data customer</td></tr>';
+                return;
+            }
+            let html = '';
+            state.customers.slice(0, 20).forEach(c => {
+                html += `
+                    <tr>
+                        <td><strong>${c.nama || ''}</strong></td>
+                        <td>${c.no_hp || ''}</td>
+                        <td>${c.email || '-'}</td>
+                        <td>${c.alamat || '-'}</td>
+                        <td>${c.catatan || '-'}</td>
+                        <td><button class="btn btn-primary btn-sm" onclick="useCustomer('${escapeHTML(c.nama)}', '${escapeHTML(c.no_hp)}')"><i class="fas fa-gift"></i> Pilih</button></td>
+                    </tr>
+                `;
+            });
+            el.customersTableBody.innerHTML = html;
+        }
+
+        window.useCustomer = function(name, phone) {
+            if (el.recipientName) el.recipientName.value = name || '';
+            if (el.whatsappNumber) el.whatsappNumber.value = phone || '';
+            showAlert(`Customer "${name}" dipilih`, 'success');
+            document.querySelector('.nav-item[data-page="create-card"]').click();
         };
 
-        window.runCleanup = async function() {
-            if (!confirm('Yakin ingin membersihkan semua pesan yang sudah kadaluarsa?')) return;
-            showLoading(true);
+        async function loadCards() {
             try {
-                const formData = new URLSearchParams();
-                formData.append('type', 'cleanup');
-                const response = await fetch(CONFIG.SCRIPT_URL, { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
-                    body: formData.toString() 
-                });
-                const result = await response.json();
-                if (result.status === 'success') {
-                    showAlert(`Berhasil membersihkan ${result.cleaned} pesan expired!`);
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
+                const data = await response.json();
+                state.cards = Array.isArray(data) ? data : [];
+                renderCardsTable();
+            } catch (error) {
+                console.error('Load cards error:', error);
+                if (el.historyTableBody) {
+                    el.historyTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
+                }
+            }
+        }
+
+        function renderCardsTable() {
+            if (!el.historyTableBody) return;
+            if (state.cards.length === 0) {
+                el.historyTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Belum ada card</td></tr>';
+                return;
+            }
+            let html = '';
+            state.cards.slice(0, 20).forEach(c => {
+                const mediaCount = c.total_media || '0';
+                let expiryText = '', statusClass = '';
+                if (c.expiry_setting === 'never') {
+                    expiryText = 'Permanen';
+                    statusClass = 'permanent';
+                } else if (c.expiry_setting === '30') {
+                    expiryText = '30 hari';
+                    statusClass = 'active';
+                } else if (c.expiry_setting === '90') {
+                    expiryText = '90 hari';
+                    statusClass = 'active';
                 } else {
-                    throw new Error(result.message);
+                    expiryText = c.expiry_setting || '-';
+                }
+                html += `
+                    <tr>
+                        <td>${c.timestamp ? new Date(c.timestamp).toLocaleDateString('id-ID') : '-'}</td>
+                        <td>${c.nama_penerima || c.name || '-'}</td>
+                        <td>${c.tema || c.theme || '-'}</td>
+                        <td style="text-align: center;">${mediaCount} Media</td>
+                        <td><a href="${c.link || '#'}" target="_blank" class="btn btn-primary btn-sm">Lihat</a></td>
+                        <td><span class="expiry-status ${statusClass}">${expiryText}</span></td>
+                    </tr>
+                `;
+            });
+            el.historyTableBody.innerHTML = html;
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=get_stats&t=${Date.now()}`);
+                const data = await response.json();
+                if (data.status === 'success') {
+                    if (el.totalMessages) el.totalMessages.textContent = data.total_messages || 0;
+                    if (el.activeMessages) el.activeMessages.textContent = data.active_messages || 0;
+                    if (el.expiredMessages) el.expiredMessages.textContent = data.expired_messages || 0;
                 }
             } catch (error) {
-                showAlert('Gagal: ' + error.message, 'error');
-            } finally {
-                showLoading(false);
+                console.error('Error loading stats:', error);
             }
-        };
+        }
 
-        window.showAddCustomerModal = function() { 
-            document.getElementById('customerModal').classList.add('active'); 
-        };
-        
+        window.showAddCustomerModal = function() { document.getElementById('customerModal').classList.add('active'); };
         window.closeCustomerModal = function() {
             document.getElementById('customerModal').classList.remove('active');
             ['modalCustomerName','modalCustomerPhone','modalCustomerEmail','modalCustomerAddress','modalCustomerNotes'].forEach(id => {
@@ -967,131 +1133,134 @@
         };
 
         window.saveCustomer = async function() {
-            const name = document.getElementById('modalCustomerName').value.trim();
-            const phone = document.getElementById('modalCustomerPhone').value.trim();
+            const name = el.modalCustomerName?.value.trim();
+            const phone = el.modalCustomerPhone?.value.trim();
+            const email = el.modalCustomerEmail?.value.trim();
+            const address = el.modalCustomerAddress?.value.trim();
+            const notes = el.modalCustomerNotes?.value.trim();
             
-            if (!name || !phone) { 
-                showAlert('Nama dan No. WA wajib diisi!', 'error'); 
-                return; 
-            }
-            showLoading(true);
+            if (!name || !phone) { showAlert('Nama dan No. WA wajib diisi!', 'error'); return; }
+            showLoading(true, 'Menyimpan customer...');
             
             try {
                 const formData = new URLSearchParams();
                 formData.append('type', 'customer');
                 formData.append('nama', name);
                 formData.append('no_hp', phone);
-                formData.append('email', document.getElementById('modalCustomerEmail').value.trim() || '');
-                formData.append('alamat', document.getElementById('modalCustomerAddress').value.trim() || '');
-                formData.append('catatan', document.getElementById('modalCustomerNotes').value.trim() || '');
+                formData.append('email', email || '');
+                formData.append('alamat', address || '');
+                formData.append('catatan', notes || '');
                 
-                const response = await fetch(CONFIG.SCRIPT_URL, { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
-                    body: formData.toString() 
-                });
+                const response = await fetch(CONFIG.SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: formData.toString() });
                 const result = await response.json();
                 
                 if (result.status === 'success') {
-                    showAlert('Customer berhasil disimpan!');
+                    showAlert('✅ Customer berhasil disimpan!', 'success');
                     closeCustomerModal();
+                    await loadCustomers();
                 } else {
                     throw new Error(result.message || 'Gagal menyimpan');
                 }
             } catch (error) {
-                showAlert('Gagal: ' + error.message, 'error');
+                console.error('Save customer error:', error);
+                showAlert('❌ Gagal: ' + error.message, 'error');
             } finally {
                 showLoading(false);
             }
         };
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Setup theme grid
-            const THEMES = [
-                { id: 'birthday', name: 'Birthday', emoji: '🎂' },
-                { id: 'valentine', name: 'Valentine', emoji: '❤️' },
-                { id: 'wedding', name: 'Wedding', emoji: '💍' },
-                { id: 'anniversary', name: 'Anniversary', emoji: '🎉' },
-                { id: 'graduation', name: 'Graduation', emoji: '🎓' },
-                { id: 'condolence', name: 'Condolence', emoji: '🕊️' },
-                { id: 'congratulation', name: 'Congratulations', emoji: '🎊' },
-                { id: 'imlek', name: 'Imlek', emoji: '🧧' },
-                { id: 'lebaran', name: 'Lebaran', emoji: '🌙' },
-                { id: 'natal', name: 'Natal', emoji: '🎄' },
-                { id: 'newyear', name: 'New Year', emoji: '🎆' }
-            ];
-
-            const themeGrid = document.getElementById('themeGrid');
-            if (themeGrid) {
-                themeGrid.innerHTML = '';
-                THEMES.forEach(theme => {
-                    const div = document.createElement('div');
-                    div.className = `theme-card ${theme.id === state.selectedTheme ? 'active' : ''}`;
-                    div.dataset.theme = theme.id;
-                    div.innerHTML = `<div class="theme-emoji">${theme.emoji}</div><div class="theme-name">${theme.name}</div>`;
-                    div.onclick = () => {
-                        state.selectedTheme = theme.id;
-                        document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
-                        div.classList.add('active');
-                    };
-                    themeGrid.appendChild(div);
-                });
-            }
-
-            // Setup navigation
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                    document.getElementById(this.dataset.page).classList.add('active');
-                });
-            });
-
-            // Update datetime
-            function updateDateTime() {
-                const el = document.getElementById('currentDateTime');
-                if (el) {
-                    const now = new Date();
-                    el.innerHTML = now.toLocaleDateString('id-ID', {
-                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-                        hour: '2-digit', minute: '2-digit', second: '2-digit'
-                    });
-                }
-            }
-            updateDateTime();
-            setInterval(updateDateTime, 1000);
-
-            // Char counter
-            const cardMessage = document.getElementById('cardMessage');
-            const charCount = document.getElementById('charCount');
-            if (cardMessage && charCount) {
-                cardMessage.addEventListener('input', function() {
-                    charCount.textContent = this.value.length;
-                });
-            }
-
-            // Load settings from localStorage
+        function loadSettings() {
             const saved = localStorage.getItem('fior_settings');
             if (saved) {
                 try {
                     const settings = JSON.parse(saved);
-                    if (settings.scriptUrl && document.getElementById('scriptUrl')) {
-                        document.getElementById('scriptUrl').value = settings.scriptUrl;
+                    if (settings.scriptUrl && el.scriptUrl) {
+                        el.scriptUrl.value = settings.scriptUrl;
                         CONFIG.SCRIPT_URL = settings.scriptUrl;
                     }
-                    if (settings.cardBaseUrl && document.getElementById('cardBaseUrl')) {
-                        document.getElementById('cardBaseUrl').value = settings.cardBaseUrl;
+                    if (settings.cardBaseUrl && el.cardBaseUrl) {
+                        el.cardBaseUrl.value = settings.cardBaseUrl;
                         CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
                     }
                 } catch (e) {}
             }
+        }
 
-            // Test connection on load
-            setTimeout(() => testConnection(), 2000);
-        });
+        window.saveSettings = function() {
+            const settings = {
+                scriptUrl: el.scriptUrl?.value || CONFIG.SCRIPT_URL,
+                cardBaseUrl: el.cardBaseUrl?.value || CONFIG.CARD_BASE_URL
+            };
+            localStorage.setItem('fior_settings', JSON.stringify(settings));
+            CONFIG.SCRIPT_URL = settings.scriptUrl;
+            CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
+            showAlert('✅ Settings tersimpan!', 'success');
+        };
+
+        window.runCleanup = async function() {
+            if (!confirm('Yakin ingin membersihkan semua pesan yang sudah kadaluarsa?')) return;
+            showLoading(true, 'Membersihkan pesan expired...');
+            try {
+                const formData = new URLSearchParams();
+                formData.append('type', 'cleanup');
+                const response = await fetch(CONFIG.SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: formData.toString() });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    showAlert(`✅ Berhasil membersihkan ${result.cleaned} pesan expired!`, 'success');
+                    await loadStats();
+                    await loadCards();
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                showAlert('❌ Gagal: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        };
+
+        function showAlert(message, type = 'success') {
+            let alertEl;
+            if (type === 'success') alertEl = el.alertSuccess;
+            else if (type === 'error') alertEl = el.alertError;
+            else alertEl = el.alertInfo;
+            if (alertEl) {
+                alertEl.textContent = message;
+                alertEl.style.display = 'block';
+                setTimeout(() => alertEl.style.display = 'none', 3000);
+            }
+        }
+
+        function showLoading(show, text = 'Loading...') {
+            if (el.loadingOverlay) {
+                if (show) {
+                    el.loadingOverlay.style.display = 'flex';
+                    if (el.loadingText) el.loadingText.textContent = text;
+                } else {
+                    el.loadingOverlay.style.display = 'none';
+                }
+            }
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"]/g, function(m) {
+                return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[m];
+            });
+        }
+
+        if (el.cardMessage) {
+            el.cardMessage.addEventListener('input', function() {
+                if (el.charCount) el.charCount.textContent = this.value.length;
+            });
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        };
     </script>
 </body>
 </html>
+
