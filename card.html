@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
     <style>
+        /* [SAME CSS AS BEFORE - unchanged] */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         .theme-birthday { --primary: #1e3a5f; --accent: #d4af37; --gradient: linear-gradient(145deg, #1e3a5f, #2b4c73); --bg: #fff9f0; }
@@ -351,7 +352,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         // ============================================
-        // FIOR CARD - TAMPILAN KARTU (FIXED VERSION)
+        // FIOR CARD - TAMPILAN KARTU (FINAL VERSION)
         // ============================================
 
         // CONFIG - GANTI DENGAN URL APPS SCRIPT ANDA
@@ -393,13 +394,15 @@
             showLoading(true);
             
             // Log untuk debugging
-            console.log('URL Params:', state.params);
+            console.log('📋 URL Params:', window.location.search);
+            console.log('📋 Parsed Params:', state.params);
             
             // Jika ada messageId, ambil dari server
             if (state.params.messageId) {
                 await loadMessageFromServer(state.params.messageId);
             } else {
                 // Mode preview atau direct params
+                console.log('📋 No message ID, using direct params');
                 applyDirectParams();
             }
             
@@ -425,13 +428,13 @@
             state.params = {
                 to: params.get('to') || 'Sahabat',
                 theme: params.get('theme') || 'birthday',
-                messageId: params.get('v') || null,
+                messageId: params.get('v') || null,  // 'v' adalah parameter untuk ID
                 msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
                 preview: params.get('preview') === 'true',
                 mediaList: extractMediaFromUrl(params)
             };
             
-            console.log('Message ID dari URL:', state.params.messageId);
+            console.log('📋 Message ID dari URL:', state.params.messageId);
         }
 
         function extractMediaFromUrl(params) {
@@ -468,7 +471,7 @@
             return 'image';
         }
 
-        // FUNGSI LOAD MESSAGE DARI SERVER - INI YANG DIPANGGIL
+        // FUNGSI LOAD MESSAGE DARI SERVER
         async function loadMessageFromServer(messageId) {
             try {
                 console.log('📡 Loading message from server, ID:', messageId);
@@ -549,7 +552,7 @@
         }
 
         function applyDirectParams() {
-            console.log('Applying direct params');
+            console.log('📋 Applying direct params');
             
             updateExpiryBadge({
                 expiry_setting: 'never',
@@ -563,7 +566,7 @@
             
             let icon, text, className;
             
-            console.log('Updating expiry badge with data:', data);
+            console.log('📋 Updating expiry badge with data:', data);
             
             if (!data) {
                 icon = 'fa-clock'; 
@@ -596,7 +599,7 @@
         }
 
         function renderUI() {
-            console.log('Rendering UI with params:', state.params);
+            console.log('📋 Rendering UI with params:', state.params);
             
             // Set recipient name
             if (el.recipientName) {
@@ -621,7 +624,7 @@
             
             // Set media
             state.mediaList = state.params.mediaList || [];
-            console.log('Media list:', state.mediaList);
+            console.log('📋 Media list:', state.mediaList);
             renderCarousel();
             
             // Set WhatsApp button
