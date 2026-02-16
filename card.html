@@ -3,209 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIOR Card</title>
+    <title>FIOR Card - Digital Greeting</title>
+    
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        .theme-birthday { --primary: #1e3a5f; --accent: #d4af37; --gradient: linear-gradient(145deg, #1e3a5f, #2b4c73); --bg: #fff9f0; }
+        .theme-valentine { --primary: #b76e79; --accent: #ffb6c1; --gradient: linear-gradient(145deg, #b76e79, #c98b95); --bg: #fff5f8; }
+        .theme-wedding { --primary: #b2ac88; --accent: #e6d5b8; --gradient: linear-gradient(145deg, #b2ac88, #c5bf9c); --bg: #fffcf9; }
+        .theme-anniversary { --primary: #9c89b8; --accent: #e0b0b5; --gradient: linear-gradient(145deg, #9c89b8, #b39bc0); --bg: #fbf5ff; }
+        .theme-graduation { --primary: #6b8c5e; --accent: #c5b783; --gradient: linear-gradient(145deg, #6b8c5e, #86a075); --bg: #f7fcf5; }
+        .theme-condolence { --primary: #6b705c; --accent: #b7b7a4; --gradient: linear-gradient(145deg, #6b705c, #848875); --bg: #fbfaf8; }
+        .theme-congratulation { --primary: #ff7f50; --accent: #ffb347; --gradient: linear-gradient(145deg, #ff7f50, #ff9f4b); --bg: #fff5ed; }
+        .theme-imlek { --primary: #d32f2f; --accent: #ffb300; --gradient: linear-gradient(145deg, #d32f2f, #b71c1c); --bg: #fff8e1; }
+        .theme-natal { --primary: #c41e3a; --accent: #2e7d32; --gradient: linear-gradient(145deg, #c41e3a, #a51d36); --bg: #e8f5e9; }
+        .theme-lebaran { --primary: #1b5e20; --accent: #ff8f00; --gradient: linear-gradient(145deg, #1b5e20, #2e7d32); --bg: #fff3e0; }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #fff9f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: #2d3e4f;
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
         }
+
+        .mobile-container { max-width: 450px; width: 100%; }
+
         .card {
-            max-width: 400px;
-            width: 100%;
             background: white;
-            border-radius: 24px;
+            border-radius: 32px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            animation: slideUp 0.5s ease;
+            position: relative;
         }
-        .header {
-            background: linear-gradient(145deg, #1e3a5f, #2b4c73);
-            padding: 40px 20px;
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: var(--gradient);
+            z-index: 2;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            background: var(--gradient);
+            padding: 40px 20px 48px;
             text-align: center;
-            color: white;
+            position: relative;
         }
-        .emoji {
-            font-size: 64px;
-            margin-bottom: 10px;
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: -24px; left: 0; right: 0;
+            height: 48px;
+            background: white;
+            border-radius: 50% 50% 0 0;
+            opacity: 0.1;
         }
-        .greeting {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .to-label {
-            font-size: 12px;
-            letter-spacing: 2px;
-            opacity: 0.8;
-            margin: 10px 0 5px;
-        }
-        .recipient {
-            font-size: 20px;
-            font-weight: 600;
-            word-break: break-word;
-        }
-        .content {
-            padding: 30px 20px;
-        }
+
+        .theme-emoji { font-size: 64px; margin-bottom: 8px; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        .greeting { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 800; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .to-label { font-size: 0.7rem; letter-spacing: 4px; color: rgba(255,255,255,0.8); margin: 8px 0; text-transform: uppercase; }
+        .recipient-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: white; word-break: break-word; padding: 0 16px; }
+
+        .card-body { padding: 32px 20px; }
+
+        .expiry-badge-container { display: flex; justify-content: flex-end; margin-bottom: 12px; }
         .expiry-badge {
-            display: inline-flex;
-            align-items: center;
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; border-radius: 50px;
+            font-size: 0.75rem; font-weight: 600;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--accent);
+            color: var(--primary);
+        }
+        .expiry-badge.permanent { background: #ede9fe; color: #7c3aed; border-color: #7c3aed; }
+        .expiry-badge.warning { background: #ffedd5; color: #b45309; border-color: #f59e0b; }
+        .expiry-badge.danger { background: #fee2e2; color: #b91c1c; border-color: #dc2626; }
+        .expiry-badge.success { background: #d1fae5; color: #0f766e; border-color: #0f766e; }
+
+        .message-container {
+            background: linear-gradient(145deg, #fff9f0, white);
+            border-radius: 24px;
+            padding: 24px 20px;
+            margin-bottom: 24px;
+            border: 1px solid var(--accent);
+            position: relative;
+        }
+        .message-quote {
+            position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+            background: var(--accent); width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.2rem;
+            border: 3px solid white;
+        }
+        .message { font-size: 1rem; line-height: 1.7; text-align: center; font-style: italic; }
+
+        .media-section { margin-bottom: 24px; display: none; }
+        .media-section.active { display: block; }
+
+        .media-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .media-header h3 { font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--primary); }
+        .media-count { background: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: white; }
+
+        .swiper { width: 100%; height: 300px; border-radius: 24px; margin-bottom: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .swiper-slide { background: #1a1a1a; border-radius: 24px; overflow: hidden; position: relative; }
+        .swiper-slide img, .swiper-slide video { width: 100%; height: 100%; object-fit: cover; }
+
+        .media-type-badge {
+            position: absolute; bottom: 16px; right: 16px;
+            background: rgba(0,0,0,0.7); color: white;
+            padding: 6px 14px; border-radius: 30px;
+            font-size: 0.75rem; display: flex; align-items: center; gap: 6px;
+            z-index: 10;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            display: flex;
             gap: 8px;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 20px;
+            z-index: 10;
         }
-        .expiry-badge.permanent {
-            background: #ede9fe;
-            color: #7c3aed;
-        }
-        .expiry-badge.success {
-            background: #d1fae5;
-            color: #0f766e;
-        }
-        .expiry-badge.warning {
-            background: #ffedd5;
-            color: #b45309;
-        }
-        .expiry-badge.danger {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-        .message-box {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #d4af37;
-        }
-        .message {
-            font-size: 16px;
-            line-height: 1.6;
-            font-style: italic;
-        }
-        .contact {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        .contact a {
-            color: #1e3a5f;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-        }
-        .logo {
-            width: 50px;
-            height: 50px;
-            margin: 0 auto 10px;
-            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        .company {
-            font-weight: bold;
-            color: #1e3a5f;
-        }
-        .debug {
-            margin-top: 20px;
-            padding: 10px;
-            background: #f0f0f0;
-            border-radius: 8px;
-            font-size: 12px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            display: none;
-        }
-        .loading {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        .loading.active {
-            display: flex;
-        }
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top-color: #d4af37;
+
+        .video-btn {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            background: rgba(0,0,0,0.7);
+            border: 2px solid white;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .video-btn:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .video-btn i { font-size: 1.1rem; }
+
+        .volume-btn.muted { background: rgba(220, 38, 38, 0.7); }
+
+        .swiper-button-next, .swiper-button-prev { color: white; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; }
+        .swiper-pagination-bullet { background: white; }
+        .swiper-pagination-bullet-active { background: var(--accent); }
+
+        .slide-counter {
+            position: absolute; top: 16px; right: 16px;
+            background: rgba(0,0,0,0.7); color: white;
+            padding: 6px 14px; border-radius: 30px;
+            font-size: 0.8rem; font-weight: 600; z-index: 10;
+        }
+
+        .thumbnails { display: flex; gap: 8px; overflow-x: auto; padding: 8px 4px; margin-top: 8px; }
+        .thumbnail {
+            flex: 0 0 70px; height: 70px; border-radius: 16px; overflow: hidden;
+            border: 3px solid transparent; transition: all 0.2s ease; cursor: pointer;
+        }
+        .thumbnail.active { border-color: var(--accent); transform: scale(1.05); }
+        .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        .thumbnail.video-thumb { 
+            background: linear-gradient(145deg, #333, #000); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .contact-row {
+            display: flex; align-items: center; justify-content: center; gap: 16px;
+            margin: 24px 0; padding: 12px 16px;
+            background: #f8f9fa; border-radius: 50px;
+            border: 1px solid var(--accent);
+        }
+        .contact-item { display: flex; align-items: center; gap: 8px; color: var(--primary); text-decoration: none; }
+
+        .card-footer { padding: 24px 20px 32px; text-align: center; border-top: 1px solid var(--accent); }
+        .company-logo {
+            width: 60px; height: 60px; margin: 0 auto 12px;
+            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            animation: gentleFloat 3s ease-in-out infinite;
+        }
+        @keyframes gentleFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+        .company-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+        .action-buttons { display: flex; gap: 8px; margin-top: 20px; }
+        .action-btn {
+            flex: 1; padding: 14px 0; border: none; border-radius: 50px;
+            font-weight: 600; background: var(--gradient); color: white;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            cursor: pointer; text-decoration: none;
+        }
+        .action-btn.share { background: #25D366; }
+        .action-btn.print { background: #64748b; }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.95); z-index: 2000;
+            align-items: center; justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content { max-width: 90%; max-height: 80vh; }
+        .modal-image, .modal-video { max-width: 100%; max-height: 80vh; border-radius: 24px; border: 3px solid white; }
+        .modal-close {
+            position: absolute; top: 20px; right: 20px;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: white; border: none; font-size: 1.3rem; cursor: pointer;
+        }
+
+        .notification {
+            position: fixed; top: 20px; left: 16px; right: 16px; max-width: 400px; margin: 0 auto;
+            background: white; padding: 14px 20px; border-radius: 50px;
+            border-left: 4px solid var(--accent);
+            display: none; align-items: center; gap: 12px; z-index: 2100;
+        }
+        .notification.show { display: flex; }
+
+        .loading-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.7);
+            display: none; align-items: center; justify-content: center; z-index: 9999;
+        }
+        .loading-spinner {
+            width: 40px; height: 40px;
+            border: 3px solid var(--accent); border-top-color: transparent;
+            border-radius: 50%; animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
+<body class="theme-birthday">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
     </div>
 
-    <div class="card">
-        <div class="header">
-            <div class="emoji" id="themeEmoji">🎂</div>
-            <div class="greeting" id="greetingText">Happy Birthday</div>
-            <div class="to-label">KEPADA YTH.</div>
-            <div class="recipient" id="recipientName">-</div>
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="mediaModal">
+        <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        <div class="modal-content">
+            <img id="modalImage" class="modal-image" style="display: none;">
+            <video id="modalVideo" class="modal-video" controls style="display: none;"></video>
         </div>
-        
-        <div class="content">
-            <div style="text-align: right;">
-                <div class="expiry-badge" id="expiryBadge">
-                    <i class="fas fa-clock"></i>
-                    <span id="expiryBadgeText">Memuat...</span>
+    </div>
+
+    <div class="mobile-container">
+        <div class="card">
+            <div class="card-header">
+                <div class="theme-emoji" id="themeEmoji">🎂</div>
+                <div class="greeting" id="greetingText">Happy Birthday</div>
+                <div class="to-label">KEPADA YTH.</div>
+                <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
+            </div>
+
+            <div class="card-body">
+                <div class="expiry-badge-container">
+                    <div class="expiry-badge" id="expiryBadge">
+                        <i class="fas fa-clock"></i>
+                        <span id="expiryBadgeText">Memuat...</span>
+                    </div>
+                </div>
+
+                <div class="message-container">
+                    <div class="message-quote"><i class="fas fa-quote-right"></i></div>
+                    <div class="message" id="messageText">Memuat pesan...</div>
+                </div>
+
+                <div class="media-section" id="mediaSection">
+                    <div class="media-header">
+                        <h3><i class="fas fa-images"></i> Galeri Spesial</h3>
+                        <span class="media-count" id="mediaCount">0 Media</span>
+                    </div>
+
+                    <div class="swiper">
+                        <div class="swiper-wrapper" id="carouselWrapper"></div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="slide-counter" id="slideCounter">
+                            <i class="fas fa-images"></i>
+                            <span id="currentSlide">1</span> / <span id="totalSlides">0</span>
+                        </div>
+                    </div>
+
+                    <div class="thumbnails" id="thumbnails"></div>
+                </div>
+
+                <div class="contact-row">
+                    <a href="https://wa.me/6285337777585" target="_blank" class="contact-item">
+                        <i class="fab fa-whatsapp"></i> Admin
+                    </a>
+                    <span style="width:1px; height:24px; background:var(--accent);"></span>
+                    <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="contact-item">
+                        <i class="fab fa-instagram"></i> @tokobungafior
+                    </a>
                 </div>
             </div>
-            
-            <div class="message-box">
-                <div class="message" id="messageText">Memuat pesan...</div>
+
+            <div class="card-footer">
+                <div class="company-logo"></div>
+                <div class="company-name">FIOR Florist</div>
+                <div class="company-tagline">JAYAPURA • EST. 2020</div>
+
+                <div class="action-buttons">
+                    <button class="action-btn share" onclick="shareCard()"><i class="fas fa-share-alt"></i></button>
+                    <a href="#" class="action-btn whatsapp" id="whatsappBtn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <button class="action-btn print" onclick="printCard()"><i class="fas fa-print"></i></button>
+                </div>
             </div>
-            
-            <div class="contact">
-                <a href="https://wa.me/6285337777585" target="_blank">
-                    <i class="fab fa-whatsapp" style="color:#25D366;"></i> Admin
-                </a>
-                <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank">
-                    <i class="fab fa-instagram" style="color:#E4405F;"></i> @tokobungafior
-                </a>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <div class="logo"></div>
-            <div class="company">FIOR Florist</div>
-            <div style="font-size:12px; color:#666;">JAYAPURA • EST. 2020</div>
         </div>
     </div>
 
-    <div class="debug" id="debug"></div>
-
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        // ============================================
+        // FIOR CARD - TAMPILAN KARTU (FULL INTEGRATION)
+        // ============================================
+
+        // CONFIG - GANTI DENGAN URL APPS SCRIPT ANDA
         const CONFIG = {
-            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz2LJYVbyVkfsq3SKpczvnckcmir55jDijhUL6Bbm1GDfjEbBQgZ6DYb_6MI8kMsw6wCA/exec"
+            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwWajW5E6Do_qaAzmnE59UekZgRLqISphqXQ8ErFqU6S0j9x96ovUSu0jGv_t7t5I9S/exec"
         };
 
+        // THEMES
         const THEMES = {
             birthday: { emoji: '🎂', greeting: 'Happy Birthday' },
             valentine: { emoji: '❤️', greeting: 'Happy Valentine' },
@@ -219,111 +373,375 @@
             lebaran: { emoji: '🌙', greeting: 'Selamat Lebaran' }
         };
 
-        function showLoading(show) {
-            document.getElementById('loading').classList.toggle('active', show);
+        // State
+        let state = { 
+            params: {}, 
+            mediaList: [], 
+            swiper: null,
+            messageData: null
+        };
+
+        // DOM Elements
+        const el = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            cacheElements();
+            state.params = getUrlParams();
+            
+            // Tampilkan loading
+            showLoading(true);
+            
+            // Jika ada messageId, ambil dari server
+            if (state.params.messageId) {
+                await loadMessageFromServer(state.params.messageId);
+            } else {
+                // Mode preview atau direct params
+                applyDirectParams();
+            }
+            
+            // Render UI
+            renderUI();
+            showLoading(false);
+        });
+
+        function cacheElements() {
+            const ids = [
+                'loadingOverlay', 'notification', 'notificationMessage',
+                'themeEmoji', 'greetingText', 'recipientName', 'messageText',
+                'whatsappBtn', 'mediaSection', 'mediaCount', 'carouselWrapper',
+                'thumbnails', 'mediaModal', 'modalImage', 'modalVideo',
+                'currentSlide', 'totalSlides', 'expiryBadge', 'expiryBadgeText'
+            ];
+            ids.forEach(id => el[id] = document.getElementById(id));
         }
 
-        function getParams() {
+        function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
+            
             return {
                 to: params.get('to') || 'Sahabat',
                 theme: params.get('theme') || 'birthday',
-                v: params.get('v') || null
+                messageId: params.get('v') || null,
+                msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
+                preview: params.get('preview') === 'true',
+                mediaList: extractMediaFromUrl(params)
             };
         }
 
-        async function fetchMessage(id) {
-            if (!id) return null;
+        function extractMediaFromUrl(params) {
+            const mediaList = [];
             
-            try {
-                const url = `${CONFIG.SCRIPT_URL}?type=get_message&id=${id}&t=${Date.now()}`;
-                console.log('📤 Fetching:', url);
-                
-                const response = await fetch(url);
-                const data = await response.json();
-                console.log('📥 Response:', data);
-                
-                return data;
-            } catch (error) {
-                console.error('❌ Fetch error:', error);
-                return null;
+            if (params.get('media')) {
+                mediaList.push({ 
+                    url: params.get('media'), 
+                    type: detectMediaType(params.get('media')) 
+                });
             }
+            
+            for (let i = 2; i <= 10; i++) {
+                if (params.get(`media${i}`)) {
+                    mediaList.push({ 
+                        url: params.get(`media${i}`), 
+                        type: detectMediaType(params.get(`media${i}`)) 
+                    });
+                }
+            }
+            
+            return mediaList;
+        }
+
+        function detectMediaType(url) {
+            if (!url) return 'image';
+            const u = url.toLowerCase();
+            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || 
+                u.includes('.avi') || u.includes('.mkv') || u.includes('youtube.com') ||
+                u.includes('youtu.be') || u.includes('vimeo.com')) {
+                return 'video';
+            }
+            return 'image';
+        }
+
+        async function loadMessageFromServer(messageId) {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=get_message&id=${messageId}&t=${Date.now()}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    state.messageData = data;
+                    
+                    // Update params dengan data dari server
+                    state.params.to = data.nama || state.params.to;
+                    state.params.msg = data.message || state.params.msg;
+                    state.params.theme = data.theme || state.params.theme;
+                    
+                    // Parse media URLs
+                    if (data.media_urls && Array.isArray(data.media_urls)) {
+                        state.params.mediaList = data.media_urls.map(url => ({
+                            url: url,
+                            type: detectMediaType(url)
+                        }));
+                    } else if (data.media_urls && typeof data.media_urls === 'string') {
+                        try {
+                            const parsed = JSON.parse(data.media_urls);
+                            if (Array.isArray(parsed)) {
+                                state.params.mediaList = parsed.map(url => ({
+                                    url: url,
+                                    type: detectMediaType(url)
+                                }));
+                            }
+                        } catch (e) {
+                            console.log('Media parse error:', e);
+                        }
+                    }
+                    
+                    // Update expiry badge
+                    updateExpiryBadge(data);
+                } else {
+                    showNotification('Pesan tidak ditemukan atau telah kadaluarsa');
+                }
+            } catch (error) {
+                console.error('Error loading message:', error);
+                showNotification('Gagal memuat pesan');
+            }
+        }
+
+        function applyDirectParams() {
+            // Langsung pakai params dari URL
+            state.params.mediaList = state.params.mediaList || [];
+            
+            // Update expiry untuk mode direct
+            updateExpiryBadge({
+                expiry_setting: 'never',
+                is_expired: false,
+                days_remaining: 9999
+            });
         }
 
         function updateExpiryBadge(data) {
-            const badge = document.getElementById('expiryBadge');
-            const badgeText = document.getElementById('expiryBadgeText');
+            if (!el.expiryBadge || !el.expiryBadgeText) return;
             
             let icon, text, className;
             
-            if (!data || data.status === 'error') {
-                icon = 'fa-exclamation-triangle';
-                text = 'Tidak ditemukan';
-                className = 'danger';
+            if (!data) {
+                icon = 'fa-clock'; text = 'Gagal memuat'; className = '';
             } else if (data.expiry_setting === 'never') {
-                icon = 'fa-infinity';
-                text = 'Permanen';
-                className = 'permanent';
+                icon = 'fa-infinity'; text = 'Permanen'; className = 'permanent';
             } else if (data.is_expired) {
-                icon = 'fa-exclamation-triangle';
-                text = 'Expired';
-                className = 'danger';
-            } else if (data.days_remaining === 0) {
-                icon = 'fa-hourglass-end';
-                text = 'Hari Terakhir';
-                className = 'warning';
+                icon = 'fa-exclamation-triangle'; text = 'Expired'; className = 'danger';
             } else if (data.days_remaining <= 7) {
-                icon = 'fa-hourglass-half';
-                text = data.days_remaining + ' hari lagi';
-                className = 'warning';
+                icon = 'fa-hourglass-half'; text = `${data.days_remaining} hari lagi`; className = 'warning';
+            } else if (data.days_remaining > 0) {
+                icon = 'fa-hourglass-start'; text = `${data.days_remaining} hari`; className = 'success';
             } else {
-                icon = 'fa-hourglass-start';
-                text = data.days_remaining + ' hari';
-                className = 'success';
+                icon = 'fa-clock'; text = 'Memuat...'; className = '';
             }
             
-            badge.innerHTML = `<i class="fas ${icon}"></i><span>${text}</span>`;
-            badge.className = 'expiry-badge ' + className;
+            el.expiryBadge.innerHTML = `<i class="fas ${icon}"></i><span>${text}</span>`;
+            el.expiryBadge.className = `expiry-badge ${className}`;
         }
 
-        async function init() {
-            showLoading(true);
-            
-            const params = getParams();
-            console.log('📋 Parameters:', params);
-            
-            // Set recipient
-            document.getElementById('recipientName').textContent = params.to;
+        function renderUI() {
+            // Set recipient name
+            if (el.recipientName) {
+                el.recipientName.textContent = state.params.to || 'Sahabat';
+            }
             
             // Set theme
-            if (THEMES[params.theme]) {
-                document.getElementById('themeEmoji').textContent = THEMES[params.theme].emoji;
-                document.getElementById('greetingText').textContent = THEMES[params.theme].greeting;
+            if (state.params.theme && THEMES[state.params.theme]) {
+                document.body.className = `theme-${state.params.theme}`;
+                if (el.themeEmoji) el.themeEmoji.textContent = THEMES[state.params.theme].emoji;
+                if (el.greetingText) el.greetingText.textContent = THEMES[state.params.theme].greeting;
             }
             
-            // Fetch message if v parameter exists
-            if (params.v) {
-                const messageData = await fetchMessage(params.v);
-                if (messageData && messageData.status === 'success') {
-                    document.getElementById('messageText').textContent = messageData.message;
-                    updateExpiryBadge(messageData);
-                } else {
-                    document.getElementById('messageText').textContent = 'Pesan tidak ditemukan atau telah kadaluarsa.';
-                    updateExpiryBadge(null);
-                }
-            } else {
-                document.getElementById('messageText').textContent = 'Tidak ada pesan.';
-                updateExpiryBadge(null);
+            // Set message
+            if (el.messageText) {
+                el.messageText.textContent = state.params.msg || 'Semoga hari-harimu menyenangkan!';
             }
             
-            // Set WhatsApp share
-            const waText = `Kartu untuk ${params.to}: ${window.location.href}`;
-            document.querySelector('.contact a:first-child').href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
+            // Set media
+            state.mediaList = state.params.mediaList || [];
+            renderCarousel();
             
-            showLoading(false);
+            // Set WhatsApp button
+            const waText = `Kartu untuk ${state.params.to}: ${window.location.href}`;
+            if (el.whatsappBtn) {
+                el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
+            }
         }
 
-        init();
+        function renderCarousel() {
+            if (!el.carouselWrapper || state.mediaList.length === 0) {
+                if (el.mediaSection) el.mediaSection.classList.remove('active');
+                return;
+            }
+            
+            el.mediaSection.classList.add('active');
+            el.mediaCount.textContent = `${state.mediaList.length} Media`;
+            if (el.totalSlides) el.totalSlides.textContent = state.mediaList.length;
+            
+            let slidesHTML = '';
+            state.mediaList.forEach((media, index) => {
+                if (media.type === 'video') {
+                    slidesHTML += `
+                        <div class="swiper-slide">
+                            <video id="video-${index}" src="${media.url}" loop playsinline preload="metadata"></video>
+                            <div class="media-type-badge"><i class="fas fa-film"></i> VIDEO</div>
+                            <div class="video-controls">
+                                <div class="video-btn" onclick="toggleVideoPlay(${index})">
+                                    <i id="playIcon-${index}" class="fas fa-play"></i>
+                                </div>
+                                <div class="video-btn volume-btn" id="muteBtn-${index}" onclick="toggleVideoMute(${index})">
+                                    <i id="muteIcon-${index}" class="fas fa-volume-up"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    slidesHTML += `
+                        <div class="swiper-slide" onclick="openModal('${media.url}', false)">
+                            <img src="${media.url}" loading="lazy">
+                            <div class="media-type-badge"><i class="fas fa-image"></i> FOTO</div>
+                        </div>
+                    `;
+                }
+            });
+            
+            el.carouselWrapper.innerHTML = slidesHTML;
+            
+            setTimeout(() => {
+                if (state.swiper) state.swiper.destroy();
+                state.swiper = new Swiper('.swiper', {
+                    loop: state.mediaList.length > 1,
+                    autoplay: state.mediaList.length > 1 ? { delay: 3000, disableOnInteraction: false } : false,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    on: {
+                        slideChange: function() {
+                            const idx = this.realIndex;
+                            document.querySelectorAll('.thumbnail').forEach((el, i) => {
+                                el.classList.toggle('active', i === idx);
+                            });
+                            if (el.currentSlide) el.currentSlide.textContent = idx + 1;
+                        }
+                    }
+                });
+                renderThumbnails();
+            }, 100);
+        }
+
+        function renderThumbnails() {
+            if (!el.thumbnails) return;
+            let html = '';
+            state.mediaList.forEach((media, index) => {
+                if (media.type === 'video') {
+                    html += `<div class="thumbnail video-thumb ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
+                        <i class="fas fa-play"></i>
+                    </div>`;
+                } else {
+                    html += `<div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
+                        <img src="${media.url}" loading="lazy">
+                    </div>`;
+                }
+            });
+            el.thumbnails.innerHTML = html;
+        }
+
+        // Video Controls
+        window.toggleVideoPlay = function(index) {
+            const video = document.getElementById(`video-${index}`);
+            const playIcon = document.getElementById(`playIcon-${index}`);
+            
+            if (video.paused) {
+                video.play();
+                playIcon.className = 'fas fa-pause';
+            } else {
+                video.pause();
+                playIcon.className = 'fas fa-play';
+            }
+        };
+
+        window.toggleVideoMute = function(index) {
+            const video = document.getElementById(`video-${index}`);
+            const muteIcon = document.getElementById(`muteIcon-${index}`);
+            const muteBtn = document.getElementById(`muteBtn-${index}`);
+            
+            video.muted = !video.muted;
+            
+            if (video.muted) {
+                muteIcon.className = 'fas fa-volume-mute';
+                muteBtn.classList.add('muted');
+            } else {
+                muteIcon.className = 'fas fa-volume-up';
+                muteBtn.classList.remove('muted');
+            }
+        };
+
+        // Carousel Navigation
+        window.jumpToSlide = function(index) { 
+            if (state.swiper) state.swiper.slideToLoop(index); 
+        };
+
+        // Modal
+        window.openModal = function(url, isVideo) {
+            if (isVideo) {
+                el.modalImage.style.display = 'none';
+                el.modalVideo.style.display = 'block';
+                el.modalVideo.src = url;
+                el.modalVideo.muted = false;
+                el.modalVideo.play();
+            } else {
+                el.modalImage.style.display = 'block';
+                el.modalVideo.style.display = 'none';
+                el.modalImage.src = url;
+            }
+            el.mediaModal.classList.add('active');
+        };
+
+        window.closeModal = function() {
+            el.mediaModal.classList.remove('active');
+            if (el.modalVideo) { 
+                el.modalVideo.pause(); 
+                el.modalVideo.src = ''; 
+            }
+        };
+
+        // Share
+        window.shareCard = function() {
+            const text = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
+            if (navigator.share) {
+                navigator.share({ title: 'FIOR Card', text, url: window.location.href }).catch(() => copyURL());
+            } else { copyURL(); }
+        };
+
+        function copyURL() {
+            navigator.clipboard.writeText(window.location.href)
+                .then(() => showNotification('Link disalin!'))
+                .catch(() => showNotification('Gagal menyalin link'));
+        }
+
+        window.printCard = function() { window.print(); };
+
+        // Utility
+        function showNotification(message, type = 'success') {
+            if (!el.notification || !el.notificationMessage) return;
+            el.notificationMessage.textContent = message;
+            el.notification.classList.add('show');
+            setTimeout(() => el.notification.classList.remove('show'), 2000);
+        }
+
+        function showLoading(show) {
+            if (el.loadingOverlay) {
+                el.loadingOverlay.style.display = show ? 'flex' : 'none';
+            }
+        }
+
+        // Close modal on click outside
+        window.onclick = function(event) {
+            if (event.target.classList && event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        };
     </script>
 </body>
 </html>
