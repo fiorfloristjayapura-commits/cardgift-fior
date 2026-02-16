@@ -352,7 +352,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         // ============================================
-        // FIOR CARD - FINAL VERSION (SESUAI DENGAN SCRIPT)
+        // FIOR CARD - FINAL VERSION
         // ============================================
 
         const CONFIG = {
@@ -422,7 +422,6 @@
             return 'image';
         }
 
-        // ========== FETCH MESSAGE - SESUAI DENGAN SCRIPT (cmd=get) ==========
         async function fetchMessageFromServer(messageId) {
             if (!messageId) return null;
             try {
@@ -440,7 +439,6 @@
             }
         }
 
-        // ========== PARSE MEDIA DARI DATABASE ==========
         function parseMediaFromString(mediaString) {
             if (!mediaString) return [];
             return mediaString.split('||').map(url => ({
@@ -449,7 +447,6 @@
             }));
         }
 
-        // ========== UPDATE EXPIRY BADGE ==========
         function updateExpiryBadge(data) {
             if (!el.expiryBadge || !el.expiryBadgeText) return;
             
@@ -639,7 +636,6 @@
             setTimeout(() => el.notification.classList.remove('show'), 2000);
         }
 
-        // ========== INIT - SESUAI DENGAN SCRIPT ==========
         async function init() {
             cacheElements();
             
