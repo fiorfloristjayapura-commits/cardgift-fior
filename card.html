@@ -258,6 +258,16 @@
             border-radius: 50%; animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        .error-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--danger);
+        }
+        .error-message i {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
     </style>
 </head>
 <body class="theme-birthday">
@@ -351,7 +361,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         // ============================================
-        // FIOR CARD - TAMPILAN KARTU (FULL INTEGRATION)
+        // FIOR CARD - TAMPILAN KARTU (FIXED VERSION)
         // ============================================
 
         // CONFIG - GANTI DENGAN URL APPS SCRIPT ANDA
@@ -378,7 +388,8 @@
             params: {}, 
             mediaList: [], 
             swiper: null,
-            messageData: null
+            messageData: null,
+            loading: false
         };
 
         // DOM Elements
@@ -387,10 +398,13 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', async function() {
             cacheElements();
-            state.params = getUrlParams();
+            parseUrlParams();
             
             // Tampilkan loading
             showLoading(true);
+            
+            // Log untuk debugging
+            console.log('URL Params:', state.params);
             
             // Jika ada messageId, ambil dari server
             if (state.params.messageId) {
@@ -416,22 +430,32 @@
             ids.forEach(id => el[id] = document.getElementById(id));
         }
 
-        function getUrlParams() {
+        function parseUrlParams() {
             const params = new URLSearchParams(window.location.search);
             
-            return {
+            // Parameter yang didukung:
+            // ?v=IDMESSAGE  - ID pesan dari server
+            // ?to=NAMA      - Nama penerima
+            // ?theme=THEME  - Tema kartu
+            // ?msg=PESAN    - Pesan langsung (tanpa server)
+            // ?media=URL    - URL media (bisa media2, media3, dst)
+            
+            state.params = {
                 to: params.get('to') || 'Sahabat',
                 theme: params.get('theme') || 'birthday',
-                messageId: params.get('v') || null,
+                messageId: params.get('v') || null,  // 'v' untuk ID pesan
                 msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
                 preview: params.get('preview') === 'true',
                 mediaList: extractMediaFromUrl(params)
             };
+            
+            console.log('Message ID dari URL:', state.params.messageId);
         }
 
         function extractMediaFromUrl(params) {
             const mediaList = [];
             
+            // Cek media1 sampai media10
             if (params.get('media')) {
                 mediaList.push({ 
                     url: params.get('media'), 
@@ -440,10 +464,11 @@
             }
             
             for (let i = 2; i <= 10; i++) {
-                if (params.get(`media${i}`)) {
+                const mediaParam = params.get(`media${i}`);
+                if (mediaParam) {
                     mediaList.push({ 
-                        url: params.get(`media${i}`), 
-                        type: detectMediaType(params.get(`media${i}`)) 
+                        url: mediaParam, 
+                        type: detectMediaType(mediaParam) 
                     });
                 }
             }
@@ -456,7 +481,7 @@
             const u = url.toLowerCase();
             if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || 
                 u.includes('.avi') || u.includes('.mkv') || u.includes('youtube.com') ||
-                u.includes('youtu.be') || u.includes('vimeo.com')) {
+                u.includes('youtu.be') || u.includes('vimeo.com') || u.includes('drive.google.com')) {
                 return 'video';
             }
             return 'image';
@@ -464,8 +489,15 @@
 
         async function loadMessageFromServer(messageId) {
             try {
-                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=get_message&id=${messageId}&t=${Date.now()}`);
+                console.log('Loading message from server, ID:', messageId);
+                
+                const url = `${CONFIG.SCRIPT_URL}?type=get_message&id=${messageId}&t=${Date.now()}`;
+                console.log('Fetch URL:', url);
+                
+                const response = await fetch(url);
                 const data = await response.json();
+                
+                console.log('Server response:', data);
                 
                 if (data.status === 'success') {
                     state.messageData = data;
@@ -475,42 +507,79 @@
                     state.params.msg = data.message || state.params.msg;
                     state.params.theme = data.theme || state.params.theme;
                     
-                    // Parse media URLs
-                    if (data.media_urls && Array.isArray(data.media_urls)) {
-                        state.params.mediaList = data.media_urls.map(url => ({
-                            url: url,
-                            type: detectMediaType(url)
-                        }));
-                    } else if (data.media_urls && typeof data.media_urls === 'string') {
+                    // Parse media URLs dari server
+                    if (data.media_urls) {
                         try {
-                            const parsed = JSON.parse(data.media_urls);
-                            if (Array.isArray(parsed)) {
-                                state.params.mediaList = parsed.map(url => ({
+                            // Jika media_urls adalah string JSON
+                            if (typeof data.media_urls === 'string') {
+                                const parsed = JSON.parse(data.media_urls);
+                                if (Array.isArray(parsed)) {
+                                    state.params.mediaList = parsed.map(url => ({
+                                        url: url,
+                                        type: detectMediaType(url)
+                                    }));
+                                }
+                            } 
+                            // Jika media_urls sudah array
+                            else if (Array.isArray(data.media_urls)) {
+                                state.params.mediaList = data.media_urls.map(url => ({
                                     url: url,
                                     type: detectMediaType(url)
                                 }));
                             }
                         } catch (e) {
                             console.log('Media parse error:', e);
+                            // Jika gagal parse, anggap sebagai string biasa
+                            if (typeof data.media_urls === 'string') {
+                                state.params.mediaList = [{
+                                    url: data.media_urls,
+                                    type: detectMediaType(data.media_urls)
+                                }];
+                            }
                         }
                     }
                     
                     // Update expiry badge
                     updateExpiryBadge(data);
+                    
+                    console.log('Data setelah parse:', {
+                        to: state.params.to,
+                        msg: state.params.msg,
+                        theme: state.params.theme,
+                        mediaCount: state.params.mediaList.length
+                    });
+                    
                 } else {
+                    console.error('Server error:', data.message);
                     showNotification('Pesan tidak ditemukan atau telah kadaluarsa');
+                    
+                    // Tampilkan pesan error di card
+                    if (el.messageText) {
+                        el.messageText.textContent = 'Pesan tidak ditemukan atau telah kadaluarsa.';
+                    }
+                    
+                    // Update expiry badge jadi expired
+                    updateExpiryBadge({
+                        expiry_setting: 'expired',
+                        is_expired: true,
+                        days_remaining: 0
+                    });
                 }
             } catch (error) {
                 console.error('Error loading message:', error);
                 showNotification('Gagal memuat pesan');
+                
+                if (el.messageText) {
+                    el.messageText.textContent = 'Gagal memuat pesan. Periksa koneksi internet.';
+                }
             }
         }
 
         function applyDirectParams() {
+            console.log('Applying direct params');
             // Langsung pakai params dari URL
-            state.params.mediaList = state.params.mediaList || [];
             
-            // Update expiry untuk mode direct
+            // Update expiry untuk mode direct (permanen)
             updateExpiryBadge({
                 expiry_setting: 'never',
                 is_expired: false,
@@ -523,18 +592,32 @@
             
             let icon, text, className;
             
+            console.log('Updating expiry badge with data:', data);
+            
             if (!data) {
-                icon = 'fa-clock'; text = 'Gagal memuat'; className = '';
+                icon = 'fa-clock'; 
+                text = 'Memuat...'; 
+                className = '';
             } else if (data.expiry_setting === 'never') {
-                icon = 'fa-infinity'; text = 'Permanen'; className = 'permanent';
-            } else if (data.is_expired) {
-                icon = 'fa-exclamation-triangle'; text = 'Expired'; className = 'danger';
-            } else if (data.days_remaining <= 7) {
-                icon = 'fa-hourglass-half'; text = `${data.days_remaining} hari lagi`; className = 'warning';
-            } else if (data.days_remaining > 0) {
-                icon = 'fa-hourglass-start'; text = `${data.days_remaining} hari`; className = 'success';
+                icon = 'fa-infinity'; 
+                text = 'Permanen'; 
+                className = 'permanent';
+            } else if (data.is_expired || data.expiry_setting === 'expired') {
+                icon = 'fa-exclamation-triangle'; 
+                text = 'Telah Kadaluarsa'; 
+                className = 'danger';
+            } else if (data.days_remaining !== undefined && data.days_remaining <= 7) {
+                icon = 'fa-hourglass-half'; 
+                text = `${data.days_remaining} hari lagi`; 
+                className = 'warning';
+            } else if (data.days_remaining !== undefined && data.days_remaining > 0) {
+                icon = 'fa-hourglass-start'; 
+                text = `${data.days_remaining} hari`; 
+                className = 'success';
             } else {
-                icon = 'fa-clock'; text = 'Memuat...'; className = '';
+                icon = 'fa-clock'; 
+                text = 'Memuat...'; 
+                className = '';
             }
             
             el.expiryBadge.innerHTML = `<i class="fas ${icon}"></i><span>${text}</span>`;
@@ -542,6 +625,8 @@
         }
 
         function renderUI() {
+            console.log('Rendering UI with params:', state.params);
+            
             // Set recipient name
             if (el.recipientName) {
                 el.recipientName.textContent = state.params.to || 'Sahabat';
@@ -556,22 +641,29 @@
             
             // Set message
             if (el.messageText) {
-                el.messageText.textContent = state.params.msg || 'Semoga hari-harimu menyenangkan!';
+                if (state.params.msg) {
+                    el.messageText.textContent = state.params.msg;
+                } else {
+                    el.messageText.textContent = 'Semoga hari-harimu menyenangkan!';
+                }
             }
             
             // Set media
             state.mediaList = state.params.mediaList || [];
+            console.log('Media list:', state.mediaList);
             renderCarousel();
             
             // Set WhatsApp button
-            const waText = `Kartu untuk ${state.params.to}: ${window.location.href}`;
+            const waText = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
             if (el.whatsappBtn) {
                 el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
             }
         }
 
         function renderCarousel() {
-            if (!el.carouselWrapper || state.mediaList.length === 0) {
+            if (!el.carouselWrapper) return;
+            
+            if (state.mediaList.length === 0) {
                 if (el.mediaSection) el.mediaSection.classList.remove('active');
                 return;
             }
@@ -600,7 +692,7 @@
                 } else {
                     slidesHTML += `
                         <div class="swiper-slide" onclick="openModal('${media.url}', false)">
-                            <img src="${media.url}" loading="lazy">
+                            <img src="${media.url}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=Gambar+Error'">
                             <div class="media-type-badge"><i class="fas fa-image"></i> FOTO</div>
                         </div>
                     `;
@@ -609,8 +701,10 @@
             
             el.carouselWrapper.innerHTML = slidesHTML;
             
+            // Initialize Swiper setelah DOM update
             setTimeout(() => {
                 if (state.swiper) state.swiper.destroy();
+                
                 state.swiper = new Swiper('.swiper', {
                     loop: state.mediaList.length > 1,
                     autoplay: state.mediaList.length > 1 ? { delay: 3000, disableOnInteraction: false } : false,
@@ -626,12 +720,19 @@
                         }
                     }
                 });
+                
                 renderThumbnails();
             }, 100);
         }
 
         function renderThumbnails() {
             if (!el.thumbnails) return;
+            
+            if (state.mediaList.length === 0) {
+                el.thumbnails.innerHTML = '';
+                return;
+            }
+            
             let html = '';
             state.mediaList.forEach((media, index) => {
                 if (media.type === 'video') {
@@ -640,7 +741,7 @@
                     </div>`;
                 } else {
                     html += `<div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
-                        <img src="${media.url}" loading="lazy">
+                        <img src="${media.url}" loading="lazy" onerror="this.src='https://via.placeholder.com/70?text=Error'">
                     </div>`;
                 }
             });
