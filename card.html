@@ -258,16 +258,6 @@
             border-radius: 50%; animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        .error-message {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--danger);
-        }
-        .error-message i {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
     </style>
 </head>
 <body class="theme-birthday">
@@ -388,8 +378,7 @@
             params: {}, 
             mediaList: [], 
             swiper: null,
-            messageData: null,
-            loading: false
+            messageData: null
         };
 
         // DOM Elements
@@ -433,17 +422,10 @@
         function parseUrlParams() {
             const params = new URLSearchParams(window.location.search);
             
-            // Parameter yang didukung:
-            // ?v=IDMESSAGE  - ID pesan dari server
-            // ?to=NAMA      - Nama penerima
-            // ?theme=THEME  - Tema kartu
-            // ?msg=PESAN    - Pesan langsung (tanpa server)
-            // ?media=URL    - URL media (bisa media2, media3, dst)
-            
             state.params = {
                 to: params.get('to') || 'Sahabat',
                 theme: params.get('theme') || 'birthday',
-                messageId: params.get('v') || null,  // 'v' untuk ID pesan
+                messageId: params.get('v') || null,
                 msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
                 preview: params.get('preview') === 'true',
                 mediaList: extractMediaFromUrl(params)
@@ -455,7 +437,6 @@
         function extractMediaFromUrl(params) {
             const mediaList = [];
             
-            // Cek media1 sampai media10
             if (params.get('media')) {
                 mediaList.push({ 
                     url: params.get('media'), 
@@ -487,17 +468,18 @@
             return 'image';
         }
 
+        // FUNGSI LOAD MESSAGE DARI SERVER - INI YANG DIPANGGIL
         async function loadMessageFromServer(messageId) {
             try {
-                console.log('Loading message from server, ID:', messageId);
+                console.log('📡 Loading message from server, ID:', messageId);
                 
                 const url = `${CONFIG.SCRIPT_URL}?type=get_message&id=${messageId}&t=${Date.now()}`;
-                console.log('Fetch URL:', url);
+                console.log('📡 Fetch URL:', url);
                 
                 const response = await fetch(url);
                 const data = await response.json();
                 
-                console.log('Server response:', data);
+                console.log('📡 Server response:', data);
                 
                 if (data.status === 'success') {
                     state.messageData = data;
@@ -507,11 +489,15 @@
                     state.params.msg = data.message || state.params.msg;
                     state.params.theme = data.theme || state.params.theme;
                     
-                    // Parse media URLs dari server
+                    // Parse media URLs
                     if (data.media_urls) {
-                        try {
-                            // Jika media_urls adalah string JSON
-                            if (typeof data.media_urls === 'string') {
+                        if (Array.isArray(data.media_urls)) {
+                            state.params.mediaList = data.media_urls.map(url => ({
+                                url: url,
+                                type: detectMediaType(url)
+                            }));
+                        } else if (typeof data.media_urls === 'string') {
+                            try {
                                 const parsed = JSON.parse(data.media_urls);
                                 if (Array.isArray(parsed)) {
                                     state.params.mediaList = parsed.map(url => ({
@@ -519,18 +505,8 @@
                                         type: detectMediaType(url)
                                     }));
                                 }
-                            } 
-                            // Jika media_urls sudah array
-                            else if (Array.isArray(data.media_urls)) {
-                                state.params.mediaList = data.media_urls.map(url => ({
-                                    url: url,
-                                    type: detectMediaType(url)
-                                }));
-                            }
-                        } catch (e) {
-                            console.log('Media parse error:', e);
-                            // Jika gagal parse, anggap sebagai string biasa
-                            if (typeof data.media_urls === 'string') {
+                            } catch (e) {
+                                // Jika bukan JSON, treat as single URL
                                 state.params.mediaList = [{
                                     url: data.media_urls,
                                     type: detectMediaType(data.media_urls)
@@ -540,25 +516,22 @@
                     }
                     
                     // Update expiry badge
-                    updateExpiryBadge(data);
-                    
-                    console.log('Data setelah parse:', {
-                        to: state.params.to,
-                        msg: state.params.msg,
-                        theme: state.params.theme,
-                        mediaCount: state.params.mediaList.length
+                    updateExpiryBadge({
+                        expiry_setting: data.expiry_setting || '30',
+                        is_expired: data.is_expired || data.db_status === 'expired',
+                        days_remaining: data.days_remaining || 0
                     });
                     
+                    console.log('✅ Data loaded successfully');
+                    
                 } else {
-                    console.error('Server error:', data.message);
+                    console.error('❌ Server error:', data.message);
                     showNotification('Pesan tidak ditemukan atau telah kadaluarsa');
                     
-                    // Tampilkan pesan error di card
                     if (el.messageText) {
                         el.messageText.textContent = 'Pesan tidak ditemukan atau telah kadaluarsa.';
                     }
                     
-                    // Update expiry badge jadi expired
                     updateExpiryBadge({
                         expiry_setting: 'expired',
                         is_expired: true,
@@ -566,8 +539,8 @@
                     });
                 }
             } catch (error) {
-                console.error('Error loading message:', error);
-                showNotification('Gagal memuat pesan');
+                console.error('❌ Error loading message:', error);
+                showNotification('Gagal memuat pesan. Periksa koneksi internet.');
                 
                 if (el.messageText) {
                     el.messageText.textContent = 'Gagal memuat pesan. Periksa koneksi internet.';
@@ -577,9 +550,7 @@
 
         function applyDirectParams() {
             console.log('Applying direct params');
-            // Langsung pakai params dari URL
             
-            // Update expiry untuk mode direct (permanen)
             updateExpiryBadge({
                 expiry_setting: 'never',
                 is_expired: false,
@@ -606,11 +577,11 @@
                 icon = 'fa-exclamation-triangle'; 
                 text = 'Telah Kadaluarsa'; 
                 className = 'danger';
-            } else if (data.days_remaining !== undefined && data.days_remaining <= 7) {
+            } else if (data.days_remaining !== undefined && data.days_remaining <= 7 && data.days_remaining > 0) {
                 icon = 'fa-hourglass-half'; 
                 text = `${data.days_remaining} hari lagi`; 
                 className = 'warning';
-            } else if (data.days_remaining !== undefined && data.days_remaining > 0) {
+            } else if (data.days_remaining !== undefined && data.days_remaining > 7) {
                 icon = 'fa-hourglass-start'; 
                 text = `${data.days_remaining} hari`; 
                 className = 'success';
@@ -705,23 +676,27 @@
             setTimeout(() => {
                 if (state.swiper) state.swiper.destroy();
                 
-                state.swiper = new Swiper('.swiper', {
-                    loop: state.mediaList.length > 1,
-                    autoplay: state.mediaList.length > 1 ? { delay: 3000, disableOnInteraction: false } : false,
-                    pagination: { el: '.swiper-pagination', clickable: true },
-                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                    on: {
-                        slideChange: function() {
-                            const idx = this.realIndex;
-                            document.querySelectorAll('.thumbnail').forEach((el, i) => {
-                                el.classList.toggle('active', i === idx);
-                            });
-                            if (el.currentSlide) el.currentSlide.textContent = idx + 1;
+                try {
+                    state.swiper = new Swiper('.swiper', {
+                        loop: state.mediaList.length > 1,
+                        autoplay: state.mediaList.length > 1 ? { delay: 3000, disableOnInteraction: false } : false,
+                        pagination: { el: '.swiper-pagination', clickable: true },
+                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                        on: {
+                            slideChange: function() {
+                                const idx = this.realIndex;
+                                document.querySelectorAll('.thumbnail').forEach((el, i) => {
+                                    el.classList.toggle('active', i === idx);
+                                });
+                                if (el.currentSlide) el.currentSlide.textContent = idx + 1;
+                            }
                         }
-                    }
-                });
-                
-                renderThumbnails();
+                    });
+                    
+                    renderThumbnails();
+                } catch (e) {
+                    console.error('Swiper error:', e);
+                }
             }, 100);
         }
 
@@ -751,30 +726,34 @@
         // Video Controls
         window.toggleVideoPlay = function(index) {
             const video = document.getElementById(`video-${index}`);
+            if (!video) return;
+            
             const playIcon = document.getElementById(`playIcon-${index}`);
             
             if (video.paused) {
                 video.play();
-                playIcon.className = 'fas fa-pause';
+                if (playIcon) playIcon.className = 'fas fa-pause';
             } else {
                 video.pause();
-                playIcon.className = 'fas fa-play';
+                if (playIcon) playIcon.className = 'fas fa-play';
             }
         };
 
         window.toggleVideoMute = function(index) {
             const video = document.getElementById(`video-${index}`);
+            if (!video) return;
+            
             const muteIcon = document.getElementById(`muteIcon-${index}`);
             const muteBtn = document.getElementById(`muteBtn-${index}`);
             
             video.muted = !video.muted;
             
             if (video.muted) {
-                muteIcon.className = 'fas fa-volume-mute';
-                muteBtn.classList.add('muted');
+                if (muteIcon) muteIcon.className = 'fas fa-volume-mute';
+                if (muteBtn) muteBtn.classList.add('muted');
             } else {
-                muteIcon.className = 'fas fa-volume-up';
-                muteBtn.classList.remove('muted');
+                if (muteIcon) muteIcon.className = 'fas fa-volume-up';
+                if (muteBtn) muteBtn.classList.remove('muted');
             }
         };
 
@@ -785,12 +764,14 @@
 
         // Modal
         window.openModal = function(url, isVideo) {
+            if (!el.mediaModal || !el.modalImage || !el.modalVideo) return;
+            
             if (isVideo) {
                 el.modalImage.style.display = 'none';
                 el.modalVideo.style.display = 'block';
                 el.modalVideo.src = url;
                 el.modalVideo.muted = false;
-                el.modalVideo.play();
+                el.modalVideo.play().catch(e => console.log('Video play error:', e));
             } else {
                 el.modalImage.style.display = 'block';
                 el.modalVideo.style.display = 'none';
@@ -800,6 +781,8 @@
         };
 
         window.closeModal = function() {
+            if (!el.mediaModal) return;
+            
             el.mediaModal.classList.remove('active');
             if (el.modalVideo) { 
                 el.modalVideo.pause(); 
