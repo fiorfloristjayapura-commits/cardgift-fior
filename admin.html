@@ -3,700 +3,1414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIOR Card - Digital Greeting</title>
+    <title>FIOR Card - Admin Panel</title>
     
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        .theme-birthday { --primary: #1e3a5f; --accent: #d4af37; --gradient: linear-gradient(145deg, #1e3a5f, #2b4c73); --bg: #fff9f0; }
-        .theme-valentine { --primary: #b76e79; --accent: #ffb6c1; --gradient: linear-gradient(145deg, #b76e79, #c98b95); --bg: #fff5f8; }
-        .theme-wedding { --primary: #b2ac88; --accent: #e6d5b8; --gradient: linear-gradient(145deg, #b2ac88, #c5bf9c); --bg: #fffcf9; }
-        .theme-anniversary { --primary: #9c89b8; --accent: #e0b0b5; --gradient: linear-gradient(145deg, #9c89b8, #b39bc0); --bg: #fbf5ff; }
-        .theme-graduation { --primary: #6b8c5e; --accent: #c5b783; --gradient: linear-gradient(145deg, #6b8c5e, #86a075); --bg: #f7fcf5; }
-        .theme-condolence { --primary: #6b705c; --accent: #b7b7a4; --gradient: linear-gradient(145deg, #6b705c, #848875); --bg: #fbfaf8; }
-        .theme-congratulation { --primary: #ff7f50; --accent: #ffb347; --gradient: linear-gradient(145deg, #ff7f50, #ff9f4b); --bg: #fff5ed; }
-        .theme-imlek { --primary: #d32f2f; --accent: #ffb300; --gradient: linear-gradient(145deg, #d32f2f, #b71c1c); --bg: #fff8e1; }
-        .theme-natal { --primary: #c41e3a; --accent: #2e7d32; --gradient: linear-gradient(145deg, #c41e3a, #a51d36); --bg: #e8f5e9; }
-        .theme-lebaran { --primary: #1b5e20; --accent: #ff8f00; --gradient: linear-gradient(145deg, #1b5e20, #2e7d32); --bg: #fff3e0; }
+        :root {
+            --navy: #1e3a5f;
+            --navy-light: #2b4c73;
+            --navy-deep: #0a192f;
+            --gold: #d4af37;
+            --gold-light: #f5e8c6;
+            --white: #ffffff;
+            --soft-white: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+            --success: #0f766e;
+            --success-light: #d1fae5;
+            --danger: #b91c1c;
+            --danger-light: #fee2e2;
+            --warning: #b45309;
+            --warning-light: #ffedd5;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05);
+            
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+            
+            --transition: all 0.3s ease;
+        }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--bg);
-            color: #2d3e4f;
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--soft-white);
+            color: var(--gray-800);
+        }
+
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 2rem;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: var(--shadow-sm);
         }
 
-        .mobile-container { max-width: 450px; width: 100%; }
-
-        .card {
-            background: white;
-            border-radius: 32px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            animation: slideUp 0.5s ease;
-            position: relative;
-        }
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 6px;
-            background: var(--gradient);
-            z-index: 2;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
+        .logo-image {
+            width: 50px;
+            height: 50px;
+            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--navy-deep);
+        }
+
+        .logo-text span {
+            color: var(--gold);
+        }
+
+        .datetime {
+            background: var(--gray-100);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--gray-200);
+            color: var(--navy);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 82px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            padding: 2rem 1.25rem;
+            position: sticky;
+            top: 82px;
+            height: calc(100vh - 82px);
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0 0.5rem 1.5rem 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .sidebar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--gray-600);
+            border-radius: var(--radius-lg);
+            margin-bottom: 0.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--gold-light);
+            color: var(--navy);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(145deg, var(--navy), var(--navy-light));
+            color: white;
+        }
+
+        .nav-item.active i {
+            color: white;
+        }
+
+        .status {
+            margin-top: 2rem;
+            padding: 1.25rem;
+            background: var(--soft-white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        .status-text {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2.5rem;
+            overflow-y: auto;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .card-header {
-            background: var(--gradient);
-            padding: 40px 20px 48px;
-            text-align: center;
-            position: relative;
-        }
-        .card-header::after {
-            content: '';
-            position: absolute;
-            bottom: -24px; left: 0; right: 0;
-            height: 48px;
-            background: white;
-            border-radius: 50% 50% 0 0;
-            opacity: 0.1;
-        }
-
-        .theme-emoji { font-size: 64px; margin-bottom: 8px; animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
-        .greeting { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 800; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .to-label { font-size: 0.7rem; letter-spacing: 4px; color: rgba(255,255,255,0.8); margin: 8px 0; text-transform: uppercase; }
-        .recipient-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: white; word-break: break-word; padding: 0 16px; }
-
-        .card-body { padding: 32px 20px; }
-
-        .expiry-badge-container { display: flex; justify-content: flex-end; margin-bottom: 12px; }
-        .expiry-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 14px; border-radius: 50px;
-            font-size: 0.75rem; font-weight: 600;
-            background: rgba(255,255,255,0.9);
-            border: 1px solid var(--accent);
-            color: var(--primary);
-        }
-        .expiry-badge.permanent { background: #ede9fe; color: #7c3aed; border-color: #7c3aed; }
-        .expiry-badge.warning { background: #ffedd5; color: #b45309; border-color: #f59e0b; }
-        .expiry-badge.danger { background: #fee2e2; color: #b91c1c; border-color: #dc2626; }
-        .expiry-badge.success { background: #d1fae5; color: #0f766e; border-color: #0f766e; }
-
-        .message-container {
-            background: linear-gradient(145deg, #fff9f0, white);
-            border-radius: 24px;
-            padding: 24px 20px;
-            margin-bottom: 24px;
-            border: 1px solid var(--accent);
-            position: relative;
-        }
-        .message-quote {
-            position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
-            background: var(--accent); width: 40px; height: 40px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.2rem;
-            border: 3px solid white;
-        }
-        .message { font-size: 1rem; line-height: 1.7; text-align: center; font-style: italic; }
-
-        .media-section { margin-bottom: 24px; display: none; }
-        .media-section.active { display: block; }
-
-        .media-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .media-header h3 { font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--primary); }
-        .media-count { background: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: white; }
-
-        .swiper { width: 100%; height: 300px; border-radius: 24px; margin-bottom: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .swiper-slide { background: #1a1a1a; border-radius: 24px; overflow: hidden; position: relative; }
-        .swiper-slide img, .swiper-slide video { width: 100%; height: 100%; object-fit: cover; }
-
-        .media-type-badge {
-            position: absolute; bottom: 16px; right: 16px;
-            background: rgba(0,0,0,0.7); color: white;
-            padding: 6px 14px; border-radius: 30px;
-            font-size: 0.75rem; display: flex; align-items: center; gap: 6px;
-            z-index: 10;
-        }
-
-        .video-controls {
-            position: absolute;
-            bottom: 16px;
-            left: 16px;
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
-
-        .video-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.7);
-            border: 2px solid white;
-            color: white;
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--navy-deep);
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            gap: 1rem;
         }
 
-        .video-btn:hover {
-            background: var(--accent);
-            transform: scale(1.1);
+        .page-title i {
+            color: var(--gold);
         }
 
-        .video-btn i { font-size: 1.1rem; }
-
-        .volume-btn.muted { background: rgba(220, 38, 38, 0.7); }
-
-        .swiper-button-next, .swiper-button-prev { color: white; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; }
-        .swiper-pagination-bullet { background: white; }
-        .swiper-pagination-bullet-active { background: var(--accent); }
-
-        .slide-counter {
-            position: absolute; top: 16px; right: 16px;
-            background: rgba(0,0,0,0.7); color: white;
-            padding: 6px 14px; border-radius: 30px;
-            font-size: 0.8rem; font-weight: 600; z-index: 10;
+        .page-subtitle {
+            color: var(--gray-600);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            padding-left: 0.5rem;
+            border-left: 3px solid var(--gold);
         }
 
-        .thumbnails { display: flex; gap: 8px; overflow-x: auto; padding: 8px 4px; margin-top: 8px; }
-        .thumbnail {
-            flex: 0 0 70px; height: 70px; border-radius: 16px; overflow: hidden;
-            border: 3px solid transparent; transition: all 0.2s ease; cursor: pointer;
+        .form-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
         }
-        .thumbnail.active { border-color: var(--accent); transform: scale(1.05); }
-        .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
-        .thumbnail.video-thumb { 
-            background: linear-gradient(145deg, #333, #000); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+
+        .form-group {
+            margin-bottom: 1.75rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label i {
+            color: var(--gold);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            background: var(--soft-white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(212,175,55,0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .url-media-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-add-url {
+            padding: 0.875rem 1.75rem;
+            background: var(--navy);
             color: white;
-            font-size: 1.5rem;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
         }
 
-        .contact-row {
-            display: flex; align-items: center; justify-content: center; gap: 16px;
-            margin: 24px 0; padding: 12px 16px;
-            background: #f8f9fa; border-radius: 50px;
-            border: 1px solid var(--accent);
-        }
-        .contact-item { display: flex; align-items: center; gap: 8px; color: var(--primary); text-decoration: none; }
-
-        .card-footer { padding: 24px 20px 32px; text-align: center; border-top: 1px solid var(--accent); }
-        .company-logo {
-            width: 60px; height: 60px; margin: 0 auto 12px;
-            background-image: url('https://raw.githubusercontent.com/fiorfloristjayapura-commits/cardgift-fior/d7415aa463679a5ce6f358244c536824fb4c278c/logo%20fior%20transparant.png');
-            background-size: contain; background-repeat: no-repeat; background-position: center;
-            animation: gentleFloat 3s ease-in-out infinite;
-        }
-        @keyframes gentleFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-        .company-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; color: var(--primary); }
-
-        .action-buttons { display: flex; gap: 8px; margin-top: 20px; }
-        .action-btn {
-            flex: 1; padding: 14px 0; border: none; border-radius: 50px;
-            font-weight: 600; background: var(--gradient); color: white;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            cursor: pointer; text-decoration: none;
-        }
-        .action-btn.share { background: #25D366; }
-        .action-btn.print { background: #64748b; }
-
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.95); z-index: 2000;
-            align-items: center; justify-content: center;
-        }
-        .modal.active { display: flex; }
-        .modal-content { max-width: 90%; max-height: 80vh; }
-        .modal-image, .modal-video { max-width: 100%; max-height: 80vh; border-radius: 24px; border: 3px solid white; }
-        .modal-close {
-            position: absolute; top: 20px; right: 20px;
-            width: 44px; height: 44px; border-radius: 50%;
-            background: white; border: none; font-size: 1.3rem; cursor: pointer;
+        .btn-add-url:hover {
+            background: var(--navy-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
-        .notification {
-            position: fixed; top: 20px; left: 16px; right: 16px; max-width: 400px; margin: 0 auto;
-            background: white; padding: 14px 20px; border-radius: 50px;
-            border-left: 4px solid var(--accent);
-            display: none; align-items: center; gap: 12px; z-index: 2100;
+        .url-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
         }
-        .notification.show { display: flex; }
+
+        .url-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.25rem;
+            background: var(--soft-white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+        }
+
+        .url-item i {
+            color: var(--gold);
+        }
+
+        .url-text {
+            flex: 1;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            word-break: break-all;
+            font-family: monospace;
+        }
+
+        .url-item-remove {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: var(--radius-md);
+        }
+
+        .url-item-remove:hover {
+            background: var(--danger-light);
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .theme-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-card:hover {
+            border-color: var(--gold);
+            background: var(--gold-light);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .theme-card.active {
+            background: linear-gradient(145deg, var(--navy), var(--navy-light));
+            border-color: var(--navy);
+        }
+
+        .theme-card.active .theme-emoji,
+        .theme-card.active .theme-name {
+            color: white;
+        }
+
+        .theme-emoji {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, var(--navy), var(--navy-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-success {
+            background: linear-gradient(145deg, var(--success), #0a5c4c);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .result-card {
+            background: var(--white);
+            border: 1px solid var(--success);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            margin-top: 2rem;
+            display: none;
+            box-shadow: var(--shadow-lg);
+            animation: slideInUp 0.4s ease;
+        }
+
+        .result-card.active {
+            display: block !important;
+        }
+
+        .link-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--soft-white);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-200);
+            margin: 1.5rem 0;
+        }
+
+        .short-link {
+            flex: 1;
+            color: var(--navy);
+            word-break: break-all;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: var(--navy);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .qrcode-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--soft-white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-200);
+        }
+
+        .table-container {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            overflow: auto;
+            max-height: 500px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: var(--gray-100);
+            color: var(--navy);
+            font-weight: 600;
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 2px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+        }
+
+        .table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
 
         .loading-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.9);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.95);
             display: none;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             z-index: 9999;
         }
+
+        .loading-content {
+            text-align: center;
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+        }
+
         .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--accent);
-            border-top-color: transparent;
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--gold-light);
+            border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .loading-text {
-            margin-top: 15px;
-            color: var(--primary);
-            font-weight: 600;
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        
-        .error-container {
-            text-align: center;
-            padding: 40px 20px;
+
+        .alert {
+            padding: 1rem 1.75rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1.5rem;
+            display: none;
+            border-left: 4px solid;
         }
-        
-        .error-icon {
-            font-size: 60px;
+
+        .alert-success {
+            background: var(--success-light);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert-error {
+            background: var(--danger-light);
+            border-color: var(--danger);
             color: var(--danger);
-            margin-bottom: 20px;
         }
-        
-        .error-title {
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            max-width: 550px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .modal-header h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
             font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--danger);
-            margin-bottom: 10px;
-        }
-        
-        .error-message {
+            cursor: pointer;
             color: var(--gray-600);
-            margin-bottom: 30px;
-        }
-        
-        .btn-home {
-            display: inline-block;
-            padding: 12px 30px;
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-home:hover {
-            background: var(--accent);
-            transform: translateY(-3px);
         }
     </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div style="text-align: center;">
+        <div class="loading-content">
             <div class="loading-spinner"></div>
-            <div class="loading-text">Memuat kartu ucapan...</div>
+            <div class="loading-text" id="loadingText">Memproses...</div>
         </div>
     </div>
 
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notificationMessage"></span>
-    </div>
-
-    <!-- Modal Media -->
-    <div class="modal" id="mediaModal">
-        <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
-        <div class="modal-content">
-            <img id="modalImage" class="modal-image" style="display: none;">
-            <video id="modalVideo" class="modal-video" controls style="display: none;"></video>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-image"></div>
+            <div class="logo-text">FIOR<span>CARD</span></div>
         </div>
-    </div>
+        <div class="datetime">
+            <i class="fas fa-calendar-alt"></i>
+            <span id="currentDateTime">Memuat...</span>
+        </div>
+    </header>
 
-    <div class="mobile-container">
-        <div class="card" id="mainCard" style="display: none;">
-            <div class="card-header">
-                <div class="theme-emoji" id="themeEmoji">🎂</div>
-                <div class="greeting" id="greetingText">Happy Birthday</div>
-                <div class="to-label">KEPADA YTH.</div>
-                <div class="recipient-name" id="recipientName">[Nama Penerima]</div>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo"></div>
+                <div class="sidebar-title">FIOR CARD</div>
             </div>
+            <nav>
+                <div class="nav-item active" data-page="create-card">
+                    <i class="fas fa-magic"></i>
+                    <span>Buat Card</span>
+                </div>
+                <div class="nav-item" data-page="customers">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </div>
+                <div class="nav-item" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </nav>
+            <div class="status" id="connectionStatus">
+                <span class="status-dot"></span>
+                <span class="status-text" id="statusText">Mengecek koneksi...</span>
+            </div>
+        </aside>
 
-            <div class="card-body">
-                <div class="expiry-badge-container">
-                    <div class="expiry-badge" id="expiryBadge">
-                        <i class="fas fa-clock"></i>
-                        <span id="expiryBadgeText">Memuat...</span>
-                    </div>
+        <main class="main-content">
+            <div id="alertSuccess" class="alert alert-success"></div>
+            <div id="alertError" class="alert alert-error"></div>
+
+            <!-- CREATE CARD PAGE -->
+            <div id="create-card" class="page active">
+                <h1 class="page-title">
+                    <i class="fas fa-magic"></i>
+                    Buat Card Baru
+                </h1>
+                <div class="page-subtitle">
+                    Generate kartu ucapan digital dengan URL media
                 </div>
 
-                <div class="message-container">
-                    <div class="message-quote"><i class="fas fa-quote-right"></i></div>
-                    <div class="message" id="messageText">Memuat pesan...</div>
-                </div>
-
-                <div class="media-section" id="mediaSection">
-                    <div class="media-header">
-                        <h3><i class="fas fa-images"></i> Galeri Spesial</h3>
-                        <span class="media-count" id="mediaCount">0 Media</span>
+                <div class="form-card">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            Nama Penerima <span style="color: var(--danger);">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="recipientName" 
+                               placeholder="Masukkan nama penerima">
                     </div>
 
-                    <div class="swiper">
-                        <div class="swiper-wrapper" id="carouselWrapper"></div>
-                        <div class="swiper-pagination"></div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                        <div class="slide-counter" id="slideCounter">
-                            <i class="fas fa-images"></i>
-                            <span id="currentSlide">1</span> / <span id="totalSlides">0</span>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fab fa-whatsapp"></i>
+                            Nomor WhatsApp <span style="color: var(--danger);">*</span>
+                        </label>
+                        <input type="tel" class="form-control" id="whatsappNumber" 
+                               placeholder="081234567890">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-comment"></i>
+                            Pesan Ucapan <span style="color: var(--danger);">*</span>
+                        </label>
+                        <textarea class="form-control" id="cardMessage" 
+                                  placeholder="Tulis pesan ucapan Anda... (minimal 20 karakter)" 
+                                  rows="5"></textarea>
+                        <div style="display: flex; justify-content: space-between; margin-top: 0.25rem;">
+                            <small style="color: var(--gray-600);">Minimal 20 karakter</small>
+                            <small style="color: var(--gray-600);">
+                                <span id="charCount">0</span>/1000
+                            </small>
                         </div>
                     </div>
 
-                    <div class="thumbnails" id="thumbnails"></div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i>
+                            URL Media (Gambar/Video)
+                        </label>
+                        <div class="url-media-group">
+                            <input type="url" class="form-control" id="mediaUrlInput" 
+                                   placeholder="https://example.com/gambar.jpg">
+                            <button type="button" class="btn-add-url" onclick="addMediaUrl()">
+                                <i class="fas fa-plus"></i> Tambah
+                            </button>
+                        </div>
+                        <div id="urlListContainer" class="url-list"></div>
+                        <input type="hidden" id="mediaUrls" value="[]">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-palette"></i>
+                            Pilih Tema (7 Tema)
+                        </label>
+                        <div class="theme-grid" id="themeGrid"></div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button class="btn btn-primary" style="flex: 2;" onclick="createCard()">
+                            <i class="fas fa-magic"></i> GENERATE CARD
+                        </button>
+                        <button class="btn btn-primary" style="flex: 1; background: var(--success);" onclick="previewCard()">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                        <button class="btn btn-primary" style="flex: 1; background: var(--gray-600);" onclick="resetForm()">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
                 </div>
 
-                <div class="contact-row">
-                    <a href="https://wa.me/6285337777585" target="_blank" class="contact-item">
-                        <i class="fab fa-whatsapp"></i> Admin
-                    </a>
-                    <span style="width:1px; height:24px; background:var(--accent);"></span>
-                    <a href="https://www.instagram.com/tokobungafior.jayapura" target="_blank" class="contact-item">
-                        <i class="fab fa-instagram"></i> @tokobungafior
-                    </a>
+                <div id="cardResult" class="result-card">
+                    <h3 style="color: var(--success); margin-bottom: 1.5rem;">
+                        <i class="fas fa-check-circle"></i> CARD BERHASIL DIBUAT!
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i> LINK CARD
+                        </label>
+                        <div class="link-container">
+                            <span class="short-link" id="generatedLink"></span>
+                            <button class="copy-btn" onclick="copyLink()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-qrcode"></i> QR CODE
+                        </label>
+                        <div class="qrcode-container" id="qrcode"></div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#" target="_blank" class="btn btn-success" id="whatsappResultBtn" style="flex: 1;">
+                            <i class="fab fa-whatsapp"></i> Kirim WA
+                        </a>
+                        <a href="#" target="_blank" class="btn btn-primary" id="previewResultBtn" style="flex: 1;">
+                            <i class="fas fa-eye"></i> Buka Card
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="card-footer">
-                <div class="company-logo"></div>
-                <div class="company-name">FIOR Florist</div>
-                <div class="company-tagline">JAYAPURA • EST. 2020</div>
+            <!-- CUSTOMERS PAGE -->
+            <div id="customers" class="page">
+                <h1 class="page-title">
+                    <i class="fas fa-users"></i> Data Customers
+                </h1>
+                <div class="page-subtitle">
+                    Kelola database customer FIOR Florist
+                </div>
+                
+                <button class="btn btn-primary" onclick="showAddCustomerModal()" style="margin-bottom: 2rem;">
+                    <i class="fas fa-user-plus"></i> Tambah Customer
+                </button>
 
-                <div class="action-buttons">
-                    <button class="action-btn share" onclick="shareCard()"><i class="fas fa-share-alt"></i></button>
-                    <a href="#" class="action-btn whatsapp" id="whatsappBtn" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                    <button class="action-btn print" onclick="printCard()"><i class="fas fa-print"></i></button>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>No. WhatsApp</th>
+                                <th>Email</th>
+                                <th>Alamat</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTableBody">
+                            <tr><td colspan="5" style="text-align: center; padding: 2rem;">Memuat data...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-        
-        <div class="card" id="errorCard" style="display: none;">
-            <div class="error-container">
-                <div class="error-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
+
+            <!-- HISTORY PAGE -->
+            <div id="history" class="page">
+                <h1 class="page-title">
+                    <i class="fas fa-history"></i> History Cards
+                </h1>
+                <div class="page-subtitle">
+                    Riwayat semua card yang telah dibuat
                 </div>
-                <div class="error-title">Oops!</div>
-                <div class="error-message" id="errorMessage">Kartu tidak ditemukan atau telah kadaluarsa.</div>
-                <a href="https://fiorfloristjayapura.com" class="btn-home">Kembali ke Beranda</a>
+
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Penerima</th>
+                                <th>Tema</th>
+                                <th>Media</th>
+                                <th>Link</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr><td colspan="5" style="text-align: center; padding: 2rem;">Memuat data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SETTINGS PAGE -->
+            <div id="settings" class="page">
+                <h1 class="page-title">
+                    <i class="fas fa-cog"></i> Settings
+                </h1>
+                <div class="page-subtitle">
+                    Konfigurasi API dan sistem
+                </div>
+
+                <div class="form-card">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-link"></i> Google Apps Script URL
+                        </label>
+                        <input type="url" class="form-control" id="scriptUrl" 
+                               value="https://script.google.com/macros/s/AKfycbwWajW5E6Do_qaAzmnE59UekZgRLqISphqXQ8ErFqU6S0j9x96ovUSu0jGv_t7t5I9S/exec">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-globe"></i> Card Base URL
+                        </label>
+                        <input type="url" class="form-control" id="cardBaseUrl" 
+                               value="https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html">
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveSettings()">
+                        <i class="fas fa-save"></i> Simpan Settings
+                    </button>
+                    <button class="btn btn-primary" onclick="testConnection()" style="margin-left: 1rem;">
+                        <i class="fas fa-wifi"></i> Test Connection
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL TAMBAH CUSTOMER -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Tambah Customer</h3>
+                <button class="modal-close" onclick="closeCustomerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap *</label>
+                    <input type="text" class="form-control" id="modalCustomerName" 
+                           placeholder="Masukkan nama lengkap">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">No. WhatsApp *</label>
+                    <input type="tel" class="form-control" id="modalCustomerPhone" 
+                           placeholder="081234567890">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="modalCustomerEmail" 
+                           placeholder="customer@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Alamat</label>
+                    <textarea class="form-control" id="modalCustomerAddress" 
+                              rows="2" placeholder="Jl. Contoh No. 123"></textarea>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="saveCustomer()">
+                    <i class="fas fa-save"></i> Simpan
+                </button>
+                <button class="btn btn-primary" style="background: var(--gray-600);" onclick="closeCustomerModal()">
+                    Batal
+                </button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        // ============================================
-        // FIOR CARD - TAMPILAN KARTU
-        // ============================================
-
         const CONFIG = {
-            SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwWajW5E6Do_qaAzmnE59UekZgRLqISphqXQ8ErFqU6S0j9x96ovUSu0jGv_t7t5I9S/exec"
+            SCRIPT_URL: document.getElementById('scriptUrl')?.value || "https://script.google.com/macros/s/AKfycbwWajW5E6Do_qaAzmnE59UekZgRLqISphqXQ8ErFqU6S0j9x96ovUSu0jGv_t7t5I9S/exec",
+            CARD_BASE_URL: document.getElementById('cardBaseUrl')?.value || "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
+            DEFAULT_THEME: "birthday"
         };
 
-        const THEMES = {
-            birthday: { emoji: '🎂', greeting: 'Happy Birthday' },
-            valentine: { emoji: '❤️', greeting: 'Happy Valentine' },
-            wedding: { emoji: '💍', greeting: 'Congratulations' },
-            anniversary: { emoji: '🎉', greeting: 'Happy Anniversary' },
-            graduation: { emoji: '🎓', greeting: 'Congratulations!' },
-            condolence: { emoji: '🕊️', greeting: 'Deepest Condolences' },
-            congratulation: { emoji: '🎊', greeting: 'Congratulations!' },
-            imlek: { emoji: '🧧', greeting: 'Gong Xi Fa Cai' },
-            natal: { emoji: '🎄', greeting: 'Merry Christmas' },
-            lebaran: { emoji: '🌙', greeting: 'Selamat Lebaran' }
-        };
+        const THEMES = [
+            { id: 'birthday', name: 'Birthday', emoji: '🎂' },
+            { id: 'valentine', name: 'Valentine', emoji: '❤️' },
+            { id: 'wedding', name: 'Wedding', emoji: '💍' },
+            { id: 'anniversary', name: 'Anniversary', emoji: '🎉' },
+            { id: 'graduation', name: 'Graduation', emoji: '🎓' },
+            { id: 'condolence', name: 'Condolence', emoji: '🕊️' },
+            { id: 'congratulation', name: 'Congratulation', emoji: '🎊' }
+        ];
 
-        let state = { 
-            params: {}, 
-            mediaList: [], 
-            swiper: null
+        let state = {
+            customers: [],
+            cards: [],
+            selectedTheme: CONFIG.DEFAULT_THEME,
+            mediaUrls: []
         };
 
         const el = {};
 
-        document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener('DOMContentLoaded', function() {
             cacheElements();
-            parseUrlParams();
-            
-            showLoading(true);
-            
-            console.log('URL:', window.location.href);
-            console.log('Message ID:', state.params.messageId);
-            
-            if (state.params.messageId) {
-                await loadMessageFromServer(state.params.messageId);
-            } else {
-                // Mode direct dari URL
-                renderUI();
-                showMainCard();
-            }
-            
-            showLoading(false);
+            loadSettings();
+            loadThemes();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            setupNavigation();
+            loadCustomers();
+            loadCards();
+            setTimeout(() => testConnection(true), 1000);
         });
 
         function cacheElements() {
             const ids = [
-                'loadingOverlay', 'notification', 'notificationMessage',
-                'themeEmoji', 'greetingText', 'recipientName', 'messageText',
-                'whatsappBtn', 'mediaSection', 'mediaCount', 'carouselWrapper',
-                'thumbnails', 'mediaModal', 'modalImage', 'modalVideo',
-                'currentSlide', 'totalSlides', 'expiryBadge', 'expiryBadgeText',
-                'mainCard', 'errorCard', 'errorMessage'
+                'loadingOverlay', 'loadingText',
+                'alertSuccess', 'alertError',
+                'currentDateTime', 'statusText',
+                'recipientName', 'whatsappNumber', 'cardMessage', 'charCount',
+                'mediaUrlInput', 'urlListContainer', 'mediaUrls',
+                'themeGrid', 'cardResult', 'generatedLink',
+                'whatsappResultBtn', 'previewResultBtn', 'qrcode',
+                'customersTableBody', 'historyTableBody',
+                'scriptUrl', 'cardBaseUrl',
+                'modalCustomerName', 'modalCustomerPhone', 
+                'modalCustomerEmail', 'modalCustomerAddress'
             ];
             ids.forEach(id => el[id] = document.getElementById(id));
         }
 
-        function parseUrlParams() {
-            const params = new URLSearchParams(window.location.search);
+        function updateDateTime() {
+            if (el.currentDateTime) {
+                el.currentDateTime.innerHTML = new Date().toLocaleDateString('id-ID', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
+                });
+            }
+        }
+
+        function setupNavigation() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    document.getElementById(this.dataset.page).classList.add('active');
+                    
+                    if (this.dataset.page === 'customers') loadCustomers();
+                    if (this.dataset.page === 'history') loadCards();
+                });
+            });
+        }
+
+        function loadThemes() {
+            if (!el.themeGrid) return;
+            el.themeGrid.innerHTML = '';
+            THEMES.forEach(theme => {
+                const div = document.createElement('div');
+                div.className = `theme-card ${theme.id === state.selectedTheme ? 'active' : ''}`;
+                div.dataset.theme = theme.id;
+                div.innerHTML = `<div class="theme-emoji">${theme.emoji}</div><div class="theme-name">${theme.name}</div>`;
+                div.onclick = () => {
+                    state.selectedTheme = theme.id;
+                    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+                    div.classList.add('active');
+                };
+                el.themeGrid.appendChild(div);
+            });
+        }
+
+        function generateId() {
+            return Math.random().toString(36).substring(2, 10);
+        }
+
+        window.addMediaUrl = function() {
+            const url = el.mediaUrlInput?.value.trim();
+            if (!url) { showAlert('Masukkan URL!', 'error'); return; }
+            if (!url.startsWith('http')) { showAlert('URL harus http://', 'error'); return; }
             
-            state.params = {
-                to: params.get('to') || 'Sahabat',
-                theme: params.get('theme') || 'birthday',
-                messageId: params.get('v') || null,
-                msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
-                mediaList: []
-            };
+            state.mediaUrls.push(url);
+            if (el.mediaUrls) el.mediaUrls.value = JSON.stringify(state.mediaUrls);
+            renderUrlList();
+            el.mediaUrlInput.value = '';
+        };
+
+        window.removeMediaUrl = function(index) {
+            state.mediaUrls.splice(index, 1);
+            if (el.mediaUrls) el.mediaUrls.value = JSON.stringify(state.mediaUrls);
+            renderUrlList();
+        };
+
+        function renderUrlList() {
+            if (!el.urlListContainer) return;
+            if (state.mediaUrls.length === 0) {
+                el.urlListContainer.innerHTML = '';
+                return;
+            }
+            let html = '';
+            state.mediaUrls.forEach((url, i) => {
+                html += `
+                    <div class="url-item">
+                        <i class="fas fa-link"></i>
+                        <span class="url-text">${url.length > 60 ? url.substring(0,60)+'...' : url}</span>
+                        <button class="url-item-remove" onclick="removeMediaUrl(${i})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            el.urlListContainer.innerHTML = html;
+        }
+
+        window.createCard = async function() {
+            const name = el.recipientName?.value.trim();
+            const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
+            const message = el.cardMessage?.value.trim();
+            const theme = state.selectedTheme;
             
-            // Ambil media dari URL
-            if (params.get('media')) {
-                state.params.mediaList.push({ 
-                    url: params.get('media'), 
-                    type: detectMediaType(params.get('media')) 
+            if (!name) { showAlert('Nama harus diisi!', 'error'); return; }
+            if (!phone || phone.length < 10) { showAlert('Nomor WA tidak valid!', 'error'); return; }
+            if (!message || message.length < 20) { showAlert('Pesan minimal 20 karakter!', 'error'); return; }
+            
+            showLoading(true, 'Membuat card...');
+            
+            try {
+                const messageId = generateId();
+                let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}&v=${messageId}`;
+                
+                if (state.mediaUrls.length === 1) {
+                    cardUrl += `&media=${encodeURIComponent(state.mediaUrls[0])}`;
+                } else if (state.mediaUrls.length > 1) {
+                    state.mediaUrls.forEach((url, i) => {
+                        cardUrl += `&media${i+1}=${encodeURIComponent(url)}`;
+                    });
+                }
+                
+                if (el.generatedLink) el.generatedLink.textContent = cardUrl;
+                
+                if (el.qrcode) {
+                    el.qrcode.innerHTML = '';
+                    new QRCode(el.qrcode, {
+                        text: cardUrl,
+                        width: 200,
+                        height: 200,
+                        colorDark: "#1e3a5f",
+                        colorLight: "#ffffff"
+                    });
+                }
+                
+                const waNum = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
+                const waMsg = `Halo ${name}, ini kartu ucapan digital dari FIOR Florist:\n\n${cardUrl}`;
+                if (el.whatsappResultBtn) el.whatsappResultBtn.href = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
+                if (el.previewResultBtn) el.previewResultBtn.href = cardUrl;
+                
+                if (el.cardResult) {
+                    el.cardResult.classList.add('active');
+                    el.cardResult.style.display = 'block';
+                    setTimeout(() => el.cardResult.scrollIntoView({ behavior: 'smooth' }), 200);
+                }
+                
+                const formData = new URLSearchParams();
+                formData.append('type', 'card');
+                formData.append('nama', name);
+                formData.append('no_hp', phone);
+                formData.append('tema', theme);
+                formData.append('pesan', message);
+                formData.append('link', cardUrl);
+                formData.append('media_url', state.mediaUrls.join('||'));
+                formData.append('creator', 'Admin');
+                
+                await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
+                });
+                
+                showAlert('✅ CARD BERHASIL!', 'success');
+                loadCards();
+                
+            } catch (error) {
+                showAlert('Gagal: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        };
+
+        window.previewCard = function() {
+            const name = el.recipientName?.value.trim() || 'Preview';
+            const message = el.cardMessage?.value.trim() || 'Preview message';
+            const theme = state.selectedTheme;
+            
+            let url = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}&theme=${theme}`;
+            
+            if (state.mediaUrls.length === 1) {
+                url += `&media=${encodeURIComponent(state.mediaUrls[0])}`;
+            } else if (state.mediaUrls.length > 1) {
+                state.mediaUrls.forEach((url, i) => {
+                    url += `&media${i+1}=${encodeURIComponent(state.mediaUrls[i])}`;
                 });
             }
             
-            for (let i = 2; i <= 10; i++) {
-                if (params.get(`media${i}`)) {
-                    state.params.mediaList.push({ 
-                        url: params.get(`media${i}`), 
-                        type: detectMediaType(params.get(`media${i}`)) 
-                    });
-                }
-            }
-        }
+            window.open(url, '_blank');
+        };
 
-        function detectMediaType(url) {
-            if (!url) return 'image';
-            const u = url.toLowerCase();
-            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm')) {
-                return 'video';
-            }
-            return 'image';
-        }
+        window.resetForm = function() {
+            if (el.recipientName) el.recipientName.value = '';
+            if (el.whatsappNumber) el.whatsappNumber.value = '';
+            if (el.cardMessage) el.cardMessage.value = '';
+            if (el.charCount) el.charCount.textContent = '0';
+            
+            state.mediaUrls = [];
+            if (el.mediaUrls) el.mediaUrls.value = '[]';
+            renderUrlList();
+            
+            state.selectedTheme = CONFIG.DEFAULT_THEME;
+            document.querySelectorAll('.theme-card').forEach(c => {
+                c.classList.toggle('active', c.dataset.theme === CONFIG.DEFAULT_THEME);
+            });
+        };
 
-        async function loadMessageFromServer(messageId) {
+        window.copyLink = function() {
+            const link = el.generatedLink?.textContent;
+            if (!link) { showAlert('Tidak ada link', 'error'); return; }
+            navigator.clipboard.writeText(link)
+                .then(() => showAlert('✅ Link dicopy!', 'success'))
+                .catch(() => showAlert('❌ Gagal copy', 'error'));
+        };
+
+        window.testConnection = async function(silent = false) {
+            if (!silent) showLoading(true, 'Testing koneksi...');
             try {
-                const url = `${CONFIG.SCRIPT_URL}?type=get_message&id=${messageId}&t=${Date.now()}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    state.params.to = data.nama || state.params.to;
-                    state.params.msg = data.message || state.params.msg;
-                    state.params.theme = data.theme || state.params.theme;
-                    
-                    if (data.media_urls && Array.isArray(data.media_urls)) {
-                        state.params.mediaList = data.media_urls.map(url => ({
-                            url: url,
-                            type: detectMediaType(url)
-                        }));
-                    }
-                    
-                    updateExpiryBadge(data.days_remaining, data.is_expired);
-                    renderUI();
-                    showMainCard();
-                    
+                const response = await fetch(CONFIG.SCRIPT_URL + '?type=test&t=' + Date.now());
+                const result = await response.json();
+                if (result.status === 'success') {
+                    if (!silent) showAlert('✅ Koneksi berhasil!', 'success');
+                    if (el.statusText) el.statusText.textContent = 'Terhubung';
+                    return true;
                 } else {
-                    showError('Kartu tidak ditemukan');
+                    throw new Error('Gagal');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                renderUI(); // Tetap tampilkan dari URL
-                showMainCard();
+                if (!silent) showAlert('❌ Koneksi gagal!', 'error');
+                if (el.statusText) el.statusText.textContent = 'Gagal';
+                return false;
+            } finally {
+                if (!silent) showLoading(false);
+            }
+        };
+
+        async function loadCustomers() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=customers&t=${Date.now()}`);
+                const data = await response.json();
+                state.customers = Array.isArray(data) ? data : [];
+                renderCustomersTable();
+            } catch (error) {
+                if (el.customersTableBody) {
+                    el.customersTableBody.innerHTML = '<tr><td colspan="5">Gagal memuat data</td></tr>';
+                }
             }
         }
 
-        function updateExpiryBadge(days, isExpired) {
-            if (!el.expiryBadge || !el.expiryBadgeText) return;
-            
-            let icon, text, className;
-            
-            if (isExpired) {
-                icon = 'fa-exclamation-triangle'; 
-                text = 'Telah Kadaluarsa'; 
-                className = 'danger';
-            } else if (days <= 7) {
-                icon = 'fa-hourglass-half'; 
-                text = `${days} hari lagi`; 
-                className = 'warning';
-            } else {
-                icon = 'fa-hourglass-start'; 
-                text = `${days} hari`; 
-                className = 'success';
+        function renderCustomersTable() {
+            if (!el.customersTableBody) return;
+            if (state.customers.length === 0) {
+                el.customersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada data</td></tr>';
+                return;
             }
-            
-            el.expiryBadge.innerHTML = `<i class="fas ${icon}"></i><span>${text}</span>`;
-            el.expiryBadge.className = `expiry-badge ${className}`;
+            let html = '';
+            state.customers.slice(0, 20).forEach(c => {
+                html += `
+                    <tr>
+                        <td><strong>${c.nama || ''}</strong></td>
+                        <td>${c.no_hp || ''}</td>
+                        <td>${c.email || '-'}</td>
+                        <td>${c.alamat || '-'}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="useCustomer('${c.nama}', '${c.no_hp}')">
+                                Pilih
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            el.customersTableBody.innerHTML = html;
         }
 
-        function renderUI() {
-            if (el.recipientName) {
-                el.recipientName.textContent = state.params.to;
-            }
-            
-            if (state.params.theme && THEMES[state.params.theme]) {
-                document.body.className = `theme-${state.params.theme}`;
-                if (el.themeEmoji) el.themeEmoji.textContent = THEMES[state.params.theme].emoji;
-                if (el.greetingText) el.greetingText.textContent = THEMES[state.params.theme].greeting;
-            }
-            
-            if (el.messageText) {
-                el.messageText.textContent = state.params.msg || 'Semoga hari-harimu menyenangkan!';
-            }
-            
-            state.mediaList = state.params.mediaList || [];
-            renderCarousel();
-            
-            const waText = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
-            if (el.whatsappBtn) {
-                el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
+        window.useCustomer = function(name, phone) {
+            if (el.recipientName) el.recipientName.value = name || '';
+            if (el.whatsappNumber) el.whatsappNumber.value = phone || '';
+            document.querySelector('.nav-item[data-page="create-card"]').click();
+        };
+
+        async function loadCards() {
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?type=cards&t=${Date.now()}`);
+                const data = await response.json();
+                state.cards = Array.isArray(data) ? data : [];
+                renderCardsTable();
+            } catch (error) {
+                if (el.historyTableBody) {
+                    el.historyTableBody.innerHTML = '<tr><td colspan="5">Gagal memuat data</td></tr>';
+                }
             }
         }
 
-        function renderCarousel() {
-            if (!el.carouselWrapper) return;
+        function renderCardsTable() {
+            if (!el.historyTableBody) return;
+            if (state.cards.length === 0) {
+                el.historyTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada card</td></tr>';
+                return;
+            }
+            let html = '';
+            state.cards.slice(0, 20).forEach(c => {
+                html += `
+                    <tr>
+                        <td>${c.timestamp || ''}</td>
+                        <td>${c.name || ''}</td>
+                        <td>${c.theme || ''}</td>
+                        <td>${c.hasMedia ? '✅' : '❌'}</td>
+                        <td>
+                            <a href="${c.link}" target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            });
+            el.historyTableBody.innerHTML = html;
+        }
+
+        window.showAddCustomerModal = function() {
+            document.getElementById('customerModal').classList.add('active');
+        };
+
+        window.closeCustomerModal = function() {
+            document.getElementById('customerModal').classList.remove('active');
+            ['modalCustomerName', 'modalCustomerPhone', 'modalCustomerEmail', 'modalCustomerAddress'].forEach(id => {
+                const elm = document.getElementById(id);
+                if (elm) elm.value = '';
+            });
+        };
+
+        window.saveCustomer = async function() {
+            const name = el.modalCustomerName?.value.trim();
+            const phone = el.modalCustomerPhone?.value.trim();
+            const email = el.modalCustomerEmail?.value.trim();
+            const address = el.modalCustomerAddress?.value.trim();
             
-            if (state.mediaList.length === 0) {
-                if (el.mediaSection) el.mediaSection.classList.remove('active');
+            if (!name || !phone) {
+                showAlert('Nama dan No. WA wajib diisi!', 'error');
                 return;
             }
             
-            el.mediaSection.classList.add('active');
-            el.mediaCount.textContent = `${state.mediaList.length} Media`;
-            if (el.totalSlides) el.totalSlides.textContent = state.mediaList.length;
+            showLoading(true, 'Menyimpan...');
             
-            let slidesHTML = '';
-            state.mediaList.forEach((media, index) => {
-                if (media.type === 'video') {
-                    slidesHTML += `
-                        <div class="swiper-slide">
-                            <video src="${media.url}" loop playsinline preload="metadata"></video>
-                            <div class="media-type-badge"><i class="fas fa-film"></i> VIDEO</div>
-                        </div>
-                    `;
-                } else {
-                    slidesHTML += `
-                        <div class="swiper-slide" onclick="openModal('${media.url}')">
-                            <img src="${media.url}" loading="lazy">
-                            <div class="media-type-badge"><i class="fas fa-image"></i> FOTO</div>
-                        </div>
-                    `;
-                }
-            });
-            
-            el.carouselWrapper.innerHTML = slidesHTML;
-            
-            setTimeout(() => {
-                if (state.swiper) state.swiper.destroy();
+            try {
+                const formData = new URLSearchParams();
+                formData.append('type', 'customer');
+                formData.append('nama', name);
+                formData.append('no_hp', phone);
+                formData.append('email', email || '');
+                formData.append('alamat', address || '');
                 
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showAlert('Customer tersimpan!', 'success');
+                    closeCustomerModal();
+                    await loadCustomers();
+                } else {
+                    throw new Error(result.message || 'Gagal');
+                }
+            } catch (error) {
+                showAlert('Gagal: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        };
+
+        function loadSettings() {
+            const saved = localStorage.getItem('fior_settings');
+            if (saved) {
                 try {
-                    state.swiper = new Swiper('.swiper', {
-                        loop: state.mediaList.length > 1,
-                        autoplay: state.mediaList.length > 1 ? { delay: 3000, disableOnInteraction: false } : false,
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
-                    });
+                    const settings = JSON.parse(saved);
+                    if (settings.scriptUrl && el.scriptUrl) {
+                        el.scriptUrl.value = settings.scriptUrl;
+                        CONFIG.SCRIPT_URL = settings.scriptUrl;
+                    }
+                    if (settings.cardBaseUrl && el.cardBaseUrl) {
+                        el.cardBaseUrl.value = settings.cardBaseUrl;
+                        CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
+                    }
                 } catch (e) {}
-            }, 100);
+            }
         }
 
-        function showMainCard() {
-            if (el.mainCard) el.mainCard.style.display = 'block';
-            if (el.errorCard) el.errorCard.style.display = 'none';
-        }
-
-        function showError(message) {
-            if (el.mainCard) el.mainCard.style.display = 'none';
-            if (el.errorCard) el.errorCard.style.display = 'block';
-            if (el.errorMessage) el.errorMessage.textContent = message;
-        }
-
-        window.openModal = function(url) {
-            if (!el.mediaModal || !el.modalImage) return;
-            el.modalImage.src = url;
-            el.modalImage.style.display = 'block';
-            el.mediaModal.classList.add('active');
+        window.saveSettings = function() {
+            const settings = {
+                scriptUrl: el.scriptUrl?.value || CONFIG.SCRIPT_URL,
+                cardBaseUrl: el.cardBaseUrl?.value || CONFIG.CARD_BASE_URL
+            };
+            localStorage.setItem('fior_settings', JSON.stringify(settings));
+            CONFIG.SCRIPT_URL = settings.scriptUrl;
+            CONFIG.CARD_BASE_URL = settings.cardBaseUrl;
+            showAlert('Settings tersimpan!', 'success');
         };
 
-        window.closeModal = function() {
-            if (!el.mediaModal) return;
-            el.mediaModal.classList.remove('active');
-            if (el.modalImage) el.modalImage.src = '';
-        };
-
-        window.shareCard = function() {
-            const text = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
-            if (navigator.share) {
-                navigator.share({ title: 'FIOR Card', text, url: window.location.href }).catch(() => copyURL());
-            } else { copyURL(); }
-        };
-
-        function copyURL() {
-            navigator.clipboard.writeText(window.location.href)
-                .then(() => showNotification('Link disalin!'))
-                .catch(() => showNotification('Gagal menyalin link'));
+        function showAlert(message, type = 'success') {
+            const alertEl = document.getElementById(type === 'success' ? 'alertSuccess' : 'alertError');
+            if (alertEl) {
+                alertEl.textContent = message;
+                alertEl.style.display = 'block';
+                setTimeout(() => alertEl.style.display = 'none', 3000);
+            }
         }
 
-        window.printCard = function() { window.print(); };
-
-        function showNotification(message) {
-            if (!el.notification || !el.notificationMessage) return;
-            el.notificationMessage.textContent = message;
-            el.notification.classList.add('show');
-            setTimeout(() => el.notification.classList.remove('show'), 2000);
-        }
-
-        function showLoading(show) {
+        function showLoading(show, text = 'Loading...') {
             if (el.loadingOverlay) {
-                el.loadingOverlay.style.display = show ? 'flex' : 'none';
+                if (show) {
+                    el.loadingOverlay.style.display = 'flex';
+                    if (el.loadingText) el.loadingText.textContent = text;
+                } else {
+                    el.loadingOverlay.style.display = 'none';
+                }
             }
         }
 
-        window.onclick = function(event) {
-            if (event.target.classList && event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-            }
-        };
+        if (el.cardMessage) {
+            el.cardMessage.addEventListener('input', function() {
+                if (el.charCount) el.charCount.textContent = this.value.length;
+            });
+        }
     </script>
 </body>
 </html>
