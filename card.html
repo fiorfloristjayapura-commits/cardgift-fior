@@ -356,7 +356,6 @@
         // ============================================
 
         const CONFIG = {
-            // Menggunakan URL dari script pertama yang lebih pendek
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzTPgv-D6VNNlh0QHERaizfzN4tWCs42Xdr3sZLdpIzs3oHQAuz5D-6tqfO5U7E2QHmEw/exec"
         };
 
@@ -391,12 +390,12 @@
             
             const mediaList = [];
             
-            // Cek parameter media tunggal (dari script pertama)
+            // Cek parameter media tunggal
             if (params.get('media')) {
                 mediaList.push({ url: params.get('media'), type: detectMediaType(params.get('media')) });
             }
             
-            // Cek multiple media (dari script kedua)
+            // Cek multiple media
             for (let i = 2; i <= 10; i++) {
                 if (params.get(`media${i}`)) {
                     mediaList.push({ url: params.get(`media${i}`), type: detectMediaType(params.get(`media${i}`)) });
@@ -408,8 +407,7 @@
             return {
                 to: params.get('to') || 'Sahabat',
                 theme: params.get('theme') || 'birthday',
-                id: params.get('v'), // parameter dari script pertama
-                messageId: params.get('v') || null, // parameter dari script kedua
+                messageId: params.get('v') || null,
                 msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
                 mediaList: mediaList
             };
@@ -672,7 +670,6 @@
                     updateExpiryBadge({ is_expired: true });
                 }
             } else {
-                // Jika tidak ada msg atau messageId, tampilkan pesan default
                 el.messageText.textContent = 'Selamat menikmati kartu ucapan digital dari FIOR Florist!';
                 updateExpiryBadge({ expiry_setting: 'never' });
             }
