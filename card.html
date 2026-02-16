@@ -290,7 +290,7 @@
         }
         
         .error-message {
-            color: var(--gray-600);
+            color: #64748b;
             margin-bottom: 30px;
         }
         
@@ -312,7 +312,6 @@
     </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div style="text-align: center;">
             <div class="loading-spinner"></div>
@@ -320,13 +319,11 @@
         </div>
     </div>
 
-    <!-- Notification -->
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
         <span id="notificationMessage"></span>
     </div>
 
-    <!-- Modal Media -->
     <div class="modal" id="mediaModal">
         <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
         <div class="modal-content">
@@ -415,10 +412,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        // ============================================
-        // FIOR CARD - TAMPILAN KARTU
-        // ============================================
-
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwWajW5E6Do_qaAzmnE59UekZgRLqISphqXQ8ErFqU6S0j9x96ovUSu0jGv_t7t5I9S/exec"
         };
@@ -436,27 +429,18 @@
             lebaran: { emoji: '🌙', greeting: 'Selamat Lebaran' }
         };
 
-        let state = { 
-            params: {}, 
-            mediaList: [], 
-            swiper: null
-        };
+        let state = { params: {}, mediaList: [], swiper: null };
 
         const el = {};
 
         document.addEventListener('DOMContentLoaded', async function() {
             cacheElements();
             parseUrlParams();
-            
             showLoading(true);
-            
-            console.log('URL:', window.location.href);
-            console.log('Message ID:', state.params.messageId);
             
             if (state.params.messageId) {
                 await loadMessageFromServer(state.params.messageId);
             } else {
-                // Mode direct dari URL
                 renderUI();
                 showMainCard();
             }
@@ -487,7 +471,6 @@
                 mediaList: []
             };
             
-            // Ambil media dari URL
             if (params.get('media')) {
                 state.params.mediaList.push({ 
                     url: params.get('media'), 
@@ -508,9 +491,7 @@
         function detectMediaType(url) {
             if (!url) return 'image';
             const u = url.toLowerCase();
-            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm')) {
-                return 'video';
-            }
+            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm')) return 'video';
             return 'image';
         }
 
@@ -535,13 +516,11 @@
                     updateExpiryBadge(data.days_remaining, data.is_expired);
                     renderUI();
                     showMainCard();
-                    
                 } else {
                     showError('Kartu tidak ditemukan');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                renderUI(); // Tetap tampilkan dari URL
+                renderUI();
                 showMainCard();
             }
         }
@@ -570,9 +549,7 @@
         }
 
         function renderUI() {
-            if (el.recipientName) {
-                el.recipientName.textContent = state.params.to;
-            }
+            if (el.recipientName) el.recipientName.textContent = state.params.to;
             
             if (state.params.theme && THEMES[state.params.theme]) {
                 document.body.className = `theme-${state.params.theme}`;
@@ -628,7 +605,6 @@
             
             setTimeout(() => {
                 if (state.swiper) state.swiper.destroy();
-                
                 try {
                     state.swiper = new Swiper('.swiper', {
                         loop: state.mediaList.length > 1,
