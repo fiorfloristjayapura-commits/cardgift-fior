@@ -249,21 +249,75 @@
 
         .loading-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.7);
-            display: none; align-items: center; justify-content: center; z-index: 9999;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
         }
         .loading-spinner {
-            width: 40px; height: 40px;
-            border: 3px solid var(--accent); border-top-color: transparent;
-            border-radius: 50%; animation: spin 1s linear infinite;
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--accent);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .loading-text {
+            margin-top: 15px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .error-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .error-icon {
+            font-size: 60px;
+            color: var(--danger);
+            margin-bottom: 20px;
+        }
+        
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--danger);
+            margin-bottom: 10px;
+        }
+        
+        .error-message {
+            color: var(--gray-600);
+            margin-bottom: 30px;
+        }
+        
+        .btn-home {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-home:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
     </style>
 </head>
-<body class="theme-birthday">
+<body>
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+        <div style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Memuat kartu ucapan...</div>
+        </div>
     </div>
 
     <!-- Notification -->
@@ -272,7 +326,7 @@
         <span id="notificationMessage"></span>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Media -->
     <div class="modal" id="mediaModal">
         <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
         <div class="modal-content">
@@ -282,7 +336,7 @@
     </div>
 
     <div class="mobile-container">
-        <div class="card">
+        <div class="card" id="mainCard" style="display: none;">
             <div class="card-header">
                 <div class="theme-emoji" id="themeEmoji">🎂</div>
                 <div class="greeting" id="greetingText">Happy Birthday</div>
@@ -346,20 +400,29 @@
                 </div>
             </div>
         </div>
+        
+        <div class="card" id="errorCard" style="display: none;">
+            <div class="error-container">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="error-title">Oops!</div>
+                <div class="error-message" id="errorMessage">Kartu tidak ditemukan atau telah kadaluarsa.</div>
+                <a href="https://fiorfloristjayapura.com" class="btn-home">Kembali ke Beranda</a>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         // ============================================
-        // FIOR CARD - TAMPILAN KARTU (FINAL VERSION)
+        // FIOR CARD - TAMPILAN KARTU
         // ============================================
 
-        // CONFIG - GANTI DENGAN URL APPS SCRIPT ANDA
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwWajW5E6Do_qaAzmnE59UekZgRLqISphqXQ8ErFqU6S0j9x96ovUSu0jGv_t7t5I9S/exec"
         };
 
-        // THEMES
         const THEMES = {
             birthday: { emoji: '🎂', greeting: 'Happy Birthday' },
             valentine: { emoji: '❤️', greeting: 'Happy Valentine' },
@@ -373,39 +436,31 @@
             lebaran: { emoji: '🌙', greeting: 'Selamat Lebaran' }
         };
 
-        // State
         let state = { 
             params: {}, 
             mediaList: [], 
-            swiper: null,
-            messageData: null
+            swiper: null
         };
 
-        // DOM Elements
         const el = {};
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', async function() {
             cacheElements();
             parseUrlParams();
             
-            // Tampilkan loading
             showLoading(true);
             
-            // Log untuk debugging
-            console.log('📋 URL Params:', window.location.search);
-            console.log('📋 Parsed Params:', state.params);
+            console.log('URL:', window.location.href);
+            console.log('Message ID:', state.params.messageId);
             
-            // Jika ada messageId, ambil dari server
             if (state.params.messageId) {
                 await loadMessageFromServer(state.params.messageId);
             } else {
-                console.log('📋 No message ID, using direct params');
-                applyDirectParams();
+                // Mode direct dari URL
+                renderUI();
+                showMainCard();
             }
             
-            // Render UI
-            renderUI();
             showLoading(false);
         });
 
@@ -415,7 +470,8 @@
                 'themeEmoji', 'greetingText', 'recipientName', 'messageText',
                 'whatsappBtn', 'mediaSection', 'mediaCount', 'carouselWrapper',
                 'thumbnails', 'mediaModal', 'modalImage', 'modalVideo',
-                'currentSlide', 'totalSlides', 'expiryBadge', 'expiryBadgeText'
+                'currentSlide', 'totalSlides', 'expiryBadge', 'expiryBadgeText',
+                'mainCard', 'errorCard', 'errorMessage'
             ];
             ids.forEach(id => el[id] = document.getElementById(id));
         }
@@ -428,42 +484,31 @@
                 theme: params.get('theme') || 'birthday',
                 messageId: params.get('v') || null,
                 msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
-                preview: params.get('preview') === 'true',
-                mediaList: extractMediaFromUrl(params)
+                mediaList: []
             };
             
-            console.log('📋 Message ID dari URL:', state.params.messageId);
-        }
-
-        function extractMediaFromUrl(params) {
-            const mediaList = [];
-            
+            // Ambil media dari URL
             if (params.get('media')) {
-                mediaList.push({ 
+                state.params.mediaList.push({ 
                     url: params.get('media'), 
                     type: detectMediaType(params.get('media')) 
                 });
             }
             
             for (let i = 2; i <= 10; i++) {
-                const mediaParam = params.get(`media${i}`);
-                if (mediaParam) {
-                    mediaList.push({ 
-                        url: mediaParam, 
-                        type: detectMediaType(mediaParam) 
+                if (params.get(`media${i}`)) {
+                    state.params.mediaList.push({ 
+                        url: params.get(`media${i}`), 
+                        type: detectMediaType(params.get(`media${i}`)) 
                     });
                 }
             }
-            
-            return mediaList;
         }
 
         function detectMediaType(url) {
             if (!url) return 'image';
             const u = url.toLowerCase();
-            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || 
-                u.includes('.avi') || u.includes('.mkv') || u.includes('youtube.com') ||
-                u.includes('youtu.be') || u.includes('vimeo.com') || u.includes('drive.google.com')) {
+            if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm')) {
                 return 'video';
             }
             return 'image';
@@ -471,30 +516,15 @@
 
         async function loadMessageFromServer(messageId) {
             try {
-                console.log('📡 Loading message from server, ID:', messageId);
-                
-                // Gunakan fetch biasa
                 const url = `${CONFIG.SCRIPT_URL}?type=get_message&id=${messageId}&t=${Date.now()}`;
-                console.log('📡 Fetch URL:', url);
-                
                 const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
                 const data = await response.json();
-                console.log('📡 Server response:', data);
                 
                 if (data.status === 'success') {
-                    state.messageData = data;
-                    
-                    // Update params dengan data dari server
                     state.params.to = data.nama || state.params.to;
                     state.params.msg = data.message || state.params.msg;
                     state.params.theme = data.theme || state.params.theme;
                     
-                    // Parse media URLs
                     if (data.media_urls && Array.isArray(data.media_urls)) {
                         state.params.mediaList = data.media_urls.map(url => ({
                             url: url,
@@ -502,84 +532,37 @@
                         }));
                     }
                     
-                    // Update expiry badge
-                    updateExpiryBadge({
-                        expiry_setting: data.expiry_setting || '30',
-                        is_expired: data.is_expired || false,
-                        days_remaining: data.days_remaining || 0
-                    });
-                    
-                    console.log('✅ Data loaded successfully');
+                    updateExpiryBadge(data.days_remaining, data.is_expired);
+                    renderUI();
+                    showMainCard();
                     
                 } else {
-                    console.error('❌ Server error:', data.message);
-                    showNotification('Pesan tidak ditemukan atau telah kadaluarsa');
-                    
-                    if (el.messageText) {
-                        el.messageText.textContent = 'Pesan tidak ditemukan atau telah kadaluarsa.';
-                    }
-                    
-                    updateExpiryBadge({
-                        expiry_setting: 'expired',
-                        is_expired: true,
-                        days_remaining: 0
-                    });
+                    showError('Kartu tidak ditemukan');
                 }
             } catch (error) {
-                console.error('❌ Error loading message:', error);
-                showNotification('Gagal memuat pesan. Menggunakan data dari URL.');
-                
-                // Fallback ke data dari URL
-                if (!state.params.msg && el.messageText) {
-                    el.messageText.textContent = 'Semoga hari-harimu menyenangkan!';
-                }
-                
-                updateExpiryBadge({
-                    expiry_setting: 'never',
-                    is_expired: false,
-                    days_remaining: 9999
-                });
+                console.error('Error:', error);
+                renderUI(); // Tetap tampilkan dari URL
+                showMainCard();
             }
         }
 
-        function applyDirectParams() {
-            console.log('📋 Applying direct params');
-            updateExpiryBadge({
-                expiry_setting: 'never',
-                is_expired: false,
-                days_remaining: 9999
-            });
-        }
-
-        function updateExpiryBadge(data) {
+        function updateExpiryBadge(days, isExpired) {
             if (!el.expiryBadge || !el.expiryBadgeText) return;
             
             let icon, text, className;
             
-            if (!data) {
-                icon = 'fa-clock'; 
-                text = 'Memuat...'; 
-                className = '';
-            } else if (data.expiry_setting === 'never') {
-                icon = 'fa-infinity'; 
-                text = 'Permanen'; 
-                className = 'permanent';
-            } else if (data.is_expired || data.expiry_setting === 'expired') {
+            if (isExpired) {
                 icon = 'fa-exclamation-triangle'; 
                 text = 'Telah Kadaluarsa'; 
                 className = 'danger';
-            } else if (data.days_remaining <= 7 && data.days_remaining > 0) {
+            } else if (days <= 7) {
                 icon = 'fa-hourglass-half'; 
-                text = `${data.days_remaining} hari lagi`; 
+                text = `${days} hari lagi`; 
                 className = 'warning';
-            } else if (data.days_remaining > 7) {
-                icon = 'fa-hourglass-start'; 
-                text = `${data.days_remaining} hari`; 
-                className = 'success';
             } else {
-                icon = 'fa-clock'; 
-                text = 'Memuat...'; 
-                className = '';
+                icon = 'fa-hourglass-start'; 
+                text = `${days} hari`; 
+                className = 'success';
             }
             
             el.expiryBadge.innerHTML = `<i class="fas ${icon}"></i><span>${text}</span>`;
@@ -587,35 +570,23 @@
         }
 
         function renderUI() {
-            console.log('📋 Rendering UI with params:', state.params);
-            
-            // Set recipient name
             if (el.recipientName) {
-                el.recipientName.textContent = state.params.to || 'Sahabat';
+                el.recipientName.textContent = state.params.to;
             }
             
-            // Set theme
             if (state.params.theme && THEMES[state.params.theme]) {
                 document.body.className = `theme-${state.params.theme}`;
                 if (el.themeEmoji) el.themeEmoji.textContent = THEMES[state.params.theme].emoji;
                 if (el.greetingText) el.greetingText.textContent = THEMES[state.params.theme].greeting;
             }
             
-            // Set message
             if (el.messageText) {
-                if (state.params.msg) {
-                    el.messageText.textContent = state.params.msg;
-                } else {
-                    el.messageText.textContent = 'Semoga hari-harimu menyenangkan!';
-                }
+                el.messageText.textContent = state.params.msg || 'Semoga hari-harimu menyenangkan!';
             }
             
-            // Set media
             state.mediaList = state.params.mediaList || [];
-            console.log('📋 Media list:', state.mediaList);
             renderCarousel();
             
-            // Set WhatsApp button
             const waText = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
             if (el.whatsappBtn) {
                 el.whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(waText)}`;
@@ -639,22 +610,14 @@
                 if (media.type === 'video') {
                     slidesHTML += `
                         <div class="swiper-slide">
-                            <video id="video-${index}" src="${media.url}" loop playsinline preload="metadata"></video>
+                            <video src="${media.url}" loop playsinline preload="metadata"></video>
                             <div class="media-type-badge"><i class="fas fa-film"></i> VIDEO</div>
-                            <div class="video-controls">
-                                <div class="video-btn" onclick="toggleVideoPlay(${index})">
-                                    <i id="playIcon-${index}" class="fas fa-play"></i>
-                                </div>
-                                <div class="video-btn volume-btn" id="muteBtn-${index}" onclick="toggleVideoMute(${index})">
-                                    <i id="muteIcon-${index}" class="fas fa-volume-up"></i>
-                                </div>
-                            </div>
                         </div>
                     `;
                 } else {
                     slidesHTML += `
-                        <div class="swiper-slide" onclick="openModal('${media.url}', false)">
-                            <img src="${media.url}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=Gambar+Error'">
+                        <div class="swiper-slide" onclick="openModal('${media.url}')">
+                            <img src="${media.url}" loading="lazy">
                             <div class="media-type-badge"><i class="fas fa-image"></i> FOTO</div>
                         </div>
                     `;
@@ -671,110 +634,34 @@
                         loop: state.mediaList.length > 1,
                         autoplay: state.mediaList.length > 1 ? { delay: 3000, disableOnInteraction: false } : false,
                         pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                        on: {
-                            slideChange: function() {
-                                const idx = this.realIndex;
-                                document.querySelectorAll('.thumbnail').forEach((el, i) => {
-                                    el.classList.toggle('active', i === idx);
-                                });
-                                if (el.currentSlide) el.currentSlide.textContent = idx + 1;
-                            }
-                        }
+                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
                     });
-                    
-                    renderThumbnails();
-                } catch (e) {
-                    console.error('Swiper error:', e);
-                }
+                } catch (e) {}
             }, 100);
         }
 
-        function renderThumbnails() {
-            if (!el.thumbnails) return;
-            
-            if (state.mediaList.length === 0) {
-                el.thumbnails.innerHTML = '';
-                return;
-            }
-            
-            let html = '';
-            state.mediaList.forEach((media, index) => {
-                if (media.type === 'video') {
-                    html += `<div class="thumbnail video-thumb ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
-                        <i class="fas fa-play"></i>
-                    </div>`;
-                } else {
-                    html += `<div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
-                        <img src="${media.url}" loading="lazy" onerror="this.src='https://via.placeholder.com/70?text=Error'">
-                    </div>`;
-                }
-            });
-            el.thumbnails.innerHTML = html;
+        function showMainCard() {
+            if (el.mainCard) el.mainCard.style.display = 'block';
+            if (el.errorCard) el.errorCard.style.display = 'none';
         }
 
-        window.toggleVideoPlay = function(index) {
-            const video = document.getElementById(`video-${index}`);
-            if (!video) return;
-            
-            const playIcon = document.getElementById(`playIcon-${index}`);
-            
-            if (video.paused) {
-                video.play();
-                if (playIcon) playIcon.className = 'fas fa-pause';
-            } else {
-                video.pause();
-                if (playIcon) playIcon.className = 'fas fa-play';
-            }
-        };
+        function showError(message) {
+            if (el.mainCard) el.mainCard.style.display = 'none';
+            if (el.errorCard) el.errorCard.style.display = 'block';
+            if (el.errorMessage) el.errorMessage.textContent = message;
+        }
 
-        window.toggleVideoMute = function(index) {
-            const video = document.getElementById(`video-${index}`);
-            if (!video) return;
-            
-            const muteIcon = document.getElementById(`muteIcon-${index}`);
-            const muteBtn = document.getElementById(`muteBtn-${index}`);
-            
-            video.muted = !video.muted;
-            
-            if (video.muted) {
-                if (muteIcon) muteIcon.className = 'fas fa-volume-mute';
-                if (muteBtn) muteBtn.classList.add('muted');
-            } else {
-                if (muteIcon) muteIcon.className = 'fas fa-volume-up';
-                if (muteBtn) muteBtn.classList.remove('muted');
-            }
-        };
-
-        window.jumpToSlide = function(index) { 
-            if (state.swiper) state.swiper.slideToLoop(index); 
-        };
-
-        window.openModal = function(url, isVideo) {
-            if (!el.mediaModal || !el.modalImage || !el.modalVideo) return;
-            
-            if (isVideo) {
-                el.modalImage.style.display = 'none';
-                el.modalVideo.style.display = 'block';
-                el.modalVideo.src = url;
-                el.modalVideo.muted = false;
-                el.modalVideo.play().catch(e => console.log('Video play error:', e));
-            } else {
-                el.modalImage.style.display = 'block';
-                el.modalVideo.style.display = 'none';
-                el.modalImage.src = url;
-            }
+        window.openModal = function(url) {
+            if (!el.mediaModal || !el.modalImage) return;
+            el.modalImage.src = url;
+            el.modalImage.style.display = 'block';
             el.mediaModal.classList.add('active');
         };
 
         window.closeModal = function() {
             if (!el.mediaModal) return;
-            
             el.mediaModal.classList.remove('active');
-            if (el.modalVideo) { 
-                el.modalVideo.pause(); 
-                el.modalVideo.src = ''; 
-            }
+            if (el.modalImage) el.modalImage.src = '';
         };
 
         window.shareCard = function() {
@@ -792,7 +679,7 @@
 
         window.printCard = function() { window.print(); };
 
-        function showNotification(message, type = 'success') {
+        function showNotification(message) {
             if (!el.notification || !el.notificationMessage) return;
             el.notificationMessage.textContent = message;
             el.notification.classList.add('show');
