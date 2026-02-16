@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
     <style>
-        /* [SAME CSS AS BEFORE - unchanged] */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         .theme-birthday { --primary: #1e3a5f; --accent: #d4af37; --gradient: linear-gradient(145deg, #1e3a5f, #2b4c73); --bg: #fff9f0; }
@@ -401,7 +400,6 @@
             if (state.params.messageId) {
                 await loadMessageFromServer(state.params.messageId);
             } else {
-                // Mode preview atau direct params
                 console.log('📋 No message ID, using direct params');
                 applyDirectParams();
             }
@@ -428,7 +426,7 @@
             state.params = {
                 to: params.get('to') || 'Sahabat',
                 theme: params.get('theme') || 'birthday',
-                messageId: params.get('v') || null,  // 'v' adalah parameter untuk ID
+                messageId: params.get('v') || null,
                 msg: params.get('msg') ? decodeURIComponent(params.get('msg')) : null,
                 preview: params.get('preview') === 'true',
                 mediaList: extractMediaFromUrl(params)
@@ -471,17 +469,21 @@
             return 'image';
         }
 
-        // FUNGSI LOAD MESSAGE DARI SERVER
         async function loadMessageFromServer(messageId) {
             try {
                 console.log('📡 Loading message from server, ID:', messageId);
                 
+                // Gunakan fetch biasa
                 const url = `${CONFIG.SCRIPT_URL}?type=get_message&id=${messageId}&t=${Date.now()}`;
                 console.log('📡 Fetch URL:', url);
                 
                 const response = await fetch(url);
-                const data = await response.json();
                 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
                 console.log('📡 Server response:', data);
                 
                 if (data.status === 'success') {
@@ -493,35 +495,17 @@
                     state.params.theme = data.theme || state.params.theme;
                     
                     // Parse media URLs
-                    if (data.media_urls) {
-                        if (Array.isArray(data.media_urls)) {
-                            state.params.mediaList = data.media_urls.map(url => ({
-                                url: url,
-                                type: detectMediaType(url)
-                            }));
-                        } else if (typeof data.media_urls === 'string') {
-                            try {
-                                const parsed = JSON.parse(data.media_urls);
-                                if (Array.isArray(parsed)) {
-                                    state.params.mediaList = parsed.map(url => ({
-                                        url: url,
-                                        type: detectMediaType(url)
-                                    }));
-                                }
-                            } catch (e) {
-                                // Jika bukan JSON, treat as single URL
-                                state.params.mediaList = [{
-                                    url: data.media_urls,
-                                    type: detectMediaType(data.media_urls)
-                                }];
-                            }
-                        }
+                    if (data.media_urls && Array.isArray(data.media_urls)) {
+                        state.params.mediaList = data.media_urls.map(url => ({
+                            url: url,
+                            type: detectMediaType(url)
+                        }));
                     }
                     
                     // Update expiry badge
                     updateExpiryBadge({
                         expiry_setting: data.expiry_setting || '30',
-                        is_expired: data.is_expired || data.db_status === 'expired',
+                        is_expired: data.is_expired || false,
                         days_remaining: data.days_remaining || 0
                     });
                     
@@ -543,17 +527,23 @@
                 }
             } catch (error) {
                 console.error('❌ Error loading message:', error);
-                showNotification('Gagal memuat pesan. Periksa koneksi internet.');
+                showNotification('Gagal memuat pesan. Menggunakan data dari URL.');
                 
-                if (el.messageText) {
-                    el.messageText.textContent = 'Gagal memuat pesan. Periksa koneksi internet.';
+                // Fallback ke data dari URL
+                if (!state.params.msg && el.messageText) {
+                    el.messageText.textContent = 'Semoga hari-harimu menyenangkan!';
                 }
+                
+                updateExpiryBadge({
+                    expiry_setting: 'never',
+                    is_expired: false,
+                    days_remaining: 9999
+                });
             }
         }
 
         function applyDirectParams() {
             console.log('📋 Applying direct params');
-            
             updateExpiryBadge({
                 expiry_setting: 'never',
                 is_expired: false,
@@ -565,8 +555,6 @@
             if (!el.expiryBadge || !el.expiryBadgeText) return;
             
             let icon, text, className;
-            
-            console.log('📋 Updating expiry badge with data:', data);
             
             if (!data) {
                 icon = 'fa-clock'; 
@@ -580,11 +568,11 @@
                 icon = 'fa-exclamation-triangle'; 
                 text = 'Telah Kadaluarsa'; 
                 className = 'danger';
-            } else if (data.days_remaining !== undefined && data.days_remaining <= 7 && data.days_remaining > 0) {
+            } else if (data.days_remaining <= 7 && data.days_remaining > 0) {
                 icon = 'fa-hourglass-half'; 
                 text = `${data.days_remaining} hari lagi`; 
                 className = 'warning';
-            } else if (data.days_remaining !== undefined && data.days_remaining > 7) {
+            } else if (data.days_remaining > 7) {
                 icon = 'fa-hourglass-start'; 
                 text = `${data.days_remaining} hari`; 
                 className = 'success';
@@ -675,7 +663,6 @@
             
             el.carouselWrapper.innerHTML = slidesHTML;
             
-            // Initialize Swiper setelah DOM update
             setTimeout(() => {
                 if (state.swiper) state.swiper.destroy();
                 
@@ -726,7 +713,6 @@
             el.thumbnails.innerHTML = html;
         }
 
-        // Video Controls
         window.toggleVideoPlay = function(index) {
             const video = document.getElementById(`video-${index}`);
             if (!video) return;
@@ -760,12 +746,10 @@
             }
         };
 
-        // Carousel Navigation
         window.jumpToSlide = function(index) { 
             if (state.swiper) state.swiper.slideToLoop(index); 
         };
 
-        // Modal
         window.openModal = function(url, isVideo) {
             if (!el.mediaModal || !el.modalImage || !el.modalVideo) return;
             
@@ -793,7 +777,6 @@
             }
         };
 
-        // Share
         window.shareCard = function() {
             const text = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
             if (navigator.share) {
@@ -809,7 +792,6 @@
 
         window.printCard = function() { window.print(); };
 
-        // Utility
         function showNotification(message, type = 'success') {
             if (!el.notification || !el.notificationMessage) return;
             el.notificationMessage.textContent = message;
@@ -823,7 +805,6 @@
             }
         }
 
-        // Close modal on click outside
         window.onclick = function(event) {
             if (event.target.classList && event.target.classList.contains('modal')) {
                 event.target.classList.remove('active');
