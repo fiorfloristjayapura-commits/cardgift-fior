@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
-        /* CSS LENGKAP - PASTIKAN SEMUA ADA */
+        /* CSS LENGKAP - SAMA SEPERTI SEBELUMNYA */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -843,7 +843,7 @@
             border: 1px solid var(--gray-200);
             border-radius: var(--radius-xl);
             overflow: auto;
-            max-height: 500px;
+            max-height: 600px;
             box-shadow: var(--shadow-md);
         }
 
@@ -862,12 +862,14 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            white-space: nowrap;
         }
 
         .table td {
             padding: 1rem 1.25rem;
             border-bottom: 1px solid var(--gray-200);
             color: var(--gray-700);
+            white-space: nowrap;
         }
 
         .expiry-status {
@@ -1068,17 +1070,6 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
-        /* Debug Info */
-        .debug-info {
-            background: #f0f0f0;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -1089,9 +1080,6 @@
             <div class="loading-text" id="loadingText">Memproses...</div>
         </div>
     </div>
-
-    <!-- Debug Info (hidden) -->
-    <div id="debugInfo" class="debug-info"></div>
 
     <!-- Header -->
     <header class="header">
@@ -1305,7 +1293,7 @@
                 <h1 class="page-title"><i class="fas fa-users"></i> Data Customers</h1>
                 <div class="page-subtitle">Kelola database customer FIOR Florist</div>
                 
-                <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
                     <button class="btn btn-primary" onclick="showAddCustomerModal()">
                         <i class="fas fa-user-plus"></i> Tambah Customer
                     </button>
@@ -1314,6 +1302,9 @@
                     </button>
                     <button class="btn btn-warning" onclick="generateSampleTimestamp()">
                         <i class="fas fa-clock"></i> Generate Timestamp
+                    </button>
+                    <button class="btn btn-purple" onclick="refreshCustomers()">
+                        <i class="fas fa-sync"></i> Refresh
                     </button>
                 </div>
 
@@ -1327,11 +1318,13 @@
                                 <th>Catatan</th>
                                 <th>Email</th>
                                 <th>Alamat</th>
+                                <th>Tgl Daftar</th>
+                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="customersTableBody">
-                            <tr><td colspan="7" style="text-align: center; padding: 2rem;">Memuat data...</td></tr>
+                            <tr><td colspan="9" style="text-align: center; padding: 2rem;">Memuat data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1446,6 +1439,17 @@
                     <label class="form-label">Alamat</label>
                     <textarea class="form-control" id="modalCustomerAddress" rows="2" placeholder="Jl. Contoh No. 123, Kota, Provinsi"></textarea>
                 </div>
+                <div class="form-group">
+                    <label class="form-label">Tanggal Daftar</label>
+                    <input type="date" class="form-control" id="modalCustomerTglDaftar">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-control" id="modalCustomerStatus">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
             </div>
             <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
                 <button class="btn btn-primary" onclick="saveCustomer()"><i class="fas fa-save"></i> Simpan</button>
@@ -1456,7 +1460,8 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - VERSI SIMPLE DENGAN TIMESTAMP PASTI
+        // FIOR CARD ADMIN - STRUKTUR CUSTOMERS 8 KOLOM
+        // Timestamp | Nama | No_HP | Catatan | Email | Alamat | Tgl_Daftar | Status
         // ============================================
 
         const CONFIG = {
@@ -1520,7 +1525,7 @@
                 'customersTableBody', 'historyTableBody',
                 'scriptUrl', 'cardBaseUrl',
                 'modalCustomerName', 'modalCustomerPhone', 'modalCustomerNotes',
-                'modalCustomerEmail', 'modalCustomerAddress',
+                'modalCustomerEmail', 'modalCustomerAddress', 'modalCustomerTglDaftar', 'modalCustomerStatus',
                 'totalMessages', 'activeMessages', 'expiredMessages',
                 'expiry30', 'expiry90', 'expiryNever', 'selectedExpiry'
             ];
@@ -1827,13 +1832,13 @@
             }
         };
 
-        // ========== FUNGSI TIMESTAMP PALING SEDERHANA ==========
+        // ========== FUNGSI TIMESTAMP ==========
         function formatDate(date) {
             if (!date) return '-';
             
             try {
                 const d = new Date(date);
-                if (isNaN(d.getTime())) return '-';
+                if (isNaN(d.getTime())) return date.toString();
                 
                 const day = d.getDate().toString().padStart(2, '0');
                 const month = (d.getMonth() + 1).toString().padStart(2, '0');
@@ -1843,24 +1848,40 @@
                 
                 return `${day}/${month}/${year} ${hours}:${minutes}`;
             } catch (e) {
-                return '-';
+                return date.toString();
             }
         }
 
-        // Fungsi untuk generate timestamp sample
+        function formatDateOnly(date) {
+            if (!date) return '-';
+            
+            try {
+                const d = new Date(date);
+                if (isNaN(d.getTime())) return date.toString();
+                
+                const day = d.getDate().toString().padStart(2, '0');
+                const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                const year = d.getFullYear();
+                
+                return `${day}/${month}/${year}`;
+            } catch (e) {
+                return date.toString();
+            }
+        }
+
         window.generateSampleTimestamp = function() {
             const now = new Date();
             
-            // Sample untuk customers
             if (state.customers.length > 0) {
                 state.customers = state.customers.map((c, i) => {
                     const sampleDate = new Date(now.getTime() - (i * 24 * 60 * 60 * 1000));
                     c.timestamp = sampleDate.toISOString();
+                    c.Tgl_Daftar = sampleDate.toISOString().split('T')[0];
+                    c.Status = 'Active';
                     return c;
                 });
             }
             
-            // Sample untuk cards
             if (state.cards.length > 0) {
                 state.cards = state.cards.map((c, i) => {
                     const sampleDate = new Date(now.getTime() - (i * 24 * 60 * 60 * 1000));
@@ -1879,11 +1900,15 @@
             if (state.customers.length > 0) {
                 const first = state.customers[0];
                 let msg = `Total: ${state.customers.length}\n`;
-                msg += `Timestamp: ${first.timestamp || 'Tidak ada'}`;
+                msg += `Kolom: ${Object.keys(first).join(', ')}`;
                 showAlert(msg, 'info');
             } else {
                 showAlert('Tidak ada data', 'error');
             }
+        };
+
+        window.refreshCustomers = function() {
+            loadCustomers();
         };
 
         // ========== CUSTOMERS ==========
@@ -1898,24 +1923,11 @@
                 console.log('📥 Customers:', data);
                 
                 state.customers = Array.isArray(data) ? data : [];
-                
-                // Jika tidak ada timestamp, generate sample
-                if (state.customers.length > 0) {
-                    const now = new Date();
-                    state.customers = state.customers.map((c, i) => {
-                        if (!c.timestamp && !c.Timestamp) {
-                            const sampleDate = new Date(now.getTime() - (i * 24 * 60 * 60 * 1000));
-                            c.timestamp = sampleDate.toISOString();
-                        }
-                        return c;
-                    });
-                }
-                
                 renderCustomersTable();
             } catch (error) {
                 console.error('❌ Error:', error);
                 if (el.customersTableBody) {
-                    el.customersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
+                    el.customersTableBody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--danger);">Gagal memuat data</td></tr>';
                 }
             } finally {
                 showLoading(false);
@@ -1926,31 +1938,35 @@
             if (!el.customersTableBody) return;
             
             if (state.customers.length === 0) {
-                el.customersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">Belum ada data customer</td></tr>';
+                el.customersTableBody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 2rem;">Belum ada data customer</td></tr>';
                 return;
             }
             
             let html = '';
             state.customers.forEach((c) => {
-                // Timestamp
-                const ts = c.timestamp || c.Timestamp || c.created_at || new Date().toISOString();
-                const formattedDate = formatDate(ts);
-                
-                // Data lainnya
+                // STRUKTUR SESUAI SHEET: Timestamp | Nama | No_HP | Catatan | Email | Alamat | Tgl_Daftar | Status
+                const timestamp = c.timestamp || c.Timestamp || c[0] || '-';
                 const nama = c.nama || c.Nama || c.name || c[1] || '-';
                 const no_hp = c.no_hp || c.No_HP || c.phone || c[2] || '-';
                 const catatan = c.catatan || c.Catatan || c.notes || c[3] || '-';
                 const email = c.email || c.Email || c[4] || '-';
                 const alamat = c.alamat || c.Alamat || c.address || c[5] || '-';
+                const tgl_daftar = c.Tgl_Daftar || c.tgl_daftar || c[6] || '-';
+                const status = c.Status || c.status || c[7] || 'Active';
+                
+                const formattedTimestamp = formatDate(timestamp);
+                const formattedTglDaftar = formatDateOnly(tgl_daftar);
                 
                 html += `
                     <tr>
-                        <td><small>${formattedDate}</small></td>
+                        <td><small>${formattedTimestamp}</small></td>
                         <td><strong>${escapeHTML(nama)}</strong></td>
                         <td>${escapeHTML(no_hp)}</td>
                         <td>${escapeHTML(catatan)}</td>
                         <td>${escapeHTML(email)}</td>
                         <td>${escapeHTML(alamat)}</td>
+                        <td>${formattedTglDaftar}</td>
+                        <td><span class="expiry-status ${status === 'Active' ? 'active' : ''}">${status}</span></td>
                         <td>
                             <button class="btn btn-primary btn-sm" onclick="useCustomer('${escapeHTML(nama)}', '${escapeHTML(no_hp)}')">
                                 <i class="fas fa-gift"></i> Pilih
@@ -1970,15 +1986,20 @@
         };
 
         window.showAddCustomerModal = function() { 
+            // Reset form
+            document.getElementById('modalCustomerName').value = '';
+            document.getElementById('modalCustomerPhone').value = '';
+            document.getElementById('modalCustomerNotes').value = '';
+            document.getElementById('modalCustomerEmail').value = '';
+            document.getElementById('modalCustomerAddress').value = '';
+            document.getElementById('modalCustomerTglDaftar').value = new Date().toISOString().split('T')[0];
+            document.getElementById('modalCustomerStatus').value = 'Active';
+            
             document.getElementById('customerModal').classList.add('active'); 
         };
         
         window.closeCustomerModal = function() {
             document.getElementById('customerModal').classList.remove('active');
-            ['modalCustomerName','modalCustomerPhone','modalCustomerNotes','modalCustomerEmail','modalCustomerAddress'].forEach(id => {
-                const elm = document.getElementById(id);
-                if (elm) elm.value = '';
-            });
         };
 
         window.saveCustomer = async function() {
@@ -1987,6 +2008,8 @@
             const notes = el.modalCustomerNotes?.value.trim();
             const email = el.modalCustomerEmail?.value.trim();
             const address = el.modalCustomerAddress?.value.trim();
+            const tgl_daftar = el.modalCustomerTglDaftar?.value;
+            const status = el.modalCustomerStatus?.value;
             
             if (!name || !phone) { 
                 showAlert('Nama dan No. HP wajib diisi!', 'error'); 
@@ -2003,6 +2026,8 @@
                 formData.append('catatan', notes || '');
                 formData.append('email', email || '');
                 formData.append('alamat', address || '');
+                formData.append('tgl_daftar', tgl_daftar || '');
+                formData.append('status', status || 'Active');
                 
                 const response = await fetch(CONFIG.SCRIPT_URL, { 
                     method: 'POST', 
@@ -2038,19 +2063,6 @@
                 console.log('📥 Cards:', data);
                 
                 state.cards = Array.isArray(data) ? data : [];
-                
-                // Jika tidak ada timestamp, generate sample
-                if (state.cards.length > 0) {
-                    const now = new Date();
-                    state.cards = state.cards.map((c, i) => {
-                        if (!c.timestamp && !c.Timestamp && !c.created_at) {
-                            const sampleDate = new Date(now.getTime() - (i * 24 * 60 * 60 * 1000));
-                            c.timestamp = sampleDate.toISOString();
-                        }
-                        return c;
-                    });
-                }
-                
                 renderCardsTable();
             } catch (error) {
                 console.error('❌ Error:', error);
@@ -2072,8 +2084,7 @@
             
             let html = '';
             state.cards.forEach((c) => {
-                // Timestamp
-                const ts = c.timestamp || c.Timestamp || c.created_at || c.date || new Date().toISOString();
+                const ts = c.timestamp || c.Timestamp || c.created_at || c.date || '-';
                 const formattedDate = formatDate(ts);
                 
                 const mediaCount = c.total_media || c.media_count || '0';
