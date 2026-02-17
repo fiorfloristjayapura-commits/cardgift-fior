@@ -20,18 +20,13 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* Theme Colors - Enhanced Elegant Palette */
+        /* Theme Colors */
         .theme-birthday { 
             --primary: #1e3a5f; 
             --accent: #d4af37; 
             --gradient: linear-gradient(135deg, #1e3a5f, #2b4c73, #1e3a5f); 
             --bg: #f8f4e9; 
             --light: #e8f0fe;
-            --particle-1: #d4af37;
-            --particle-2: #1e3a5f;
-            --particle-3: #ffd700;
-            --gold: #d4af37;
-            --silver: #c0c0c0;
         }
         
         .theme-valentine { 
@@ -40,11 +35,6 @@
             --gradient: linear-gradient(135deg, #9e2a4b, #b76e79, #9e2a4b); 
             --bg: #fef3f5; 
             --light: #ffe4e8;
-            --particle-1: #ff69b4;
-            --particle-2: #9e2a4b;
-            --particle-3: #ffb6c1;
-            --gold: #e8b4b8;
-            --silver: #d4af37;
         }
         
         .theme-wedding { 
@@ -53,11 +43,6 @@
             --gradient: linear-gradient(135deg, #8a7968, #b2ac88, #8a7968); 
             --bg: #fdf9f2; 
             --light: #f5f0e6;
-            --particle-1: #ffffff;
-            --particle-2: #e6d5b8;
-            --particle-3: #d4c4a8;
-            --gold: #d4c4a8;
-            --silver: #c0c0c0;
         }
         
         .theme-anniversary { 
@@ -66,11 +51,6 @@
             --gradient: linear-gradient(135deg, #6b5b7e, #9c89b8, #6b5b7e); 
             --bg: #faf7fc; 
             --light: #f0e6fa;
-            --particle-1: #9c89b8;
-            --particle-2: #e0b0b5;
-            --particle-3: #b39bc0;
-            --gold: #c9b6d9;
-            --silver: #b39bc0;
         }
         
         .theme-graduation { 
@@ -79,11 +59,6 @@
             --gradient: linear-gradient(135deg, #2c5f2d, #6b8c5e, #2c5f2d); 
             --bg: #f8fbf4; 
             --light: #e3f0de;
-            --particle-1: #6b8c5e;
-            --particle-2: #d4af37;
-            --particle-3: #4a6741;
-            --gold: #d4af37;
-            --silver: #c0c0c0;
         }
         
         .theme-condolence { 
@@ -92,11 +67,6 @@
             --gradient: linear-gradient(135deg, #4a4e3f, #6b705c, #4a4e3f); 
             --bg: #faf9f5; 
             --light: #efeeea;
-            --particle-1: #6b705c;
-            --particle-2: #b7b7a4;
-            --particle-3: #4a4e3f;
-            --gold: #b7b7a4;
-            --silver: #8a8f7c;
         }
         
         .theme-congratulation { 
@@ -105,11 +75,6 @@
             --gradient: linear-gradient(135deg, #c44536, #ff7f50, #c44536); 
             --bg: #fef7f0; 
             --light: #ffe4d6;
-            --particle-1: #ff7f50;
-            --particle-2: #f9c74f;
-            --particle-3: #ff4500;
-            --gold: #f9c74f;
-            --silver: #ff7f50;
         }
         
         .theme-imlek { 
@@ -118,11 +83,6 @@
             --gradient: linear-gradient(135deg, #9e2a2a, #c44536, #9e2a2a); 
             --bg: #fef4e6; 
             --light: #ffe4cc;
-            --particle-1: #9e2a2a;
-            --particle-2: #ffb347;
-            --particle-3: #ffd700;
-            --gold: #ffb347;
-            --silver: #c0c0c0;
         }
         
         .theme-natal { 
@@ -131,11 +91,6 @@
             --gradient: linear-gradient(135deg, #1e4a3b, #2e7d32, #1e4a3b); 
             --bg: #f0f5f0; 
             --light: #e0f0e0;
-            --particle-1: #b22222;
-            --particle-2: #2e7d32;
-            --particle-3: #ffd700;
-            --gold: #ffd700;
-            --silver: #c0c0c0;
         }
         
         .theme-lebaran { 
@@ -144,20 +99,11 @@
             --gradient: linear-gradient(135deg, #1e5631, #2e7d32, #1e5631); 
             --bg: #fcf9f0; 
             --light: #f5efe0;
-            --particle-1: #1e5631;
-            --particle-2: #ff8c42;
-            --particle-3: #f9a825;
-            --gold: #ff8c42;
-            --silver: #f9a825;
         }
 
         /* Print Styles */
         @media print {
-            body {
-                background: white;
-                padding: 0;
-                margin: 0;
-            }
+            body { background: white; padding: 0; margin: 0; }
             
             .background-animation,
             .action-buttons,
@@ -181,9 +127,8 @@
             
             .card {
                 box-shadow: none;
-                border: 2px solid var(--accent);
+                border: 2px solid #000;
                 break-inside: avoid;
-                page-break-inside: avoid;
             }
             
             .card-header {
@@ -191,23 +136,15 @@
                 print-color-adjust: exact;
             }
             
-            .expiry-badge {
+            .recipient-name {
+                color: #000;
+                background: none;
                 border: 1px solid #000;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            
-            .media-section.active {
-                display: block;
             }
             
             .swiper {
                 height: 300px;
                 border: 1px solid #ccc;
-            }
-            
-            .swiper-slide {
-                page-break-inside: avoid;
             }
         }
 
@@ -225,7 +162,7 @@
             transition: background 0.5s ease;
         }
 
-        /* Animated Background Container - More Elegant */
+        /* Animated Background */
         .background-animation {
             position: fixed;
             top: 0;
@@ -237,7 +174,6 @@
             pointer-events: none;
         }
 
-        /* Elegant Floating Orbs */
         .floating-orb {
             position: absolute;
             border-radius: 50%;
@@ -252,7 +188,6 @@
             66% { transform: translate(-30px, 30px) scale(0.9); }
         }
 
-        /* Elegant Pattern Overlay */
         .pattern-overlay {
             position: absolute;
             top: 0;
@@ -265,7 +200,7 @@
             z-index: 1;
         }
 
-        /* Mobile Container - Optimized for Print */
+        /* Main Container */
         .mobile-container { 
             max-width: 450px; 
             width: 100%; 
@@ -281,25 +216,17 @@
             }
         }
 
-        /* Card Styles - Enhanced Elegance */
+        /* Card Styles */
         .card {
             background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(20px);
             border-radius: 60px 60px 40px 40px;
             overflow: hidden;
             box-shadow: 0 40px 70px rgba(0,0,0,0.15), 
-                        0 0 0 1px rgba(212, 175, 55, 0.2) inset,
-                        0 0 30px rgba(212, 175, 55, 0.1);
-            animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+                        0 0 0 1px rgba(212, 175, 55, 0.2) inset;
+            animation: slideUp 0.6s ease;
             position: relative;
             border: 1px solid rgba(255,255,255,0.5);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 50px 80px rgba(0,0,0,0.2), 
-                        0 0 0 2px var(--accent) inset;
-            transform: translateY(-5px);
         }
 
         .card::before {
@@ -312,21 +239,12 @@
             box-shadow: 0 0 25px var(--accent);
         }
 
-        .card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at top right, rgba(255,255,255,0.5), transparent 70%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(40px) scale(0.98); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* Elegant Card Header */
+        /* Card Header */
         .card-header {
             background: var(--gradient);
             padding: 50px 20px 60px;
@@ -344,7 +262,6 @@
             height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
             animation: shine 10s ease-in-out infinite;
-            z-index: 1;
         }
 
         @keyframes shine {
@@ -352,41 +269,22 @@
             50% { transform: translate(30%, 30%) rotate(5deg); }
         }
 
-        /* Elegant Border Pattern */
-        .card-header .border-pattern {
-            position: absolute;
-            bottom: -30px;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: repeating-linear-gradient(45deg, 
-                        transparent, 
-                        transparent 15px, 
-                        rgba(255,255,255,0.1) 15px, 
-                        rgba(255,255,255,0.1) 30px);
-            z-index: 5;
-        }
-
         .theme-emoji {
             font-size: 85px;
             margin-bottom: 10px;
-            animation: elegantFloat 4s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite;
             filter: drop-shadow(0 15px 20px rgba(0,0,0,0.3));
-            position: relative;
-            z-index: 10;
-            transform-origin: center;
             background: rgba(255,255,255,0.2);
             width: 120px;
             height: 120px;
             line-height: 120px;
             border-radius: 50%;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto 20px;
             backdrop-filter: blur(5px);
             border: 2px solid rgba(255,255,255,0.3);
         }
 
-        @keyframes elegantFloat {
+        @keyframes float {
             0%, 100% { transform: translateY(0) scale(1); }
             50% { transform: translateY(-15px) scale(1.05); }
         }
@@ -398,9 +296,6 @@
             color: white;
             text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
             letter-spacing: 1px;
-            position: relative;
-            z-index: 10;
-            line-height: 1.2;
             text-transform: uppercase;
         }
 
@@ -420,8 +315,6 @@
             margin: 20px 0 10px;
             text-transform: uppercase;
             font-weight: 300;
-            position: relative;
-            z-index: 10;
         }
 
         .recipient-name {
@@ -431,33 +324,25 @@
             color: white;
             word-break: break-word;
             padding: 10px 25px;
-            position: relative;
-            z-index: 10;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
             background: rgba(255,255,255,0.15);
             display: inline-block;
-            max-width: 90%;
-            margin: 0 auto;
             border-radius: 60px;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.3);
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            letter-spacing: 0.5px;
         }
 
+        /* Card Body */
         .card-body { 
             padding: 40px 25px; 
-            position: relative;
-            z-index: 10;
             background: linear-gradient(to bottom, rgba(255,255,255,0.8), white);
         }
 
-        /* Elegant Expiry Badge */
+        /* Expiry Badge */
         .expiry-badge-container { 
             display: flex; 
             justify-content: flex-end; 
             margin-bottom: 20px; 
-            animation: fadeInRight 0.6s ease;
         }
 
         .expiry-badge {
@@ -472,16 +357,14 @@
             border: 1px solid var(--accent);
             color: var(--primary);
             box-shadow: 0 8px 15px rgba(0,0,0,0.08);
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-            letter-spacing: 0.3px;
         }
 
-        .expiry-badge i {
-            color: var(--accent);
-        }
+        .expiry-badge.permanent { background: #ede9fe; color: #7c3aed; border-color: #7c3aed; }
+        .expiry-badge.warning { background: #ffedd5; color: #b45309; border-color: #f59e0b; }
+        .expiry-badge.danger { background: #fee2e2; color: #b91c1c; border-color: #dc2626; }
+        .expiry-badge.success { background: #d1fae5; color: #0f766e; border-color: #0f766e; }
 
-        /* Elegant Message Container */
+        /* Message Container */
         .message-container {
             background: linear-gradient(145deg, #ffffff, #faf7f0);
             border-radius: 40px;
@@ -489,16 +372,7 @@
             margin-bottom: 30px;
             border: 1px solid var(--accent);
             position: relative;
-            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.15), 
-                        0 0 0 1px rgba(212, 175, 55, 0.2) inset;
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .message-container:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 30px 50px -15px rgba(0,0,0,0.2), 
-                        0 0 0 2px var(--accent) inset;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.15);
         }
 
         .message-quote {
@@ -517,12 +391,6 @@
             font-size: 1.5rem;
             border: 4px solid white;
             box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-            animation: gentlePulse 3s ease-in-out infinite;
-        }
-
-        @keyframes gentlePulse {
-            0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 8px 15px rgba(0,0,0,0.15); }
-            50% { transform: translateX(-50%) scale(1.05); box-shadow: 0 15px 25px rgba(0,0,0,0.2); }
         }
 
         .message { 
@@ -533,15 +401,12 @@
             font-style: italic;
             color: var(--primary);
             font-weight: 500;
-            position: relative;
-            z-index: 2;
         }
 
-        /* Elegant Media Section */
+        /* Media Section */
         .media-section { 
             margin-bottom: 30px; 
             display: none;
-            animation: fadeIn 0.6s ease;
         }
 
         .media-section.active { 
@@ -553,7 +418,6 @@
             align-items: center; 
             justify-content: space-between; 
             margin-bottom: 20px; 
-            padding: 0 5px;
         }
 
         .media-header h3 { 
@@ -567,8 +431,6 @@
             padding: 8px 20px;
             border-radius: 40px;
             border: 1px solid var(--accent);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            letter-spacing: 0.3px;
         }
 
         .media-count { 
@@ -579,10 +441,9 @@
             font-weight: 500; 
             color: white;
             box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-            letter-spacing: 0.3px;
         }
 
-        /* Elegant Swiper */
+        /* Swiper */
         .swiper { 
             width: 100%; 
             height: 380px; 
@@ -593,7 +454,7 @@
         }
 
         .swiper-slide { 
-            background: linear-gradient(145deg, #2a2a2a, #1a1a1a); 
+            background: #1a1a1a; 
             border-radius: 40px; 
             overflow: hidden; 
             position: relative; 
@@ -604,12 +465,6 @@
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
-            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .swiper-slide:hover img,
-        .swiper-slide:hover video {
-            transform: scale(1.08);
         }
 
         .media-type-badge {
@@ -627,12 +482,9 @@
             z-index: 10;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            font-weight: 500;
-            letter-spacing: 0.3px;
         }
 
-        /* Elegant Video Controls */
+        /* Video Controls */
         .video-controls {
             position: absolute;
             bottom: 25px;
@@ -647,33 +499,26 @@
             height: 52px;
             border-radius: 50%;
             background: rgba(0,0,0,0.7);
-            border: 2px solid rgba(255,255,255,0.9);
+            border: 2px solid white;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.3s ease;
             backdrop-filter: blur(8px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
         }
 
         .video-btn:hover {
             background: var(--accent);
             transform: scale(1.15) rotate(10deg);
-            border-color: white;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-        }
-
-        .video-btn i {
-            font-size: 1.3rem;
         }
 
         .volume-btn.muted {
             background: rgba(180, 60, 60, 0.9);
         }
 
-        /* Elegant Navigation */
+        /* Swiper Navigation */
         .swiper-button-next, 
         .swiper-button-prev { 
             color: white; 
@@ -682,36 +527,23 @@
             height: 50px; 
             border-radius: 50%;
             backdrop-filter: blur(8px);
-            border: 2px solid rgba(255,255,255,0.8);
-            transition: all 0.3s ease;
+            border: 2px solid white;
         }
 
         .swiper-button-next:hover,
         .swiper-button-prev:hover {
             background: var(--accent);
-            transform: scale(1.15);
-            border-color: white;
-        }
-
-        .swiper-button-next:after, 
-        .swiper-button-prev:after {
-            font-size: 1.3rem;
-            font-weight: bold;
         }
 
         .swiper-pagination-bullet { 
             background: white; 
             width: 10px;
             height: 10px;
-            opacity: 0.7;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
         .swiper-pagination-bullet-active { 
             background: var(--accent); 
             transform: scale(1.4);
-            opacity: 1;
-            box-shadow: 0 0 15px var(--accent);
         }
 
         .slide-counter {
@@ -723,37 +555,16 @@
             padding: 8px 18px; 
             border-radius: 40px;
             font-size: 0.85rem; 
-            font-weight: 500; 
             z-index: 10;
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-            letter-spacing: 0.3px;
         }
 
-        /* Elegant Thumbnails */
+        /* Thumbnails */
         .thumbnails { 
             display: flex; 
             gap: 12px; 
             overflow-x: auto; 
             padding: 15px 5px; 
-            margin-top: 15px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) var(--light);
-        }
-
-        .thumbnails::-webkit-scrollbar {
-            height: 5px;
-        }
-
-        .thumbnails::-webkit-scrollbar-track {
-            background: var(--light);
-            border-radius: 10px;
-        }
-
-        .thumbnails::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 10px;
         }
 
         .thumbnail {
@@ -770,7 +581,6 @@
         .thumbnail.active { 
             border-color: var(--accent); 
             transform: scale(1.08) translateY(-3px);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
         }
 
         .thumbnail img { 
@@ -788,7 +598,7 @@
             font-size: 2rem;
         }
 
-        /* Elegant Contact Row */
+        /* Contact Row */
         .contact-row {
             display: flex; 
             align-items: center; 
@@ -800,8 +610,6 @@
             border-radius: 60px;
             border: 1px solid var(--accent);
             backdrop-filter: blur(8px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            animation: fadeInUp 0.6s ease 0.2s both;
         }
 
         .contact-item { 
@@ -814,7 +622,6 @@
             transition: all 0.3s ease;
             padding: 8px 15px;
             border-radius: 50px;
-            font-size: 0.95rem;
         }
 
         .contact-item:hover {
@@ -823,18 +630,13 @@
             color: var(--accent);
         }
 
-        .contact-item i {
-            font-size: 1.3rem;
-        }
-
-        /* Elegant Card Footer */
+        /* Card Footer */
         .card-footer { 
             padding: 30px 25px 40px; 
             text-align: center; 
             border-top: 2px dashed var(--accent);
             position: relative;
             background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(8px);
         }
 
         .card-footer::before {
@@ -863,7 +665,6 @@
             width: 30px;
             height: 20px;
             line-height: 20px;
-            z-index: 5;
         }
 
         .company-logo {
@@ -875,10 +676,14 @@
             background-repeat: no-repeat; 
             background-position: center;
             animation: gentleFloat 4s ease-in-out infinite;
-            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.2));
             background-color: rgba(255,255,255,0.5);
             border-radius: 50%;
             padding: 10px;
+        }
+
+        @keyframes gentleFloat { 
+            0%,100% { transform: translateY(0); } 
+            50% { transform: translateY(-5px); } 
         }
 
         .company-name { 
@@ -899,7 +704,7 @@
             text-transform: uppercase;
         }
 
-        /* Elegant Action Buttons */
+        /* Action Buttons */
         .action-buttons { 
             display: flex; 
             gap: 15px; 
@@ -920,13 +725,12 @@
             gap: 10px;
             cursor: pointer; 
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.3s ease;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.3);
             font-size: 0.95rem;
-            letter-spacing: 0.5px;
-            position: relative;
             overflow: hidden;
+            position: relative;
         }
 
         .action-btn::before {
@@ -947,22 +751,13 @@
         .action-btn:hover {
             transform: translateY(-4px);
             box-shadow: 0 15px 30px rgba(0,0,0,0.25);
-            filter: brightness(1.1);
-        }
-
-        .action-btn:active {
-            transform: translateY(-2px);
-        }
-
-        .action-btn i {
-            font-size: 1.2rem;
         }
 
         .action-btn.share { background: linear-gradient(135deg, #1e3a5f, #2b4c73); }
         .action-btn.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
         .action-btn.print { background: linear-gradient(135deg, #6b5b7e, #9c89b8); }
 
-        /* Elegant Modal */
+        /* Modal */
         .modal {
             display: none; 
             position: fixed; 
@@ -979,24 +774,18 @@
 
         .modal.active { 
             display: flex; 
-            animation: elegantFadeIn 0.4s ease;
+            animation: fadeIn 0.4s ease;
         }
 
-        @keyframes elegantFadeIn {
-            from { opacity: 0; backdrop-filter: blur(0); }
-            to { opacity: 1; backdrop-filter: blur(15px); }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content { 
             max-width: 90%; 
             max-height: 85vh; 
             position: relative;
-            animation: modalZoomIn 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        @keyframes modalZoomIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
         }
 
         .modal-image, 
@@ -1022,7 +811,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.4s ease;
             box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             z-index: 2010;
             border: 2px solid var(--accent);
@@ -1032,10 +821,9 @@
             transform: rotate(180deg) scale(1.15);
             background: var(--accent);
             color: white;
-            border-color: white;
         }
 
-        /* Elegant Notification */
+        /* Notification */
         .notification {
             position: fixed; 
             top: 25px; 
@@ -1052,26 +840,17 @@
             gap: 15px; 
             z-index: 2100;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            backdrop-filter: blur(15px);
-            animation: elegantSlideDown 0.4s ease;
-            font-weight: 500;
+            animation: slideDown 0.4s ease;
         }
 
-        @keyframes elegantSlideDown {
+        @keyframes slideDown {
             from { transform: translateY(-120%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .notification.show { 
-            display: flex; 
-        }
+        .notification.show { display: flex; }
 
-        .notification i {
-            font-size: 1.4rem;
-            color: var(--accent);
-        }
-
-        /* Loading Overlay */
+        /* Loading */
         .loading-overlay {
             position: fixed; 
             top: 0; 
@@ -1092,57 +871,31 @@
             border: 4px solid var(--accent); 
             border-top-color: transparent;
             border-radius: 50%; 
-            animation: elegantSpin 1s linear infinite;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            animation: spin 1s linear infinite;
         }
 
-        @keyframes elegantSpin { 
+        @keyframes spin { 
             to { transform: rotate(360deg); } 
-        }
-
-        /* Print-specific adjustments */
-        @media print {
-            .action-btn {
-                display: none;
-            }
-            
-            .card {
-                border: 2px solid #000;
-                margin: 0;
-                page-break-inside: avoid;
-            }
-            
-            .recipient-name {
-                color: #000;
-                background: none;
-                border: 1px solid #000;
-            }
-            
-            .message-container {
-                border: 1px solid #000;
-                box-shadow: none;
-            }
-            
-            .company-logo {
-                filter: grayscale(100%);
-            }
         }
     </style>
 </head>
 <body class="theme-birthday">
-    <!-- Animated Background Container -->
+    <!-- Animated Background -->
     <div class="background-animation" id="backgroundAnimation"></div>
     <div class="pattern-overlay"></div>
 
+    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
     </div>
 
+    <!-- Notification -->
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
         <span id="notificationMessage"></span>
     </div>
 
+    <!-- Modal -->
     <div class="modal" id="mediaModal">
         <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
         <div class="modal-content">
@@ -1151,10 +904,10 @@
         </div>
     </div>
 
+    <!-- Main Card -->
     <div class="mobile-container">
         <div class="card" data-aos="fade-up" data-aos-duration="1000">
             <div class="card-header">
-                <div class="border-pattern"></div>
                 <div class="theme-emoji" id="themeEmoji">🎂</div>
                 <div class="greeting" id="greetingText">Happy Birthday</div>
                 <div class="to-label">KEPADA YTH.</div>
@@ -1162,6 +915,7 @@
             </div>
 
             <div class="card-body">
+                <!-- Expiry Badge -->
                 <div class="expiry-badge-container" data-aos="fade-left" data-aos-delay="150">
                     <div class="expiry-badge" id="expiryBadge">
                         <i class="fas fa-clock"></i>
@@ -1169,11 +923,13 @@
                     </div>
                 </div>
 
+                <!-- Message -->
                 <div class="message-container" data-aos="fade-up" data-aos-delay="250">
                     <div class="message-quote"><i class="fas fa-quote-right"></i></div>
                     <div class="message" id="messageText">Memuat pesan...</div>
                 </div>
 
+                <!-- Media Gallery -->
                 <div class="media-section" id="mediaSection" data-aos="fade-up" data-aos-delay="350">
                     <div class="media-header">
                         <h3><i class="fas fa-images"></i> Galeri Spesial</h3>
@@ -1194,6 +950,7 @@
                     <div class="thumbnails" id="thumbnails"></div>
                 </div>
 
+                <!-- Contact Info -->
                 <div class="contact-row" data-aos="fade-up" data-aos-delay="450">
                     <a href="https://wa.me/6285337777585" target="_blank" class="contact-item">
                         <i class="fab fa-whatsapp"></i> Admin
@@ -1205,6 +962,7 @@
                 </div>
             </div>
 
+            <!-- Footer -->
             <div class="card-footer">
                 <div class="company-logo"></div>
                 <div class="company-name">FIOR Florist</div>
@@ -1223,8 +981,8 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // ============================================
-        // FIOR CARD - WITH CONTINUOUS VIDEO PLAYBACK
-        // Video tetap berjalan saat slide berpindah
+        // FIOR CARD - COMPLETE EDITION
+        // UI Elegan, Siap Cetak, Video Tetap Jalan
         // ============================================
 
         const CONFIG = {
@@ -1232,65 +990,24 @@
         };
 
         const THEMES = {
-            birthday: { 
-                emoji: '🎂', 
-                greeting: 'Happy Birthday',
-                bgElements: ['baloon', 'confetti']
-            },
-            valentine: { 
-                emoji: '❤️', 
-                greeting: 'Happy Valentine',
-                bgElements: ['heart']
-            },
-            wedding: { 
-                emoji: '💍', 
-                greeting: 'Congratulations',
-                bgElements: ['ring', 'sparkle']
-            },
-            anniversary: { 
-                emoji: '🎉', 
-                greeting: 'Happy Anniversary',
-                bgElements: ['star']
-            },
-            graduation: { 
-                emoji: '🎓', 
-                greeting: 'Congratulations!',
-                bgElements: ['graduation-cap']
-            },
-            condolence: { 
-                emoji: '🕊️', 
-                greeting: 'Deepest Condolences',
-                bgElements: ['dove']
-            },
-            congratulation: { 
-                emoji: '🎊', 
-                greeting: 'Congratulations!',
-                bgElements: ['firework']
-            },
-            imlek: { 
-                emoji: '🧧', 
-                greeting: 'Gong Xi Fa Cai',
-                bgElements: ['lantern']
-            },
-            natal: { 
-                emoji: '🎄', 
-                greeting: 'Merry Christmas',
-                bgElements: ['snowflake', 'tree']
-            },
-            lebaran: { 
-                emoji: '🌙', 
-                greeting: 'Selamat Lebaran',
-                bgElements: ['crescent', 'ketupat']
-            }
+            birthday: { emoji: '🎂', greeting: 'Happy Birthday' },
+            valentine: { emoji: '❤️', greeting: 'Happy Valentine' },
+            wedding: { emoji: '💍', greeting: 'Congratulations' },
+            anniversary: { emoji: '🎉', greeting: 'Happy Anniversary' },
+            graduation: { emoji: '🎓', greeting: 'Congratulations!' },
+            condolence: { emoji: '🕊️', greeting: 'Deepest Condolences' },
+            congratulation: { emoji: '🎊', greeting: 'Congratulations!' },
+            imlek: { emoji: '🧧', greeting: 'Gong Xi Fa Cai' },
+            natal: { emoji: '🎄', greeting: 'Merry Christmas' },
+            lebaran: { emoji: '🌙', greeting: 'Selamat Lebaran' }
         };
 
         let state = { 
             params: {}, 
             mediaList: [], 
             swiper: null,
-            videoObserver: null,
-            activeVideoIndex: -1, // Track which video is currently active/playing
-            isUserInteracting: false // Track if user is interacting with video controls
+            activeVideoIndex: -1,
+            isUserInteracting: false
         };
 
         const el = {};
@@ -1300,58 +1017,8 @@
             ids.forEach(id => el[id] = document.getElementById(id));
         }
 
-        function createBackgroundElements(theme) {
-            if (!el.backgroundAnimation) return;
-            
-            const bgEl = el.backgroundAnimation;
-            bgEl.innerHTML = '';
-            
-            const elements = THEMES[theme]?.bgElements || ['floating-orb'];
-            const count = 12;
-            
-            for (let i = 0; i < count; i++) {
-                const elementType = elements[Math.floor(Math.random() * elements.length)];
-                const element = document.createElement('div');
-                element.className = elementType;
-                
-                element.style.left = Math.random() * 100 + '%';
-                element.style.top = Math.random() * 100 + '%';
-                element.style.animationDelay = Math.random() * 5 + 's';
-                element.style.animationDuration = (Math.random() * 15 + 15) + 's';
-                
-                if (elementType === 'baloon') {
-                    const size = Math.random() * 40 + 30;
-                    element.style.width = size + 'px';
-                    element.style.height = size * 1.3 + 'px';
-                } else if (elementType === 'heart' || elementType === 'star') {
-                    const size = Math.random() * 30 + 20;
-                    element.style.width = size + 'px';
-                    element.style.height = size + 'px';
-                } else if (elementType === 'snowflake') {
-                    const size = Math.random() * 8 + 4;
-                    element.style.width = size + 'px';
-                    element.style.height = size + 'px';
-                }
-                
-                bgEl.appendChild(element);
-            }
-            
-            for (let i = 0; i < 6; i++) {
-                const orb = document.createElement('div');
-                orb.className = 'floating-orb';
-                orb.style.left = Math.random() * 100 + '%';
-                orb.style.top = Math.random() * 100 + '%';
-                orb.style.width = Math.random() * 400 + 100 + 'px';
-                orb.style.height = orb.style.width;
-                orb.style.background = `var(--particle-${Math.floor(Math.random() * 3) + 1})`;
-                orb.style.animationDuration = (Math.random() * 25 + 25) + 's';
-                bgEl.appendChild(orb);
-            }
-        }
-
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
-            
             const mediaList = [];
             
             if (params.get('media')) {
@@ -1363,8 +1030,6 @@
                     mediaList.push({ url: params.get(`media${i}`), type: detectMediaType(params.get(`media${i}`)) });
                 }
             }
-            
-            console.log('📸 Media ditemukan:', mediaList.length);
             
             return {
                 to: params.get('to') || 'Sahabat',
@@ -1379,8 +1044,7 @@
             if (!url) return 'image';
             const u = url.toLowerCase();
             if (u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || 
-                u.includes('.avi') || u.includes('.mkv') || u.includes('youtube.com') ||
-                u.includes('youtu.be') || u.includes('vimeo.com')) {
+                u.includes('.avi') || u.includes('.mkv')) {
                 return 'video';
             }
             return 'image';
@@ -1390,15 +1054,10 @@
             if (!messageId) return null;
             try {
                 const url = `${CONFIG.SCRIPT_URL}?cmd=get&id=${messageId}&t=${Date.now()}`;
-                console.log('📤 Fetching:', url);
-                
                 const response = await fetch(url);
-                const data = await response.json();
-                console.log('📥 Response:', data);
-                
-                return data;
+                return await response.json();
             } catch (error) {
-                console.error('❌ Fetch error:', error);
+                console.error('Fetch error:', error);
                 return null;
             }
         }
@@ -1446,7 +1105,7 @@
             el.expiryBadge.className = `expiry-badge ${className}`;
         }
 
-        // Video Control Functions - MODIFIED FOR CONTINUOUS PLAYBACK
+        // VIDEO FUNCTIONS - Video tetap jalan saat slide berganti
         window.toggleVideoPlay = function(index) {
             const video = document.getElementById(`video-${index}`);
             const playIcon = document.getElementById(`playIcon-${index}`);
@@ -1455,25 +1114,18 @@
                 state.isUserInteracting = true;
                 
                 if (video.paused) {
-                    // If this video is paused, play it and set as active
                     video.play().catch(e => console.log('Play failed:', e));
                     playIcon.className = 'fas fa-pause';
                     state.activeVideoIndex = index;
-                    
-                    // Update all video icons to show pause only for active video
                     updateAllVideoIcons();
                 } else {
-                    // If this video is playing, pause it
                     video.pause();
                     playIcon.className = 'fas fa-play';
-                    
-                    // If this was the active video, clear active index
                     if (state.activeVideoIndex === index) {
                         state.activeVideoIndex = -1;
                     }
                 }
                 
-                // Reset user interaction flag after a delay
                 setTimeout(() => {
                     state.isUserInteracting = false;
                 }, 500);
@@ -1515,12 +1167,12 @@
             });
         }
 
-        // MODIFIED: Don't pause videos on slide change, just update active index
         function handleVideoOnSlideChange(currentIndex) {
-            // Don't pause videos when slide changes
-            // Just update which video is considered "active" for UI purposes
+            if (el.currentSlide) el.currentSlide.textContent = currentIndex + 1;
+            
+            // JANGAN pause video saat slide berganti
+            // Biarkan video tetap jalan
             if (state.activeVideoIndex === -1) {
-                // If no video is playing, try to play the video on current slide
                 const currentMedia = state.mediaList[currentIndex];
                 if (currentMedia && currentMedia.type === 'video' && !state.isUserInteracting) {
                     const video = document.getElementById(`video-${currentIndex}`);
@@ -1531,57 +1183,6 @@
                     }
                 }
             }
-            
-            // Update current slide counter
-            if (el.currentSlide) el.currentSlide.textContent = currentIndex + 1;
-        }
-
-        function setupVideoObserver() {
-            if (state.videoObserver) {
-                state.videoObserver.disconnect();
-            }
-
-            // Modified observer - don't pause videos when out of view
-            state.videoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.target.tagName === 'VIDEO') {
-                        const index = parseInt(entry.target.id.split('-')[1]);
-                        const playIcon = document.getElementById(`playIcon-${index}`);
-                        
-                        // Only handle videos that are supposed to be playing
-                        if (entry.isIntersecting) {
-                            // Video is visible
-                            if (index === state.activeVideoIndex && entry.target.paused && !state.isUserInteracting) {
-                                // If this is the active video and it's paused, try to play it
-                                entry.target.play().catch(e => console.log('Play failed:', e));
-                                if (playIcon) playIcon.className = 'fas fa-pause';
-                            }
-                        } else {
-                            // Video is not visible - but DON'T pause it, just update UI
-                            // Allow audio to continue playing
-                            if (playIcon && !entry.target.paused) {
-                                // Update icon but don't pause
-                                playIcon.className = 'fas fa-pause';
-                            }
-                        }
-                    }
-                });
-            }, { 
-                threshold: 0.3,
-                rootMargin: '0px'
-            });
-
-            // Observe all videos after they're created
-            setTimeout(() => {
-                state.mediaList.forEach((media, index) => {
-                    if (media.type === 'video') {
-                        const video = document.getElementById(`video-${index}`);
-                        if (video) {
-                            state.videoObserver.observe(video);
-                        }
-                    }
-                });
-            }, 500);
         }
 
         function renderCarousel() {
@@ -1599,15 +1200,7 @@
                 if (media.type === 'video') {
                     slidesHTML += `
                         <div class="swiper-slide">
-                            <video 
-                                id="video-${index}" 
-                                src="${media.url}" 
-                                loop 
-                                playsinline 
-                                preload="auto"
-                                muted
-                                autoplay
-                            ></video>
+                            <video id="video-${index}" src="${media.url}" loop playsinline preload="auto" muted autoplay></video>
                             <div class="media-type-badge"><i class="fas fa-film"></i> VIDEO</div>
                             <div class="video-controls">
                                 <div class="video-btn" onclick="toggleVideoPlay(${index})">
@@ -1622,7 +1215,7 @@
                 } else {
                     slidesHTML += `
                         <div class="swiper-slide" onclick="openModal('${media.url}', false)">
-                            <img src="${media.url}" loading="lazy" alt="Gallery image">
+                            <img src="${media.url}" loading="lazy">
                             <div class="media-type-badge"><i class="fas fa-image"></i> FOTO</div>
                         </div>
                     `;
@@ -1649,7 +1242,6 @@
                         nextEl: '.swiper-button-next', 
                         prevEl: '.swiper-button-prev' 
                     },
-                    effect: 'slide',
                     speed: 800,
                     on: {
                         slideChange: function() {
@@ -1657,19 +1249,16 @@
                             document.querySelectorAll('.thumbnail').forEach((el, i) => {
                                 el.classList.toggle('active', i === idx);
                             });
-                            
-                            // Handle video on slide change - MODIFIED to not pause videos
                             handleVideoOnSlideChange(idx);
                         },
                         init: function() {
                             setTimeout(() => {
                                 if (state.mediaList.length > 0) {
-                                    // Try to play the first video if it exists
                                     const firstMedia = state.mediaList[0];
                                     if (firstMedia.type === 'video') {
                                         const firstVideo = document.getElementById('video-0');
                                         if (firstVideo) {
-                                            firstVideo.play().catch(e => console.log('Auto play prevented:', e));
+                                            firstVideo.play().catch(e => console.log('Auto play:', e));
                                             state.activeVideoIndex = 0;
                                             updateAllVideoIcons();
                                         }
@@ -1681,7 +1270,6 @@
                 });
                 
                 renderThumbnails();
-                setupVideoObserver();
             }, 100);
         }
 
@@ -1695,7 +1283,7 @@
                     </div>`;
                 } else {
                     html += `<div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="jumpToSlide(${index})">
-                        <img src="${media.url}" loading="lazy" alt="Thumbnail">
+                        <img src="${media.url}" loading="lazy">
                     </div>`;
                 }
             });
@@ -1705,7 +1293,7 @@
         window.jumpToSlide = function(index) { 
             if (state.swiper) {
                 state.swiper.slideToLoop(index);
-                // Don't pause videos when jumping to slide
+                // Video tetap jalan, tidak di-pause
             }
         };
 
@@ -1735,11 +1323,8 @@
         window.shareCard = function() {
             const text = `Kartu dari FIOR Florist untuk ${state.params.to}\n${window.location.href}`;
             if (navigator.share) {
-                navigator.share({ 
-                    title: 'FIOR Card', 
-                    text, 
-                    url: window.location.href 
-                }).catch(() => copyURL());
+                navigator.share({ title: 'FIOR Card', text, url: window.location.href })
+                    .catch(() => copyURL());
             } else { copyURL(); }
         };
 
@@ -1763,11 +1348,7 @@
         async function init() {
             cacheElements();
             
-            AOS.init({
-                once: true,
-                duration: 800,
-                easing: 'ease-in-out'
-            });
+            AOS.init({ once: true, duration: 800 });
             
             state.params = getUrlParams();
             state.mediaList = state.params.mediaList || [];
@@ -1778,8 +1359,6 @@
                 document.body.className = `theme-${state.params.theme}`;
                 el.themeEmoji.textContent = THEMES[state.params.theme].emoji;
                 el.greetingText.textContent = THEMES[state.params.theme].greeting;
-                
-                createBackgroundElements(state.params.theme);
             }
             
             if (state.params.msg) {
@@ -1787,13 +1366,12 @@
                 updateExpiryBadge({ expiry_setting: 'never' });
             } else if (state.params.messageId) {
                 const messageData = await fetchMessageFromServer(state.params.messageId);
-                if (messageData && messageData.status === 'success') {
+                if (messageData?.status === 'success') {
                     el.messageText.textContent = messageData.message;
                     updateExpiryBadge(messageData);
                     
                     if (messageData.media) {
                         state.mediaList = parseMediaFromString(messageData.media);
-                        console.log('📸 Media dari database:', state.mediaList.length);
                     }
                 } else {
                     el.messageText.textContent = 'Pesan tidak ditemukan atau telah kadaluarsa.';
@@ -1809,12 +1387,6 @@
             
             renderCarousel();
         }
-
-        window.addEventListener('beforeunload', function() {
-            if (state.videoObserver) {
-                state.videoObserver.disconnect();
-            }
-        });
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
