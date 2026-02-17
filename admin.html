@@ -15,6 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
+        /* CSS tetap sama seperti di atas - tidak diubah */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -632,10 +633,9 @@
 
     <script>
         // ============================================
-        // FIOR CARD ADMIN - FINAL VERSION
+        // FIOR CARD ADMIN - LINK PENDEK (HANYA v=ID)
         // ============================================
 
-        // Konfigurasi - GUNAKAN URL SCRIPT ANDA
         const CONFIG = {
             SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzTPgv-D6VNNlh0QHERaizfzN4tWCs42Xdr3sZLdpIzs3oHQAuz5D-6tqfO5U7E2QHmEw/exec",
             CARD_BASE_URL: "https://fiorfloristjayapura-commits.github.io/cardgift-fior/card.html",
@@ -742,7 +742,6 @@
                     state.selectedTheme = theme.id;
                     document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
                     div.classList.add('active');
-                    showAlert(`Tema: ${theme.name}`, 'success');
                 };
                 el.themeGrid.appendChild(div);
             });
@@ -845,7 +844,7 @@
             }
         }
 
-        // ========== CREATE CARD ==========
+        // ========== CREATE CARD - LINK PENDEK (HANYA v=ID) ==========
         window.createCard = async function() {
             const name = el.recipientName?.value.trim();
             const phone = el.whatsappNumber?.value.trim().replace(/\D/g, '');
@@ -863,7 +862,7 @@
                 const messageId = generateShortId();
                 const mediaUrlsString = state.mediaUrls.map(m => m.url).join('||');
                 
-                // Parameter HARUS SESUAI dengan yang diharapkan script
+                // Kirim semua data ke server (termasuk media)
                 const url = `${CONFIG.SCRIPT_URL}?cmd=save&id=${messageId}&msg=${encodeURIComponent(message)}&nama=${encodeURIComponent(name)}&phone=${phone}&theme=${theme}&expiry=${expirySetting}&media=${encodeURIComponent(mediaUrlsString)}`;
                 
                 console.log('📤 Mengirim ke:', url);
@@ -874,15 +873,8 @@
                 console.log('📥 Response:', result);
                 
                 if (result.status === 'success') {
-                    // Buat URL card
-                    let cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}`;
-                    
-                    if (state.mediaUrls.length > 0) {
-                        state.mediaUrls.forEach((media, index) => {
-                            const paramName = index === 0 ? 'media' : `media${index + 1}`;
-                            cardUrl += `&${paramName}=${encodeURIComponent(media.url)}`;
-                        });
-                    }
+                    // LINK PENDEK - HANYA PAKAI PARAMETER v
+                    const cardUrl = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}`;
                     
                     // Tampilkan hasil
                     if (el.generatedLink) el.generatedLink.textContent = cardUrl;
@@ -940,10 +932,12 @@
 
         window.previewCard = function() {
             const name = el.recipientName?.value.trim() || 'Preview';
-            const message = el.cardMessage?.value.trim() || 'Preview message';
             const theme = state.selectedTheme;
             const messageId = 'preview_' + generateShortId();
+            
+            // Untuk preview, kita tetap kirim media via URL (karena belum disimpan)
             let url = `${CONFIG.CARD_BASE_URL}?to=${encodeURIComponent(name)}&theme=${theme}&v=${messageId}&preview=true`;
+            
             if (state.mediaUrls.length > 0) {
                 state.mediaUrls.forEach((media, index) => {
                     const paramName = index === 0 ? 'media' : `media${index + 1}`;
@@ -1263,5 +1257,3 @@
     </script>
 </body>
 </html>
-
-
