@@ -1223,7 +1223,8 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // ============================================
-        // FIOR CARD - ELEGANT EDITION WITH PRINT OPTIMIZATION
+        // FIOR CARD - WITH CONTINUOUS VIDEO PLAYBACK
+        // Video tetap berjalan saat slide berpindah
         // ============================================
 
         const CONFIG = {
@@ -1287,7 +1288,9 @@
             params: {}, 
             mediaList: [], 
             swiper: null,
-            videoObserver: null
+            videoObserver: null,
+            activeVideoIndex: -1, // Track which video is currently active/playing
+            isUserInteracting: false // Track if user is interacting with video controls
         };
 
         const el = {};
@@ -1443,20 +1446,37 @@
             el.expiryBadge.className = `expiry-badge ${className}`;
         }
 
-        // Video Control Functions
+        // Video Control Functions - MODIFIED FOR CONTINUOUS PLAYBACK
         window.toggleVideoPlay = function(index) {
             const video = document.getElementById(`video-${index}`);
             const playIcon = document.getElementById(`playIcon-${index}`);
             
             if (video) {
+                state.isUserInteracting = true;
+                
                 if (video.paused) {
-                    pauseAllVideosExcept(index);
+                    // If this video is paused, play it and set as active
                     video.play().catch(e => console.log('Play failed:', e));
                     playIcon.className = 'fas fa-pause';
+                    state.activeVideoIndex = index;
+                    
+                    // Update all video icons to show pause only for active video
+                    updateAllVideoIcons();
                 } else {
+                    // If this video is playing, pause it
                     video.pause();
                     playIcon.className = 'fas fa-play';
+                    
+                    // If this was the active video, clear active index
+                    if (state.activeVideoIndex === index) {
+                        state.activeVideoIndex = -1;
+                    }
                 }
+                
+                // Reset user interaction flag after a delay
+                setTimeout(() => {
+                    state.isUserInteracting = false;
+                }, 500);
             }
         };
 
@@ -1478,17 +1498,42 @@
             }
         };
 
-        function pauseAllVideosExcept(exceptIndex) {
+        function updateAllVideoIcons() {
             state.mediaList.forEach((media, index) => {
-                if (media.type === 'video' && index !== exceptIndex) {
+                if (media.type === 'video') {
                     const video = document.getElementById(`video-${index}`);
                     const playIcon = document.getElementById(`playIcon-${index}`);
-                    if (video) {
-                        video.pause();
-                        if (playIcon) playIcon.className = 'fas fa-play';
+                    
+                    if (video && playIcon) {
+                        if (index === state.activeVideoIndex && !video.paused) {
+                            playIcon.className = 'fas fa-pause';
+                        } else {
+                            playIcon.className = 'fas fa-play';
+                        }
                     }
                 }
             });
+        }
+
+        // MODIFIED: Don't pause videos on slide change, just update active index
+        function handleVideoOnSlideChange(currentIndex) {
+            // Don't pause videos when slide changes
+            // Just update which video is considered "active" for UI purposes
+            if (state.activeVideoIndex === -1) {
+                // If no video is playing, try to play the video on current slide
+                const currentMedia = state.mediaList[currentIndex];
+                if (currentMedia && currentMedia.type === 'video' && !state.isUserInteracting) {
+                    const video = document.getElementById(`video-${currentIndex}`);
+                    if (video && video.paused) {
+                        video.play().catch(e => console.log('Auto play prevented:', e));
+                        state.activeVideoIndex = currentIndex;
+                        updateAllVideoIcons();
+                    }
+                }
+            }
+            
+            // Update current slide counter
+            if (el.currentSlide) el.currentSlide.textContent = currentIndex + 1;
         }
 
         function setupVideoObserver() {
@@ -1496,26 +1541,37 @@
                 state.videoObserver.disconnect();
             }
 
+            // Modified observer - don't pause videos when out of view
             state.videoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.target.tagName === 'VIDEO') {
-                        const index = entry.target.id.split('-')[1];
+                        const index = parseInt(entry.target.id.split('-')[1]);
                         const playIcon = document.getElementById(`playIcon-${index}`);
                         
+                        // Only handle videos that are supposed to be playing
                         if (entry.isIntersecting) {
-                            entry.target.play().catch(e => console.log('Auto play prevented:', e));
-                            if (playIcon) playIcon.className = 'fas fa-pause';
+                            // Video is visible
+                            if (index === state.activeVideoIndex && entry.target.paused && !state.isUserInteracting) {
+                                // If this is the active video and it's paused, try to play it
+                                entry.target.play().catch(e => console.log('Play failed:', e));
+                                if (playIcon) playIcon.className = 'fas fa-pause';
+                            }
                         } else {
-                            entry.target.pause();
-                            if (playIcon) playIcon.className = 'fas fa-play';
+                            // Video is not visible - but DON'T pause it, just update UI
+                            // Allow audio to continue playing
+                            if (playIcon && !entry.target.paused) {
+                                // Update icon but don't pause
+                                playIcon.className = 'fas fa-pause';
+                            }
                         }
                     }
                 });
             }, { 
-                threshold: 0.5,
+                threshold: 0.3,
                 rootMargin: '0px'
             });
 
+            // Observe all videos after they're created
             setTimeout(() => {
                 state.mediaList.forEach((media, index) => {
                     if (media.type === 'video') {
@@ -1601,18 +1657,21 @@
                             document.querySelectorAll('.thumbnail').forEach((el, i) => {
                                 el.classList.toggle('active', i === idx);
                             });
-                            if (el.currentSlide) el.currentSlide.textContent = idx + 1;
                             
+                            // Handle video on slide change - MODIFIED to not pause videos
                             handleVideoOnSlideChange(idx);
                         },
                         init: function() {
                             setTimeout(() => {
                                 if (state.mediaList.length > 0) {
+                                    // Try to play the first video if it exists
                                     const firstMedia = state.mediaList[0];
                                     if (firstMedia.type === 'video') {
                                         const firstVideo = document.getElementById('video-0');
                                         if (firstVideo) {
                                             firstVideo.play().catch(e => console.log('Auto play prevented:', e));
+                                            state.activeVideoIndex = 0;
+                                            updateAllVideoIcons();
                                         }
                                     }
                                 }
@@ -1624,25 +1683,6 @@
                 renderThumbnails();
                 setupVideoObserver();
             }, 100);
-        }
-
-        function handleVideoOnSlideChange(currentIndex) {
-            state.mediaList.forEach((media, index) => {
-                if (media.type === 'video') {
-                    const video = document.getElementById(`video-${index}`);
-                    const playIcon = document.getElementById(`playIcon-${index}`);
-                    
-                    if (video) {
-                        if (index === currentIndex) {
-                            video.play().catch(e => console.log('Play prevented:', e));
-                            if (playIcon) playIcon.className = 'fas fa-pause';
-                        } else {
-                            video.pause();
-                            if (playIcon) playIcon.className = 'fas fa-play';
-                        }
-                    }
-                }
-            });
         }
 
         function renderThumbnails() {
@@ -1663,7 +1703,10 @@
         }
 
         window.jumpToSlide = function(index) { 
-            if (state.swiper) state.swiper.slideToLoop(index); 
+            if (state.swiper) {
+                state.swiper.slideToLoop(index);
+                // Don't pause videos when jumping to slide
+            }
         };
 
         window.openModal = function(url, isVideo) {
