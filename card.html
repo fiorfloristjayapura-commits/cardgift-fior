@@ -115,7 +115,8 @@
             .thumbnails,
             .modal,
             .notification,
-            .loading-overlay {
+            .loading-overlay,
+            .tap-animation {
                 display: none !important;
             }
             
@@ -458,6 +459,7 @@
             border-radius: 40px; 
             overflow: hidden; 
             position: relative; 
+            cursor: pointer;
         }
 
         .swiper-slide img, 
@@ -465,6 +467,7 @@
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
+            pointer-events: none; /* Mencegah video menangkap event, biarkan slide yang menangkap */
         }
 
         .media-type-badge {
@@ -482,6 +485,79 @@
             z-index: 10;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.2);
+            pointer-events: none;
+        }
+
+        /* TAP Animation */
+        .tap-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            pointer-events: none;
+            animation: tapPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(255,255,255,0.5);
+        }
+
+        .tap-animation i {
+            font-size: 2.5rem;
+            color: white;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+        }
+
+        .tap-animation.small {
+            width: 50px;
+            height: 50px;
+        }
+
+        .tap-animation.small i {
+            font-size: 1.5rem;
+        }
+
+        @keyframes tapPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(255,255,255,0.7);
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.8;
+                box-shadow: 0 0 0 20px rgba(255,255,255,0);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(255,255,255,0);
+            }
+        }
+
+        /* Ripple effect on tap */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple 0.6s ease-out;
+            pointer-events: none;
+            z-index: 25;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
         }
 
         /* Video Controls */
@@ -491,7 +567,8 @@
             left: 25px;
             display: flex;
             gap: 12px;
-            z-index: 10;
+            z-index: 15;
+            pointer-events: auto;
         }
 
         .video-btn {
@@ -514,6 +591,11 @@
             transform: scale(1.15) rotate(10deg);
         }
 
+        .video-btn i {
+            font-size: 1.3rem;
+            pointer-events: none;
+        }
+
         .volume-btn.muted {
             background: rgba(180, 60, 60, 0.9);
         }
@@ -528,6 +610,7 @@
             border-radius: 50%;
             backdrop-filter: blur(8px);
             border: 2px solid white;
+            transition: all 0.3s ease;
         }
 
         .swiper-button-next:hover,
@@ -557,6 +640,7 @@
             font-size: 0.85rem; 
             z-index: 10;
             backdrop-filter: blur(8px);
+            pointer-events: none;
         }
 
         /* Thumbnails */
@@ -981,8 +1065,8 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // ============================================
-        // FIOR CARD - COMPLETE EDITION
-        // UI Elegan, Siap Cetak, Video Tetap Jalan
+        // FIOR CARD - TAP TO AUTO PLAY VIDEO
+        // Ketuk layar di area video untuk auto play
         // ============================================
 
         const CONFIG = {
@@ -1007,7 +1091,8 @@
             mediaList: [], 
             swiper: null,
             activeVideoIndex: -1,
-            isUserInteracting: false
+            isUserInteracting: false,
+            tapAnimationTimeout: null
         };
 
         const el = {};
@@ -1105,8 +1190,130 @@
             el.expiryBadge.className = `expiry-badge ${className}`;
         }
 
-        // VIDEO FUNCTIONS - Video tetap jalan saat slide berganti
-        window.toggleVideoPlay = function(index) {
+        // ============================================
+        // TAP TO AUTO PLAY VIDEO FUNCTIONS
+        // ============================================
+
+        // Create tap animation element
+        function createTapAnimation(slideElement, x, y) {
+            // Remove existing tap animation
+            const existingAnim = slideElement.querySelector('.tap-animation');
+            if (existingAnim) existingAnim.remove();
+
+            // Create new tap animation
+            const tapAnim = document.createElement('div');
+            tapAnim.className = 'tap-animation small';
+            tapAnim.style.left = x + 'px';
+            tapAnim.style.top = y + 'px';
+            tapAnim.innerHTML = '<i class="fas fa-play"></i>';
+            
+            slideElement.appendChild(tapAnim);
+
+            // Auto remove after animation
+            if (state.tapAnimationTimeout) clearTimeout(state.tapAnimationTimeout);
+            state.tapAnimationTimeout = setTimeout(() => {
+                const anim = slideElement.querySelector('.tap-animation');
+                if (anim) anim.remove();
+            }, 2000);
+        }
+
+        // Create ripple effect
+        function createRipple(slideElement, x, y) {
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.width = '20px';
+            ripple.style.height = '20px';
+            ripple.style.transform = 'translate(-50%, -50%) scale(0)';
+            
+            slideElement.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // Handle tap on slide
+        function handleSlideTap(event, slideIndex) {
+            const slide = event.currentTarget;
+            const media = state.mediaList[slideIndex];
+            
+            // Get click/tap coordinates
+            const rect = slide.getBoundingClientRect();
+            const x = ((event.clientX || (event.touches && event.touches[0].clientX)) - rect.left) + 'px';
+            const y = ((event.clientY || (event.touches && event.touches[0].clientY)) - rect.top) + 'px';
+
+            if (media.type === 'video') {
+                // Handle video
+                const video = document.getElementById(`video-${slideIndex}`);
+                const playIcon = document.getElementById(`playIcon-${slideIndex}`);
+                
+                if (video) {
+                    // Create visual feedback
+                    createRipple(slide, x, y);
+                    createTapAnimation(slide, x, y);
+
+                    if (video.paused) {
+                        // Play video
+                        video.play().catch(e => console.log('Play failed:', e));
+                        if (playIcon) playIcon.className = 'fas fa-pause';
+                        state.activeVideoIndex = slideIndex;
+                        
+                        // Pause other videos
+                        state.mediaList.forEach((m, idx) => {
+                            if (idx !== slideIndex && m.type === 'video') {
+                                const otherVideo = document.getElementById(`video-${idx}`);
+                                const otherIcon = document.getElementById(`playIcon-${idx}`);
+                                if (otherVideo) {
+                                    otherVideo.pause();
+                                    if (otherIcon) otherIcon.className = 'fas fa-play';
+                                }
+                            }
+                        });
+                    } else {
+                        // Pause video
+                        video.pause();
+                        if (playIcon) playIcon.className = 'fas fa-play';
+                        if (state.activeVideoIndex === slideIndex) {
+                            state.activeVideoIndex = -1;
+                        }
+                    }
+                }
+            } else {
+                // Handle image - open modal
+                openModal(media.url, false);
+            }
+        }
+
+        // Add tap listeners to slides
+        function addTapListeners() {
+            setTimeout(() => {
+                document.querySelectorAll('.swiper-slide').forEach((slide, index) => {
+                    // Remove existing listeners
+                    slide.removeEventListener('click', slide._tapHandler);
+                    slide.removeEventListener('touchstart', slide._tapHandler);
+                    
+                    // Create handler
+                    const handler = (e) => {
+                        e.preventDefault();
+                        handleSlideTap(e, index);
+                    };
+                    
+                    // Store handler for removal
+                    slide._tapHandler = handler;
+                    
+                    // Add listeners
+                    slide.addEventListener('click', handler);
+                    slide.addEventListener('touchstart', handler, { passive: false });
+                });
+            }, 500);
+        }
+
+        // VIDEO FUNCTIONS
+        window.toggleVideoPlay = function(index, event) {
+            if (event) event.stopPropagation(); // Prevent triggering slide tap
+            
             const video = document.getElementById(`video-${index}`);
             const playIcon = document.getElementById(`playIcon-${index}`);
             
@@ -1117,7 +1324,18 @@
                     video.play().catch(e => console.log('Play failed:', e));
                     playIcon.className = 'fas fa-pause';
                     state.activeVideoIndex = index;
-                    updateAllVideoIcons();
+                    
+                    // Pause other videos
+                    state.mediaList.forEach((media, idx) => {
+                        if (idx !== index && media.type === 'video') {
+                            const otherVideo = document.getElementById(`video-${idx}`);
+                            const otherIcon = document.getElementById(`playIcon-${idx}`);
+                            if (otherVideo) {
+                                otherVideo.pause();
+                                if (otherIcon) otherIcon.className = 'fas fa-play';
+                            }
+                        }
+                    });
                 } else {
                     video.pause();
                     playIcon.className = 'fas fa-play';
@@ -1132,7 +1350,9 @@
             }
         };
 
-        window.toggleVideoMute = function(index) {
+        window.toggleVideoMute = function(index, event) {
+            if (event) event.stopPropagation(); // Prevent triggering slide tap
+            
             const video = document.getElementById(`video-${index}`);
             const muteIcon = document.getElementById(`muteIcon-${index}`);
             const muteBtn = document.getElementById(`muteBtn-${index}`);
@@ -1170,8 +1390,7 @@
         function handleVideoOnSlideChange(currentIndex) {
             if (el.currentSlide) el.currentSlide.textContent = currentIndex + 1;
             
-            // JANGAN pause video saat slide berganti
-            // Biarkan video tetap jalan
+            // Auto play video on current slide if none is playing
             if (state.activeVideoIndex === -1) {
                 const currentMedia = state.mediaList[currentIndex];
                 if (currentMedia && currentMedia.type === 'video' && !state.isUserInteracting) {
@@ -1199,14 +1418,14 @@
             state.mediaList.forEach((media, index) => {
                 if (media.type === 'video') {
                     slidesHTML += `
-                        <div class="swiper-slide">
-                            <video id="video-${index}" src="${media.url}" loop playsinline preload="auto" muted autoplay></video>
+                        <div class="swiper-slide" data-index="${index}">
+                            <video id="video-${index}" src="${media.url}" loop playsinline preload="auto" muted></video>
                             <div class="media-type-badge"><i class="fas fa-film"></i> VIDEO</div>
                             <div class="video-controls">
-                                <div class="video-btn" onclick="toggleVideoPlay(${index})">
-                                    <i id="playIcon-${index}" class="fas fa-pause"></i>
+                                <div class="video-btn" onclick="toggleVideoPlay(${index}, event)">
+                                    <i id="playIcon-${index}" class="fas fa-play"></i>
                                 </div>
-                                <div class="video-btn volume-btn muted" id="muteBtn-${index}" onclick="toggleVideoMute(${index})">
+                                <div class="video-btn volume-btn muted" id="muteBtn-${index}" onclick="toggleVideoMute(${index}, event)">
                                     <i id="muteIcon-${index}" class="fas fa-volume-mute"></i>
                                 </div>
                             </div>
@@ -1214,7 +1433,7 @@
                     `;
                 } else {
                     slidesHTML += `
-                        <div class="swiper-slide" onclick="openModal('${media.url}', false)">
+                        <div class="swiper-slide" data-index="${index}">
                             <img src="${media.url}" loading="lazy">
                             <div class="media-type-badge"><i class="fas fa-image"></i> FOTO</div>
                         </div>
@@ -1250,26 +1469,12 @@
                                 el.classList.toggle('active', i === idx);
                             });
                             handleVideoOnSlideChange(idx);
-                        },
-                        init: function() {
-                            setTimeout(() => {
-                                if (state.mediaList.length > 0) {
-                                    const firstMedia = state.mediaList[0];
-                                    if (firstMedia.type === 'video') {
-                                        const firstVideo = document.getElementById('video-0');
-                                        if (firstVideo) {
-                                            firstVideo.play().catch(e => console.log('Auto play:', e));
-                                            state.activeVideoIndex = 0;
-                                            updateAllVideoIcons();
-                                        }
-                                    }
-                                }
-                            }, 500);
                         }
                     }
                 });
                 
                 renderThumbnails();
+                addTapListeners();
             }, 100);
         }
 
@@ -1293,7 +1498,6 @@
         window.jumpToSlide = function(index) { 
             if (state.swiper) {
                 state.swiper.slideToLoop(index);
-                // Video tetap jalan, tidak di-pause
             }
         };
 
@@ -1388,6 +1592,7 @@
             renderCarousel();
         }
 
+        // Re-add tap listeners when slides change
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
